@@ -1,2 +1,4 @@
 # 10k_android
-10k_android_ver_0.2
+## ver 0.2
+
+### design
