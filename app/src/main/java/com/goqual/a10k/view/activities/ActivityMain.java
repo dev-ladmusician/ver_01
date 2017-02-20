@@ -1,4 +1,4 @@
-package com.goqual.a10k.view.activity;
+package com.goqual.a10k.view.activities;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -12,10 +12,9 @@ import android.view.MenuItem;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.view.BlankFragment;
 import com.goqual.a10k.view.adapters.FragmentPagerAdapter;
 import com.goqual.a10k.view.base.BaseActivity;
-import com.goqual.a10k.view.base.FragmentBase;
+import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
 
@@ -49,10 +48,6 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
 
     private void initViewPager() {
         fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
-        fragmentPagerAdapter.addItem(BlankFragment.newInstance("1"));
-        fragmentPagerAdapter.addItem(BlankFragment.newInstance("2"));
-        fragmentPagerAdapter.addItem(BlankFragment.newInstance("3"));
-        fragmentPagerAdapter.addItem(BlankFragment.newInstance("4"));
 
         mBinding.mainPager.setAdapter(fragmentPagerAdapter);
         mBinding.mainPager.addOnPageChangeListener(mainPagerPageChangeListener);
@@ -134,7 +129,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
 
         @Override
         public void onPageSelected(int position) {
-            setTitle(((FragmentBase)fragmentPagerAdapter.getItem(position)).getTitle());
+            setTitle(((BaseFragment)fragmentPagerAdapter.getItem(position)).getTitle());
             try {
                 invalidateFragmentMenus(position);
                 mBinding.mainTaps.getTabAt(position).select();

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="activity"
-            type="com.goqual.a10k.view.activity.MainActivity"/>
+            type="com.goqual.a10k.view.activities.ActivityMain"/>
     </data>
 
     <RelativeLayout
