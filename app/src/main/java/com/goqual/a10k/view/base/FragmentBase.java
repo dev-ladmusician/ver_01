@@ -18,7 +18,7 @@ import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import java.util.ArrayList;
 
 /**
- * Created by seyriz on 2017. 2. 17..
+ * Created by HanWool on 2017. 2. 17..
  */
 
 public abstract class FragmentBase extends Fragment
