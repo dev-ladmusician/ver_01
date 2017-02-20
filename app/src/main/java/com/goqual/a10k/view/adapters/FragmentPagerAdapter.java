@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.goqual.a10k.view.base.FragmentBase;
+import com.goqual.a10k.view.base.BaseFragment;
 
 import java.util.ArrayList;
 
@@ -13,12 +13,14 @@ import java.util.ArrayList;
  */
 
 public class FragmentPagerAdapter extends FragmentStatePagerAdapter {
-    ArrayList<FragmentBase> fragmentLists;
+    ArrayList<BaseFragment> fragmentLists;
 
     public FragmentPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
         fragmentLists = new ArrayList<>();
     }
+
+
 
     @Override
     public CharSequence getPageTitle(int position) {
@@ -35,7 +37,14 @@ public class FragmentPagerAdapter extends FragmentStatePagerAdapter {
         return fragmentLists.get(position);
     }
 
-    public void addItem(FragmentBase item) {
+    public void addItem(BaseFragment item) {
         fragmentLists.add(item);
+        notifyDataSetChanged();
     }
+
+    public ArrayList<BaseFragment> getFragmentLists() {
+        return fragmentLists;
+    }
+
+
 }

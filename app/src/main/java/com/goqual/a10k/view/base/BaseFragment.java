@@ -1,6 +1,7 @@
 package com.goqual.a10k.view.base;
 
-import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
@@ -9,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
@@ -21,14 +24,27 @@ import java.util.ArrayList;
  * Created by seyriz on 2017. 2. 17..
  */
 
-public abstract class FragmentBase extends Fragment
+public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
         implements IFragmentInteraction{
+
+    protected B mBinding;
+
+    protected abstract int getLayoutId();
 
     private IActivityInteraction activityInteraction;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+         mBinding = DataBindingUtil.inflate(
+                inflater, getLayoutId(), container, false);
+        View view = mBinding.getRoot();
+        return view;
     }
 
     @Override
