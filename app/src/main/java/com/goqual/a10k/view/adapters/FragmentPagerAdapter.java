@@ -39,11 +39,20 @@ public class FragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     public void addItem(BaseFragment item) {
         fragmentLists.add(item);
-        notifyDataSetChanged();
+        refresh();
     }
 
     public ArrayList<BaseFragment> getFragmentLists() {
         return fragmentLists;
+    }
+
+    public void clear() {
+        fragmentLists.clear();
+        refresh();
+    }
+
+    public void refresh() {
+        notifyDataSetChanged();
     }
 
 

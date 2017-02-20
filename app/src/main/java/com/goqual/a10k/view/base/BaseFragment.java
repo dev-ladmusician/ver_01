@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
+import com.goqual.a10k.view.activities.ActivityMain;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 
@@ -31,11 +32,12 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
 
     protected abstract int getLayoutId();
 
-    private IActivityInteraction activityInteraction;
+    protected IActivityInteraction mActivityInteraction;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivityInteraction = (ActivityMain)getActivity();
     }
 
     @Nullable
@@ -43,8 +45,7 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          mBinding = DataBindingUtil.inflate(
                 inflater, getLayoutId(), container, false);
-        View view = mBinding.getRoot();
-        return view;
+        return mBinding.getRoot();
     }
 
     @Override
@@ -68,7 +69,7 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
                             @ColorRes int selectedColor
     ) {
         TabLayout tabLayout = new TabLayout(getActivity());
-        AppBarLayout appBarLayout = activityInteraction.getAppbar();
+        AppBarLayout appBarLayout = mActivityInteraction.getAppbar();
         ViewGroup.LayoutParams params = appBarLayout.getLayoutParams();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;

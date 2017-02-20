@@ -1,9 +1,15 @@
 package com.goqual.a10k.view.adapters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.widget.AdapterView;
 
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
+import com.goqual.a10k.view.adapters.model.AdapterDataModel;
+import com.goqual.a10k.view.adapters.view.AdapterDataView;
+import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchEach;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchList;
 
@@ -14,22 +20,16 @@ import java.util.List;
  * Created by seyriz on 2017. 2. 17..
  */
 
-public class SwitchContainerPagerAdapter extends FragmentPagerAdapter {
+public class SwitchContainerPagerAdapter extends FragmentPagerAdapter  {
     List<Switch> mSwitchList = null;
     Context mContext = null;
+    private OnRecyclerItemClickListener onRecyclerItemClickListener;
 
     public SwitchContainerPagerAdapter(FragmentManager fragmentManager, Context ctx) {
         super(fragmentManager);
         this.mSwitchList = new ArrayList<>();
         getFragmentLists().add(new FragmentMainSwitchList());
         mContext = ctx;
-    }
-
-    private void addSwitch(Switch newSwitch) {
-        FragmentMainSwitchEach frag = FragmentMainSwitchEach.newInstance(mSwitchList.size());
-
-        mSwitchList.add(newSwitch);
-        addItem(frag);
     }
 
     @Override
@@ -40,7 +40,29 @@ public class SwitchContainerPagerAdapter extends FragmentPagerAdapter {
             return POSITION_NONE;
     }
 
+    @Override
+    public void clear() {
+        mSwitchList.clear();
+        super.clear();
+        super.addItem(FragmentMainSwitchList.newInstance());
+        refresh();
+    }
+
     public Switch getSwitch(int position) {
         return this.mSwitchList.get(position);
+    }
+
+    public void addItem(Switch newSwitch) {
+
+        FragmentMainSwitchEach frag = FragmentMainSwitchEach.newInstance(mSwitchList.size());
+
+        mSwitchList.add(newSwitch);
+        addItem(frag);
+    }
+
+    public void deleteItem(int position) {
+        mSwitchList.remove(position);
+        fragmentLists.remove(position+1); // {FragmentMainSwitchList, ...}
+        refresh();
     }
 }
