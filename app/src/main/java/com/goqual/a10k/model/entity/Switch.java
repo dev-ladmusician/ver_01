@@ -1,5 +1,7 @@
 package com.goqual.a10k.model.entity;
 
+import com.android.annotations.Nullable;
+
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
@@ -9,9 +11,9 @@ public class Switch {
     private int _bsid;
     private int state;
     private int seq;
-    private boolean btn1;
-    private boolean btn2;
-    private boolean btn3;
+    @Nullable private Boolean btn1;
+    @Nullable private Boolean btn2;
+    @Nullable private Boolean btn3;
     private String hw;
     private String fw;
     private String title;
@@ -61,27 +63,30 @@ public class Switch {
         this.seq = seq;
     }
 
-    public boolean isBtn1() {
+    @Nullable
+    public Boolean getBtn1() {
         return btn1;
     }
 
-    public void setBtn1(boolean btn1) {
+    public void setBtn1(@Nullable Boolean btn1) {
         this.btn1 = btn1;
     }
 
-    public boolean isBtn2() {
+    @Nullable
+    public Boolean getBtn2() {
         return btn2;
     }
 
-    public void setBtn2(boolean btn2) {
+    public void setBtn2(@Nullable Boolean btn2) {
         this.btn2 = btn2;
     }
 
-    public boolean isBtn3() {
+    @Nullable
+    public Boolean getBtn3() {
         return btn3;
     }
 
-    public void setBtn3(boolean btn3) {
+    public void setBtn3(@Nullable Boolean btn3) {
         this.btn3 = btn3;
     }
 

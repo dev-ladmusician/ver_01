@@ -7,4 +7,13 @@
 
     <!-- args -->
     <string name="arg_switch_position">arg_switch_position</string>
+
+    <!-- Switch item -->
+    <string name="btn_on">on</string>
+    <string name="btn_off">off</string>
+    <string name="btn_capital_on">ON</string>
+    <string name="btn_capital_off">OFF</string>
+    <string name="btn_null">none</string>
+    <string name="btn_str_on">1</string>
+    <string name="btn_str_off">0</string>
 </resources>

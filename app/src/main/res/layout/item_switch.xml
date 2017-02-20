@@ -65,68 +65,69 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <include
-                layout="@layout/item_switch_btn_state_s" />
+            <com.goqual.a10k.view.customviews.CustomViewBtnStates
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
-        <!--<RelativeLayout-->
-            <!--android:id="@+id/item_switch_btn_container"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
+        <RelativeLayout
+            android:id="@+id/item_switch_btn_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/item_switch_btn_1"-->
-                <!--android:layout_width="@dimen/item_switch_width_btn_wrapper"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_toLeftOf="@+id/item_switch_btn_2">-->
+            <RelativeLayout
+                android:id="@+id/item_switch_btn_1"
+                android:layout_width="@dimen/item_switch_width_btn_wrapper"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/item_switch_btn_2">
 
-                <!--<TextView-->
-                    <!--android:id="@+id/item_switch_btn_txt_1"-->
-                    <!--android:layout_width="@dimen/item_switch_size_btn"-->
-                    <!--android:layout_height="@dimen/item_switch_size_btn"-->
-                    <!--android:layout_centerInParent="true"-->
-                    <!--android:text="@string/btn_off"-->
-                    <!--android:textColor="@color/grey_03"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:gravity="center"-->
-                    <!--android:background="@drawable/selector_switch_btn_off"/>-->
-            <!--</RelativeLayout>-->
+                <TextView
+                    android:id="@+id/item_switch_btn_txt_1"
+                    android:layout_width="@dimen/item_switch_size_btn"
+                    android:layout_height="@dimen/item_switch_size_btn"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_off"
+                    android:textColor="@color/grey_03"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/selector_switch_btn_off"/>
+            </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/item_switch_btn_2"-->
-                <!--android:layout_width="@dimen/item_switch_width_btn_wrapper"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_toLeftOf="@+id/item_switch_btn_3">-->
+            <RelativeLayout
+                android:id="@+id/item_switch_btn_2"
+                android:layout_width="@dimen/item_switch_width_btn_wrapper"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/item_switch_btn_3">
 
-                <!--<TextView-->
-                    <!--android:id="@+id/item_switch_btn_txt_2"-->
-                    <!--android:layout_width="@dimen/item_switch_size_btn"-->
-                    <!--android:layout_height="@dimen/item_switch_size_btn"-->
-                    <!--android:layout_centerInParent="true"-->
-                    <!--android:text="@string/btn_off"-->
-                    <!--android:textColor="@color/grey_03"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:gravity="center"-->
-                    <!--android:background="@drawable/selector_switch_btn_off"/>-->
-            <!--</RelativeLayout>-->
+                <TextView
+                    android:id="@+id/item_switch_btn_txt_2"
+                    android:layout_width="@dimen/item_switch_size_btn"
+                    android:layout_height="@dimen/item_switch_size_btn"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_off"
+                    android:textColor="@color/grey_03"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/selector_switch_btn_off"/>
+            </RelativeLayout>
 
-            <!--<RelativeLayout-->
-                <!--android:id="@+id/item_switch_btn_3"-->
-                <!--android:layout_width="@dimen/item_switch_width_btn_wrapper"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_alignParentRight="true">-->
+            <RelativeLayout
+                android:id="@+id/item_switch_btn_3"
+                android:layout_width="@dimen/item_switch_width_btn_wrapper"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true">
 
-                <!--<TextView-->
-                    <!--android:id="@+id/item_switch_btn_txt_3"-->
-                    <!--android:layout_width="@dimen/item_switch_size_btn"-->
-                    <!--android:layout_height="@dimen/item_switch_size_btn"-->
-                    <!--android:layout_centerInParent="true"-->
-                    <!--android:text="@string/btn_off"-->
-                    <!--android:textColor="@color/grey_03"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:gravity="center"-->
-                    <!--android:background="@drawable/selector_switch_btn_off"/>-->
-            <!--</RelativeLayout>-->
-        <!--</RelativeLayout>-->
+                <TextView
+                    android:id="@+id/item_switch_btn_txt_3"
+                    android:layout_width="@dimen/item_switch_size_btn"
+                    android:layout_height="@dimen/item_switch_size_btn"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_off"
+                    android:textColor="@color/grey_03"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/selector_switch_btn_off"/>
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

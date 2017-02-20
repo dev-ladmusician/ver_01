@@ -7,10 +7,15 @@
     <dimen name="padding_16">16dp</dimen>
     <dimen name="item_height_100">100dp</dimen>
 
-    <dimen name="item_ic_container_size">46dp</dimen>\
+    <dimen name="item_ic_container_size">46dp</dimen>
     <dimen name="item_ic_size_l">35dp</dimen>
     <dimen name="item_ic_size_m">30dp</dimen>
     <dimen name="item_ic_size_s">25dp</dimen>
     <dimen name="item_ic_size_xs">20dp</dimen>
     <dimen name="item_ic_size_xxs">18dp</dimen>
+
+    <!-- switches -->
+    <dimen name="item_switch_width_btn_wrapper">74dp</dimen>
+    <dimen name="item_switch_size_btn">60dp</dimen>
+
 </resources>
