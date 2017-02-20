@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.view.adapters.FragmentPagerAdapter;
+import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
@@ -26,7 +26,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     protected int getLayoutId() { return R.layout.activity_main; }
 
     private Menu menu;
-    private FragmentPagerAdapter fragmentPagerAdapter;
+    private AdapterPager fragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     }
 
     private void initViewPager() {
-        fragmentPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager());
+        fragmentPagerAdapter = new AdapterPager(getSupportFragmentManager());
 
         mBinding.mainPager.setAdapter(fragmentPagerAdapter);
         mBinding.mainPager.addOnPageChangeListener(mainPagerPageChangeListener);

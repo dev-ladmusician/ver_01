@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchContainerBinding;
-import com.goqual.a10k.view.adapters.SwitchContainerPagerAdapter;
+import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 
 /**
@@ -21,7 +21,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     private String mTitle = null;
 
-    private SwitchContainerPagerAdapter mPagerAdapter;
+    private AdapterSwitchContainer mPagerAdapter;
 
     @Override
     public String getTitle() {
@@ -47,7 +47,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     private void initView() {
-        mPagerAdapter = new SwitchContainerPagerAdapter(getFragmentManager(), getActivity());
+        mPagerAdapter = new AdapterSwitchContainer(getFragmentManager(), getActivity());
         mBinding.viewPager.setAdapter(mPagerAdapter);
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
     }

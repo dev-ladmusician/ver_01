@@ -19,6 +19,7 @@ public class Switch {
     private boolean isavailable;
     private boolean outlet;
     private boolean mIsDeletable;
+    public boolean mIsStateView;
 
     private String WIFI_SSID = "";
     private String WIFI_BSSID = "";
@@ -178,5 +179,13 @@ public class Switch {
 
     public void setAP_SERVER_PORT(int AP_SERVER_PORT) {
         this.AP_SERVER_PORT = AP_SERVER_PORT;
+    }
+
+    public boolean ismIsStateView() {
+        return mIsStateView;
+    }
+
+    public void setmIsStateView(boolean mIsStateView) {
+        this.mIsStateView = mIsStateView;
     }
 }
