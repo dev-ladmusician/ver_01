@@ -6,9 +6,9 @@
             name="itemSwitch"
             type="com.goqual.a10k.model.entity.Switch" />
 
-        <variable
-            name="viewholder"
-            type="com.goqual.a10k.view.viewholders.SwitchViewHolder" />
+        <import
+            alias="View"
+            type="android.view.View"/>
     </data>
 
     <RelativeLayout
@@ -18,12 +18,13 @@
         android:paddingRight="@dimen/padding_16"
         android:background="@drawable/style_border_bottom_grey">
 
+        <!-- delete -->
         <RelativeLayout
             android:id="@+id/item_switch_delete"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_ic_container_size"
-            android:visibility="gone"
+            android:visibility="@{itemSwitch.mIsStateView ? View.VISIBLE : View.GONE}"
             android:layout_height="match_parent">
 
             <ImageView
@@ -35,18 +36,21 @@
                 android:layout_alignParentLeft="true" />
         </RelativeLayout>
 
+        <!-- title -->
         <TextView
             android:id="@+id/item_switch_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/item_switch_delete"
-            android:text="10K"/>
+            android:text="@{itemSwitch.title}"/>
 
+        <!-- rename -->
         <RelativeLayout
             android:id="@+id/item_switch_rename"
             android:layout_toRightOf="@+id/item_switch_title"
             android:layout_width="@dimen/item_ic_container_size"
+            android:visibility="@{itemSwitch.mIsStateView ? View.VISIBLE : View.GONE}"
             android:layout_height="match_parent">
 
             <ImageView
@@ -57,18 +61,18 @@
         </RelativeLayout>
 
         <!-- edit mode btn state -->
-        <LinearLayout
-            android:id="@+id/item_switch_btn_state_container"
-            android:visibility="gone"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/item_switch_btn_state_container"-->
+            <!--android:visibility="gone"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <com.goqual.a10k.view.customviews.CustomViewBtnStates
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+            <!--<com.goqual.a10k.view.customviews.CustomViewBtnStates-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"/>-->
+        <!--</LinearLayout>-->
 
         <RelativeLayout
             android:id="@+id/item_switch_btn_container"
@@ -86,11 +90,11 @@
                     android:layout_width="@dimen/item_switch_size_btn"
                     android:layout_height="@dimen/item_switch_size_btn"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_off"
-                    android:textColor="@color/grey_03"
+                    android:text="@{itemSwitch.btn1 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn1 ? @color/white : @color/grey_03}"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:background="@drawable/selector_switch_btn_off"/>
+                    android:background="@{itemSwitch.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -104,11 +108,11 @@
                     android:layout_width="@dimen/item_switch_size_btn"
                     android:layout_height="@dimen/item_switch_size_btn"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_off"
-                    android:textColor="@color/grey_03"
+                    android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:background="@drawable/selector_switch_btn_off"/>
+                    android:background="@{itemSwitch.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -122,11 +126,11 @@
                     android:layout_width="@dimen/item_switch_size_btn"
                     android:layout_height="@dimen/item_switch_size_btn"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_off"
-                    android:textColor="@color/grey_03"
+                    android:text="@{itemSwitch.btn3 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:background="@drawable/selector_switch_btn_off"/>
+                    android:background="@{itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

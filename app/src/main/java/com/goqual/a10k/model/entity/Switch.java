@@ -16,7 +16,7 @@ public class Switch {
     @Nullable private Boolean btn3;
     private String hw;
     private String fw;
-    private String title;
+    public String title;
     private String macaddr;
     private boolean isavailable;
     private boolean outlet;
