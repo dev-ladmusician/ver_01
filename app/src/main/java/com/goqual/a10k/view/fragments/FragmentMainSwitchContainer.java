@@ -11,10 +11,13 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchContainerBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.presenter.SocketManager;
 import com.goqual.a10k.presenter.SwitchPresenter;
+import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 
 /**
@@ -22,7 +25,7 @@ import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-implements SwitchPresenter.View<Switch> {
+implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
@@ -30,6 +33,7 @@ implements SwitchPresenter.View<Switch> {
     private AdapterSwitchContainer mPagerAdapter;
 
     private SwitchPresenterImpl mPresenter;
+    private SocketManagerImpl mSocketManager;
 
     public static FragmentMainSwitchContainer newInstance() {
         
@@ -110,10 +114,23 @@ implements SwitchPresenter.View<Switch> {
         return mPresenter;
     }
 
+    private SocketManager getSocketManager() {
+        if(mSocketManager == null) {
+            mSocketManager = new SocketManagerImpl(this, getActivity());
+        }
+        return mSocketManager;
+    }
+
     private void initView() {
-        mPagerAdapter = new AdapterSwitchContainer(getFragmentManager(), getActivity());
+        mPagerAdapter = new AdapterSwitchContainer(getChildFragmentManager(), getActivity());
         mBinding.viewPager.setAdapter(mPagerAdapter);
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
+    }
+
+    @Override
+    public void onSwitchClicked(int position, int btnNumber) {
+        Switch item = SwitchManager.getInstance().getItem(position);
+        getSocketManager().operationOnOff(item, btnNumber);
     }
 
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {

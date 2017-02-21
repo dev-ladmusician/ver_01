@@ -26,5 +26,15 @@ public class SwitchViewHolder extends RecyclerView.ViewHolder {
 
     public void bindView(int position, Switch item, OnRecyclerItemClickListener listener) {
         binding.setItemSwitch(item);
+
+        binding.itemSwitchBtn1.setOnClickListener(v -> {
+            listener.onItemClick(v.getId(), position);
+        });
+        binding.itemSwitchBtn2.setOnClickListener(v -> {
+            listener.onItemClick(v.getId(), position);
+        });
+        binding.itemSwitchBtn3.setOnClickListener(v -> {
+            listener.onItemClick(v.getId(), position);
+        });
     }
 }
