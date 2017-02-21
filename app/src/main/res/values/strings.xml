@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">A10K</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- title -->
+    <string name="title_switch_list">All Switches</string>
+    <string name="title_switch_each">10K</string>
+
+    <!-- args -->
+    <string name="arg_switch_position">arg_switch_position</string>
+
+    <!-- Switch item -->
+    <string name="btn_on">on</string>
+    <string name="btn_off">off</string>
+    <string name="btn_capital_on">ON</string>
+    <string name="btn_capital_off">OFF</string>
+    <string name="btn_null">none</string>
+    <string name="btn_str_on">1</string>
+    <string name="btn_str_off">0</string>
 </resources>
