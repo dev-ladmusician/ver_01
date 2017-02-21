@@ -6,12 +6,14 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchEachBinding;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
 
 /**
@@ -59,6 +61,10 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    public void onBtnClick(View view) {
+        LogUtil.d(TAG, ((TextView)view).getText().toString());
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,6 +72,7 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
         mBinding = DataBindingUtil.bind(view);
         if (mSwitch != null) {
             mBinding.setItemSwitch(mSwitch);
+            mBinding.setFragment(this);
         }
     }
 

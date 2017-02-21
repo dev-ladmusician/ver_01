@@ -7,6 +7,10 @@
             name="itemSwitch"
             type="com.goqual.a10k.model.entity.Switch" />
 
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.FragmentMainSwitchEach"/>
+
         <import
             type="android.view.View"
             alias="View" />
@@ -48,6 +52,7 @@
                     android:layout_height="@dimen/switch_each_btn_size"
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:onClick="@{fragment::onBtnClick}"
                     android:text="@{itemSwitch.btn1 ? @string/btn_on : @string/btn_off}"
                     android:textColor="@{itemSwitch.btn1 ? @color/white : @color/grey_03}"
                     android:background="@{itemSwitch.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
@@ -60,7 +65,8 @@
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_1"
                     android:layout_marginBottom="@dimen/switch_each_btn_margin"
-                    android:layout_marginTop="@{@dimen/switch_each_btn_margin}"
+                    android:layout_marginTop="@dimen/switch_each_btn_margin"
+                    android:onClick="@{fragment::onBtnClick}"
                     android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
                     android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
                     android:visibility="@{itemSwitch.state &lt; 2 ? View.GONE : View.VISIBLE}"
@@ -73,6 +79,7 @@
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_2"
+                    android:onClick="@{fragment::onBtnClick}"
                     android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
                     android:visibility="@{itemSwitch.state &lt; 3 ? View.GONE : View.VISIBLE}"
                     android:text="@{itemSwitch.btn3 ? @string/btn_on : @string/btn_off}"
