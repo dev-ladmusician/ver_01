@@ -6,7 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
 /**
- * Created by seyriz on 2017. 2. 17..
+ * Created by HanWool on 2017. 2. 17..
  */
 
 public class ApplicationBase extends Application {
