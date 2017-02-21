@@ -92,6 +92,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         mBinding.switchList.setAdapter(getAdapter());
         mBinding.switchList.setLayoutManager(new LinearLayoutManager(mContext));
 
+
         getAdapter().setOnRecyclerItemClickListener((id, position) -> {
             switch (id) {
                 case R.id.item_switch_btn_1:
