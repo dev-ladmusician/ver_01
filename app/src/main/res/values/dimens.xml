@@ -18,4 +18,16 @@
     <dimen name="item_switch_width_btn_wrapper">74dp</dimen>
     <dimen name="item_switch_size_btn">60dp</dimen>
 
+    <!-- switch each -->
+    <dimen name="switch_each_container_margin">40dp</dimen>
+    <dimen name="switch_each_container_padding">20dp</dimen>
+    <dimen name="switch_each_container_eleavation">20dp</dimen>
+    <dimen name="switch_each_container_radius">30dp</dimen>
+    <dimen name="switch_each_btn_size">100dp</dimen>
+    <dimen name="switch_each_btn_margin">8dp</dimen>
+    <dimen name="switch_each_btn_margin_two">20dp</dimen>
+    <dimen name="switch_each_btn_txt_size">20dp</dimen>
+    <dimen name="switch_each_version_txt_size">10dp</dimen>
+    <dimen name="switch_each_setting_wrapper">40dp</dimen>
+    <dimen name="switch_each_setting">28dp</dimen>
 </resources>

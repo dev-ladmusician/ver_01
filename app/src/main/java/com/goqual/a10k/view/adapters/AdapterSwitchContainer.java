@@ -3,8 +3,8 @@ package com.goqual.a10k.view.adapters;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 
-import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchEach;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchList;
@@ -17,6 +17,7 @@ import java.util.List;
  */
 
 public class AdapterSwitchContainer extends AdapterPager {
+    private static final String TAG = AdapterSwitchContainer.class.getSimpleName();
     List<Switch> mSwitchList = null;
     Context mContext = null;
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
@@ -51,7 +52,7 @@ public class AdapterSwitchContainer extends AdapterPager {
     public void addItem(Switch newSwitch) {
 
         FragmentMainSwitchEach frag = FragmentMainSwitchEach.newInstance(mSwitchList.size());
-
+        LogUtil.e(TAG, "frag :: " + frag.getId());
         mSwitchList.add(newSwitch);
         addItem(frag);
     }

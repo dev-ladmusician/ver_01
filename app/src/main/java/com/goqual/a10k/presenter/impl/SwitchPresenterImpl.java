@@ -42,8 +42,8 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                 .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((item) -> {
-                            mView.addItem(item);
                             SwitchManager.getInstance().addItem(item);
+                            mView.addItem(item);
                         },
                         (e) -> {
                             if (e instanceof HttpException) {
@@ -53,6 +53,7 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                                     mView.onError(e);
                                 }
                             } else {
+                                e.printStackTrace();
                                 LogUtil.e(TAG, "anonymous error");
                             }
                         },
