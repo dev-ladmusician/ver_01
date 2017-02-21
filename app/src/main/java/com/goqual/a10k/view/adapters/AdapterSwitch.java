@@ -92,4 +92,6 @@ implements AdapterDataModel<Switch>, AdapterDataView{
     public void onBindViewHolder(SwitchViewHolder holder, int position) {
         holder.bindView(position, mSwitchList.get(position), mItemClickListener);
     }
+
+
 }

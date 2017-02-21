@@ -25,10 +25,18 @@ public class SwitchManager {
         mSwitchList = new ArrayList<>();
     }
 
+    public ArrayList<Switch> getList() {
+        return mSwitchList;
+    }
+
     public void addItem(Switch item) {
         if (mSwitchList != null) {
             mSwitchList.add(item);
         }
+    }
+
+    public void clear() {
+        mSwitchList.clear();
     }
 
     public int getCount() {

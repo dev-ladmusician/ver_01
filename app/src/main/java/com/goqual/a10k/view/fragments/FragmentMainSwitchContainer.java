@@ -15,6 +15,7 @@ import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
@@ -55,6 +56,9 @@ implements SwitchPresenter.View<Switch> {
          */
         mBinding.viewPager.setOffscreenPageLimit(SwitchManager.getInstance().getCount());
         mPagerAdapter.refresh();
+
+        // update switch list
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
     }
 
     @Override
@@ -93,6 +97,8 @@ implements SwitchPresenter.View<Switch> {
     @Override
     public void onResume() {
         super.onResume();
+        mPagerAdapter.clear();
+        SwitchManager.getInstance().clear();
         getPresenter()
                 .loadItems();
     }
