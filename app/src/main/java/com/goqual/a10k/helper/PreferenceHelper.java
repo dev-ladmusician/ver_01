@@ -10,6 +10,14 @@ import android.content.SharedPreferences;
 public class PreferenceHelper {
     private final String PREF_NAME = "com.goqual.10k";
     private Context mContext;
+    private static PreferenceHelper instance;
+
+    public static PreferenceHelper getInstance(Context ctx) {
+        if(instance == null) {
+            instance = new PreferenceHelper(ctx);
+        }
+        return instance;
+    }
 
     public PreferenceHelper(Context context) {
         mContext = context;

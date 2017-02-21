@@ -11,6 +11,7 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchContainerBinding;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.SwitchPresenter;
+import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 
@@ -25,6 +26,17 @@ implements SwitchPresenter.View<Switch> {
     private String mTitle = null;
 
     private AdapterSwitchContainer mPagerAdapter;
+
+    private SwitchPresenterImpl mPresenter;
+
+    public static FragmentMainSwitchContainer newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        FragmentMainSwitchContainer fragment = new FragmentMainSwitchContainer();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void loadingStart() {
@@ -48,7 +60,7 @@ implements SwitchPresenter.View<Switch> {
 
     @Override
     public void addItem(Switch item) {
-
+        mPagerAdapter.addItem(item);
     }
 
     @Override
@@ -72,6 +84,20 @@ implements SwitchPresenter.View<Switch> {
         super.onViewCreated(view, savedInstanceState);
 
         initView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPresenter()
+                .loadItems();
+    }
+
+    private SwitchPresenter getPresenter() {
+        if(mPresenter == null) {
+            mPresenter = new SwitchPresenterImpl(getActivity(), this, mPagerAdapter);
+        }
+        return mPresenter;
     }
 
     private void initView() {

@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.activities;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -11,16 +12,19 @@ import android.view.MenuItem;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
         implements IActivityInteraction{
     public static final String TAG = ActivityMain.class.getSimpleName();
+
 
     @Override
     protected int getLayoutId() { return R.layout.activity_main; }
@@ -33,6 +37,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         super.onCreate(savedInstanceState);
         mBinding.setActivity(this);
         initView();
+        PreferenceHelper.getInstance(this)
+                .put(getString(R.string.arg_user_token),
+                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNDg3NjUwOTc2LCJleHAiOjE0ODgxNzY1NzZ9.z4eJQRtAcGYJFyEWikVYYHrtmcfOl1R3c9bsFy5VNTI");
+
     }
 
     private void initView() {
@@ -48,6 +56,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
 
     private void initViewPager() {
         fragmentPagerAdapter = new AdapterPager(getSupportFragmentManager());
+        fragmentPagerAdapter.addItem(FragmentMainSwitchContainer.newInstance());
 
         mBinding.mainPager.setAdapter(fragmentPagerAdapter);
         mBinding.mainPager.addOnPageChangeListener(mainPagerPageChangeListener);

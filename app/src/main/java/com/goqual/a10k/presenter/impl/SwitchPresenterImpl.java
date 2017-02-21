@@ -3,6 +3,7 @@ package com.goqual.a10k.presenter.impl;
 import android.content.Context;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
@@ -40,7 +41,10 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                 .filter(items -> items != null && !items.isEmpty())
                 .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::addItem,
+                .subscribe((item) -> {
+                            mView.addItem(item);
+                            SwitchManager.getInstance().addItem(item);
+                        },
                         (e) -> {
                             if (e instanceof HttpException) {
                                 HttpException error = (HttpException) e;
