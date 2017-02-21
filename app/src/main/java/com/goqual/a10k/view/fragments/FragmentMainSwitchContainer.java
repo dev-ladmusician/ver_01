@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchContainerBinding;
+import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 
@@ -16,12 +18,38 @@ import com.goqual.a10k.view.base.BaseFragment;
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding> {
+public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
+implements SwitchPresenter.View<Switch> {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
 
     private AdapterSwitchContainer mPagerAdapter;
+
+    @Override
+    public void loadingStart() {
+
+    }
+
+    @Override
+    public void loadingStop() {
+
+    }
+
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public void onError(Throwable e) {
+
+    }
+
+    @Override
+    public void addItem(Switch item) {
+
+    }
 
     @Override
     public String getTitle() {
