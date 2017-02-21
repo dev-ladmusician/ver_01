@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.activities;
 
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -17,6 +16,9 @@ import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.fragments.FragmentMainAlarm;
+import com.goqual.a10k.view.fragments.FragmentMainNoti;
+import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
@@ -57,7 +59,11 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     private void initViewPager() {
         fragmentPagerAdapter = new AdapterPager(getSupportFragmentManager());
         fragmentPagerAdapter.addItem(FragmentMainSwitchContainer.newInstance());
+        fragmentPagerAdapter.addItem(FragmentMainAlarm.newInstance());
+        fragmentPagerAdapter.addItem(FragmentMainNoti.newInstance());
+        fragmentPagerAdapter.addItem(FragmentMainSetting.newInstance());
 
+        mBinding.mainPager.setOffscreenPageLimit(getResources().getInteger(R.integer.main_viewpager_count));
         mBinding.mainPager.setAdapter(fragmentPagerAdapter);
         mBinding.mainPager.addOnPageChangeListener(mainPagerPageChangeListener);
     }

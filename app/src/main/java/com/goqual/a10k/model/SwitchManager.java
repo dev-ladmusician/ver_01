@@ -31,4 +31,8 @@ public class SwitchManager {
         }
     }
 
+    public int getCount() {
+        return mSwitchList.size();
+    }
+
 }

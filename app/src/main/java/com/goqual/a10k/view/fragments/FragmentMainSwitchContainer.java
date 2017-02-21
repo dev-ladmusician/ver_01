@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchContainerBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
@@ -32,7 +33,6 @@ implements SwitchPresenter.View<Switch> {
     public static FragmentMainSwitchContainer newInstance() {
         
         Bundle args = new Bundle();
-        
         FragmentMainSwitchContainer fragment = new FragmentMainSwitchContainer();
         fragment.setArguments(args);
         return fragment;
@@ -50,7 +50,11 @@ implements SwitchPresenter.View<Switch> {
 
     @Override
     public void refresh() {
-
+        /**
+         * TODO Switch가 많아지면 memory 문제가 발생함
+         */
+        mBinding.viewPager.setOffscreenPageLimit(SwitchManager.getInstance().getCount());
+        mPagerAdapter.refresh();
     }
 
     @Override
