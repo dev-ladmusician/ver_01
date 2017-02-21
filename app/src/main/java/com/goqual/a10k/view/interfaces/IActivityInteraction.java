@@ -4,7 +4,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
 
 /**
- * Created by seyriz on 2017. 2. 17..
+ * Created by HanWool on 2017. 2. 17..
  */
 
 public interface IActivityInteraction {
