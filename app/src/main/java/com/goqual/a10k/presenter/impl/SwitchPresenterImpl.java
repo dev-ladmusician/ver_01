@@ -9,6 +9,9 @@ import com.goqual.a10k.model.remote.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.util.Errors;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventSwitchRefresh;
+import com.goqual.a10k.util.event.RxBus;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
@@ -44,6 +47,7 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                 .subscribe((item) -> {
                             SwitchManager.getInstance().addItem(item);
                             mView.addItem(item);
+                            RxBus.getInstance().send(new EventSwitchRefresh(item));
                         },
                         (e) -> {
                             if (e instanceof HttpException) {

@@ -3,14 +3,15 @@
     package="com.goqual.a10k">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+        android:name=".ApplicationBase"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".ApplicationBase">
+        android:theme="@style/AppTheme">
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,7 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activities.ActivityMain"></activity>
+        <activity android:name=".view.activities.ActivityMain" />
+
+        <service
+            android:name=".util.ServiceSocketIO"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.goqual.a10k.START_SOCKET_SERVICE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

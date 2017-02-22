@@ -8,7 +8,7 @@ public class Constraint {
     public static String MQTT_BROKER_IP = "52.79.137.129";
     //public static String MQTT_BROKER_IP = "52.53.244.248";
 
-    public static final String SOCKER_SERVER_IP = "http://52.78.206.170:1987";
+    public static final String SOCKET_SERVER_IP = "http://52.78.206.170:1987";
     //public static final String SOCKER_SERVER_IP = "http://54.153.40.3:1987";
     public static final String BASE_URL = "http://52.78.206.170:3443/";
     //public static final String BASE_URL = "http://54.153.40.3:3443/";

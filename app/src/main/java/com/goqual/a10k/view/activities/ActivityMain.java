@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -14,6 +15,7 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ServiceSocketIO;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
@@ -46,6 +48,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         super.onCreate(savedInstanceState);
         mBinding.setActivity(this);
         initView();
+        startService(new Intent(this, ServiceSocketIO.class));
         PreferenceHelper.getInstance(this)
                 .put(getString(R.string.arg_user_token),
                         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNDg3NjUwOTc2LCJleHAiOjE0ODgxNzY1NzZ9.z4eJQRtAcGYJFyEWikVYYHrtmcfOl1R3c9bsFy5VNTI");
