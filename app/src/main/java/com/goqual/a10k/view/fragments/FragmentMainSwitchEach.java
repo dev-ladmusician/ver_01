@@ -29,6 +29,7 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
     private FragmentMainSwitchEachBinding mBinding = null;
     private ISwitchOperationListener operationListener = null;
     private Switch mSwitch = null;
+    private int mSwitchItemPosition;
 
     public static FragmentMainSwitchEach newInstance(int position) {
         Bundle args = new Bundle();
@@ -51,13 +52,13 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int position = -1;
+        mSwitchItemPosition = -1;
         if(getArguments() != null) {
-            position = getArguments().getInt(ARG_POSITION, -1);
+            mSwitchItemPosition = getArguments().getInt(ARG_POSITION, -1);
         }
 
-        if (position != -1) {
-            mSwitch = SwitchManager.getInstance().getItem(position);
+        if (mSwitchItemPosition != -1) {
+            mSwitch = SwitchManager.getInstance().getItem(mSwitchItemPosition);
         }
     }
 
@@ -70,18 +71,17 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
 
     public void onBtnClick(View view) {
         LogUtil.d(TAG, ""+view.getId());
-        /**
-         * TODO: onSwitchClicked에서 스위치를 넘기는 방법을 고민할 필요가 있을 듯
-         */
         switch (view.getId()) {
             case R.id.switch_btn_1:
-                operationListener.onSwitchClicked(SwitchManager.getInstance().getPosition(mSwitch), 1);
+                operationListener.onSwitchClicked(mSwitchItemPosition, 1);
                 break;
             case R.id.switch_btn_2:
-                operationListener.onSwitchClicked(SwitchManager.getInstance().getPosition(mSwitch), 2);
+                operationListener.onSwitchClicked(mSwitchItemPosition, 2);
                 break;
             case R.id.switch_btn_3:
-                operationListener.onSwitchClicked(SwitchManager.getInstance().getPosition(mSwitch), 3);
+                operationListener.onSwitchClicked(mSwitchItemPosition, 3);
+                break;
+            case R.id.switch_setting:
                 break;
         }
     }

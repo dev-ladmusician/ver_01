@@ -107,7 +107,6 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
     @Override
     public void onResume() {
         super.onResume();
-//        mBinding.viewPager.setOffscreenPageLimit(0);
 
         mPagerAdapter.clear();
         mPagerAdapter.refresh();
@@ -162,8 +161,6 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
         @Override
         public void onPageSelected(int position) {
-            LogUtil.e(TAG, "CURRENT PAGE selected:: " + mBinding.viewPager.getCurrentItem());
-            //mCurrentPage = mBinding.viewPager.getCurrentItem();
             mTitle = ((BaseFragment)mPagerAdapter.getItem(position)).getTitle();
             mActivityInteraction.setTitle(mTitle);
         }
