@@ -8,11 +8,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -22,11 +26,14 @@ import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
+import rx.functions.Action1;
+
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
         implements IActivityInteraction{
     public static final String TAG = ActivityMain.class.getSimpleName();
 
+    private EventSwitchEdit mEditBtnStatus;
 
     @Override
     protected int getLayoutId() { return R.layout.activity_main; }
@@ -49,6 +56,23 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         initToolbar();
         initViewPager();
         initMainTab();
+
+        mBinding.toolbarEdit.setVisibility(View.GONE);
+
+        subEvent();
+    }
+
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventSwitchEdit) {
+                            mEditBtnStatus = (EventSwitchEdit)event;
+                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getStatus());
+                        }
+                    }
+                });
     }
 
     private void initToolbar() {
@@ -117,6 +141,24 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void setTitle(String title) {
         LogUtil.d(TAG, title);
         mBinding.toolbarTitle.setText(title);
+    }
+
+    public void onBtnClick(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_edit:
+                switch (mEditBtnStatus.getStatus()) {
+                    case DONE:
+                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.DONE));
+                        break;
+                    case EDIT:
+                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.EDIT));
+                        break;
+                }
+                break;
+            case R.id.toolbar_add:
+                RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.ADD));
+                break;
+        }
     }
 
     private TabLayout.OnTabSelectedListener mainTapSelectedListener = new TabLayout.OnTabSelectedListener() {

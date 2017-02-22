@@ -16,17 +16,23 @@ import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+
+import rx.functions.Action1;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
@@ -39,7 +45,7 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
     private int mCurrentPage = 0;
 
     public static FragmentMainSwitchContainer newInstance() {
-        
+
         Bundle args = new Bundle();
         FragmentMainSwitchContainer fragment = new FragmentMainSwitchContainer();
         fragment.setArguments(args);
@@ -69,6 +75,11 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
         LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
         mBinding.viewPager.setCurrentItem(mCurrentPage);
+
+        RxBus.getInstance().send(
+                SwitchManager.getInstance().getCount() == 0 ?
+                        new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE) :
+                        new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
     }
 
     @Override
@@ -146,12 +157,39 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
         mPagerAdapter = new AdapterSwitchContainer(getChildFragmentManager(), getActivity());
         mBinding.viewPager.setAdapter(mPagerAdapter);
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
+        subEvent();
     }
 
-    @Override
-    public void onSwitchClicked(int position, int btnNumber) {
-        Switch item = SwitchManager.getInstance().getItem(position);
-        getSocketManager().operationOnOff(item, btnNumber);
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventToolbarClick) {
+                            // TODO
+                            LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
+                            switch (((EventToolbarClick) event).getStatus()) {
+                                case DONE:
+                                    passToolbarClickEvent(EventSwitchEdit.STATUS.DONE);
+
+                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                                    break;
+                                case EDIT:
+                                    passToolbarClickEvent(EventSwitchEdit.STATUS.EDIT);
+
+                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.DONE));
+                                    break;
+                                case ADD:
+                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                                    break;
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void passToolbarClickEvent(EventSwitchEdit.STATUS status) {
+        ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(status);
     }
 
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -170,4 +208,41 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
         }
     };
+
+
+
+
+    /**
+     * switch operation
+     */
+    @Override
+    public void onSwitchClicked(int position, int btnNumber) {
+        Switch item = SwitchManager.getInstance().getItem(position);
+        getSocketManager().operationOnOff(item, btnNumber);
+    }
+
+    @Override
+    public void onSwitchDelete(int position) {
+        getPresenter().deleteItem(position);
+    }
+
+    @Override
+    public void onSwitchRename(int position, String title) {
+        getPresenter().rename(position, title);
+    }
+
+    @Override
+    public void onSuccessRenameSwitch(int position, String title) {
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).changeSwitchTitle(position, title);
+    }
+
+    @Override
+    public void onSuccessDeleteSwitch(int position) {
+        // 등록된 스위치가 없으면 edit hide
+        if (SwitchManager.getInstance().getCount() == 0) {
+            RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE));
+        }
+        mPagerAdapter.deleteItem(position);
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
+    }
 }

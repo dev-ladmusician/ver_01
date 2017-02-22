@@ -6,9 +6,11 @@ package com.goqual.a10k.presenter;
 
 public interface SwitchPresenter {
     void loadItems();
-    void deleteItem(int position, int connectionId);
-    void rename(int position, int connectionId, String title);
+    void deleteItem(int position);
+    void rename(int position, String title);
 
     interface View<T> extends BasePresenterView<T> {
+        void onSuccessRenameSwitch(int position, String title);
+        void onSuccessDeleteSwitch(int position);
     }
 }

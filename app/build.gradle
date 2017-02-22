@@ -39,7 +39,7 @@ android {
             versionCode versionNumber
             versionName "${versionMajor}.${versionMinor}.${versionPatch}-${versionBuild}"
             applicationId "com.goqual.a10k"
-            minSdkVersion 15
+            minSdkVersion 21
             targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             multiDexEnabled true

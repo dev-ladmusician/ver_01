@@ -61,13 +61,38 @@ public class SwitchPresenterImpl implements SwitchPresenter {
     }
 
     @Override
-    public void deleteItem(int position, int connectionId) {
-
+    public void deleteItem(int position) {
+        getSwitchService().getSwitchApi().delete(SwitchManager.getInstance().getItem(position).get_connectionid())
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            //mView.leaveSocketRoom(position);
+                            SwitchManager.getInstance().delete(position);
+                            //mView.removeSwitchEach(position);
+                            //mView.initIndicator();
+                            mView.onSuccessDeleteSwitch(position);
+                        },
+                        (e)-> {
+                            e.printStackTrace();
+                            //mView.onFailDelete(position);
+                        },
+                        () -> mAdapter.notifyDataSetChanged());
     }
 
     @Override
-    public void rename(int position, int connectionId, String title) {
-
+    public void rename(int position, String title) {
+        getSwitchService().getSwitchApi().rename(
+                SwitchManager.getInstance().getItem(position).get_connectionid(), title)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            SwitchManager.getInstance().changeTitle(position, title);
+                            mView.onSuccessRenameSwitch(position, title);
+                        },
+                        Throwable::printStackTrace,
+                        () -> mAdapter.notifyDataSetChanged());
     }
 
     public SwitchService getSwitchService() {

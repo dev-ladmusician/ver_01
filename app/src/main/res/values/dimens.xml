@@ -5,7 +5,11 @@
 
     <!-- common -->
     <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_24">24dp</dimen>
     <dimen name="item_height_100">100dp</dimen>
+
+    <!-- toolbar -->
+    <dimen name="toolbar_height">60dp</dimen>
 
     <dimen name="item_ic_container_size">46dp</dimen>
     <dimen name="item_ic_size_l">35dp</dimen>
@@ -30,4 +34,12 @@
     <dimen name="switch_each_version_txt_size">10dp</dimen>
     <dimen name="switch_each_setting_wrapper">40dp</dimen>
     <dimen name="switch_each_setting">28dp</dimen>
+
+    <!-- dialog -->
+    <dimen name="dialog_w">270dp</dimen>
+    <dimen name="dialog_w_b">300dp</dimen>
+    <dimen name="dialog_title_size">22dp</dimen>
+    <dimen name="dialog_wrapper_radius">15dp</dimen>
+    <dimen name="dialog_switch_rename_edit_padding_bottom">15dp</dimen>
+
 </resources>

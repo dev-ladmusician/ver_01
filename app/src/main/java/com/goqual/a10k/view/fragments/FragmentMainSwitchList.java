@@ -1,8 +1,10 @@
 package com.goqual.a10k.view.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +13,27 @@ import android.view.ViewGroup;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
 public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListBinding>
- implements ISwitchRefreshListener {
+        implements ISwitchRefreshListener, IToolbarClickListener {
     public static final String TAG = FragmentMainSwitchList.class.getSimpleName();
 
     private AdapterSwitch mAdapter = null;
     private Context mContext = null;
-
+    private CustomDialog mDeleteDialog = null;
+    private CustomDialog mRenameDialog = null;
     private ISwitchOperationListener operationListener = null;
 
     public static FragmentMainSwitchList newInstance() {
@@ -37,11 +44,30 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     }
 
     @Override
+    public void onClickEdit(EventSwitchEdit.STATUS status) {
+        getAdapter().setItemState(status == EventSwitchEdit.STATUS.EDIT);
+    }
+
+    @Override
     public void updateSwitches() {
         getAdapter().clear();
         getAdapter().updateItems(SwitchManager.getInstance().getList());
         getAdapter().refresh();
 
+        mBinding.setSwitchList(SwitchManager.getInstance());
+    }
+
+    @Override
+    public void changeSwitchTitle(int position, String title) {
+        getAdapter().updateItem(position, SwitchManager.getInstance().getItem(position));
+        getAdapter().refresh();
+    }
+
+    @Override
+    public void deleteSwitch(int position) {
+        getAdapter().deleteItem(position);
+        getAdapter().refresh();
+        
         mBinding.setSwitchList(SwitchManager.getInstance());
     }
 
@@ -111,11 +137,60 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                 case R.id.item_switch_btn_3:
                     operationListener.onSwitchClicked(position, 3);
                     break;
+                case R.id.item_switch_delete:
+                    LogUtil.e(TAG, "DELETE");
+                    getDeleteDialog().isEditable(false)
+                            .setTitleText(R.string.switch_delete_title)
+                            .setMessageText(R.string.switch_delete_content)
+                            .isPositiveButton(true, getString(R.string.common_delete), ((dialog, i) -> {
+                                ((ISwitchOperationListener) getParentFragment()).onSwitchDelete(
+                                        position);
+                                getDeleteDialog().dismiss();
+                            }))
+                            .isNegativeButtonEnable(true, getString(R.string.common_cancel), ((dialog, i) -> {
+                                getDeleteDialog().dismiss();
+                            }))
+                            .show();
+
+                    break;
+                case R.id.item_switch_rename:
+                    LogUtil.e(TAG, "RENAME");
+                    getRenameDialog().isEditable(true)
+                            .setTitleText(R.string.switch_rename_title)
+                            .setEditTextHint(R.string.switch_rename_hit)
+                            .isPositiveButton(true, getString(R.string.common_ok), (dialog, which)-> {
+                                if (getRenameDialog().getEditTextMessage().length() != 0) {
+                                    ((ISwitchOperationListener) getParentFragment()).onSwitchRename(
+                                            position, getRenameDialog().getEditTextMessage());
+                                    getRenameDialog().dismiss();
+                                }
+
+                            })
+                            .isNegativeButtonEnable(true, getString(R.string.common_cancel), (dialog, which) -> {
+                                getRenameDialog().setEditTextMessage("");
+                                getRenameDialog().dismiss();
+                            })
+                            .show();
+                    break;
             }
         });
     }
 
     private void onItemClick(int position) {
 
+    }
+
+    private CustomDialog getRenameDialog() {
+        if (mRenameDialog == null) {
+            mRenameDialog = new CustomDialog(getActivity());
+        }
+        return mRenameDialog;
+    }
+
+    private CustomDialog getDeleteDialog() {
+        if (mDeleteDialog == null) {
+            mDeleteDialog = new CustomDialog(getActivity());
+        }
+        return mDeleteDialog;
     }
 }

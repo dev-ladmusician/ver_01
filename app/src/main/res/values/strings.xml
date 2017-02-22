@@ -1,9 +1,22 @@
 <resources>
     <string name="app_name">A10K</string>
 
+    <!-- common -->
+    <string name="common_ok">확인</string>
+    <string name="common_allow">허가</string>
+    <string name="common_retry">재시도</string>
+    <string name="common_delete">삭제</string>
+    <string name="common_cancel">취소</string>
+    <string name="common_deny">거부</string>
+
     <!-- title -->
     <string name="title_switch_list">All Switches</string>
     <string name="title_switch_each">10K</string>
+
+    <!-- toolbar -->
+    <string name="toolbar_edit">Edit</string>
+    <string name="toolbar_save">Save</string>
+    <string name="toolbar_done">Done</string>
 
     <!-- Switch item -->
     <string name="btn_on">on</string>
@@ -33,6 +46,5 @@
     <string name="switch_rename_title">스위치 이름 변경하기</string>
     <string name="switch_rename_hit">10K 내방 스위치</string>
     <string name="add_switch">새로운 10k 등록하기</string>
-
     <string name="error_delete_switch">스위치를 삭제하는데 오류가 발생했습니다.</string>
 </resources>
