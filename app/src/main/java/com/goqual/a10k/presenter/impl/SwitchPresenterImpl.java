@@ -47,7 +47,7 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                 .subscribe((item) -> {
                             SwitchManager.getInstance().addItem(item);
                             mView.addItem(item);
-                            RxBus.getInstance().send(new EventSwitchRefresh(item));
+                            RxBus.getInstance().send(new EventSwitchRefresh());
                         },
                         (e) -> {
                             if (e instanceof HttpException) {

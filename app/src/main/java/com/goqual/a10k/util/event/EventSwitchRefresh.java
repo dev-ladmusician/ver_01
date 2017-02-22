@@ -7,13 +7,8 @@ import com.goqual.a10k.model.entity.Switch;
  */
 
 public class EventSwitchRefresh {
-    private Switch mSwitch;
 
-    public EventSwitchRefresh(Switch mSwitch) {
-        this.mSwitch = mSwitch;
+    public EventSwitchRefresh() {
     }
 
-    public Switch getSwitch() {
-        return mSwitch;
-    }
 }

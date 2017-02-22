@@ -11,6 +11,11 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.google.gson.Gson;
+import com.goqual.a10k.R;
+import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.SocketData;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.event.EventSocketIO;
 import com.goqual.a10k.util.event.EventSwitchRefresh;
@@ -27,6 +32,7 @@ public class ServiceSocketIO extends Service {
     public static final String TAG = "ServiceSocketIO";
 
     private Socket mSocket;
+    private boolean isConnected;
 
     public ServiceSocketIO() {
     }
@@ -73,34 +79,36 @@ public class ServiceSocketIO extends Service {
         try {
             mSocket = IO.socket(Constraint.SOCKET_SERVER_IP);
             mSocket.connect();
-            joinInitialRoom();
+            initSocketCallback();
         } catch (URISyntaxException e) {
             LogUtil.e(TAG, e.getMessage(), e);
         }
     }
 
-    private void joinInitialRoom() {
+    private void initSocketCallback() {
         mSocket.on(Socket.EVENT_CONNECT, args -> {
             LogUtil.e(TAG, "SOCKET EVENT_CONNECT");
+            isConnected = true;
+            RxBus.getInstance().send(new EventSocketIO(EventSocketIO.CONNECTION_STATE.CONNECTED));
         });
         mSocket.on(Socket.EVENT_CONNECT_ERROR, args -> {
             LogUtil.e(TAG, "SOCKET EVENT_CONNECT_ERROR");
+            isConnected = false;
             RxBus.getInstance().send(new EventSocketIO(EventSocketIO.CONNECTION_STATE.ERROR));
         });
         mSocket.on(Socket.EVENT_RECONNECT_FAILED, args -> {
             LogUtil.e(TAG, "SOCKET EVENT_RECONNECT_FAILED");
+            isConnected = false;
+            RxBus.getInstance().send(new EventSocketIO(EventSocketIO.CONNECTION_STATE.FAILED));
             mSocket.disconnect();
         });
         mSocket.on(Socket.EVENT_DISCONNECT, args -> {
             LogUtil.e(TAG, "SOCKET EVENT_DISCONNECT");
+            isConnected = false;
+            RxBus.getInstance().send(new EventSocketIO(EventSocketIO.CONNECTION_STATE.DISCONNECTED));
+            leaveAllSwitchRoom();
             if(!isInternetConnected()) {
                 mSocket.disconnect();
-            }
-        });
-        mSocket.on(SocketProtocols.CONNECTION, args -> {
-            LogUtil.e(TAG, "SOCKET EVENT_CONNECT_ERROR");
-            for(Object obj : args) {
-                LogUtil.e(TAG, "SOCKET CONNECTION :: " + obj);
             }
         });
     }
@@ -111,14 +119,71 @@ public class ServiceSocketIO extends Service {
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventSwitchRefresh) {
-                            joinRoom(((EventSwitchRefresh) event).getSwitch());
+                            leaveAllSwitchRoom();
+                            joinSwitchRoom();
                         }
                     }
                 });
     }
 
-    private void joinRoom(Switch item) {
-        LogUtil.e(TAG, "joinRoom");
+
+
+    /**
+     * 스위치 동작 시키기
+     * @param macaddr
+     * @param btn
+     * @param operation
+     */
+    public void operationBtn(String macaddr, int btn, String operation) {
+        LogUtil.e(TAG, "macaddr : " + macaddr + " btn : " + btn + " op : " + operation);
+        if (btn > 0) {
+            Gson gson = new Gson();
+            SocketData data = new SocketData(macaddr,
+                    PreferenceHelper.getInstance(getApplicationContext()).getStringValue(
+                            getString(R.string.arg_user_token), ""
+                    ), btn, operation);
+            mSocket.emit(SocketProtocols.OPERATION_SWITCH_STATE, gson.toJson(data));
+        }
+    }
+
+    /**
+     * 스위치 서버단에 그룹핑 시켜주기
+     */
+    public void joinSwitchRoom() {
+        if (SwitchManager.getInstance().getCount() > 0)
+            for(Switch item : SwitchManager.getInstance().getList()) {
+                Gson gson = new Gson();
+                SocketData data = new SocketData(item.getMacaddr(),
+                        PreferenceHelper.getInstance(getApplicationContext()).getStringValue(
+                                getString(R.string.arg_user_token), ""
+                        ));
+
+                mSocket.emit(SocketProtocols.JOIN_REQ, gson.toJson(data));
+            }
+    }
+
+    public void leaveSwitchRoom(int position) {
+        Switch item = SwitchManager.getInstance().getItem(position);
+        Gson gson = new Gson();
+        SocketData data = new SocketData(item.getMacaddr(),
+                PreferenceHelper.getInstance(getApplicationContext()).getStringValue(
+                        getString(R.string.arg_user_token), ""
+                ));
+
+        mSocket.emit(SocketProtocols.LEAVE_REQ, gson.toJson(data));
+    }
+
+    public void leaveAllSwitchRoom() {
+        if (SwitchManager.getInstance().getCount() > 0)
+            for(Switch item : SwitchManager.getInstance().getList()) {
+                Gson gson = new Gson();
+                SocketData data = new SocketData(item.getMacaddr(),
+                        PreferenceHelper.getInstance(getApplicationContext()).getStringValue(
+                                getString(R.string.arg_user_token), ""
+                        ));
+
+                mSocket.emit(SocketProtocols.LEAVE_REQ, gson.toJson(data));
+            }
     }
 
     private boolean isInternetConnected(){
@@ -130,13 +195,6 @@ public class ServiceSocketIO extends Service {
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    private Emitter.Listener mEmitListener = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-
-        }
-    };
-
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -146,10 +204,15 @@ public class ServiceSocketIO extends Service {
             for(String key : bundle.keySet()) {
                 LogUtil.d(TAG, "networkChangeReceiver :: KEY : " + key + "\nVALUE : " + bundle.get(key));
             }
+            if(isInternetConnected()) {
+                if (!isConnected) {
+
+                }
+            }
         }
     };
 
-    class SocketIOServiceBinder extends Binder {
+    public class SocketIOServiceBinder extends Binder {
 
     }
 

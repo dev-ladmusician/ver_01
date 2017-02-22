@@ -7,6 +7,7 @@ package com.goqual.a10k.util.event;
 public class EventSocketIO {
     public enum CONNECTION_STATE {
         CONNECTED,
+        DISCONNECTED,
         FAILED,
         ERROR
     }
