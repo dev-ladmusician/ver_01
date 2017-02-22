@@ -38,8 +38,11 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
 
     @Override
     public void updateSwitches() {
+        getAdapter().clear();
         getAdapter().updateItems(SwitchManager.getInstance().getList());
         getAdapter().refresh();
+
+        mBinding.setSwitchList(SwitchManager.getInstance());
     }
 
     @Override
@@ -88,7 +91,12 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         super.onResume();
     }
 
+    public void onBtnClick(View view) {
+
+    }
+
     private void initView() {
+        mBinding.setFragment(this);
         mBinding.switchList.setAdapter(getAdapter());
         mBinding.switchList.setLayoutManager(new LinearLayoutManager(mContext));
 

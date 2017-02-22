@@ -26,4 +26,13 @@
     <string name="arg_alarm">arg_alarm</string>
     <string name="arg_absence">arg_absence</string>
     <string name="arg_nfc">arg_nfc</string>
+
+    <!-- Switch -->
+    <string name="switch_delete_title">삭제</string>
+    <string name="switch_delete_content">스위치를 \n목록에서 삭제 하시겠습니까?</string>
+    <string name="switch_rename_title">스위치 이름 변경하기</string>
+    <string name="switch_rename_hit">10K 내방 스위치</string>
+    <string name="add_switch">새로운 10k 등록하기</string>
+
+    <string name="error_delete_switch">스위치를 삭제하는데 오류가 발생했습니다.</string>
 </resources>

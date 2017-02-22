@@ -47,4 +47,8 @@ public class SwitchManager {
         return mSwitchList.get(position);
     }
 
+    public int getPosition(Switch item) {
+        return mSwitchList.indexOf(item);
+    }
+
 }
