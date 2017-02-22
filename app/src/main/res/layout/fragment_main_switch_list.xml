@@ -5,17 +5,61 @@
 
     <data>
         <variable
-            name="activity"
+            name="switchList"
+            type="com.goqual.a10k.model.SwitchManager"/>
+        <variable
+            name="fragment"
             type="com.goqual.a10k.view.fragments.FragmentMainSwitchList"/>
+
+        <import
+            type="android.view.View"
+            alias="View"/>
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:id="@+id/list_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/switch_each_container_margin"
+            android:padding="@dimen/switch_each_container_padding"
+            android:elevation="@dimen/switch_each_container_eleavation"
+            android:background="@drawable/style_switch_container"
+            android:visibility="@{switchList.getCount() == 0 ? View.VISIBLE : View.GONE}">
+
+            <RelativeLayout
+                android:id="@+id/add_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    android:id="@+id/img_add_switch"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_plus_b"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/img_add_switch"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/padding_16"
+                    android:text="@string/add_switch"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/switch_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="@{switchList.getCount() &gt; 0 ? View.VISIBLE : View.GONE}"/>
+
     </RelativeLayout>
 </layout>
