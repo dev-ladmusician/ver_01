@@ -2,8 +2,6 @@ package com.goqual.a10k.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +23,8 @@ public class CustomDialog extends Dialog{
     private Context mContext = null;
     private DialogCustomBinding mBinding = null;
     private DialogModel mModel;
-    private OnClickListener mOnClickListener;
+    private OnClickListener mOnPositiveClickListener;
+    private OnClickListener mOnNegativeClickListener;
 
     public CustomDialog(@NonNull Context context) {
         super(context);
@@ -76,16 +75,14 @@ public class CustomDialog extends Dialog{
     }
 
     public CustomDialog isPositiveButton(boolean enable, String text, OnClickListener onClickListener) {
-//        setButton(BUTTON_POSITIVE, text, onClickListener);
         mModel.setPositiveButton(enable);
-        mOnClickListener = onClickListener;
+        mOnPositiveClickListener = onClickListener;
         return this;
     }
 
     public CustomDialog isNegativeButtonEnable(boolean enable, String text, OnClickListener onClickListener) {
-//        setButton(BUTTON_NEGATIVE, text, onClickListener);
         mModel.setNegativeButton(enable);
-        mOnClickListener = onClickListener;
+        mOnNegativeClickListener = onClickListener;
         return this;
     }
 
@@ -106,11 +103,13 @@ public class CustomDialog extends Dialog{
 
     public CustomDialog setEditTextMessage(String message) {
         mModel.setEditTextMessage(message);
+        mBinding.setItem(mModel);
         return this;
     }
 
     public CustomDialog setEditTextMessage(@StringRes int messageId) {
         mModel.setEditTextMessage(mContext.getString(messageId));
+        mBinding.setItem(mModel);
         return this;
     }
 
@@ -120,7 +119,14 @@ public class CustomDialog extends Dialog{
 
     public void onBtnClick(View view) {
         int which = view.getId() == R.id.dialog_btn_ok ? BUTTON_POSITIVE : BUTTON_NEGATIVE;
-        mOnClickListener.onClick(this, which);
+        switch (view.getId()) {
+            case R.id.dialog_btn_ok:
+                mOnPositiveClickListener.onClick(this, which);
+                break;
+            case R.id.dialog_btn_cancel:
+                mOnNegativeClickListener.onClick(this, which);
+                break;
+        }
     }
 
 }

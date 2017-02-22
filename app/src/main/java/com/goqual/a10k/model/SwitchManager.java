@@ -9,7 +9,6 @@ import java.util.ArrayList;
  */
 
 public class SwitchManager {
-
     private static SwitchManager instance;
 
     private ArrayList<Switch> mSwitchList = null;
@@ -51,4 +50,7 @@ public class SwitchManager {
         return mSwitchList.indexOf(item);
     }
 
+    public void changeTitle(int position, String title) {
+        mSwitchList.get(position).setTitle(title);
+    }
 }

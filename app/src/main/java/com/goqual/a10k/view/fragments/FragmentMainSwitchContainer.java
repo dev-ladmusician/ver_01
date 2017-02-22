@@ -192,12 +192,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(status);
     }
 
-    @Override
-    public void onSwitchClicked(int position, int btnNumber) {
-        Switch item = SwitchManager.getInstance().getItem(position);
-        getSocketManager().operationOnOff(item, btnNumber);
-    }
-
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -214,4 +208,31 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
         }
     };
+
+
+
+
+    /**
+     * switch operation
+     */
+    @Override
+    public void onSwitchClicked(int position, int btnNumber) {
+        Switch item = SwitchManager.getInstance().getItem(position);
+        getSocketManager().operationOnOff(item, btnNumber);
+    }
+
+    @Override
+    public void onSwitchDelete(int position) {
+        getPresenter().deleteItem(position);
+    }
+
+    @Override
+    public void onSwitchRename(int position, String title) {
+        getPresenter().rename(position, title);
+    }
+
+    @Override
+    public void onSuccessRenameSwitch(int position, String title) {
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).changeSwitchTitle(position, title);
+    }
 }

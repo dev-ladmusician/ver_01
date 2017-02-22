@@ -61,13 +61,23 @@ public class SwitchPresenterImpl implements SwitchPresenter {
     }
 
     @Override
-    public void deleteItem(int position, int connectionId) {
-
+    public void deleteItem(int position) {
+        LogUtil.e(TAG, "delete item :: " + position);
     }
 
     @Override
-    public void rename(int position, int connectionId, String title) {
-
+    public void rename(int position, String title) {
+        getSwitchService().getSwitchApi().rename(
+                SwitchManager.getInstance().getItem(position).get_connectionid(), title)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            SwitchManager.getInstance().changeTitle(position, title);
+                            mView.onSuccessRenameSwitch(position, title);
+                        },
+                        Throwable::printStackTrace,
+                        () -> mAdapter.notifyDataSetChanged());
     }
 
     public SwitchService getSwitchService() {

@@ -5,6 +5,7 @@
     <string name="common_ok">확인</string>
     <string name="common_allow">허가</string>
     <string name="common_retry">재시도</string>
+    <string name="common_delete">삭제</string>
     <string name="common_cancel">취소</string>
     <string name="common_deny">거부</string>
 
