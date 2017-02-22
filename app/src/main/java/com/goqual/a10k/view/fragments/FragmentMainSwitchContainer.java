@@ -16,6 +16,8 @@ import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
@@ -26,7 +28,7 @@ import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
@@ -39,7 +41,7 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
     private int mCurrentPage = 0;
 
     public static FragmentMainSwitchContainer newInstance() {
-        
+
         Bundle args = new Bundle();
         FragmentMainSwitchContainer fragment = new FragmentMainSwitchContainer();
         fragment.setArguments(args);
@@ -69,6 +71,11 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
         LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
         mBinding.viewPager.setCurrentItem(mCurrentPage);
+
+        RxBus.getInstance().send(
+                SwitchManager.getInstance().getCount() == 0 ?
+                        new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE) :
+                        new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
     }
 
     @Override

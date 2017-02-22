@@ -5,6 +5,11 @@
     <string name="title_switch_list">All Switches</string>
     <string name="title_switch_each">10K</string>
 
+    <!-- toolbar -->
+    <string name="toolbar_edit">Edit</string>
+    <string name="toolbar_save">Save</string>
+    <string name="toolbar_done">Done</string>
+
     <!-- Switch item -->
     <string name="btn_on">on</string>
     <string name="btn_off">off</string>

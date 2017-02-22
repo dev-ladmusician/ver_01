@@ -8,11 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -21,6 +24,8 @@ import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+
+import rx.functions.Action1;
 
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
@@ -49,6 +54,22 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         initToolbar();
         initViewPager();
         initMainTab();
+
+        mBinding.toolbarEdit.setVisibility(View.GONE);
+
+        subEvent();
+    }
+
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventSwitchEdit) {
+                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getStatus());
+                        }
+                    }
+                });
     }
 
     private void initToolbar() {
