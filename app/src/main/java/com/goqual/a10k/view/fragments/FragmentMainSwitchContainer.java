@@ -15,6 +15,7 @@ import com.goqual.a10k.presenter.SocketManager;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
@@ -34,6 +35,8 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
     private SwitchPresenterImpl mPresenter;
     private SocketManagerImpl mSocketManager;
+
+    private int mCurrentPage = 0;
 
     public static FragmentMainSwitchContainer newInstance() {
         
@@ -63,6 +66,9 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
         // update switch list
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
+
+        LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
+        mBinding.viewPager.setCurrentItem(mCurrentPage);
     }
 
     @Override
@@ -101,10 +107,26 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
     @Override
     public void onResume() {
         super.onResume();
+//        mBinding.viewPager.setOffscreenPageLimit(0);
+
         mPagerAdapter.clear();
+        mPagerAdapter.refresh();
+
         SwitchManager.getInstance().clear();
         getPresenter()
                 .loadItems();
+    }
+
+    /**
+     * list clear했는데도 불구하고 viewPager가 view를 다시 그려서
+     * 항상 존재하는 switchListFragment로 고정
+     * loadItems가 끝난 후 현제 focus되있는 frag로 다시 이동
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        mCurrentPage = mBinding.viewPager.getCurrentItem();
+        mBinding.viewPager.setCurrentItem(0);
     }
 
     private SwitchPresenter getPresenter() {
@@ -140,6 +162,8 @@ implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager
 
         @Override
         public void onPageSelected(int position) {
+            LogUtil.e(TAG, "CURRENT PAGE selected:: " + mBinding.viewPager.getCurrentItem());
+            //mCurrentPage = mBinding.viewPager.getCurrentItem();
             mTitle = ((BaseFragment)mPagerAdapter.getItem(position)).getTitle();
             mActivityInteraction.setTitle(mTitle);
         }

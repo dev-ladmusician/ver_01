@@ -38,6 +38,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
 
     @Override
     public void updateSwitches() {
+        getAdapter().clear();
         getAdapter().updateItems(SwitchManager.getInstance().getList());
         getAdapter().refresh();
     }

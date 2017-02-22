@@ -25,7 +25,7 @@ public class AdapterSwitchContainer extends AdapterPager {
     public AdapterSwitchContainer(FragmentManager fragmentManager, Context ctx) {
         super(fragmentManager);
         this.mSwitchList = new ArrayList<>();
-        getFragmentLists().add(new FragmentMainSwitchList());
+        getFragmentLists().add(FragmentMainSwitchList.newInstance());
         mContext = ctx;
     }
 
@@ -39,9 +39,10 @@ public class AdapterSwitchContainer extends AdapterPager {
 
     @Override
     public void clear() {
+        FragmentMainSwitchList fragList = (FragmentMainSwitchList)getFragmentLists().get(0);
         mSwitchList.clear();
         super.clear();
-        super.addItem(FragmentMainSwitchList.newInstance());
+        super.addItem(fragList);
         refresh();
     }
 
