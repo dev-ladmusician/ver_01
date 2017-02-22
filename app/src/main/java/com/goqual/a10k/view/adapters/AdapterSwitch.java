@@ -93,5 +93,11 @@ implements AdapterDataModel<Switch>, AdapterDataView{
         holder.bindView(position, mSwitchList.get(position), mItemClickListener);
     }
 
+    public void setItemState(boolean state) {
+        for(Switch item : mSwitchList) {
+            item.setmIsStateView(state);
+        }
 
+        refresh();
+    }
 }

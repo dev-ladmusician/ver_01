@@ -23,6 +23,7 @@ import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
 
@@ -169,9 +170,13 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                             LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
                             switch (((EventToolbarClick) event).getStatus()) {
                                 case DONE:
+                                    passToolbarClickEvent(EventSwitchEdit.STATUS.DONE);
+
                                     RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
                                     break;
                                 case EDIT:
+                                    passToolbarClickEvent(EventSwitchEdit.STATUS.EDIT);
+
                                     RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.DONE));
                                     break;
                                 case ADD:
@@ -181,6 +186,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                         }
                     }
                 });
+    }
+
+    private void passToolbarClickEvent(EventSwitchEdit.STATUS status) {
+        ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(status);
     }
 
     @Override

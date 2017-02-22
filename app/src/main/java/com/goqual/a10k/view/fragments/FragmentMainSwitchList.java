@@ -11,17 +11,20 @@ import android.view.ViewGroup;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
 public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListBinding>
- implements ISwitchRefreshListener {
+ implements ISwitchRefreshListener, IToolbarClickListener {
     public static final String TAG = FragmentMainSwitchList.class.getSimpleName();
 
     private AdapterSwitch mAdapter = null;
@@ -34,6 +37,11 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         FragmentMainSwitchList fragment = new FragmentMainSwitchList();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onClickEdit(EventSwitchEdit.STATUS status) {
+        getAdapter().setItemState(status == EventSwitchEdit.STATUS.EDIT);
     }
 
     @Override

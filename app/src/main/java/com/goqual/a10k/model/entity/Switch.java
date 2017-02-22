@@ -20,7 +20,6 @@ public class Switch {
     private String macaddr;
     private boolean isavailable;
     private boolean outlet;
-    private boolean mIsDeletable;
     public boolean mIsStateView;
 
     private String WIFI_SSID = "";
@@ -136,14 +135,6 @@ public class Switch {
 
     public void setOutlet(boolean outlet) {
         this.outlet = outlet;
-    }
-
-    public boolean ismIsDeletable() {
-        return mIsDeletable;
-    }
-
-    public void setmIsDeletable(boolean mIsDeletable) {
-        this.mIsDeletable = mIsDeletable;
     }
 
     public String getWIFI_SSID() {

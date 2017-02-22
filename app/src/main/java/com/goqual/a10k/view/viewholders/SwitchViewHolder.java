@@ -15,7 +15,6 @@ import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 
 public class SwitchViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
-
     ItemSwitchBinding binding;
 
     public SwitchViewHolder(View itemView, Context ctx) {
@@ -26,6 +25,7 @@ public class SwitchViewHolder extends RecyclerView.ViewHolder {
 
     public void bindView(int position, Switch item, OnRecyclerItemClickListener listener) {
         binding.setItemSwitch(item);
+//        binding.itemSwitchBtnStateContainer.setItem(item);
 
         binding.itemSwitchBtn1.setOnClickListener(v -> {
             listener.onItemClick(v.getId(), position);
