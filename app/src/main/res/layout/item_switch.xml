@@ -8,6 +8,10 @@
             name="itemSwitch"
             type="com.goqual.a10k.model.entity.Switch" />
 
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.SwitchViewHolder"/>
+
         <import
             alias="View"
             type="android.view.View" />
@@ -28,8 +32,9 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_ic_container_size"
+            android:layout_height="match_parent"
             android:visibility="@{itemSwitch.mIsStateView ? View.VISIBLE : View.GONE}"
-            android:layout_height="match_parent">
+            android:onClick="@{holder::onBtnClick}">
 
             <ImageView
                 android:layout_width="@dimen/item_ic_size_m"
@@ -54,8 +59,9 @@
             android:id="@+id/item_switch_rename"
             android:layout_toRightOf="@+id/item_switch_title"
             android:layout_width="@dimen/item_ic_container_size"
+            android:layout_height="match_parent"
             android:visibility="@{itemSwitch.mIsStateView ? View.VISIBLE : View.GONE}"
-            android:layout_height="match_parent">
+            android:onClick="@{holder::onBtnClick}">
 
             <ImageView
                 android:layout_width="@dimen/item_ic_size_m"
@@ -89,7 +95,8 @@
                 android:id="@+id/item_switch_btn_1"
                 android:layout_width="@dimen/item_switch_width_btn_wrapper"
                 android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/item_switch_btn_2">
+                android:layout_toLeftOf="@+id/item_switch_btn_2"
+                android:onClick="@{holder::onBtnClick}">
 
                 <TextView
                     android:id="@+id/item_switch_btn_txt_1"
@@ -108,7 +115,8 @@
                 android:id="@+id/item_switch_btn_2"
                 android:layout_width="@dimen/item_switch_width_btn_wrapper"
                 android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/item_switch_btn_3">
+                android:layout_toLeftOf="@+id/item_switch_btn_3"
+                android:onClick="@{holder::onBtnClick}">
 
                 <TextView
                     android:id="@+id/item_switch_btn_txt_2"
@@ -127,7 +135,8 @@
                 android:id="@+id/item_switch_btn_3"
                 android:layout_width="@dimen/item_switch_width_btn_wrapper"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:onClick="@{holder::onBtnClick}">
 
                 <TextView
                     android:id="@+id/item_switch_btn_txt_3"

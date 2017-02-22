@@ -1,8 +1,10 @@
 package com.goqual.a10k.view.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +13,12 @@ import android.view.ViewGroup;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
@@ -24,7 +28,7 @@ import com.goqual.a10k.view.interfaces.IToolbarClickListener;
  */
 
 public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListBinding>
- implements ISwitchRefreshListener, IToolbarClickListener {
+        implements ISwitchRefreshListener, IToolbarClickListener {
     public static final String TAG = FragmentMainSwitchList.class.getSimpleName();
 
     private AdapterSwitch mAdapter = null;
@@ -118,6 +122,27 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     break;
                 case R.id.item_switch_btn_3:
                     operationListener.onSwitchClicked(position, 3);
+                    break;
+                case R.id.item_switch_delete:
+                    LogUtil.e(TAG, "item_switch_delete");
+                    break;
+                case R.id.item_switch_rename:
+                    CustomDialog renameDialog = new CustomDialog(getActivity());
+                    DialogInterface.OnClickListener onClickListener = (dialog, which)-> {
+                        if (which == AlertDialog.BUTTON_POSITIVE) {
+                            LogUtil.e(TAG, "RENAME :: " + renameDialog.getEditTextMessage());
+                        } else {
+                            LogUtil.e(TAG, "RENAME :: CANCEL");
+                        }
+                        dialog.dismiss();
+                    };
+                    renameDialog.isEditable(true)
+                            .setTitleText(R.string.switch_rename_title)
+                            .setEditTextHint(R.string.switch_rename_hit)
+                            .isPositiveButton(true, getString(R.string.common_ok), onClickListener)
+                            .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener);
+
+                    renameDialog.show();
                     break;
             }
         });

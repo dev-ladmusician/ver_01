@@ -17,24 +17,23 @@ public class SwitchViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     ItemSwitchBinding binding;
 
+    private int mPosition;
+    private OnRecyclerItemClickListener mListener;
+
     public SwitchViewHolder(View itemView, Context ctx) {
         super(itemView);
         mContext = ctx;
         binding = DataBindingUtil.bind(itemView);
+        binding.setHolder(this);
     }
 
     public void bindView(int position, Switch item, OnRecyclerItemClickListener listener) {
+        mListener = listener;
+        mPosition = position;
         binding.setItemSwitch(item);
-//        binding.itemSwitchBtnStateContainer.setItem(item);
+    }
 
-        binding.itemSwitchBtn1.setOnClickListener(v -> {
-            listener.onItemClick(v.getId(), position);
-        });
-        binding.itemSwitchBtn2.setOnClickListener(v -> {
-            listener.onItemClick(v.getId(), position);
-        });
-        binding.itemSwitchBtn3.setOnClickListener(v -> {
-            listener.onItemClick(v.getId(), position);
-        });
+    public void onBtnClick(View view) {
+        mListener.onItemClick(view.getId(), mPosition);
     }
 }
