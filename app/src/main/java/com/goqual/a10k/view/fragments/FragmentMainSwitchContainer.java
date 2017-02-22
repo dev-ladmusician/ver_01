@@ -17,11 +17,14 @@ import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
+
+import rx.functions.Action1;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
@@ -153,6 +156,31 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         mPagerAdapter = new AdapterSwitchContainer(getChildFragmentManager(), getActivity());
         mBinding.viewPager.setAdapter(mPagerAdapter);
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
+        subEvent();
+    }
+
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventToolbarClick) {
+                            // TODO
+                            LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
+                            switch (((EventToolbarClick) event).getStatus()) {
+                                case DONE:
+                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                                    break;
+                                case EDIT:
+                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.DONE));
+                                    break;
+                                case ADD:
+                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                                    break;
+                            }
+                        }
+                    }
+                });
     }
 
     @Override

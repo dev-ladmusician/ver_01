@@ -73,11 +73,12 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:visibility="@{eventSwitEditEnum == editStatusEnum.HIDE ? View.GONE : View.VISIBLE}"
-                            android:text="@{eventSwitEditEnum == editStatusEnum.EDIT ? @string/toolbar_edit : @string/toolbar_done}"
                             android:gravity="center|left"
                             android:paddingLeft="@dimen/padding_16"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:onClick="@{activity::onBtnClick}"
+                            android:visibility="@{eventSwitEditEnum == editStatusEnum.HIDE ? View.GONE : View.VISIBLE}"
+                            android:text="@{eventSwitEditEnum == editStatusEnum.EDIT ? @string/toolbar_edit : @string/toolbar_done}" />
 
                         <RelativeLayout
                             android:id="@+id/toolbar_add"
@@ -85,7 +86,8 @@
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:paddingRight="@dimen/padding_16"
-                            android:layout_centerVertical="true">
+                            android:layout_centerVertical="true"
+                            android:onClick="@{activity::onBtnClick}">
 
                             <ImageView
                                 android:layout_width="15dp"

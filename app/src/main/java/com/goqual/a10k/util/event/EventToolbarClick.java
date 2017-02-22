@@ -1,14 +1,14 @@
 package com.goqual.a10k.util.event;
 
 /**
- * Created by ladmusician on 2017. 2. 22..
+ * Created by hanwool on 2017. 2. 22..
  */
 
-public class EventSwitchEdit {
+public class EventToolbarClick {
     public enum STATUS {
         EDIT,
         DONE,
-        HIDE
+        ADD
     }
 
     private STATUS status;
@@ -18,10 +18,10 @@ public class EventSwitchEdit {
     }
 
     /**
-     * 바꿀 스테이터스를 던져야 함!!!
-     * @param status 바꿀 스테이터스
+     * 현재 스테이터스를 던져야 함!!!
+     * @param status 현재 스테이터스
      */
-    public EventSwitchEdit(STATUS status) {
+    public EventToolbarClick(STATUS status) {
         this.status = status;
     }
 }

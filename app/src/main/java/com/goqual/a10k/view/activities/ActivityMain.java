@@ -13,8 +13,10 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
@@ -32,6 +34,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         implements IActivityInteraction{
     public static final String TAG = ActivityMain.class.getSimpleName();
 
+    private EventSwitchEdit mEditBtnStatus;
 
     @Override
     protected int getLayoutId() { return R.layout.activity_main; }
@@ -66,6 +69,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventSwitchEdit) {
+                            mEditBtnStatus = (EventSwitchEdit)event;
                             mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getStatus());
                         }
                     }
@@ -138,6 +142,24 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void setTitle(String title) {
         LogUtil.d(TAG, title);
         mBinding.toolbarTitle.setText(title);
+    }
+
+    public void onBtnClick(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar_edit:
+                switch (mEditBtnStatus.getStatus()) {
+                    case DONE:
+                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.DONE));
+                        break;
+                    case EDIT:
+                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.EDIT));
+                        break;
+                }
+                break;
+            case R.id.toolbar_add:
+                RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.ADD));
+                break;
+        }
     }
 
     private TabLayout.OnTabSelectedListener mainTapSelectedListener = new TabLayout.OnTabSelectedListener() {
