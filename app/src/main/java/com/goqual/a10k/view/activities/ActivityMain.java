@@ -13,7 +13,6 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
-import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;

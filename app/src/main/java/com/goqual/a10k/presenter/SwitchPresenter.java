@@ -11,5 +11,6 @@ public interface SwitchPresenter {
 
     interface View<T> extends BasePresenterView<T> {
         void onSuccessRenameSwitch(int position, String title);
+        void onSuccessDeleteSwitch(int position);
     }
 }

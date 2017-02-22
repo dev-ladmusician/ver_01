@@ -235,4 +235,14 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onSuccessRenameSwitch(int position, String title) {
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).changeSwitchTitle(position, title);
     }
+
+    @Override
+    public void onSuccessDeleteSwitch(int position) {
+        // 등록된 스위치가 없으면 edit hide
+        if (SwitchManager.getInstance().getCount() == 0) {
+            RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE));
+        }
+        mPagerAdapter.deleteItem(position);
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
+    }
 }

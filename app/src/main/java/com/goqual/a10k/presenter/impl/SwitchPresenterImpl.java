@@ -62,7 +62,22 @@ public class SwitchPresenterImpl implements SwitchPresenter {
 
     @Override
     public void deleteItem(int position) {
-        LogUtil.e(TAG, "delete item :: " + position);
+        getSwitchService().getSwitchApi().delete(SwitchManager.getInstance().getItem(position).get_connectionid())
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            //mView.leaveSocketRoom(position);
+                            SwitchManager.getInstance().delete(position);
+                            //mView.removeSwitchEach(position);
+                            //mView.initIndicator();
+                            mView.onSuccessDeleteSwitch(position);
+                        },
+                        (e)-> {
+                            e.printStackTrace();
+                            //mView.onFailDelete(position);
+                        },
+                        () -> mAdapter.notifyDataSetChanged());
     }
 
     @Override

@@ -7,4 +7,5 @@ package com.goqual.a10k.view.interfaces;
 public interface ISwitchRefreshListener {
     void updateSwitches();
     void changeSwitchTitle(int position, String title);
+    void deleteSwitch(int position);
 }

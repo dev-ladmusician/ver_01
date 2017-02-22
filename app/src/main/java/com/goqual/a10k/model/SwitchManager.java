@@ -53,4 +53,8 @@ public class SwitchManager {
     public void changeTitle(int position, String title) {
         mSwitchList.get(position).setTitle(title);
     }
+
+    public void delete(int position) {
+        mSwitchList.remove(position);
+    }
 }

@@ -64,6 +64,14 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     }
 
     @Override
+    public void deleteSwitch(int position) {
+        getAdapter().deleteItem(position);
+        getAdapter().refresh();
+        
+        mBinding.setSwitchList(SwitchManager.getInstance());
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.fragment_main_switch_list;
     }
