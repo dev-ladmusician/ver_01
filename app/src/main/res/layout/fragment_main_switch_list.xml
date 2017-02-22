@@ -28,6 +28,7 @@
             android:padding="@dimen/switch_each_container_padding"
             android:elevation="@dimen/switch_each_container_eleavation"
             android:background="@drawable/style_switch_container"
+            android:onClick="@{fragment::onBtnClick}"
             android:visibility="@{switchList.getCount() == 0 ? View.VISIBLE : View.GONE}">
 
             <RelativeLayout
