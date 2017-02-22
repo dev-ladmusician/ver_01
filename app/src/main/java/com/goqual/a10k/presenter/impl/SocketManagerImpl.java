@@ -2,13 +2,18 @@ package com.goqual.a10k.presenter.impl;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.goqual.a10k.R;
+import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.entity.SocketData;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.SocketManager;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.ServiceSocketIO;
+import com.goqual.a10k.util.SocketIoManager;
+import com.goqual.a10k.util.SocketProtocols;
 import com.goqual.a10k.util.event.EventSocketIO;
-import com.goqual.a10k.util.event.EventSwitchRefresh;
 import com.goqual.a10k.util.event.RxBus;
+import com.goqual.a10k.util.interfaces.ISocketIoConnectionListener;
 
 import rx.functions.Action1;
 
@@ -16,36 +21,89 @@ import rx.functions.Action1;
  * Created by HanWool on 2017. 2. 21..
  */
 
-public class SocketManagerImpl implements SocketManager {
+public class SocketManagerImpl implements SocketManager, ISocketIoConnectionListener {
     public static final String TAG = SocketManager.class.getSimpleName();
     private View mView = null;
     private Context mContext = null;
-    private ServiceSocketIO.SocketIOServiceBinder serviceBinder;
+    private SocketIoManager mSocketManager;
 
-    public SocketManagerImpl(View mView, Context ctx, ServiceSocketIO.SocketIOServiceBinder binder) {
+    public SocketManagerImpl(View mView, Context ctx) {
+        LogUtil.e(TAG, "SocketManagerImpl");
         this.mView = mView;
         mContext = ctx;
-        serviceBinder = binder;
-        subEvent();
+        mSocketManager = SocketIoManager.getInstance(ctx, this);
     }
 
     @Override
     public void operationOnOff(Switch item, int btnNumber) {
         LogUtil.d(TAG, "ITEM : " + item.toString() + "\n BTN NUMBER : " + btnNumber);
-
+        if (btnNumber > 0) {
+            Gson gson = new Gson();
+            String btnState;
+            switch (btnNumber) {
+                case 1:
+                    btnState = !item.getBtn1() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
+                    break;
+                case 2:
+                    btnState = !item.getBtn2() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
+                    break;
+                case 3:
+                    btnState = !item.getBtn3() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
+                    break;
+                default:
+                    btnState = mContext.getString(R.string.btn_str_on);
+            }
+            SocketData data = new SocketData(item.getMacaddr(),
+                    PreferenceHelper.getInstance(mContext).getStringValue(
+                            mContext.getString(R.string.arg_user_token), ""
+                    ), btnNumber,
+                    btnState);
+            mSocketManager.emit(SocketProtocols.OPERATION_SWITCH_STATE, gson.toJson(data));
+        }
     }
 
-    private void subEvent() {
-        RxBus.getInstance().toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if(event instanceof EventSocketIO) {
-
-                        }
-                    }
-                });
+    @Override
+    public void onConnected() {
+        LogUtil.e(TAG, "SOCKET onConnected");
+        mSocketManager.joinSwitchRoom();
     }
 
+    @Override
+    public void onConnectionTimeOut() {
+        LogUtil.e(TAG, "SOCKET onConnectionTimeOut");
+    }
 
+    @Override
+    public void onDisconnect() {
+        LogUtil.e(TAG, "SOCKET onDisconnect");
+        mSocketManager.leaveAllSwitchRooms();
+    }
+
+    @Override
+    public void onError() {
+        LogUtil.e(TAG, "SOCKET onError");
+    }
+
+    @Override
+    public void onReceiveMessage(Object... args) {
+        LogUtil.e(TAG, "SOCKET onReceiveMessage");
+        for(Object obj : args) {
+            LogUtil.e(TAG, "SOCKET obj :: " + obj);
+        }
+    }
+
+    @Override
+    public void onReconnect() {
+        LogUtil.e(TAG, "SOCKET onReconnect");
+    }
+
+    @Override
+    public void onReconnectionFailed() {
+        LogUtil.e(TAG, "SOCKET onReconnectionFailed");
+    }
+
+    @Override
+    public void refreshConnectedRoom() {
+        mSocketManager.joinSwitchRoom();
+    }
 }

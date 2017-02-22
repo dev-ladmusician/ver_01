@@ -8,6 +8,7 @@ import com.goqual.a10k.model.entity.Switch;
 
 public interface SocketManager {
     void operationOnOff(Switch item, int btnNumber);
+    void refreshConnectedRoom();
 
     interface View {
     }

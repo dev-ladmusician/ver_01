@@ -90,6 +90,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void addItem(Switch item) {
         mPagerAdapter.addItem(item);
+        getSocketManager().refreshConnectedRoom();
     }
 
     @Override
@@ -100,6 +101,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_main_switch_container;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSocketManager();
     }
 
     @Nullable
