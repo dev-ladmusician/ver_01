@@ -6,7 +6,7 @@
     <data>
         <variable
             name="activity"
-            type="com.goqual.a10k.view.fragments.FragmentMainSwitchContainer"/>
+            type="com.goqual.a10k.view.fragments.switches.FragmentMainSwitchContainer"/>
     </data>
 
     <RelativeLayout
