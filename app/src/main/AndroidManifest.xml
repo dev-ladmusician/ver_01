@@ -21,14 +21,6 @@
         </activity>
         <activity android:name=".view.activities.ActivityMain" />
 
-        <service
-            android:name=".util.ServiceSocketIO"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.goqual.a10k.START_SOCKET_SERVICE"/>
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>
