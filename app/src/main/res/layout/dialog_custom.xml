@@ -83,7 +83,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/identitiy_01"
-                    android:text="@string/common_cancel"
+                    android:text="@{item.negativeButtonText}"
                     android:onClick="@{dialog::onBtnClick}"
                     android:visibility="@{item.isSetNegativeButton ? View.VISIBLE : View.GONE}"
                     />
@@ -95,7 +95,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/identitiy_01"
-                    android:text="@string/common_ok"
+                    android:text="@{item.positiveButtonText}"
                     android:onClick="@{dialog::onBtnClick}"
                     android:visibility="@{item.isSetPositiveButton ? View.VISIBLE : View.GONE}"
                     />

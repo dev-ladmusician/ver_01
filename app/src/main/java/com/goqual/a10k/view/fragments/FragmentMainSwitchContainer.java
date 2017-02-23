@@ -1,7 +1,11 @@
 package com.goqual.a10k.view.fragments;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,8 @@ import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
@@ -42,7 +48,11 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     private SwitchPresenterImpl mPresenter;
     private SocketManagerImpl mSocketManager;
 
+    private CustomDialog connectionFailedDialog;
+
     private int mCurrentPage = 0;
+
+    private Handler mHandler;
 
     public static FragmentMainSwitchContainer newInstance() {
 
@@ -94,6 +104,51 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     @Override
+    public void onConnectionError() {
+        if(mHandler != null) {
+            mHandler.post(() -> {
+                if(connectionFailedDialog == null) {
+                    DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+                        switch (which) {
+                            case Dialog.BUTTON_POSITIVE:
+                                dialog.dismiss();
+                                mSocketManager.tryReconnect();
+                                break;
+                            case Dialog.BUTTON_NEGATIVE:
+                                // finish app;
+                                dialog.dismiss();
+                                connectionFailedDialog = null;
+                                ((IActivityInteraction)getActivity()).finishApp();
+                                break;
+                        }
+                    };
+                    connectionFailedDialog = new CustomDialog(getActivity())
+                            .isEditable(false)
+                            .isNegativeButtonEnable(true, getString(R.string.common_quit), onClickListener)
+                            .isPositiveButton(true, getString(R.string.common_retry), onClickListener)
+                            .setTitleText(R.string.socket_connection_error_title)
+                            .setMessageText(R.string.socket_connection_error_content);
+                    connectionFailedDialog.show();
+                }
+                else {
+                    if(!connectionFailedDialog.isShowing()) {
+                        connectionFailedDialog.show();
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onConnected() {
+        if(connectionFailedDialog != null && connectionFailedDialog.isShowing()) {
+            connectionFailedDialog.cancel();
+            connectionFailedDialog = null;
+        }
+        Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
     public String getTitle() {
         return mTitle;
     }
@@ -106,6 +161,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mHandler = new Handler();
         getSocketManager();
     }
 
@@ -132,6 +188,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         SwitchManager.getInstance().clear();
         getPresenter()
                 .loadItems();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSocketManager.destroySocketConnection();
     }
 
     /**

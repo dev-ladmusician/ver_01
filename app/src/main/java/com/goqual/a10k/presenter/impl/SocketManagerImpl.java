@@ -34,6 +34,11 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
         mSocketManager = SocketIoManager.getInstance(ctx, this);
     }
 
+    public void tryReconnect() {
+        mSocketManager.disconnect();
+        mSocketManager.connect();
+    }
+
     @Override
     public void operationOnOff(Switch item, int btnNumber) {
         LogUtil.d(TAG, "ITEM : " + item.toString() + "\n BTN NUMBER : " + btnNumber);
@@ -65,6 +70,7 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     @Override
     public void onConnected() {
         LogUtil.e(TAG, "SOCKET onConnected");
+        mView.onConnected();
         mSocketManager.joinSwitchRoom();
     }
 
@@ -82,6 +88,7 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     @Override
     public void onError() {
         LogUtil.e(TAG, "SOCKET onError");
+        mView.onConnectionError();
     }
 
     @Override
@@ -106,4 +113,11 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     public void refreshConnectedRoom() {
         mSocketManager.joinSwitchRoom();
     }
+
+    @Override
+    public void destroySocketConnection() {
+        mSocketManager.destroy();
+        mSocketManager = null;
+    }
+
 }

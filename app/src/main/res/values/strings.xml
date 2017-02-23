@@ -2,12 +2,13 @@
     <string name="app_name">A10K</string>
 
     <!-- common -->
-    <string name="common_ok">확인</string>
-    <string name="common_allow">허가</string>
-    <string name="common_retry">재시도</string>
-    <string name="common_delete">삭제</string>
-    <string name="common_cancel">취소</string>
-    <string name="common_deny">거부</string>
+    <string name="common_ok">OK</string>
+    <string name="common_allow">Allow</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_deny">Deny</string>
+    <string name="common_quit">Quit</string>
 
     <!-- title -->
     <string name="title_switch_list">All Switches</string>
@@ -47,4 +48,13 @@
     <string name="switch_rename_hit">10K 내방 스위치</string>
     <string name="add_switch">새로운 10k 등록하기</string>
     <string name="error_delete_switch">스위치를 삭제하는데 오류가 발생했습니다.</string>
+
+    <!-- Socket -->
+    <string name="socket_connection_error_title">통신 연결 실패</string>
+    <string name="socket_connection_error_content">서버와 통신이 원활하지 않습니다.</string>
+
+    <!-- SOCKET.IO -->
+    <string name="SOCKET_SUCCESS_CONNECT">서버와 통신 연결되었습니다.</string>
+    <string name="SOCKET_ERROR_CONNECT">서버와 통신 연결하는데 오류가 발생했습니다.</string>
+    <string name="SOCKET_DISCONNECT">서버와 통신 연결이 끊겼습니다.</string>
 </resources>

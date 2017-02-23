@@ -17,6 +17,7 @@ import java.util.TimerTask;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 /**
  * Created by hanwool on 2017. 2. 22..
@@ -54,78 +55,107 @@ public class SocketIoManager{
             if(mSocket == null) {
                 mSocket = IO.socket(Constraint.SOCKET_SERVER_IP);
             }
-            initSocketCallback();
-            connect();
+            if(!isConnected) {
+                registerSocketCallback();
+                connect();
+            }
         } catch (URISyntaxException e) {
             LogUtil.e(TAG, e.getMessage(), e);
         }
     }
 
-    private void connect() {
+    public void connect() {
         mSocket.connect();
     }
 
-    private void disconnect() {
+    public void disconnect() {
         mSocket.disconnect();
     }
 
-    private void initSocketCallback() {
-        mSocket.on(Socket.EVENT_CONNECT, args -> {
-            LogUtil.e(TAG, "SOCKET EVENT_CONNECT");
-            mListener.onConnected();
-            isConnected = true;
-        });
-        mSocket.on(Socket.EVENT_RECONNECT, args -> {
-            LogUtil.e(TAG, "SOCKET EVENT_RECONNECT");
-            isConnected = false;
-            mListener.onReconnect();
-        });
-        mSocket.on(Socket.EVENT_RECONNECT_FAILED, args -> {
-            LogUtil.e(TAG, "SOCKET EVENT_RECONNECT_FAILED");
-            isConnected = false;
-            mListener.onReconnectionFailed();
-            disconnect();
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(!isConnected) {
-                        mSocket.connect();
-                    }
-                }
-            }, RETRY_AFTER_TWO_SECONDS);
-        });
-        mSocket.on(Socket.EVENT_DISCONNECT, args -> {
-            LogUtil.e(TAG, "SOCKET EVENT_DISCONNECT");
-            isConnected = false;
-            mListener.onDisconnect();
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(!isConnected) {
-                        mSocket.connect();
-                    }
-                }
-            }, RETRY_AFTER_TWO_SECONDS);
-        });
-        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
-            isConnected = false;
-            mListener.onConnectionTimeOut();
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if(!isConnected) {
-                        mSocket.connect();
-                    }
-                }
-            }, RETRY_AFTER_TWO_SECONDS);
-        });
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, args -> {
-            LogUtil.e(TAG, "SOCKET EVENT_CONNECT_ERROR");
-            isConnected = false;
-            mListener.onError();
-            disconnect();
-        });
+    public void destroy() {
+        disconnect();
+        unregisterSocketCallback();
+        mSocket = null;
     }
+
+    private void registerSocketCallback() {
+        mSocket.on(Socket.EVENT_CONNECT, onConnectedListener);
+        mSocket.on(Socket.EVENT_RECONNECT, onReconnectingListener);
+        mSocket.on(Socket.EVENT_RECONNECT_FAILED, onReconnectFailListener);
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnectedListener);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+    }
+    
+    private void unregisterSocketCallback() {
+        mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);
+        mSocket.off(Socket.EVENT_RECONNECT, onReconnectingListener);
+        mSocket.off(Socket.EVENT_RECONNECT_FAILED, onReconnectFailListener);
+        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnectedListener);
+        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
+        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+    }
+
+    private Emitter.Listener onConnectedListener = args ->{
+        LogUtil.e(TAG, "SOCKET EVENT_CONNECT");
+        mListener.onConnected();
+        isConnected = true;
+    };
+
+    private Emitter.Listener onReconnectingListener = args -> {
+        LogUtil.e(TAG, "SOCKET EVENT_RECONNECT");
+        isConnected = false;
+        mListener.onReconnect();
+    };
+
+    private Emitter.Listener onReconnectFailListener = args -> {
+        LogUtil.e(TAG, "SOCKET EVENT_RECONNECT_FAILED");
+        isConnected = false;
+        mListener.onReconnectionFailed();
+        disconnect();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(!isConnected) {
+                    mSocket.connect();
+                }
+            }
+        }, RETRY_AFTER_TWO_SECONDS);
+    };
+
+    private Emitter.Listener onDisconnectedListener = args -> {
+        LogUtil.e(TAG, "SOCKET EVENT_DISCONNECT");
+        isConnected = false;
+        mListener.onDisconnect();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(!isConnected) {
+                    mSocket.connect();
+                }
+            }
+        }, RETRY_AFTER_TWO_SECONDS);
+    };
+
+    private Emitter.Listener onConnectionTimeoutListener = args -> {
+        isConnected = false;
+        mListener.onConnectionTimeOut();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(!isConnected) {
+                    mSocket.connect();
+                }
+            }
+        }, RETRY_AFTER_TWO_SECONDS);
+    };
+
+    private Emitter.Listener onConnectErrorListener = args -> {
+        LogUtil.e(TAG, "SOCKET EVENT_CONNECT_ERROR");
+        isConnected = false;
+        mListener.onError();
+        disconnect();
+    };
 
     public void emit(String event, Object... msg) {
         if(isConnected) {

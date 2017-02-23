@@ -11,6 +11,8 @@ public class DialogModel {
     public String message;
     public String editTextHint;
     public String editTextMessage;
+    public String positiveButtonText;
+    public String negativeButtonText;
     public boolean isEditable;
     public boolean isSetPositiveButton;
     public boolean isSetNegativeButton;
@@ -76,11 +78,19 @@ public class DialogModel {
         this.editTextMessage = editTextMessage;
     }
 
-    public void setSetPositiveButton(boolean setPositiveButton) {
-        isSetPositiveButton = setPositiveButton;
+    public String getPositiveButtonText() {
+        return positiveButtonText;
     }
 
-    public void setSetNegativeButton(boolean setNegativeButton) {
-        isSetNegativeButton = setNegativeButton;
+    public void setPositiveButtonText(String positiveButtonText) {
+        this.positiveButtonText = positiveButtonText;
+    }
+
+    public String getNegativeButtonText() {
+        return negativeButtonText;
+    }
+
+    public void setNegativeButtonText(String negativeButtonText) {
+        this.negativeButtonText = negativeButtonText;
     }
 }

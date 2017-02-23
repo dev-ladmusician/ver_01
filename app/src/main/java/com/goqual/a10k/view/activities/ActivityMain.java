@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -45,6 +46,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.e(TAG, "ON_CREATE!!!");
         mBinding.setActivity(this);
         initView();
         PreferenceHelper.getInstance(this)
@@ -143,6 +145,12 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void setTitle(String title) {
         LogUtil.d(TAG, title);
         mBinding.toolbarTitle.setText(title);
+    }
+
+    @Override
+    public void finishApp() {
+        ActivityCompat.finishAffinity(this);
+        System.exit(0);
     }
 
     public void onBtnClick(View view) {
