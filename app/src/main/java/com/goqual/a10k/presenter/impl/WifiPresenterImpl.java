@@ -5,14 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.util.Constraint;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.WifiLevelDescCompare;
+import com.goqual.a10k.util.switchConnect.SimpleSocketClient;
+import com.goqual.a10k.util.switchConnect.WifiLevelDescCompare;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +32,14 @@ public class WifiPresenterImpl implements WifiPresenter {
     private Context mContext = null;
     private WifiManager mWifiManager;
 
-    private List<ScanResult> mScanResultList;
+    private int mSelectedWifiPostion;
+    private String mSelectedWifiPassword;
+
+    private ArrayList<ScanResult> mScanResultList;
+
+    private ScanResult m10KResult;
+    private WifiConfiguration mWifiConfiguration;
+    private int mNetworkId;
 
     public WifiPresenterImpl(WifiPresenterImpl.View mView, Context mContext) {
         this.mView = mView;
@@ -39,29 +48,84 @@ public class WifiPresenterImpl implements WifiPresenter {
 
     @Override
     public void startScan() {
-        LogUtil.d(TAG, "startScan");
         mView.onScanStart();
         enableWifi();
         mContext.registerReceiver(scanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        mScanResultList = new ArrayList<>();
         getWifiManager().startScan();
     }
 
     @Override
-    public void onClick(int position) {
-
+    public void destroy() {
+        mContext.unregisterReceiver(scanReceiver);
     }
 
     @Override
-    public void connectToWifi(int position, String pass) {
+    public void onClick(int position) {
+        mSelectedWifiPostion = position;
+        mView.openPassDialog(mScanResultList.get(position).SSID);
+    }
+
+    @Override
+    public void connectToWifi(String pass) {
+        mSelectedWifiPassword = pass;
     }
 
     @Override
     public void connect10K() {
+        LogUtil.d(TAG, "connect10K::" + m10KResult);
+        if(m10KResult != null) {
+            mNetworkId = getWifiManager().addNetwork(getWifiConfiguration());
+            if(mNetworkId != -1 && getWifiManager().enableNetwork(mNetworkId, true)) {
+                LogUtil.d(TAG, "connect10K::SUCCESS:" + mNetworkId);
+                SimpleSocketClient.getInstance(Constraint.BS_SERVER_IP, Constraint.SERVER_PORT);
+            }
+            else {
+                LogUtil.d(TAG, "addNetwork::FAILED:" + mNetworkId);
+                mView.openErrorDialog();
+                endConnect10K();
+            }
+        }
+    }
 
+    private void endConnect10K(){
+        if(m10KResult != null && mNetworkId != -1) {
+            if(getWifiManager().disableNetwork(mNetworkId)) {
+                LogUtil.d(TAG, "disableNetwork::SUCCESS");
+            }
+            else {
+                LogUtil.d(TAG, "disableNetwork::FAILED");
+            }
+            if(getWifiManager().removeNetwork(mNetworkId)) {
+                LogUtil.d(TAG, "removeNetwork::SUCCESS");
+            }
+            else {
+                LogUtil.d(TAG, "removeNetwork::FAILED");
+            }
+        }
+    }
+
+    private WifiConfiguration getWifiConfiguration() {
+        if(mWifiConfiguration == null) {
+            mWifiConfiguration = new WifiConfiguration();
+            mWifiConfiguration.SSID = m10KResult.SSID;
+            mWifiConfiguration.status = WifiConfiguration.Status.DISABLED;
+            mWifiConfiguration.priority = 40;
+            mWifiConfiguration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+            mWifiConfiguration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+            mWifiConfiguration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+            mWifiConfiguration.allowedAuthAlgorithms.clear();
+            mWifiConfiguration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+
+            mWifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+            mWifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+            mWifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+            mWifiConfiguration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        }
+        return mWifiConfiguration;
     }
 
     private void enableWifi() {
-        LogUtil.d(TAG, "enableWifi");
         if(!getWifiManager().isWifiEnabled()) {
             getWifiManager().setWifiEnabled(true);
         }
@@ -70,8 +134,6 @@ public class WifiPresenterImpl implements WifiPresenter {
     private WifiManager getWifiManager() {
         if(mWifiManager == null) {
             mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo info = mWifiManager.getConnectionInfo();
-            LogUtil.d(TAG, "STATUS::info:" + info.toString());
         }
         return mWifiManager;
     }
@@ -79,19 +141,25 @@ public class WifiPresenterImpl implements WifiPresenter {
     BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            LogUtil.d(TAG, "onReceive");
-            mScanResultList = getWifiManager().getScanResults();
-            Collections.sort(mScanResultList, new WifiLevelDescCompare());
+            List<ScanResult> scanResultList = getWifiManager().getScanResults();
+            Collections.sort(scanResultList, new WifiLevelDescCompare());
             boolean isSwitchFinded = false;
-            for(ScanResult result : mScanResultList) {
-                LogUtil.d(TAG, result.toString());
+            for(ScanResult result : scanResultList) {
                 isSwitchFinded = isSwitchFinded || (result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2));
                 if(result.frequency < WIFI_FREQUENCY_MAX_VALUE) {
-                    mView.addAP(result);
+                    if(!(result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2))) {
+                        if(!result.SSID.isEmpty()) {
+                            mScanResultList.add(result);
+                            mView.addAP(result);
+                        }
+                    }
+                    else {
+                        m10KResult = result;
+                    }
                 }
             }
             if(!isSwitchFinded) {
-                mView.noSwitchFined();
+                mView.noSwitchFound();
             }
             mView.onScanEnd();
         }

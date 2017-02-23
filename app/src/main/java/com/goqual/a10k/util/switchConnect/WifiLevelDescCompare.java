@@ -1,4 +1,4 @@
-package com.goqual.a10k.util;
+package com.goqual.a10k.util.switchConnect;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;

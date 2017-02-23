@@ -35,7 +35,7 @@ import com.goqual.a10k.view.interfaces.IConnectFragmentListener;
  */
 
 public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelectWifiBinding>
-implements WifiPresenter.View{
+        implements WifiPresenter.View{
 
     public static final String TAG = FragmentConnectSelectWifi.class.getSimpleName();
 
@@ -83,13 +83,25 @@ implements WifiPresenter.View{
     }
 
     @Override
-    public void openPassDialog(int position) {
+    public void openPassDialog(String ssid) {
+        CustomDialog customDialog = new CustomDialog(getActivity());
 
-    }
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    getPresenter().connectToWifi(customDialog.getEditTextMessage());
+                    getPresenter().connect10K();
+                    break;
+            }
+            dialog.dismiss();
+        };
 
-    @Override
-    public void closePassDialog() {
-
+        customDialog.isEditable(true)
+                .setTitleText(String.format("%s%s", getString(R.string.select_wifi_pass_dialog_title), ssid))
+                .setMessageText(R.string.select_wifi_pass_dialog_content)
+                .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
+                .isPositiveButton(true, getString(R.string.common_ok), onClickListener);
+        customDialog.show();
     }
 
     @Override
@@ -101,13 +113,25 @@ implements WifiPresenter.View{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        LogUtil.d(TAG, "onResume");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getPresenter().destroy();
+    }
+
+    @Override
     public void onScanEnd() {
         LogUtil.d(TAG, "onScanEnd");
         mBinding.loading.setVisibility(View.GONE);
     }
 
     @Override
-    public void noSwitchFined() {
+    public void noSwitchFound() {
         DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
@@ -186,7 +210,9 @@ implements WifiPresenter.View{
         mBinding.listContainer.setAdapter(getAdapter());
         mBinding.listContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
-
+            if(viewId == R.id.wifi_connect) {
+                getPresenter().onClick(position);
+            }
         });
     }
 

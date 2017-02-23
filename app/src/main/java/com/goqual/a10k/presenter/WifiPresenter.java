@@ -9,22 +9,22 @@ import android.net.wifi.ScanResult;
 public interface WifiPresenter {
     void startScan();
     void onClick(int position);
-    void connectToWifi(int position, String pass);
+    void connectToWifi(String pass);
     void connect10K();
+    void destroy();
 
     interface View<T>{
         void onConnectError();
         void onConnectSuccess();
 
         void addAP(ScanResult bs);
-        void noSwitchFined();
+        void noSwitchFound();
         void onScanEnd();
         void onScanStart();
 
         void openErrorDialog();
         void closeErrorDialog();
 
-        void openPassDialog(int position);
-        void closePassDialog();
+        void openPassDialog(String ssid);
     }
 }

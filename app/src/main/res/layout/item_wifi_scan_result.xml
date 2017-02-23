@@ -41,7 +41,8 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:textColor="@color/identitiy_01"
-            android:text="@string/item_wifi_connect" />
+            android:text="@string/item_wifi_connect"
+            android:onClick="@{holder::onBtnClick}"/>
     </RelativeLayout>
 
 </layout>
