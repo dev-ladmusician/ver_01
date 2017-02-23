@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="result"
+            type="android.net.wifi.ScanResult" />
+
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.WifiScanResultViewHolder"/>
+
+        <import
+            alias="View"
+            type="android.view.View" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/item_wifi_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_setting_admin"
+        android:paddingLeft="@dimen/padding_20"
+        android:paddingRight="@dimen/padding_20"
+        android:background="@drawable/selector_list">
+
+        <TextView
+            android:id="@+id/wifi_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@{result.SSID}" />
+
+        <TextView
+            android:id="@+id/wifi_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/identitiy_01"
+            android:text="@string/item_wifi_connect" />
+    </RelativeLayout>
+
+</layout>

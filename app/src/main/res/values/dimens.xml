@@ -5,6 +5,7 @@
 
     <!-- common -->
     <dimen name="padding_16">16dp</dimen>
+    <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_24">24dp</dimen>
     <dimen name="padding_32">32dp</dimen>
     <dimen name="item_height_100">100dp</dimen>

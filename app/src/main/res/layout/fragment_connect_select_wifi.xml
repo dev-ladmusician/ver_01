@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" >
     <data>
-
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.connect.FragmentConnectSelectWifi"/>
     </data>
 
     <RelativeLayout

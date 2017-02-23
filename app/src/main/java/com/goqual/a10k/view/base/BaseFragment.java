@@ -37,7 +37,7 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivityInteraction = (ActivityMain)getActivity();
+        mActivityInteraction = (IActivityInteraction)getActivity();
     }
 
     @Nullable

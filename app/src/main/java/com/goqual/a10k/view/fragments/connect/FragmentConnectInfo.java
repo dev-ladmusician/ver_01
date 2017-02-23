@@ -1,5 +1,7 @@
 package com.goqual.a10k.view.fragments.connect;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -39,6 +41,11 @@ public class FragmentConnectInfo extends BaseFragment<FragmentConnectInfoBinding
         return null;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +55,7 @@ public class FragmentConnectInfo extends BaseFragment<FragmentConnectInfoBinding
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mBinding.setFragment(this);
     }
 
     public void onBtnClick(View v) {
