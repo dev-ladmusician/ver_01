@@ -361,7 +361,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             LogUtil.d(TAG, "networkChangeReceiver :: isInternetConnected :" + isInternetConnected() );
             Bundle bundle = intent.getExtras();
             for(String key : bundle.keySet()) {
-                LogUtil.d(TAG, "networkChangeReceiver :: KEY : " + key + "\nVALUE : " + bundle.get(key));
+                LogUtil.d(TAG, "networkChangeReceiver :: KEY : " + key + "\nVALUE : " + bundle.get(key) + "\n TYPE" + bundle.get(key).getClass().getCanonicalName());
             }
             if(isInternetConnected()) {
                 refresh();

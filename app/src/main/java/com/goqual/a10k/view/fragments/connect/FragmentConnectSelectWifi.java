@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -63,7 +65,28 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
 
     @Override
     public void onConnectSuccess() {
+        CustomDialog customDialog = new CustomDialog(getActivity());
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    getPresenter().setName(customDialog.getEditTextMessage());
+                    break;
+            }
+            dialog.dismiss();
+        };
+        customDialog
+                .isEditable(true)
+                .setTitleText(R.string.rename_title)
+                .setMessageText(R.string.rename_content)
+                .setEditTextHint(R.string.rename_edit_hint)
+                .isPositiveButton(true, getString(R.string.rename_btn_txt), onClickListener)
+                .isNegativeButtonEnable(false, "", null)
+                .show();
+    }
 
+    @Override
+    public void onRegisterSuccess() {
+        getActivity().finish();
     }
 
     @Override
@@ -78,11 +101,6 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     }
 
     @Override
-    public void closeErrorDialog() {
-
-    }
-
-    @Override
     public void openPassDialog(String ssid) {
         CustomDialog customDialog = new CustomDialog(getActivity());
 
@@ -91,6 +109,8 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                 case DialogInterface.BUTTON_POSITIVE:
                     getPresenter().connectToWifi(customDialog.getEditTextMessage());
                     getPresenter().connect10K();
+                    mBinding.listWrap.setVisibility(View.GONE);
+                    mBinding.setSwitchLoadingContainer.setVisibility(View.VISIBLE);
                     break;
             }
             dialog.dismiss();
@@ -186,6 +206,33 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
         if(requestCode == REQ_LOCATION_PERMMISION) {
             if(grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(!Settings.System.canWrite(getActivity())) {
+                        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+                            switch (which) {
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                                    intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    try {
+                                        startActivity(intent);
+                                    } catch (Exception e) {
+                                        LogUtil.e("MainActivity", "error starting permission intent", e);
+                                    }
+                                    break;
+                            }
+                            dialog.dismiss();
+                        };
+                        CustomDialog customDialog = new CustomDialog(getActivity());
+                        customDialog.isEditable(false)
+                                .isEditable(false)
+                                .setTitleText(R.string.permission_dialog_title)
+                                .setMessageText(R.string.permission_dialog_message)
+                                .isPositiveButton(true, getString(R.string.common_allow), onClickListener)
+                                .isNegativeButtonEnable(false, "", null)
+                                .show();
+                    }
+                }
                 scanWifi();
             }
         }

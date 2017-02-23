@@ -1,0 +1,14 @@
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/gif_s_to_r_00"
+        android:duration="300" />
+    <item
+        android:drawable="@drawable/gif_s_to_r_01"
+        android:duration="300" />
+    <item
+        android:drawable="@drawable/gif_s_to_r_02"
+        android:duration="300" />
+    <item
+        android:drawable="@drawable/gif_s_to_r_03"
+        android:duration="300" />
+</animation-list>

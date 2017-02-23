@@ -96,7 +96,10 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
     public void changePage(int page) {
         LogUtil.d(TAG, "changePage::"+page);
         BaseFragment fragment = null;
-        if(page == getResources().getInteger(R.integer.frag_select_wifi)) {
+        if(page == getResources().getInteger(R.integer.frag_info)) {
+            fragment = FragmentConnectInfo.newInstance();
+        }
+        else if(page == getResources().getInteger(R.integer.frag_select_wifi)) {
             fragment = FragmentConnectSelectWifi.newInstance();
         }
         else if(page == getResources().getInteger(R.integer.frag_set_switch)) {

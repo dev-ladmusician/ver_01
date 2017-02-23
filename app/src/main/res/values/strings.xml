@@ -64,7 +64,7 @@
     <string name="info_btn_start">연결 시작</string>
 
     <string name="select_wifi_info">스위치가 인터넷에 연결될 Wi-Fi를 선택해주세요 \n(5G Wi-Fi는 목록에 보이지 않아요)</string>
-    <string name="select_wifi_permission_rationale">스위치와 연결하기 위해서는 권한 필요합니다.</string>
+    <string name="select_wifi_permission_rationale">스위치와 연결하기 위해서는 권한이 필요합니다.</string>
     <string name="select_wifi_permission_denied">권한이 없으면 스위치와 연결할 수 없습니다.</string>
     <string name="permission_allow">ALLOW</string>
     <string name="permission_deny">DENY</string>
@@ -90,8 +90,8 @@
 
     <string name="rename_title">자! 이제 마지막이에요!</string>
     <string name="rename_content">방금 연결한 스위치의 이름을 설정해 주세요!</string>
-    <string name="reanme_btn_txt">스위치 등록 완료</string>
-    <string name="reanme_edit_hint">10k switch</string>
+    <string name="rename_btn_txt">스위치 등록 완료</string>
+    <string name="rename_edit_hint">10k switch</string>
 
     <string name="add_connection_error_title">스위치 등록 오류</string>
     <string name="add_connection_error_content">스위치를 등록하는데 오류가 발생했습니다.</string>
@@ -115,4 +115,7 @@
     <string name="nfc_no_title_err_title">이름 설정 오류</string>
     <string name="nfc_no_title_err_content">NFC 태그에 이름을 설정해주세요.</string>
 
+    <!-- permission -->
+    <string name="permission_dialog_title">Request permission</string>
+    <string name="permission_dialog_message">안드로이드 마시멜로 이상에서는 스위치와 통신을 시도하기 위해 시스템 설정 권한이 필요합니다.</string>
 </resources>

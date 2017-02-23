@@ -11,11 +11,14 @@ public interface WifiPresenter {
     void onClick(int position);
     void connectToWifi(String pass);
     void connect10K();
+    void setName(String name);
     void destroy();
 
     interface View<T>{
         void onConnectError();
         void onConnectSuccess();
+
+        void onRegisterSuccess();
 
         void addAP(ScanResult bs);
         void noSwitchFound();
@@ -23,7 +26,6 @@ public interface WifiPresenter {
         void onScanStart();
 
         void openErrorDialog();
-        void closeErrorDialog();
 
         void openPassDialog(String ssid);
     }

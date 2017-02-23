@@ -4,25 +4,43 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 
+import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.remote.SwitchService;
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.util.Constraint;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.SocketProtocols;
+import com.goqual.a10k.util.StringUtil;
+import com.goqual.a10k.util.interfaces.IRawSocketCommunicationListener;
+import com.goqual.a10k.util.switchConnect.ConnectSocketData;
 import com.goqual.a10k.util.switchConnect.SimpleSocketClient;
 import com.goqual.a10k.util.switchConnect.WifiLevelDescCompare;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.http.Field;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by hanwool on 2017. 2. 23..
  */
 
-public class WifiPresenterImpl implements WifiPresenter {
+public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunicationListener {
 
     public static final String TAG = WifiPresenterImpl.class.getSimpleName();
 
@@ -32,7 +50,7 @@ public class WifiPresenterImpl implements WifiPresenter {
     private Context mContext = null;
     private WifiManager mWifiManager;
 
-    private int mSelectedWifiPostion;
+    private ScanResult mSelectedWifi;
     private String mSelectedWifiPassword;
 
     private ArrayList<ScanResult> mScanResultList;
@@ -40,6 +58,16 @@ public class WifiPresenterImpl implements WifiPresenter {
     private ScanResult m10KResult;
     private WifiConfiguration mWifiConfiguration;
     private int mNetworkId;
+
+    private String mSwitchId;
+    private int mSwitchBtnCount;
+    private String mSwitchHwVersion;
+    private String mSwitchFwVertion;
+    private String mSwitchTitle;
+
+    private SwitchService mSwitchService;
+
+    private SimpleSocketClient mSocketClient;
 
     public WifiPresenterImpl(WifiPresenterImpl.View mView, Context mContext) {
         this.mView = mView;
@@ -51,6 +79,7 @@ public class WifiPresenterImpl implements WifiPresenter {
         mView.onScanStart();
         enableWifi();
         mContext.registerReceiver(scanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        mContext.registerReceiver(networkChangeReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         mScanResultList = new ArrayList<>();
         getWifiManager().startScan();
     }
@@ -58,11 +87,12 @@ public class WifiPresenterImpl implements WifiPresenter {
     @Override
     public void destroy() {
         mContext.unregisterReceiver(scanReceiver);
+        mContext.unregisterReceiver(networkChangeReceiver);
     }
 
     @Override
     public void onClick(int position) {
-        mSelectedWifiPostion = position;
+        mSelectedWifi = mScanResultList.get(position);
         mView.openPassDialog(mScanResultList.get(position).SSID);
     }
 
@@ -78,7 +108,6 @@ public class WifiPresenterImpl implements WifiPresenter {
             mNetworkId = getWifiManager().addNetwork(getWifiConfiguration());
             if(mNetworkId != -1 && getWifiManager().enableNetwork(mNetworkId, true)) {
                 LogUtil.d(TAG, "connect10K::SUCCESS:" + mNetworkId);
-                SimpleSocketClient.getInstance(Constraint.BS_SERVER_IP, Constraint.SERVER_PORT);
             }
             else {
                 LogUtil.d(TAG, "addNetwork::FAILED:" + mNetworkId);
@@ -88,8 +117,36 @@ public class WifiPresenterImpl implements WifiPresenter {
         }
     }
 
+    @Override
+    public void setName(String name) {
+        mSwitchTitle = name;
+        LogUtil.d(TAG, String.format(Locale.KOREA, "<SWITCH DATA> id: %s\nname: %s\nbtnCount: %d\nHW: %s\nFW: %s",
+                mSwitchId,
+                mSwitchTitle,
+                mSwitchBtnCount,
+                mSwitchHwVersion,
+                mSwitchFwVertion));
+
+        getSwitchService().getSwitchApi().add(mSwitchId, mSwitchTitle, mSwitchBtnCount)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            LogUtil.d(TAG, "onNext::" + resultDTO.getResult() + "\nERROR? " + resultDTO.getError());
+                            mView.onRegisterSuccess();
+                        },
+                        (e)-> {
+                            LogUtil.e(TAG, e.getMessage(), e);
+                        },
+                        () -> {
+                            LogUtil.d(TAG, "onCompleted::");
+                            mView.onRegisterSuccess();
+                        });
+    }
+
     private void endConnect10K(){
         if(m10KResult != null && mNetworkId != -1) {
+            getSocketClient().disconnect();
             if(getWifiManager().disableNetwork(mNetworkId)) {
                 LogUtil.d(TAG, "disableNetwork::SUCCESS");
             }
@@ -125,6 +182,195 @@ public class WifiPresenterImpl implements WifiPresenter {
         return mWifiConfiguration;
     }
 
+    private SimpleSocketClient getSocketClient() {
+        if(mSocketClient == null) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mSocketClient = SimpleSocketClient.getInstance(Constraint.BS_SERVER_IP, Constraint.SERVER_PORT, this);
+
+                ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkRequest.Builder networkRequestBuilder = new NetworkRequest.Builder();
+                networkRequestBuilder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+                connectivityManager.requestNetwork(networkRequestBuilder.build(), new ConnectivityManager.NetworkCallback(){
+                    @Override
+                    public void onAvailable(Network network) {
+                        connectivityManager.unregisterNetworkCallback(this);
+                        mSocketClient.setNetwork(network);
+                        mSocketClient.connect();
+                        mSocketClient.start();
+                    }
+                });
+            }
+            else {
+                mSocketClient = SimpleSocketClient.getInstance(Constraint.BS_SERVER_IP, Constraint.SERVER_PORT, this);
+            }
+        }
+        return mSocketClient;
+    }
+
+    private void startSetting10K(){
+        LogUtil.d(TAG, "startSetting10K");
+        getSocketClient();
+    }
+
+    private void sendReqGetId(){
+        LogUtil.d(TAG, "sendReqGetId");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_BLUESW_DEVICE_ID, new byte[]{'0'});
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqSetSSID() {
+        LogUtil.d(TAG, "sendReqSetSSID");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_SSID, mSelectedWifi.SSID.getBytes());
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqSetBSSDID() {
+        LogUtil.d(TAG, "sendReqSetBSSDID");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_BSSID, mSelectedWifi.BSSID.getBytes());
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqSetWifiPassword() {
+        LogUtil.d(TAG, "sendReqSetWifiPassword");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_PASS, mSelectedWifiPassword.getBytes());
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqSetMqttServerIp() {
+        LogUtil.d(TAG, "sendReqSetMqttServerIp");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_MQTT_BROKER_IP, Constraint.MQTT_BROKER_IP.getBytes());
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqGetBtnCount() {
+        LogUtil.d(TAG, "sendReqGetBtnCount");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_SWTICH_COUNT, new byte[]{'0'});
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqGetHwVersion() {
+        LogUtil.d(TAG, "sendReqGetHwVersion");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_HW_VERSION, new byte[]{'0'});
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqGetFwVertion() {
+        LogUtil.d(TAG, "sendReqGetFwVertion");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_FW_VERSION, new byte[]{'0'});
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void sendReqEndConnection() {
+        LogUtil.d(TAG, "sendReqEndConnection");
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_END, new byte[]{'0'});
+        getSocketClient().sendPacket(data.makePacket());
+    }
+
+    private void onResId(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResId::" + data.toString());
+        mSwitchId = StringUtil.charArrToString(data.getData());
+        if(!mSwitchId.isEmpty()) {
+            sendReqSetSSID();
+        } else {
+            LogUtil.d(TAG, "onResId::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResSetSSID(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResSetSSID::" + data.toString());
+        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+            sendReqSetBSSDID();
+        } else {
+            LogUtil.d(TAG, "onResSetSSID::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResSetBSSID(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResSetBSSID::" + data.toString());
+        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+            sendReqSetWifiPassword();
+        } else {
+            LogUtil.d(TAG, "onResSetBSSID::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResSetWifiPassword(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResSetWifiPassword::" + data.toString());
+        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+            sendReqSetMqttServerIp();
+        } else {
+            LogUtil.d(TAG, "onResSetWifiPassword::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResSetMqttServerIp(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResSetMqttServerIp::" + data.toString());
+        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+            sendReqGetBtnCount();
+        } else {
+            LogUtil.d(TAG, "onResSetMqttServerIp::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResGetBtnCount(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResGetBtnCount::" + data.toString());
+        mSwitchBtnCount = Integer.parseInt(new String(data.getData()));
+        if(mSwitchBtnCount > 0) {
+            sendReqGetHwVersion();
+        } else {
+            LogUtil.d(TAG, "onResGetBtnCount::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResGetHwVersion(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResGetHwVersion::" + data.toString());
+        mSwitchHwVersion = StringUtil.charArrToString(data.getData());
+        if(!mSwitchHwVersion.isEmpty()) {
+            sendReqGetFwVertion();
+        } else {
+            LogUtil.d(TAG, "onResGetHwVersion::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResGetFwVertion(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResGetFwVertion::" + data.toString());
+        mSwitchFwVertion = StringUtil.charArrToString(data.getData());
+        if(!mSwitchFwVertion.isEmpty()) {
+            sendReqEndConnection();
+        } else {
+            LogUtil.d(TAG, "onResGetFwVertion::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+    }
+
+    private void onResEndConnection(ConnectSocketData data) {
+        LogUtil.d(TAG, "onResEndConnection::" + data.toString());
+        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+            endConnect10K();
+            mView.onConnectSuccess();
+        } else {
+            LogUtil.d(TAG, "onResEndConnection::ERROR:" + data.toString());
+            mView.onConnectError();
+            mView.openErrorDialog();
+        }
+
+    }
+
     private void enableWifi() {
         if(!getWifiManager().isWifiEnabled()) {
             getWifiManager().setWifiEnabled(true);
@@ -136,6 +382,65 @@ public class WifiPresenterImpl implements WifiPresenter {
             mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         }
         return mWifiManager;
+    }
+
+    @Override
+    public void onConnected() {
+        LogUtil.d(TAG, "SOCKET::onConnected");
+        sendReqGetId();
+    }
+
+    @Override
+    public void onDisconnected() {
+        LogUtil.d(TAG, "SOCKET::onDisconnected");
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        LogUtil.e(TAG, "SOCKET::onError", e);
+        endConnect10K();
+    }
+
+    @Override
+    public void onReceivePacket(byte[] packet) {
+        LogUtil.d(TAG, "onReceivePacket::" + new String(packet));
+        ConnectSocketData data = ConnectSocketData.parsePacket(packet);
+        switch (data.getCmd()) {
+            case SocketProtocols.RES_BLUESW_DEVICE_ID:
+                onResId(data);
+                break;
+            case SocketProtocols.RES_WIFI_SSID:
+                onResSetSSID(data);
+                break;
+            case SocketProtocols.RES_WIFI_BSSID:
+                onResSetBSSID(data);
+                break;
+            case SocketProtocols.RES_WIFI_PASS:
+                onResSetWifiPassword(data);
+                break;
+            case SocketProtocols.RES_MQTT_BROKER_IP:
+                onResSetMqttServerIp(data);
+                break;
+            case SocketProtocols.RES_SWTICH_COUNT:
+                onResGetBtnCount(data);
+                break;
+            case SocketProtocols.RES_HW_VERSION:
+                onResGetHwVersion(data);
+                break;
+            case SocketProtocols.RES_FW_VERSION:
+                onResGetFwVertion(data);
+                break;
+            case SocketProtocols.RES_END:
+                onResEndConnection(data);
+                break;
+        }
+    }
+
+    public SwitchService getSwitchService() {
+        if (mSwitchService == null)
+            mSwitchService = new SwitchService(mContext);
+
+        return mSwitchService;
     }
 
     BroadcastReceiver scanReceiver = new BroadcastReceiver() {
@@ -162,6 +467,35 @@ public class WifiPresenterImpl implements WifiPresenter {
                 mView.noSwitchFound();
             }
             mView.onScanEnd();
+        }
+    };
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        /**
+         * 네트워크 변경을 감시합니다.
+         * 네트워크 변경이 감지되었을 때 인터넷이 연결된 상태라면 서버와 재접속을 시도합니다.
+         * @param context
+         * @param intent
+         */
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            WifiInfo info = getWifiManager().getConnectionInfo();
+            LogUtil.d(TAG, "networkChangeReceiver :: " + info);
+            if(info != null) {
+                String ssid = info.getSSID().replaceAll("\"", "");
+                LogUtil.d(TAG, "networkChangeReceiver :: SSID : " + ssid);
+                LogUtil.d(TAG, "networkChangeReceiver :: SSID1 : " + Constraint.AP_NAME1);
+                LogUtil.d(TAG, "networkChangeReceiver :: SSID2 : " + Constraint.AP_NAME2);
+                if(ssid.equals(Constraint.AP_NAME1) || ssid.equals(Constraint.AP_NAME2)) {
+                    LogUtil.d(TAG, "networkChangeReceiver :: 10K");
+                    NetworkInfo networkInfo = (NetworkInfo)intent.getExtras().get("networkInfo");
+                    if(networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        if (!getSocketClient().isConnected()) {
+                            startSetting10K();
+                        }
+                    }
+                }
+            }
+
         }
     };
 }
