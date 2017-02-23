@@ -29,6 +29,7 @@ import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
+import com.goqual.a10k.view.activities.SplashActivity;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -155,6 +156,19 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     @Override
+    public void onServerError(int code) {
+
+    }
+
+    @Override
+    public void refreshViews() {
+        mCurrentPage = mBinding.viewPager.getCurrentItem();
+        mHandler.post(() -> {
+            refresh();
+        });
+    }
+
+    @Override
     public String getTitle() {
         return mTitle;
     }
@@ -167,9 +181,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().registerReceiver(networkChangeReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-        mHandler = new Handler();
-        getSocketManager();
     }
 
     @Nullable
@@ -188,6 +199,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onResume() {
         super.onResume();
+
+        getActivity().registerReceiver(networkChangeReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        mHandler = new Handler();
+        getSocketManager();
 
         mPagerAdapter.clear();
         mPagerAdapter.refresh();

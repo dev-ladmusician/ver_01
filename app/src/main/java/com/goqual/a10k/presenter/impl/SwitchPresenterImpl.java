@@ -7,11 +7,8 @@ import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
-import com.goqual.a10k.util.Errors;
+import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
-import com.goqual.a10k.util.event.EventSwitchRefresh;
-import com.goqual.a10k.util.event.RxBus;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
@@ -51,7 +48,7 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                         (e) -> {
                             if (e instanceof HttpException) {
                                 HttpException error = (HttpException) e;
-                                if (error.code() == Errors.ERROR_UNAUTHORIZED) {
+                                if (error.code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
                                     LogUtil.e(TAG, "unauthorized exception error");
                                     mView.onError(e);
                                 }

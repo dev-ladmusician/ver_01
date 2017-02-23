@@ -10,7 +10,10 @@ import com.goqual.a10k.model.entity.SocketData;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.interfaces.ISocketIoConnectionListener;
 
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -85,6 +88,14 @@ public class SocketIoManager{
         mSocket.on(Socket.EVENT_DISCONNECT, onDisconnectedListener);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+
+        mSocket.on(SocketProtocols.SOCKET_PT_REQ_JOIN, joinReqListener);
+        mSocket.on(SocketProtocols.SOCKET_PT_REQ_LEAVE, leaveReqListener);
+        mSocket.on(SocketProtocols.SOCKET_PT_REQ_OPERATION, operaionReqListener);
+
+        mSocket.on(SocketProtocols.SOCKET_PT_RES_JOIN, joinResListener);
+        mSocket.on(SocketProtocols.SOCKET_PT_RES_LEAVE, leaveResListener);
+        mSocket.on(SocketProtocols.SOCKET_PT_RES_OPERATION, operationResListener);
     }
     
     private void unregisterSocketCallback() {
@@ -157,6 +168,36 @@ public class SocketIoManager{
         disconnect();
     };
 
+    private Emitter.Listener joinReqListener = args -> {
+        LogUtil.e(TAG, "SOCKET joinReqListener");
+        mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_REQ_JOIN, new Gson().fromJson(args[0].toString(), SocketData.class));
+    };
+
+    private Emitter.Listener leaveReqListener = args -> {
+        LogUtil.e(TAG, "SOCKET leaveReqListener");
+        mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_REQ_LEAVE, new Gson().fromJson(args[0].toString(), SocketData.class));
+    };
+
+    private Emitter.Listener operaionReqListener = args -> {
+        LogUtil.e(TAG, "SOCKET operaionReqListener");
+        mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_REQ_OPERATION, new Gson().fromJson(args[0].toString(), SocketData.class));
+    };
+
+    private Emitter.Listener joinResListener = args -> {
+        LogUtil.e(TAG, "SOCKET joinResListener");
+        mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_RES_JOIN, new Gson().fromJson(args[0].toString(), SocketData.class));
+    };
+
+    private Emitter.Listener leaveResListener = args -> {
+        LogUtil.e(TAG, "SOCKET leaveResListener");
+        mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_RES_LEAVE, new Gson().fromJson(args[0].toString(), SocketData.class));
+    };
+
+    private Emitter.Listener operationResListener = args -> {
+        LogUtil.e(TAG, "SOCKET operationResListener");
+        mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_RES_OPERATION, new Gson().fromJson(args[0].toString(), SocketData.class));
+    };
+
     public void emit(String event, Object... msg) {
         if(isConnected) {
             mSocket.emit(event, msg);
@@ -188,7 +229,7 @@ public class SocketIoManager{
                             PreferenceHelper.getInstance(mContext).getStringValue(
                                     mContext.getString(R.string.arg_user_token), ""
                             ));
-                    mSocket.emit(SocketProtocols.JOIN_REQ, gson.toJson(data));
+                    mSocket.emit(SocketProtocols.SOCKET_PT_REQ_JOIN, gson.toJson(data));
                 }
         }
         else {
@@ -208,7 +249,7 @@ public class SocketIoManager{
                             mContext.getString(R.string.arg_user_token), ""
                     ));
 
-            mSocket.emit(SocketProtocols.LEAVE_REQ, gson.toJson(data));
+            mSocket.emit(SocketProtocols.SOCKET_PT_REQ_LEAVE, gson.toJson(data));
         }
     }
 

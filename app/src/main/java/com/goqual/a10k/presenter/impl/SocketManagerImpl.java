@@ -5,15 +5,19 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.SocketData;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.SocketManager;
+import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.SocketIoManager;
 import com.goqual.a10k.util.SocketProtocols;
 import com.goqual.a10k.util.event.EventSocketIO;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.util.interfaces.ISocketIoConnectionListener;
+
+import java.net.Socket;
 
 import rx.functions.Action1;
 
@@ -62,8 +66,8 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
                     PreferenceHelper.getInstance(mContext).getStringValue(
                             mContext.getString(R.string.arg_user_token), ""
                     ), btnNumber,
-                    btnState);
-            mSocketManager.emit(SocketProtocols.OPERATION_SWITCH_STATE, gson.toJson(data));
+                    btnState, 0);
+            mSocketManager.emit(SocketProtocols.SOCKET_PT_REQ_OPERATION, gson.toJson(data));
         }
     }
 
@@ -82,7 +86,9 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     @Override
     public void onDisconnect() {
         LogUtil.e(TAG, "SOCKET onDisconnect");
-        mSocketManager.leaveAllSwitchRooms();
+        if(mSocketManager != null) {
+            mSocketManager.leaveAllSwitchRooms();
+        }
     }
 
     @Override
@@ -92,11 +98,40 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     }
 
     @Override
-    public void onReceiveMessage(Object... args) {
+    public void onReceiveMessage(String type, SocketData data) {
         LogUtil.e(TAG, "SOCKET onReceiveMessage");
-        for(Object obj : args) {
-            LogUtil.e(TAG, "SOCKET obj :: " + obj);
+        switch (data.getCode()) {
+            case HttpResponseCode.OK:
+                switch (type) {
+                    case SocketProtocols.SOCKET_PT_RES_OPERATION:
+                        updateSwitchState(data);
+                }
+                break;
+            case HttpResponseCode.ERROR_BAD_REQUEST:
+            case HttpResponseCode.ERROR_UNAUTHORIZED:
+            case HttpResponseCode.ERROR_NOT_FOUND:
+            case HttpResponseCode.ERROR_INTERNAL_SERVER:
+            case HttpResponseCode.ERROR_BAD_GATEWAY:
+                mView.onServerError(data.getCode());
+                break;
         }
+    }
+
+    private void updateSwitchState(SocketData data) {
+
+        Switch item = SwitchManager.getInstance().getSwitchByMacAddr(data.getMacaddr());
+        switch (data.getBtn()) {
+            case 1:
+                item.setBtn1(data.getOperation().equals("1"));
+                break;
+            case 2:
+                item.setBtn2(data.getOperation().equals("1"));
+                break;
+            case 3:
+                item.setBtn3(data.getOperation().equals("1"));
+                break;
+        }
+        mView.refreshViews();
     }
 
     @Override

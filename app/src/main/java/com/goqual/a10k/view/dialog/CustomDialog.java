@@ -47,6 +47,8 @@ public class CustomDialog extends Dialog{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCancelable(false);
+        setCanceledOnTouchOutside(false);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBinding = DialogCustomBinding.inflate(inflater);
         mBinding.setDialog(this);

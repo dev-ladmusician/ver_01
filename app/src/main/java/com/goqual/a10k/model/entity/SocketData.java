@@ -8,6 +8,7 @@ public class SocketData {
     private String macaddr;
     private String token;
     private String operation;
+    private int code;
     private int btn;
 
     public SocketData() {
@@ -18,11 +19,12 @@ public class SocketData {
         this.token = token;
     }
 
-    public SocketData(String macaddr, String token, int btn, String operation) {
+    public SocketData(String macaddr, String token, int btn, String operation, int code) {
         this.macaddr = macaddr;
         this.token = token;
         this.operation = operation;
         this.btn = btn;
+        this.code = code;
     }
 
     public String getMacaddr() {
@@ -55,5 +57,13 @@ public class SocketData {
 
     public void setBtn(int btn) {
         this.btn = btn;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

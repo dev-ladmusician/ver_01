@@ -132,3 +132,5 @@ gradle-app.setting
 \.idea/
 
 app/src/main/java/com/goqual/a10k/util/SocketProtocols\.java
+
+app/src/main/java/com/goqual/a10k/util/Constraint\.java
