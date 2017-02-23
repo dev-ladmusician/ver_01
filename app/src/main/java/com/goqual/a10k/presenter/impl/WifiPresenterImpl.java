@@ -42,6 +42,11 @@ import rx.schedulers.Schedulers;
 
 public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunicationListener {
 
+    public enum CONNECTION_FAIL_TYPE {
+        WIFI_ERROR,
+        SOCKET_ERROR,
+    }
+
     public static final String TAG = WifiPresenterImpl.class.getSimpleName();
 
     public static final int WIFI_FREQUENCY_MAX_VALUE = 3000;
@@ -64,6 +69,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     private String mSwitchHwVersion;
     private String mSwitchFwVertion;
     private String mSwitchTitle;
+    private boolean isConnectionSuccessed;
 
     private SwitchService mSwitchService;
 
@@ -88,6 +94,8 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     public void destroy() {
         mContext.unregisterReceiver(scanReceiver);
         mContext.unregisterReceiver(networkChangeReceiver);
+        mSocketClient.disconnect();
+        mSocketClient = null;
     }
 
     @Override
@@ -111,7 +119,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
             }
             else {
                 LogUtil.d(TAG, "addNetwork::FAILED:" + mNetworkId);
-                mView.openErrorDialog();
+                mView.onConnectError();
                 endConnect10K();
             }
         }
@@ -193,10 +201,16 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                 connectivityManager.requestNetwork(networkRequestBuilder.build(), new ConnectivityManager.NetworkCallback(){
                     @Override
                     public void onAvailable(Network network) {
-                        connectivityManager.unregisterNetworkCallback(this);
-                        mSocketClient.setNetwork(network);
-                        mSocketClient.connect();
-                        mSocketClient.start();
+                        try {
+                            connectivityManager.unregisterNetworkCallback(this);
+                            mSocketClient.setNetwork(network);
+                            mSocketClient.connect();
+                            mSocketClient.start();
+                        }
+                        catch (IllegalThreadStateException e){
+                            LogUtil.e(TAG, e.getMessage(), e);
+                            endConnect10K();
+                        }
                     }
                 });
             }
@@ -219,26 +233,26 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     }
 
     private void sendReqSetSSID() {
-        LogUtil.d(TAG, "sendReqSetSSID");
-        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_SSID, mSelectedWifi.SSID.getBytes());
+        LogUtil.d(TAG, "sendReqSetSSID::" + mSelectedWifi.SSID);
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_SSID, mSelectedWifi.SSID);
         getSocketClient().sendPacket(data.makePacket());
     }
 
     private void sendReqSetBSSDID() {
-        LogUtil.d(TAG, "sendReqSetBSSDID");
-        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_BSSID, mSelectedWifi.BSSID.getBytes());
+        LogUtil.d(TAG, "sendReqSetBSSDID::" + mSelectedWifi.BSSID);
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_BSSID, mSelectedWifi.BSSID);
         getSocketClient().sendPacket(data.makePacket());
     }
 
     private void sendReqSetWifiPassword() {
-        LogUtil.d(TAG, "sendReqSetWifiPassword");
-        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_PASS, mSelectedWifiPassword.getBytes());
+        LogUtil.d(TAG, "sendReqSetWifiPassword::" + mSelectedWifiPassword);
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_WIFI_PASS, mSelectedWifiPassword);
         getSocketClient().sendPacket(data.makePacket());
     }
 
     private void sendReqSetMqttServerIp() {
-        LogUtil.d(TAG, "sendReqSetMqttServerIp");
-        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_MQTT_BROKER_IP, Constraint.MQTT_BROKER_IP.getBytes());
+        LogUtil.d(TAG, "sendReqSetMqttServerIp::" + Constraint.MQTT_BROKER_IP);
+        ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_MQTT_BROKER_IP, Constraint.MQTT_BROKER_IP);
         getSocketClient().sendPacket(data.makePacket());
     }
 
@@ -268,107 +282,108 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
 
     private void onResId(ConnectSocketData data) {
         LogUtil.d(TAG, "onResId::" + data.toString());
-        mSwitchId = StringUtil.charArrToString(data.getData());
+        mSwitchId = data.getData();
         if(!mSwitchId.isEmpty()) {
             sendReqSetSSID();
         } else {
             LogUtil.d(TAG, "onResId::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResSetSSID(ConnectSocketData data) {
         LogUtil.d(TAG, "onResSetSSID::" + data.toString());
-        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+        if(data.getData().length() > 0 && data.getData().equals(Integer.toString(SocketProtocols.DATA_SUCCESS))) {
             sendReqSetBSSDID();
         } else {
             LogUtil.d(TAG, "onResSetSSID::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResSetBSSID(ConnectSocketData data) {
         LogUtil.d(TAG, "onResSetBSSID::" + data.toString());
-        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+        if(data.getData().length() > 0 && data.getData().equals(Integer.toString(SocketProtocols.DATA_SUCCESS))) {
             sendReqSetWifiPassword();
         } else {
             LogUtil.d(TAG, "onResSetBSSID::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResSetWifiPassword(ConnectSocketData data) {
         LogUtil.d(TAG, "onResSetWifiPassword::" + data.toString());
-        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+        if(data.getData().length() > 0 && data.getData().equals(Integer.toString(SocketProtocols.DATA_SUCCESS))) {
             sendReqSetMqttServerIp();
         } else {
             LogUtil.d(TAG, "onResSetWifiPassword::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResSetMqttServerIp(ConnectSocketData data) {
         LogUtil.d(TAG, "onResSetMqttServerIp::" + data.toString());
-        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+        if(data.getData().length() > 0 && data.getData().equals(Integer.toString(SocketProtocols.DATA_SUCCESS))) {
             sendReqGetBtnCount();
         } else {
             LogUtil.d(TAG, "onResSetMqttServerIp::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResGetBtnCount(ConnectSocketData data) {
         LogUtil.d(TAG, "onResGetBtnCount::" + data.toString());
-        mSwitchBtnCount = Integer.parseInt(new String(data.getData()));
-        if(mSwitchBtnCount > 0) {
+        mSwitchBtnCount = Integer.parseInt(data.getData());
+        if(m10KResult.SSID.equals(Constraint.AP_NAME1)){
+            mSwitchBtnCount = 1;
+        }
+        if(mSwitchBtnCount <= 3 || mSwitchBtnCount > 0) {
             sendReqGetHwVersion();
         } else {
             LogUtil.d(TAG, "onResGetBtnCount::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResGetHwVersion(ConnectSocketData data) {
         LogUtil.d(TAG, "onResGetHwVersion::" + data.toString());
-        mSwitchHwVersion = StringUtil.charArrToString(data.getData());
+        mSwitchHwVersion = data.getData();
         if(!mSwitchHwVersion.isEmpty()) {
             sendReqGetFwVertion();
         } else {
             LogUtil.d(TAG, "onResGetHwVersion::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResGetFwVertion(ConnectSocketData data) {
         LogUtil.d(TAG, "onResGetFwVertion::" + data.toString());
-        mSwitchFwVertion = StringUtil.charArrToString(data.getData());
+        mSwitchFwVertion = data.getData();
         if(!mSwitchFwVertion.isEmpty()) {
             sendReqEndConnection();
         } else {
             LogUtil.d(TAG, "onResGetFwVertion::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
         }
     }
 
     private void onResEndConnection(ConnectSocketData data) {
         LogUtil.d(TAG, "onResEndConnection::" + data.toString());
-        if(data.getData().length > 0 && data.getData()[0] == SocketProtocols.DATA_SUCCESS) {
+        if(data.getData().length() > 0 && data.getData().equals(Integer.toString(SocketProtocols.DATA_SUCCESS))) {
             endConnect10K();
+            isConnectionSuccessed = true;
             mView.onConnectSuccess();
         } else {
             LogUtil.d(TAG, "onResEndConnection::ERROR:" + data.toString());
-            mView.onConnectError();
-            mView.openErrorDialog();
+            connectionError();
+            connectionError();
         }
 
+    }
+
+    private void connectionError(){
+        mView.onConnectError();
+        endConnect10K();
     }
 
     private void enableWifi() {
@@ -398,12 +413,12 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, "SOCKET::onError", e);
-        endConnect10K();
+        connectionError();
     }
 
     @Override
-    public void onReceivePacket(byte[] packet) {
-        LogUtil.d(TAG, "onReceivePacket::" + new String(packet));
+    public void onReceivePacket(Character[] packet) {
+        LogUtil.d(TAG, "onReceivePacket::" + packet);
         ConnectSocketData data = ConnectSocketData.parsePacket(packet);
         switch (data.getCmd()) {
             case SocketProtocols.RES_BLUESW_DEVICE_ID:
@@ -463,7 +478,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                     }
                 }
             }
-            if(!isSwitchFinded) {
+            if(!isSwitchFinded && !isConnectionSuccessed) {
                 mView.noSwitchFound();
             }
             mView.onScanEnd();
@@ -479,17 +494,13 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
         @Override
         public void onReceive(Context context, Intent intent) {
             WifiInfo info = getWifiManager().getConnectionInfo();
-            LogUtil.d(TAG, "networkChangeReceiver :: " + info);
             if(info != null) {
                 String ssid = info.getSSID().replaceAll("\"", "");
-                LogUtil.d(TAG, "networkChangeReceiver :: SSID : " + ssid);
-                LogUtil.d(TAG, "networkChangeReceiver :: SSID1 : " + Constraint.AP_NAME1);
-                LogUtil.d(TAG, "networkChangeReceiver :: SSID2 : " + Constraint.AP_NAME2);
                 if(ssid.equals(Constraint.AP_NAME1) || ssid.equals(Constraint.AP_NAME2)) {
-                    LogUtil.d(TAG, "networkChangeReceiver :: 10K");
                     NetworkInfo networkInfo = (NetworkInfo)intent.getExtras().get("networkInfo");
                     if(networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                         if (!getSocketClient().isConnected()) {
+                            LogUtil.d(TAG, "networkChangeReceiver :: 10K");
                             startSetting10K();
                         }
                     }

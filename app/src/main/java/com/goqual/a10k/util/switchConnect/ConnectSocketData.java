@@ -14,25 +14,20 @@ public class ConnectSocketData {
     private static final short MIN_LENGTH = 6;
     private char cmd;
     private short length;
-    private char[] data;
+    private String data;
 
     public ConnectSocketData() {
     }
 
-    public ConnectSocketData(char cmd, char[] data) {
+    public ConnectSocketData(char cmd, String data) {
         this.cmd = cmd;
-        this.length = (short)data.length;
+        this.length = (short)data.length();
         this.data = data;
     }
 
     public ConnectSocketData(char cmd, byte[] data) {
-        char[] chars = new char[data.length];
-        for(int i = 0; i<data.length; i++) {
-            chars[i] = (char)data[i];
-        }
         this.cmd = cmd;
-        this.length = (short)data.length;
-        this.data = chars;
+        this.data = new String(data);
     }
 
     public byte[] makePacket() {
@@ -44,24 +39,25 @@ public class ConnectSocketData {
         byte[] len = String.format(Locale.KOREA, "%02d", length).getBytes();
         packet[3] = len[0];
         packet[4] = len[1];
+        byte[] tempData = data.getBytes();
         for(int i = 0; i<length; i++) {
-            packet[i+5] = (byte)data[i];
+            packet[i+5] = tempData[i];
         }
         packet[totalLength-1] = ETX;
         return packet;
     }
 
-    public static ConnectSocketData parsePacket(byte[] packet) {
+    public static ConnectSocketData parsePacket(Character[] packet) {
         ConnectSocketData data = new ConnectSocketData();
         data.setCmd((char)packet[2]);
-        String len = new String(new byte[]{packet[3], packet[4]});
+        String len = new String(new char[]{packet[3], packet[4]});
         data.setLength(Short.parseShort(len));
-        byte[] tempData = Arrays.copyOfRange(packet, 5, packet.length-1);
-        char[] chars = new char[tempData.length];
-        for(int i = 0; i<data.getLength(); i++) {
-            chars[i] = (char)tempData[i];
+        Character[] tempData = Arrays.copyOfRange(packet, 5, packet.length-1);
+        char[] temp = new char[tempData.length];
+        for(int i = 0; i<temp.length; i++) {
+            temp[i] = tempData[i];
         }
-        data.setData(chars);
+        data.setData(new String(temp));
         return data;
     }
 
@@ -81,11 +77,11 @@ public class ConnectSocketData {
         this.length = length;
     }
 
-    public char[] getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(char[] data) {
+    public void setData(String data) {
         this.data = data;
     }
 
@@ -95,6 +91,6 @@ public class ConnectSocketData {
                 ConnectSocketData.class.getSimpleName(),
                 getCmd(),
                 getLength(),
-                Arrays.toString(getData()));
+                getData());
     }
 }

@@ -11,6 +11,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,6 +44,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
 
     private WifiPresenter mPresenter;
     private AdapterWifiScanResult mAdapter;
+    private Handler mHandler;
 
     private static final int REQ_LOCATION_PERMMISION = 111;
 
@@ -65,23 +67,29 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
 
     @Override
     public void onConnectSuccess() {
-        CustomDialog customDialog = new CustomDialog(getActivity());
-        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    getPresenter().setName(customDialog.getEditTextMessage());
-                    break;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                LogUtil.d(TAG, "onConnectSuccess");
+                CustomDialog customDialog = new CustomDialog(getActivity());
+                DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            getPresenter().setName(customDialog.getEditTextMessage());
+                            break;
+                    }
+                    dialog.dismiss();
+                };
+                customDialog
+                        .isEditable(true)
+                        .setTitleText(R.string.rename_title)
+                        .setMessageText(R.string.rename_content)
+                        .setEditTextHint(R.string.rename_edit_hint)
+                        .isPositiveButton(true, getString(R.string.rename_btn_txt), onClickListener)
+                        .isNegativeButtonEnable(false, "", null)
+                        .show();
             }
-            dialog.dismiss();
-        };
-        customDialog
-                .isEditable(true)
-                .setTitleText(R.string.rename_title)
-                .setMessageText(R.string.rename_content)
-                .setEditTextHint(R.string.rename_edit_hint)
-                .isPositiveButton(true, getString(R.string.rename_btn_txt), onClickListener)
-                .isNegativeButtonEnable(false, "", null)
-                .show();
+        });
     }
 
     @Override
@@ -93,11 +101,6 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     public void addAP(ScanResult bs) {
         getAdapter().addItem(bs);
         getAdapter().notifyDataSetChanged();
-    }
-
-    @Override
-    public void openErrorDialog() {
-
     }
 
     @Override
@@ -135,6 +138,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     @Override
     public void onResume() {
         super.onResume();
+        mHandler = new Handler();
         LogUtil.d(TAG, "onResume");
     }
 

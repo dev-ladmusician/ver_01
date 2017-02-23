@@ -25,8 +25,6 @@ public interface WifiPresenter {
         void onScanEnd();
         void onScanStart();
 
-        void openErrorDialog();
-
         void openPassDialog(String ssid);
     }
 }

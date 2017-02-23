@@ -34,13 +34,11 @@ public class SimpleSocketClient extends Thread{
 
     private BufferedReader buffRecv;
     private BufferedWriter buffSend;
-    private OutputStreamWriter osw;
     private OutputStream os;
-    private InputStreamReader isr;
     private InputStream is;
     private static Thread sendingThread;
 
-    private ArrayList<Byte> receiveBuffer;
+    private ArrayList<Character> receiveBuffer;
     private boolean mIsPacketStart;
     private boolean mIsPacketEnd;
 
@@ -75,16 +73,15 @@ public class SimpleSocketClient extends Thread{
     public boolean connect() {
         try {
             LogUtil.e(TAG, mAddr + "/" + mPort);
-            InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(mAddr), mPort);
-            LogUtil.e(TAG, socketAddress.toString());
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mSocket = new Socket();
-                mNetwork.bindSocket(mSocket);
+                mSocket =
+                        mNetwork.getSocketFactory().createSocket(InetAddress.getByName(mAddr), mPort);
             }
             else {
+                InetSocketAddress socketAddress = new InetSocketAddress(InetAddress.getByName(mAddr), mPort);
                 mSocket = new Socket();
+                mSocket.connect(socketAddress, 5000);
             }
-            mSocket.connect(socketAddress, 5000);
             mListener.onConnected();
         } catch (IOException e) {
             mListener.onError(e);
@@ -97,14 +94,25 @@ public class SimpleSocketClient extends Thread{
         try {
             buffRecv.close();
             buffSend.close();
+            is.close();
+            os.close();
             sendingThread.interrupt();
+            mSocket.close();
             interrupt();
             mListener.onDisconnected();
-            mSocket.close();
+            receiveBuffer.clear();
         }
         catch (Exception e) {
-            mListener.onError(e);
             LogUtil.e(TAG, e.getMessage(), e);
+        }
+        finally {
+            buffRecv = null;
+            buffSend = null;
+            is = null;
+            os = null;
+            sendingThread = null;
+            mSocket = null;
+            receiveBuffer = null;
         }
     }
 
@@ -122,10 +130,10 @@ public class SimpleSocketClient extends Thread{
         if(mSocket == null)         return;
         try {
             is = mSocket.getInputStream();
-            isr = new InputStreamReader(is);
+            InputStreamReader isr = new InputStreamReader(is);
             buffRecv = new BufferedReader(isr);
             os = mSocket.getOutputStream();
-            osw = new OutputStreamWriter(os);
+            OutputStreamWriter osw = new OutputStreamWriter(os);
             buffSend = new BufferedWriter(osw);
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -159,6 +167,7 @@ public class SimpleSocketClient extends Thread{
             };
             sendingThread.start();
         }catch (Exception e) {
+            mListener.onError(e);
             LogUtil.e(TAG, e.getMessage(), e);
         }
         LogUtil.d(TAG, "socket_thread loop started");
@@ -171,6 +180,7 @@ public class SimpleSocketClient extends Thread{
                         }
                         int aByte = buffRecv.read();
                         if(aByte != -1) {
+                            LogUtil.d(TAG, "RECV : " + aByte + " CHAR? " + (char)aByte + " BYTE? " + (byte)aByte);
                             if(aByte == 0x02) {
                                 mIsPacketStart = true;
                             }
@@ -178,16 +188,14 @@ public class SimpleSocketClient extends Thread{
                                 mIsPacketEnd = true;
                             }
                             if(mIsPacketStart) {
-                                receiveBuffer.add((byte)aByte);
+                                receiveBuffer.add((char)aByte);
                             }
                             if(mIsPacketEnd) {
-                                byte[] line = new byte[receiveBuffer.size()];
-                                for(Byte aByt : receiveBuffer) {
-                                    line[receiveBuffer.indexOf(aByt)] = aByt;
-                                }
+                                Character[] line = new Character[receiveBuffer.size()];
+                                receiveBuffer.toArray(line);
                                 LogUtil.e(TAG, "RECEIVE: " + Arrays.toString(line) + "\nCOMM_BLOCK: " + mCommBlock);
                                 mListener.onReceivePacket(line);
-                                receiveBuffer.clear();
+                                receiveBuffer = null;
                                 mIsPacketStart = false;
                                 mIsPacketEnd = false;
                             }
@@ -196,12 +204,14 @@ public class SimpleSocketClient extends Thread{
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         LogUtil.e(TAG, e.getMessage(), e);
+                        mListener.onError(e);
                     }
                 }
             }
         }
         catch (Exception e) {
             LogUtil.d(TAG, "socket_thread loop terminated");
+            mListener.onError(e);
             disconnect();
             mConnected = false;
         }
@@ -224,10 +234,12 @@ public class SimpleSocketClient extends Thread{
         }
         catch (SocketException e) {
             LogUtil.e(TAG, e.getMessage(), e);
+            mListener.onError(e);
         }
         catch (Exception e) {
             mCommBlock = false;
             LogUtil.e("asda", e.getMessage(), e);
+            mListener.onError(e);
         }
     }
 

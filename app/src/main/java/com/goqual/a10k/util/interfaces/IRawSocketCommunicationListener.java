@@ -8,5 +8,5 @@ public interface IRawSocketCommunicationListener {
     void onConnected();
     void onDisconnected();
     void onError(Throwable e);
-    void onReceivePacket(byte[] packet);
+    void onReceivePacket(Character[] packet);
 }
