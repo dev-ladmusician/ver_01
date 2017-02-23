@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.connect.FragmentConnectInfo"/>
+    </data>
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="@dimen/padding_16"
+    android:paddingLeft="@dimen/padding_16"
+    android:paddingTop="@dimen/padding_32"
+    android:paddingBottom="@dimen/padding_32">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/info_img"
+            android:layout_width="@dimen/info_img_size"
+            android:layout_height="@dimen/info_img_size"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/img_connect_info"/>
+
+        <TextView
+            android:id="@+id/info_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/info_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/padding_16"
+            android:text="@string/info_content"/>
+
+        <TextView
+            android:id="@+id/info_content_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/info_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/padding_16"
+            android:text="@string/info_content_sub"/>
+
+        <TextView
+            android:id="@+id/info_next"
+            android:layout_width="@dimen/info_img_size"
+            android:layout_height="@dimen/info_btn_height"
+            android:layout_below="@id/info_content_sub"
+            android:layout_marginTop="@dimen/padding_32"
+            android:gravity="center"
+            android:text="@string/info_btn_start"
+            android:textColor="@color/identitiy_01"
+            android:textStyle="bold"
+            android:textSize="@dimen/txt_info"
+            android:background="@drawable/style_border_b"
+            android:onClick="@{fragment::onBtnClick}"/>
+    </RelativeLayout>
+</RelativeLayout>
+
+</layout>
+

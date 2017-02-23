@@ -1,10 +1,5 @@
 package com.goqual.a10k.view.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -29,7 +24,7 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.FragmentMainAlarm;
 import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
-import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
+import com.goqual.a10k.view.fragments.switches.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
 import rx.functions.Action1;

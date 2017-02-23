@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
-import com.goqual.a10k.view.fragments.FragmentMainSwitchEach;
-import com.goqual.a10k.view.fragments.FragmentMainSwitchList;
+import com.goqual.a10k.view.fragments.switches.FragmentMainSwitchEach;
+import com.goqual.a10k.view.fragments.switches.FragmentMainSwitchList;
 
 import java.util.ArrayList;
 import java.util.List;

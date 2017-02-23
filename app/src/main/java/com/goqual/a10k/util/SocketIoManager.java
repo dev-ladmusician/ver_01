@@ -72,7 +72,9 @@ public class SocketIoManager{
     }
 
     public void disconnect() {
-        mSocket.disconnect();
+        if(mSocket != null) {
+            mSocket.disconnect();
+        }
     }
 
     public void destroy() {

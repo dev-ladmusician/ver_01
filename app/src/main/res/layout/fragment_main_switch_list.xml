@@ -9,7 +9,7 @@
             type="com.goqual.a10k.model.SwitchManager"/>
         <variable
             name="fragment"
-            type="com.goqual.a10k.view.fragments.FragmentMainSwitchList"/>
+            type="com.goqual.a10k.view.fragments.switches.FragmentMainSwitchList"/>
 
         <import
             type="android.view.View"

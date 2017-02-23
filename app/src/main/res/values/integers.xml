@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="main_viewpager_count">4</integer>
+
+    <!-- connection -->
+    <integer name="frag_info">0</integer>
+    <integer name="frag_select_wifi">1</integer>
+    <integer name="frag_set_switch">2</integer>
+    <integer name="frag_rename">3</integer>
 </resources>
