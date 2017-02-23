@@ -349,7 +349,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                 LogUtil.d(TAG, "networkChangeReceiver :: KEY : " + key + "\nVALUE : " + bundle.get(key));
             }
             if(isInternetConnected()) {
-                getPresenter().loadItems();
+                refresh();
                 if(!mSocketManager.isConnected()) {
                     mSocketManager.tryReconnect();
                 }
