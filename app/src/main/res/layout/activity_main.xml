@@ -109,8 +109,12 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/main_taps"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true">
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/style_border_top_grey"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/white"
+            app:tabMode="fixed" >
         </android.support.design.widget.TabLayout>
     </RelativeLayout>
 </layout>
