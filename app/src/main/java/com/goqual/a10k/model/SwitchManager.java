@@ -1,8 +1,10 @@
 package com.goqual.a10k.model;
 
+import com.android.annotations.Nullable;
 import com.goqual.a10k.model.entity.Switch;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
@@ -56,5 +58,15 @@ public class SwitchManager {
 
     public void delete(int position) {
         mSwitchList.remove(position);
+    }
+
+    @Nullable
+    public Switch getSwitchByMacAddr(String addr) {
+        for(Switch item : mSwitchList) {
+            if(item.getMacaddr().equals(addr)) {
+                return item;
+            }
+        }
+        return null;
     }
 }

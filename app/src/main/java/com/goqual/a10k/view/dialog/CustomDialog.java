@@ -47,6 +47,8 @@ public class CustomDialog extends Dialog{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setCancelable(false);
+        setCanceledOnTouchOutside(false);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mBinding = DialogCustomBinding.inflate(inflater);
         mBinding.setDialog(this);
@@ -76,12 +78,14 @@ public class CustomDialog extends Dialog{
 
     public CustomDialog isPositiveButton(boolean enable, String text, OnClickListener onClickListener) {
         mModel.setPositiveButton(enable);
+        mModel.setPositiveButtonText(text);
         mOnPositiveClickListener = onClickListener;
         return this;
     }
 
     public CustomDialog isNegativeButtonEnable(boolean enable, String text, OnClickListener onClickListener) {
         mModel.setNegativeButton(enable);
+        mModel.setNegativeButtonText(text);
         mOnNegativeClickListener = onClickListener;
         return this;
     }

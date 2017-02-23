@@ -11,4 +11,5 @@ public interface IActivityInteraction {
     AppBarLayout getAppbar();
     Toolbar getToolbar();
     void setTitle(String title);
+    void finishApp();
 }

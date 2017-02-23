@@ -130,3 +130,7 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/gradle,android,jetbrains
 \.idea/
+
+app/src/main/java/com/goqual/a10k/util/SocketProtocols\.java
+
+app/src/main/java/com/goqual/a10k/util/Constraint\.java
