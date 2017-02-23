@@ -96,26 +96,12 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     }
 
     private void initMainTab() {
-        if(Build.VERSION.SDK_INT>=23) {
-            mBinding.mainTaps.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
-            mBinding.mainTaps.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryDark, null));
-            mBinding.mainTaps.setTabTextColors(getResources().getColor(R.color.tabUnSelected, null), getResources().getColor(R.color.tabSelected, null));
-            mBinding.mainTaps.setElevation(1);
-        }
-        else {
-            mBinding.mainTaps.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            mBinding.mainTaps.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryDark));
-            mBinding.mainTaps.setTabTextColors(getResources().getColor(R.color.tabUnSelected), getResources().getColor(R.color.tabSelected));
-        }
-        mBinding.mainTaps.setTabMode(TabLayout.MODE_FIXED);
-        mBinding.mainTaps.setTabGravity(TabLayout.GRAVITY_FILL);
-
         mBinding.mainTaps.addOnTabSelectedListener(mainTapSelectedListener);
 
-        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setText("1"));
-        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setText("2"));
-        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setText("3"));
-        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setText("4"));
+        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_switch));
+        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_timer));
+        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_noti));
+        mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_setting));
     }
 
 
