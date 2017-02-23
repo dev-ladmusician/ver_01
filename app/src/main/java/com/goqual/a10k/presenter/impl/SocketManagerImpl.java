@@ -120,4 +120,8 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
         mSocketManager = null;
     }
 
+    @Override
+    public boolean isConnected() {
+        return mSocketManager.isConnected();
+    }
 }

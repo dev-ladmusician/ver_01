@@ -222,4 +222,8 @@ public class SocketIoManager{
             }
         }
     }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
 }

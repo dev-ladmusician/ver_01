@@ -1,7 +1,13 @@
 package com.goqual.a10k.view.fragments;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -161,6 +167,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().registerReceiver(networkChangeReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         mHandler = new Handler();
         getSocketManager();
     }
@@ -194,6 +201,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onDestroy() {
         super.onDestroy();
         mSocketManager.destroySocketConnection();
+        getActivity().unregisterReceiver(networkChangeReceiver);
     }
 
     /**
@@ -278,9 +286,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         }
     };
 
-
-
-
     /**
      * switch operation
      */
@@ -314,4 +319,41 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         mPagerAdapter.deleteItem(position);
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
     }
+
+    /**
+     * 인터넷 연결이 되어 있는지 확인합니다.
+     * @return 인터넷 연결 상태
+     */
+    private boolean isInternetConnected(){
+        ConnectivityManager cm =
+                (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
+
+    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+        /**
+         * 네트워크 변경을 감시합니다.
+         * 네트워크 변경이 감지되었을 때 인터넷이 연결된 상태라면 서버와 재접속을 시도합니다.
+         * @param context
+         * @param intent
+         */
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            LogUtil.d(TAG, "networkChangeReceiver :: isInternetConnected :" + isInternetConnected() );
+            Bundle bundle = intent.getExtras();
+            for(String key : bundle.keySet()) {
+                LogUtil.d(TAG, "networkChangeReceiver :: KEY : " + key + "\nVALUE : " + bundle.get(key));
+            }
+            if(isInternetConnected()) {
+                getPresenter().loadItems();
+                if(!mSocketManager.isConnected()) {
+                    mSocketManager.tryReconnect();
+                }
+            }
+        }
+    };
 }

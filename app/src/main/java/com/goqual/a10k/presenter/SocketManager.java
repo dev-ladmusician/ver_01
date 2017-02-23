@@ -10,6 +10,7 @@ public interface SocketManager {
     void operationOnOff(Switch item, int btnNumber);
     void refreshConnectedRoom();
     void destroySocketConnection();
+    boolean isConnected();
 
     interface View {
         void onConnectionError();
