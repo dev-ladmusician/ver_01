@@ -2,29 +2,22 @@ package com.goqual.a10k.view.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySwitchConnectionBinding;
 import com.goqual.a10k.presenter.ConnectPresenter;
-import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.ConnectPresenterImpl;
-import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.connect.FragmentConnectInfo;
 import com.goqual.a10k.view.fragments.connect.FragmentConnectSelectWifi;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
-import com.goqual.a10k.view.interfaces.IConnectFragmentListener;
+import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
 
 public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnectionBinding>
-        implements ConnectPresenter.View, IConnectFragmentListener, IActivityInteraction {
+        implements ConnectPresenter.View, IActivityFragmentPageChangeListener, IActivityInteraction {
 
     public static final String TAG = ActivitySwitchConnection.class.getSimpleName();
 

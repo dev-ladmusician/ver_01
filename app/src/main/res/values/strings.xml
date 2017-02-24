@@ -118,4 +118,37 @@
     <!-- permission -->
     <string name="permission_dialog_title">Request permission</string>
     <string name="permission_dialog_message">안드로이드 마시멜로 이상에서는 스위치와 통신을 시도하기 위해 시스템 설정 권한이 필요합니다.</string>
+
+
+    <!-- auth -->
+    <string name="push_type">fcm</string>
+    <string name="auth_phone_title">10K 시작하기</string>
+    <string name="auth_phone_edit_hint">이곳에 휴대폰번호를 입력해 주세요.</string>
+    <string name="auth_phone_txt">휴대폰 번호를 입력하고 화살표 버튼을 눌러주세요\n입력된 전화번호로 10K의 회원가입이 됩니다.</string>
+    <string name="auth_phone_eror_invalid_number">올바른 휴대폰 번호를 입력하세요.</string>
+    <string name="auth_phone_error_request_certification">인증번호 요청하는데 오류가 발생했습니다.</string>
+    <string name="auth_phone_error_register_user">회원등록하는데 오류가 발생했습니다.</string>
+
+    <string name="auth_certi_title">휴대폰 인증번호</string>
+    <string name="auth_certi_edit_hint">인증번호를 입력해 주세요.</string>
+    <string name="auth_certi_txt_left">전송 받은 인증번호를 </string>
+    <string name="auth_certi_txt_mid">60초 안에</string>
+    <string name="auth_certi_txt_right"> 입력해주세요.</string>
+    <string name="auth_certi_count">60초</string>
+    <string name="auth_certi_unit">초</string>
+
+    <string name="auth_phone_error_title">전송실패</string>
+    <string name="auth_phone_error_content">인증번호를 전송하는데 오류가 발생했습니다.</string>
+    <string name="auth_phone_btn_cancel">닫기</string>
+    <string name="auth_phone_btn_retry">재전송</string>
+
+    <string name="auth_certi_dialog_incorrect_certifinum_title">인증실패</string>
+    <string name="auth_certi_dialog_incorrect_certifinum">인증번호를 잘못입력했습니다.</string>
+    <string name="auth_certi_dialog_certifinum_timeover">인증번호 입력시간이 초과되었습니다.</string>
+    <string name="auth_certi_dialog_btn_cancel">닫기</string>
+    <string name="auth_certi_dialog_btn_retry">재전송</string>
+
+    <string name="unauthorized_title">인증실패</string>
+    <string name="unauthorized_content">다시 로그인이 해주세요.</string>
+    <string name="unauthorized_btn">LOGIN</string>
 </resources>

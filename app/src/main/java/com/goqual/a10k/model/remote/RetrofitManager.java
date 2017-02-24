@@ -80,6 +80,23 @@ public class RetrofitManager {
         return mRetrofit;
     }
 
+    public Retrofit getAuthRetrofitBuilder() {
+        if (mAuthRetrofit == null) {
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .registerTypeAdapter(Boolean.class, booleanAsIntAdapter)
+                    .registerTypeAdapter(boolean.class, booleanAsIntAdapter)
+                    .create();
+            mAuthRetrofit = new Retrofit.Builder()
+                    .baseUrl(AUTH_BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .build();
+        }
+
+        return mAuthRetrofit;
+    }
+
     private static final TypeAdapter<Boolean> booleanAsIntAdapter = new TypeAdapter<Boolean>() {
         @Override public void write(JsonWriter out, Boolean value) throws IOException {
             if (value == null) {

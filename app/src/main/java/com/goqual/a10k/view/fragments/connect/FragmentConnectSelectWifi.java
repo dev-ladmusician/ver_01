@@ -1,27 +1,22 @@
 package com.goqual.a10k.view.fragments.connect;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentConnectSelectWifiBinding;
@@ -31,7 +26,7 @@ import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterWifiScanResult;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
-import com.goqual.a10k.view.interfaces.IConnectFragmentListener;
+import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
 
 /**
  * Created by hanwool on 2017. 2. 23..
@@ -166,7 +161,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     dialog.dismiss();
-                    ((IConnectFragmentListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
+                    ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
                     break;
             }
         };
