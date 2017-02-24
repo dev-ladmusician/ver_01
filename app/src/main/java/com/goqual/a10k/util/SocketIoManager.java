@@ -68,7 +68,13 @@ public class SocketIoManager{
     }
 
     public void connect() {
-        mSocket.connect();
+        if(mSocket != null) {
+            mSocket.connect();
+        }
+        else {
+            createSocket();
+            mSocket.connect();
+        }
     }
 
     public void disconnect() {
@@ -99,7 +105,7 @@ public class SocketIoManager{
         mSocket.on(SocketProtocols.SOCKET_PT_RES_LEAVE, leaveResListener);
         mSocket.on(SocketProtocols.SOCKET_PT_RES_OPERATION, operationResListener);
     }
-    
+
     private void unregisterSocketCallback() {
         mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);
         mSocket.off(Socket.EVENT_RECONNECT, onReconnectingListener);
@@ -129,7 +135,7 @@ public class SocketIoManager{
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!isConnected) {
+                if (mSocket != null) {
                     mSocket.connect();
                 }
             }
@@ -143,8 +149,10 @@ public class SocketIoManager{
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!isConnected) {
-                    mSocket.connect();
+                if (!isConnected) {
+                    if (mSocket != null) {
+                        mSocket.connect();
+                    }
                 }
             }
         }, RETRY_AFTER_TWO_SECONDS);
@@ -156,7 +164,7 @@ public class SocketIoManager{
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!isConnected) {
+                if (mSocket != null) {
                     mSocket.connect();
                 }
             }

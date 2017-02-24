@@ -1,7 +1,5 @@
 package com.goqual.a10k.view.fragments.connect;
 
-import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,7 +9,7 @@ import android.view.ViewGroup;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentConnectInfoBinding;
 import com.goqual.a10k.view.base.BaseFragment;
-import com.goqual.a10k.view.interfaces.IConnectFragmentListener;
+import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
 
 /**
  * Created by hanwool on 2017. 2. 23..
@@ -61,7 +59,7 @@ public class FragmentConnectInfo extends BaseFragment<FragmentConnectInfoBinding
     public void onBtnClick(View v) {
         switch (v.getId()) {
             case R.id.info_next:
-                ((IConnectFragmentListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_select_wifi));
+                ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_select_wifi));
         }
     }
 }

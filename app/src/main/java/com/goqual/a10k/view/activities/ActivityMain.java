@@ -48,9 +48,9 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         LogUtil.e(TAG, "ON_CREATE!!!");
         mBinding.setActivity(this);
         initView();
-        PreferenceHelper.getInstance(this)
-                .put(getString(R.string.arg_user_token),
-                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNDg3NjUwOTc2LCJleHAiOjE0ODgxNzY1NzZ9.z4eJQRtAcGYJFyEWikVYYHrtmcfOl1R3c9bsFy5VNTI");
+//        PreferenceHelper.getInstance(this)
+//                .put(getString(R.string.arg_user_token),
+//                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNDg3NjUwOTc2LCJleHAiOjE0ODgxNzY1NzZ9.z4eJQRtAcGYJFyEWikVYYHrtmcfOl1R3c9bsFy5VNTI");
 
     }
 

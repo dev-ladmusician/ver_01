@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.github.triplet.play'
 
 android {
     compileSdkVersion 25
@@ -77,6 +78,10 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    play {
+        jsonFile = file('keys.json')
     }
 }
 
