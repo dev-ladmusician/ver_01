@@ -25,10 +25,12 @@ import com.goqual.a10k.presenter.SocketManager;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
+import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
+import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -38,6 +40,7 @@ import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.functions.Action1;
 
 /**
@@ -101,7 +104,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void onError(Throwable e) {
-
+        if(e instanceof HttpException) {
+            if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
+                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
+                getActivity().finish();
+            }
+        }
     }
 
     @Override

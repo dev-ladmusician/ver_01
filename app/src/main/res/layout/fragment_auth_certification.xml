@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.auth.FragmentAuthCertification"/>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:padding="@dimen/padding_20">
+
+            <TextView
+                android:id="@+id/auth_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_40"
+                android:text="@string/auth_certi_title"
+                android:textColor="@color/identitiy_01"
+                android:textSize="@dimen/auth_title_txt_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/auth_certi_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/auth_title"
+                android:layout_marginTop="@dimen/margin_40"
+                android:hint="@string/auth_certi_edit_hint"
+                android:inputType="number"
+                android:maxLines="1"
+                android:textColor="@color/grey_07"
+                android:paddingBottom="@dimen/padding_15"
+                android:maxLength="4"
+                android:textSize="@dimen/txt_40" />
+
+            <TextView
+                android:id="@+id/auth_certi_txt_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/auth_certi_edit"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/identitiy_01"
+                android:textStyle="bold"
+                android:textSize="@dimen/txt_40"
+                android:text="@string/auth_certi_count" />
+
+            <RelativeLayout
+                android:id="@+id/auth_certi_btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/auth_btn_height"
+                android:layout_marginTop="@dimen/margin_40"
+                android:background="@drawable/selector_btn_auth_disable"
+                android:layout_below="@+id/auth_certi_txt"
+                android:onClick="@{fragment::onBtnClick}">
+
+                <ImageView
+                    android:id="@+id/auth_certi_btn_next_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_arrow_right_grey"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/auth_certi_txt"
+                android:layout_below="@+id/auth_certi_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/auth_certi_txt_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="@dimen/auth_txt_margin_top"
+                    android:text="@string/auth_certi_txt_left" />
+
+                <TextView
+                    android:id="@+id/auth_certi_txt_middle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@+id/auth_certi_txt_left"
+                    android:layout_marginTop="@dimen/auth_txt_margin_top"
+                    android:textColor="@color/identitiy_01"
+                    android:textStyle="bold"
+                    android:text="@string/auth_certi_txt_mid" />
+
+                <TextView
+                    android:id="@+id/auth_certi_txt_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/auth_certi_txt_middle"
+                    android:layout_marginTop="@dimen/auth_txt_margin_top"
+                    android:text="@string/auth_certi_txt_right" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

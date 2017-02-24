@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".ApplicationBase"
@@ -25,8 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activities.ActivityMain" />
-        <activity
-            android:name=".view.activities.ActivitySwitchConnection"/>
+        <activity android:name=".view.activities.ActivitySwitchConnection"/>
+        <activity android:name=".view.activities.ActivityPhoneAuth"/>
     </application>
 
 </manifest>
