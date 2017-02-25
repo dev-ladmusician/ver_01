@@ -1,4 +1,6 @@
 # 10k_android
-## ver 0.2
+## ver 0.101
 
-### design
+### hooks
+
+- slack :: master branch
