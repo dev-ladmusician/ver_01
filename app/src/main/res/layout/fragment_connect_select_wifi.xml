@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" >
+    <data>
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.connect.FragmentConnectSelectWifi"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/partial_toolbar_nfc" />
+            <LinearLayout
+                android:id="@+id/list_wrap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_timer_height"
+                android:text="@string/select_wifi_info"
+                android:textColor="@color/grey_07"
+                android:gravity="center"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/set_switch_loading_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_centerInParent="true"
+                    android:id="@+id/set_loading"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/loading_connect_bs"/>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/set_loading"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/identitiy_02"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:text="@string/set_switch_info"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+
+</layout>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="itemSwitch"
+            type="com.goqual.a10k.model.entity.Switch" />
+
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.switches.FragmentMainSwitchEach"/>
+
+        <import
+            type="android.view.View"
+            alias="View" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/switch_each_container_margin"
+            android:padding="@dimen/switch_each_container_padding"
+            android:elevation="@dimen/switch_each_container_eleavation"
+            android:background="@drawable/style_switch_container">
+
+            <!-- title -->
+            <TextView
+                android:id="@+id/switch_each_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{itemSwitch.title}"
+                android:textColor="@color/identitiy_02"
+                android:textStyle="bold"/>
+
+            <!-- btn -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/switch_btn_1"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:onClick="@{fragment::onBtnClick}"
+                    android:text="@{itemSwitch.btn1 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn1 ? @color/white : @color/grey_03}"
+                    android:background="@{itemSwitch.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+
+                <TextView
+                    android:id="@+id/switch_btn_2"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:layout_below="@id/switch_btn_1"
+                    android:layout_marginBottom="@dimen/switch_each_btn_margin"
+                    android:layout_marginTop="@dimen/switch_each_btn_margin"
+                    android:onClick="@{fragment::onBtnClick}"
+                    android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
+                    android:visibility="@{itemSwitch.state &lt; 2 ? View.GONE : View.VISIBLE}"
+                    android:background="@{itemSwitch.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+
+                <TextView
+                    android:id="@+id/switch_btn_3"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:layout_below="@id/switch_btn_2"
+                    android:onClick="@{fragment::onBtnClick}"
+                    android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
+                    android:visibility="@{itemSwitch.state &lt; 3 ? View.GONE : View.VISIBLE}"
+                    android:text="@{itemSwitch.btn3 ? @string/btn_on : @string/btn_off}"
+                    android:background="@{itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+            </RelativeLayout>
+
+            <!-- hw / fw -->
+            <TextView
+                android:id="@+id/switch_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:text='@{"HW " + itemSwitch.hw + " / FW " + itemSwitch.fw}'
+                android:textSize="@dimen/switch_each_version_txt_size"
+                android:textColor="@color/grey_03"/>
+
+            <!-- setting -->
+            <RelativeLayout
+                android:id="@+id/switch_setting"
+                android:layout_width="@dimen/switch_each_setting_wrapper"
+                android:layout_height="@dimen/switch_each_setting_wrapper"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:onClick="@{fragment::onBtnClick}">
+
+                <ImageView
+                    android:layout_width="@dimen/switch_each_setting"
+                    android:layout_height="@dimen/switch_each_setting"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_switch_setting"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
+
+

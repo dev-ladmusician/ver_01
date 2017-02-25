@@ -1,6 +1,154 @@
 <resources>
     <string name="app_name">A10K</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- common -->
+    <string name="common_ok">OK</string>
+    <string name="common_allow">Allow</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_deny">Deny</string>
+    <string name="common_quit">Quit</string>
+
+    <!-- title -->
+    <string name="title_switch_list">All Switches</string>
+    <string name="title_switch_each">10K</string>
+
+    <!-- toolbar -->
+    <string name="toolbar_edit">Edit</string>
+    <string name="toolbar_save">Save</string>
+    <string name="toolbar_done">Done</string>
+
+    <!-- Switch item -->
+    <string name="btn_on">on</string>
+    <string name="btn_off">off</string>
+    <string name="btn_capital_on">ON</string>
+    <string name="btn_capital_off">OFF</string>
+    <string name="btn_null">none</string>
+    <string name="btn_str_on">1</string>
+    <string name="btn_str_off">0</string>
+
+    <!-- args -->
+    <string name="arg_user_token">USER_TOKEN</string>
+    <string name="arg_user_num">USER_NUM</string>
+    <string name="arg_switch_id">SWITCH_ID</string>
+    <string name="arg_switch_state">SWITCH_STATE</string>
+    <string name="arg_switch_position">SWITCH_POSITION</string>
+    <string name="arg_switch_btn1">switch_btn_1</string>
+    <string name="arg_switch_btn2">switch_btn_2</string>
+    <string name="arg_switch_btn3">switch_btn_3</string>
+    <string name="arg_alarm">arg_alarm</string>
+    <string name="arg_absence">arg_absence</string>
+    <string name="arg_nfc">arg_nfc</string>
+
+    <!-- Switch -->
+    <string name="switch_delete_title">삭제</string>
+    <string name="switch_delete_content">스위치를 \n목록에서 삭제 하시겠습니까?</string>
+    <string name="switch_rename_title">스위치 이름 변경하기</string>
+    <string name="switch_rename_hit">10K 내방 스위치</string>
+    <string name="add_switch">새로운 10k 등록하기</string>
+    <string name="error_delete_switch">스위치를 삭제하는데 오류가 발생했습니다.</string>
+
+    <!-- Socket -->
+    <string name="socket_connection_error_title">통신 연결 실패</string>
+    <string name="socket_connection_error_content">서버와 통신이 원활하지 않습니다.</string>
+
+    <!-- SOCKET.IO -->
+    <string name="SOCKET_SUCCESS_CONNECT">서버와 통신 연결되었습니다.</string>
+    <string name="SOCKET_ERROR_CONNECT">서버와 통신 연결하는데 오류가 발생했습니다.</string>
+    <string name="SOCKET_DISCONNECT">서버와 통신 연결이 끊겼습니다.</string>
+
+    <!-- connection -->
+    <string name="info_content">스위치에 파란색 불이 들어온다면 \n버튼을 5초동안 터치해 보세요</string>
+    <string name="info_content_sub">또로롱 소리가 나면 아래 버튼을 불러주세요.</string>
+    <string name="info_btn_start">연결 시작</string>
+
+    <string name="select_wifi_info">스위치가 인터넷에 연결될 Wi-Fi를 선택해주세요 \n(5G Wi-Fi는 목록에 보이지 않아요)</string>
+    <string name="select_wifi_permission_rationale">스위치와 연결하기 위해서는 권한이 필요합니다.</string>
+    <string name="select_wifi_permission_denied">권한이 없으면 스위치와 연결할 수 없습니다.</string>
+    <string name="permission_allow">ALLOW</string>
+    <string name="permission_deny">DENY</string>
+    <string name="item_wifi_connect">Connect</string>
+    <string name="select_wifi_error_dialog_title">10K not found</string>
+    <string name="select_wifi_error_dialog_content">AP모드된 스위치가 없습니다.</string>
+    <string name="select_wifi_error_dialog_btn_confirm">Retry</string>
+    <string name="select_wifi_error_dialog_btn_cancel">Cancel</string>
+
+    <string name="select_wifi_pass_dialog_title">Wi-Fi: </string>
+    <string name="select_wifi_pass_dialog_content">Wi-Fi 비밀번호를 입력해주세요.</string>
+    <string name="select_wifi_pass_dialog_btn_confirm">연결</string>
+    <string name="select_wifi_pass_dialog_btn_cancel">닫기</string>
+    <string name="select_wifi_pass_dialog_hint">wifi password</string>
+    <string name="select_wifi_connect_wifi_error">Wi-Fi에 연결할 수 없습니다. 비밀번호를 다시 한번 확인해주세요.</string>
+
+    <string name="set_switch_info">Setting...</string>
+    <string name="set_switch_error_title">스위치 세팅 오류</string>
+    <string name="set_switch_error_content">다시 한번 시도해주세요. \n오류가 반복될 시 문의해주시면 \n친절히 해결해드리겠습니다.</string>
+    <string name="set_swtich_error_connect_switch_to_ap">스위치가 Wi-Fi공유와 연결이 되지 않았습니다. \nWi-Fi 비밀번호가 올바른지 다시 한번 체크해주세요.</string>
+    <string name="set_switch_error_fail_connect_ap">AP에 접근할 수 없습니다. 올바른 비밀번호를 입력했는지 다시 한번 확인해주세요.</string>
+    <string name="set_switch_error_fail_connect_broker">통신 서버에 접근할 수 없습니다. 문제가 반복될 시 문의해주세요.</string>
+
+    <string name="rename_title">자! 이제 마지막이에요!</string>
+    <string name="rename_content">방금 연결한 스위치의 이름을 설정해 주세요!</string>
+    <string name="rename_btn_txt">스위치 등록 완료</string>
+    <string name="rename_edit_hint">10k switch</string>
+
+    <string name="add_connection_error_title">스위치 등록 오류</string>
+    <string name="add_connection_error_content">스위치를 등록하는데 오류가 발생했습니다.</string>
+    <string name="add_connection_btn_ok">재시도</string>
+
+    <!-- NFC -->
+    <string name="nfc_info">NFC 태그를 등록하여 더욱 간편하게 사용하세요!</string>
+    <string name="nfc_no_item">아직 등록된  NFC 태그가 없어요! \n핸드폰 가까이 다가가는 것만으로 손쉽게 \n스위치를 제어해보세요!</string>
+    <string name="nfc_delete_title">NFC 삭제</string>
+    <string name="nfc_delete_content">해당 NFC를 정말 삭제하시겠습니까?</string>
+    <string name="nfc_add_info">스마트폰을 \nNFC 태그에 올려주세요.</string>
+    <string name="nfc_add_error">NFC 태그를 등록하는데 오류가 발생했습니다. 이미 중복된 데이터가 있는지 확인해주세요.</string>
+    <string name="nfc_not_available_title">NFC not available</string>
+    <string name="nfc_not_available_content">NFC 기능을 사용할 수 \n없는 디바이스입니다.</string>
+    <string name="nfc_toolbar_title_scan">10K</string>
+    <string name="nfc_toolbar_title_select_btn">Light state</string>
+    <string name="nfc_toolbar_title_select_rename">10K</string>
+    <string name="nfc_rename_info_title">자! 이제 마지막이에요!</string>
+    <string name="nfc_rename_info_content">NFC 태그에 이름을 설정해서 관리하세요!</string>
+    <string name="nfc_rename_hint">내방 NFC</string>
+    <string name="nfc_no_title_err_title">이름 설정 오류</string>
+    <string name="nfc_no_title_err_content">NFC 태그에 이름을 설정해주세요.</string>
+
+    <!-- permission -->
+    <string name="permission_dialog_title">Request permission</string>
+    <string name="permission_dialog_message">안드로이드 마시멜로 이상에서는 스위치와 통신을 시도하기 위해 시스템 설정 권한이 필요합니다.</string>
+
+
+    <!-- auth -->
+    <string name="push_type">fcm</string>
+    <string name="auth_phone_title">10K 시작하기</string>
+    <string name="auth_phone_edit_hint">이곳에 휴대폰번호를 입력해 주세요.</string>
+    <string name="auth_phone_txt">휴대폰 번호를 입력하고 화살표 버튼을 눌러주세요\n입력된 전화번호로 10K의 회원가입이 됩니다.</string>
+    <string name="auth_phone_eror_invalid_number">올바른 휴대폰 번호를 입력하세요.</string>
+    <string name="auth_phone_error_request_certification">인증번호 요청하는데 오류가 발생했습니다.</string>
+    <string name="auth_phone_error_register_user">회원등록하는데 오류가 발생했습니다.</string>
+
+    <string name="auth_certi_title">휴대폰 인증번호</string>
+    <string name="auth_certi_edit_hint">인증번호를 입력해 주세요.</string>
+    <string name="auth_certi_txt_left">전송 받은 인증번호를 </string>
+    <string name="auth_certi_txt_mid">60초 안에</string>
+    <string name="auth_certi_txt_right"> 입력해주세요.</string>
+    <string name="auth_certi_count">60초</string>
+    <string name="auth_certi_unit">초</string>
+
+    <string name="auth_phone_error_title">전송실패</string>
+    <string name="auth_phone_error_content">인증번호를 전송하는데 오류가 발생했습니다.</string>
+    <string name="auth_phone_btn_cancel">닫기</string>
+    <string name="auth_phone_btn_retry">재전송</string>
+
+    <string name="auth_certi_dialog_incorrect_certifinum_title">인증실패</string>
+    <string name="auth_certi_dialog_incorrect_certifinum">인증번호를 잘못입력했습니다.</string>
+    <string name="auth_certi_dialog_certifinum_timeover">인증번호 입력시간이 초과되었습니다.</string>
+    <string name="auth_certi_dialog_btn_cancel">닫기</string>
+    <string name="auth_certi_dialog_btn_retry">재전송</string>
+
+    <string name="unauthorized_title">인증실패</string>
+    <string name="unauthorized_content">다시 로그인이 해주세요.</string>
+    <string name="unauthorized_btn">LOGIN</string>
 </resources>

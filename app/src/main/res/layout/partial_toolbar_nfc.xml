@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height"
+    android:background="@color/identitiy_02"
+    android:elevation="3dp"
+    android:paddingLeft="@dimen/padding_16"
+    android:paddingRight="@dimen/padding_16">
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/nfc_toolbar_title_select_btn"
+        android:textColor="@color/white"
+        android:textSize="@dimen/item_ic_size_xxs"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/toolbar_back"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_arrow_l_w" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/toolbar_save"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/white"
+            android:text="@string/toolbar_save"/>
+    </RelativeLayout>
+</RelativeLayout>

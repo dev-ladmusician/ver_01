@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fragment"
+            type="com.goqual.a10k.view.fragments.auth.FragmentAuthPhone"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_16">
+
+            <TextView
+                android:id="@+id/auth_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/auth_phone_title"
+                android:textColor="@color/identitiy_02"
+                android:textSize="40dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/auth_phone_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/auth_title"
+                android:layout_marginTop="60dp"
+                android:hint="@string/auth_phone_edit_hint"
+                android:inputType="phone"
+                android:textColorHighlight="@color/bg"
+                android:maxLines="1"
+                android:paddingBottom="15dp"
+                android:textColor="@color/grey_07"
+                android:maxLength="14"
+                android:textSize="20dp" />
+
+            <RelativeLayout
+                android:id="@+id/auth_phone_btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/selector_btn_auth_disable"
+                android:layout_below="@+id/auth_phone_edit"
+                android:clickable="false"
+                android:onClick="@{fragment::onBtnClick}">
+
+                <ImageView
+                    android:id="@+id/auth_phone_btn_next_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_arrow_right_grey"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/auth_phone_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/auth_phone_btn_next"
+                android:layout_marginTop="20dp"
+                android:text="@string/auth_phone_txt" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
+

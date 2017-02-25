@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.github.triplet.play'
 
 android {
     compileSdkVersion 25
@@ -38,7 +40,7 @@ android {
             versionCode versionNumber
             versionName "${versionMajor}.${versionMinor}.${versionPatch}-${versionBuild}"
             applicationId "com.goqual.a10k"
-            minSdkVersion 15
+            minSdkVersion 21
             targetSdkVersion 25
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             multiDexEnabled true
@@ -60,12 +62,26 @@ android {
     } else {
         throw new GradleException("Could not read version.properties!")
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
         }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    play {
+        jsonFile = file('keys.json')
     }
 }
 
@@ -75,13 +91,21 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
-
+    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
-    compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.android.support:support-v4:25.1.0'
-    testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile('io.socket:socket.io-client:0.8.3') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+    compile 'com.google.code.gson:gson:2.8.0'
 }
