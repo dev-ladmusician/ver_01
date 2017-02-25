@@ -4,4 +4,4 @@
 
 ### hooks
 
-- slack :: master push message in channel #product_android
+- slack :: master push message in channel #general
