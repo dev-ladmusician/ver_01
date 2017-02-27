@@ -94,7 +94,9 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     public void destroy() {
         mContext.unregisterReceiver(scanReceiver);
         mContext.unregisterReceiver(networkChangeReceiver);
-        mSocketClient.disconnect();
+        if(mSocketClient != null) {
+            mSocketClient.disconnect();
+        }
         mSocketClient = null;
     }
 

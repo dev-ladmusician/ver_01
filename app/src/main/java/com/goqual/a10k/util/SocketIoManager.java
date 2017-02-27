@@ -68,13 +68,10 @@ public class SocketIoManager{
     }
 
     public void connect() {
-        if(mSocket != null) {
-            mSocket.connect();
-        }
-        else {
+        if(mSocket == null) {
             createSocket();
-            mSocket.connect();
         }
+        mSocket.connect();
     }
 
     public void disconnect() {
