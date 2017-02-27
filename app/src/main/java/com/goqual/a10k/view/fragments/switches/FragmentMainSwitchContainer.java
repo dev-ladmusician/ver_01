@@ -106,8 +106,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onError(Throwable e) {
         if(e instanceof HttpException) {
             if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
-                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
-                getActivity().finish();
+//                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
+//                getActivity().finish();
             }
         }
     }
