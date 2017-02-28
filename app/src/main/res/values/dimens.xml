@@ -8,6 +8,7 @@
     <dimen name="padding_16">16dp</dimen>
     <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_24">24dp</dimen>
+    <dimen name="padding_28">28dp</dimen>
     <dimen name="padding_32">32dp</dimen>
     <dimen name="margin_40">40dp</dimen>
     <dimen name="item_height_100">100dp</dimen>
@@ -16,15 +17,20 @@
     <dimen name="txt_info_s">13dp</dimen>
     <dimen name="txt_40">40dp</dimen>
 
-    <!-- toolbar -->
-    <dimen name="toolbar_height">60dp</dimen>
-
     <dimen name="item_ic_container_size">46dp</dimen>
     <dimen name="item_ic_size_l">35dp</dimen>
     <dimen name="item_ic_size_m">30dp</dimen>
     <dimen name="item_ic_size_s">25dp</dimen>
     <dimen name="item_ic_size_xs">20dp</dimen>
     <dimen name="item_ic_size_xxs">18dp</dimen>
+
+    <!-- toolbar -->
+    <dimen name="toolbar_height">60dp</dimen>
+    <dimen name="toolbar_title_txt_size">15dp</dimen>
+    <dimen name="toolbar_plus_icon_size">18dp</dimen>
+
+    <!-- footer -->
+    <dimen name="footer_ic_size">35dp</dimen>
 
     <!-- switches -->
     <dimen name="item_switch_width_btn_wrapper">74dp</dimen>
@@ -82,5 +88,18 @@
     <dimen name="auth_btn_height">60dp</dimen>
     <dimen name="auth_btn_margin_top">20dp</dimen>
     <dimen name="auth_txt_margin_top">20dp</dimen>
+
+    <!-- admin -->
+    <dimen name="admin_user_ic_size">25dp</dimen>
+    <dimen name="admin_user_add_ic_size">20dp</dimen>
+
+    <!-- nfc -->
+    <dimen name="nfc_info_title_txt_size">18dp</dimen>
+    <dimen name="nfc_info_content_txt_size">18dp</dimen>
+
+    <!-- absence -->
+    <dimen name="item_absence_btn_size">18dp</dimen>
+    <dimen name="item_absence_btn_container_right_margin">12dp</dimen>
+    <dimen name="item_absence_time_margin_top">3dp</dimen>
 
 </resources>

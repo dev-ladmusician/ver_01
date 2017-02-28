@@ -1,12 +1,15 @@
 package com.goqual.a10k.model.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.android.annotations.Nullable;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class Switch {
+public class Switch implements Parcelable{
     private int _connectionid;
     private int _bsid;
     private int state;
@@ -26,6 +29,30 @@ public class Switch {
     private String WIFI_BSSID = "";
     private String WIFI_PASSWORD = "";
     private String WIFI_CAPABILITY = "";
+
+    public Switch() {
+    }
+
+    public Switch(Parcel in) {
+        _connectionid = in.readInt();
+        _bsid = in.readInt();
+        state = in.readInt();
+        seq = in.readInt();
+        btn1 = in.readByte()==1;
+        btn2 = in.readByte()==1;
+        btn3 = in.readByte()==1;
+        hw = in.readString();
+        fw = in.readString();
+        title = in.readString();
+        macaddr = in.readString();
+        isavailable = in.readByte()==1;
+        outlet = in.readByte()==1;
+        mIsStateView = in.readByte()==1;
+        WIFI_SSID = in.readString();
+        WIFI_BSSID = in.readString();
+        WIFI_PASSWORD = in.readString();
+        WIFI_CAPABILITY = in.readString();
+    }
 
     // BS
     private int AP_SERVER_PORT = 5050;
@@ -183,5 +210,48 @@ public class Switch {
 
     public void setmIsStateView(boolean mIsStateView) {
         this.mIsStateView = mIsStateView;
+    }
+
+    @Override
+    public int describeContents() {
+        return _connectionid;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(_connectionid);
+        dest.writeInt(_bsid);
+        dest.writeInt(state);
+        dest.writeInt(seq);
+
+        dest.writeByte(btn1?(byte)1:(byte)0);
+        dest.writeByte(btn2?(byte)1:(byte)0);
+        dest.writeByte(btn3?(byte)1:(byte)0);
+
+        dest.writeString(hw);
+        dest.writeString(fw);
+        dest.writeString(title);
+        dest.writeString(macaddr);
+
+        dest.writeByte(isavailable?(byte)1:(byte)0);
+        dest.writeByte(outlet?(byte)1:(byte)0);
+        dest.writeByte(mIsStateView?(byte)1:(byte)0);
+
+        dest.writeString(WIFI_SSID);
+        dest.writeString(WIFI_BSSID);
+        dest.writeString(WIFI_PASSWORD);
+        dest.writeString(WIFI_CAPABILITY);
+    }
+
+    public class SwitchCreator implements Creator<Switch> {
+        @Override
+        public Switch createFromParcel(Parcel source) {
+            return new Switch(source);
+        }
+
+        @Override
+        public Switch[] newArray(int size) {
+            return new Switch[size];
+        }
     }
 }

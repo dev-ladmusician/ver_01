@@ -106,6 +106,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onError(Throwable e) {
         if(e instanceof HttpException) {
             if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
+                // TODO: AUTH
 //                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
 //                getActivity().finish();
             }
@@ -223,7 +224,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocketManager.destroySocketConnection();
+        getSocketManager().destroySocketConnection();
         getActivity().unregisterReceiver(networkChangeReceiver);
     }
 

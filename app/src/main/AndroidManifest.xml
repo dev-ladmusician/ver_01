@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
         android:name=".ApplicationBase"
@@ -28,6 +31,25 @@
         <activity android:name=".view.activities.ActivityMain" />
         <activity android:name=".view.activities.ActivitySwitchConnection"/>
         <activity android:name=".view.activities.ActivityPhoneAuth"/>
+
+        <activity android:name=".view.activities.ActivityNfcDetected">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="64f5f9c9ffd9affb768b3d25da9a3d94472ca35f" />
     </application>
 
 </manifest>

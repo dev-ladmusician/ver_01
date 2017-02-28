@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/user_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height_s"
+    android:orientation="horizontal"
+    android:background="@drawable/style_border_bottom_grey"
+    android:paddingLeft="@dimen/padding_16"
+    android:paddingRight="@dimen/padding_16">
+
+    <TextView
+        android:id="@+id/history_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:text="07:30 AM"
+        android:textColor="@color/grey_06"/>
+
+    <TextView
+        android:id="@+id/history_item_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:text="Somebody"
+        android:textColor="@color/grey_03"/>
+
+    <TextView
+        android:id="@+id/history_item_method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="스위치"/>
+
+    <TextView
+        android:id="@+id/history_item_operation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/history_item_method"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/identitiy_01"
+        android:text="ON"/>
+</RelativeLayout>
