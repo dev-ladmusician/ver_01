@@ -1,8 +1,10 @@
-package com.goqual.a10k.model.remote;
+package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.Certifi;
+import com.goqual.a10k.model.remote.ResultDTO;
+import com.goqual.a10k.model.remote.RetrofitManager;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

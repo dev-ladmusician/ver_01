@@ -243,7 +243,7 @@ public class Switch implements Parcelable{
         dest.writeString(WIFI_CAPABILITY);
     }
 
-    public class SwitchCreator implements Creator<Switch> {
+    public static final Parcelable.Creator<Switch> CREATOR = new Creator<Switch>() {
         @Override
         public Switch createFromParcel(Parcel source) {
             return new Switch(source);
@@ -253,5 +253,5 @@ public class Switch implements Parcelable{
         public Switch[] newArray(int size) {
             return new Switch[size];
         }
-    }
+    };
 }

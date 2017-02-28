@@ -2,8 +2,7 @@ package com.goqual.a10k.presenter.impl;
 
 import android.content.Context;
 
-import com.google.common.base.Throwables;
-import com.goqual.a10k.model.remote.SwitchService;
+import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.ConnectPresenter;
 
 import rx.android.schedulers.AndroidSchedulers;

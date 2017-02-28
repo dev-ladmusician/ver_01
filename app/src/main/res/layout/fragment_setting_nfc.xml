@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/padding_28"
             android:paddingBottom="@dimen/padding_20"
-            android:background="@drawable/style_border_bottom_grey">
+            android:background="@drawable/style_border_bottom_grey"
+            android:onClick="@{fragment::onBtnClick}">
 
             <ImageView
                 android:id="@+id/nfc_add_ic"

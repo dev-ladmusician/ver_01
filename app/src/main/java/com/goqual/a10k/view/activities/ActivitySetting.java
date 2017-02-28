@@ -2,8 +2,10 @@ package com.goqual.a10k.view.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.goqual.a10k.R;
@@ -16,12 +18,14 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingAdmin;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingHistory;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingNfc;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
 /**
  * Created by hanwool on 2017. 2. 28..
  */
 
-public class ActivitySetting extends BaseActivity<ActivitySettingBinding> {
+public class ActivitySetting extends BaseActivity<ActivitySettingBinding>
+implements IActivityInteraction{
 
     public static final String TAG = ActivitySetting.class.getSimpleName();
 
@@ -51,9 +55,9 @@ public class ActivitySetting extends BaseActivity<ActivitySettingBinding> {
     private void initViewPager() {
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
-        mAdapterPage.addItem(FragmentSettingAdmin.newInstance());
-        mAdapterPage.addItem(FragmentSettingNfc.newInstance());
-        mAdapterPage.addItem(FragmentSettingHistory.newInstance());
+        mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitch.get_bsid()));
+        mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitch));
+        mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitch.get_bsid()));
         mBinding.settingContainer.setAdapter(mAdapterPage);
         mBinding.settingContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -123,5 +127,25 @@ public class ActivitySetting extends BaseActivity<ActivitySettingBinding> {
         switch (view.getId()) {
 
         }
+    }
+
+    @Override
+    public AppBarLayout getAppbar() {
+        return null;
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return null;
+    }
+
+    @Override
+    public void setTitle(String title) {
+
+    }
+
+    @Override
+    public void finishApp() {
+
     }
 }

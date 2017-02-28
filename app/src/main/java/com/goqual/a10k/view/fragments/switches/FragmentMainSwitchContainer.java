@@ -106,9 +106,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onError(Throwable e) {
         if(e instanceof HttpException) {
             if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
-                // TODO: AUTH
-//                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
-//                getActivity().finish();
+                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
+                getActivity().finish();
             }
         }
     }
@@ -161,7 +160,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             connectionFailedDialog.cancel();
             connectionFailedDialog = null;
         }
-        Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+        try {
+            Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+        }
+        catch (NullPointerException e) {
+            LogUtil.e(TAG, e.getMessage(), e);
+        }
     }
 
     @Override

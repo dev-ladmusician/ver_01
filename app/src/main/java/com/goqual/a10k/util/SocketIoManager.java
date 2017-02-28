@@ -104,12 +104,14 @@ public class SocketIoManager{
     }
 
     private void unregisterSocketCallback() {
-        mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);
-        mSocket.off(Socket.EVENT_RECONNECT, onReconnectingListener);
-        mSocket.off(Socket.EVENT_RECONNECT_FAILED, onReconnectFailListener);
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnectedListener);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+        if(mSocket != null) {
+            mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);
+            mSocket.off(Socket.EVENT_RECONNECT, onReconnectingListener);
+            mSocket.off(Socket.EVENT_RECONNECT_FAILED, onReconnectFailListener);
+            mSocket.off(Socket.EVENT_DISCONNECT, onDisconnectedListener);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+        }
     }
 
     private Emitter.Listener onConnectedListener = args ->{
