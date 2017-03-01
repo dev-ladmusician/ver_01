@@ -12,7 +12,6 @@ import java.util.Comparator;
 public class WifiLevelDescCompare implements Comparator<ScanResult> {
     @Override
     public int compare(ScanResult arg0, ScanResult arg1) {
-        // TODO Auto-generated method stub
         return getWifiPower(arg0) > getWifiPower(arg1) ?
                 -1 : getWifiPower(arg0) < getWifiPower(arg1) ?
                 1:0;

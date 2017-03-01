@@ -271,7 +271,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
-                            // TODO
                             LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
                             switch (((EventToolbarClick) event).getStatus()) {
                                 case DONE:

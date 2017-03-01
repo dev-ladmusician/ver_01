@@ -1,9 +1,8 @@
-package com.goqual.a10k.model.entity;
+package com.goqual.a10k.model.realm;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import kotlin.NotImplementedError;
@@ -12,16 +11,16 @@ import kotlin.NotImplementedError;
  * Created by hanwool on 2017. 2. 27..
  */
 
-public class Nfc implements Parcelable{
+public class Nfc extends RealmObject implements Parcelable{
 
     @Index
+    private String tag;
     private int _nfcid;
     private int _bsid;
     private Boolean btn1;
     private Boolean btn2;
     private Boolean btn3;
     private String title;
-    private String tag;
     private String macaddr;
     private int state;
     private int btnCount;
@@ -154,6 +153,30 @@ public class Nfc implements Parcelable{
 
     public void setmIsDeletable(boolean mIsDeletable) {
         this.mIsDeletable = mIsDeletable;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("<NFC> TITLE: %s TAG: %s MAC_ADDR: %s BTN1: %b, BTN2: %b, BTN3: %b,",
+                title,
+                tag,
+                macaddr,
+                btn1,
+                btn2,
+                btn3
+        );
+
+//        private int _nfcid;
+//        private int _bsid;
+//        private Boolean btn1;
+//        private Boolean btn2;
+//        private Boolean btn3;
+//        private String title;
+//        private String tag;
+//        private String macaddr;
+//        private int state;
+//        private int btnCount;
+//        private boolean mIsDeletable;
     }
 
     @Override

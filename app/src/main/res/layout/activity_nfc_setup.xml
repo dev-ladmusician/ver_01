@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -23,12 +24,83 @@
         android:orientation="vertical"
         android:background="@color/white">
 
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                android:contentInsetRight="0dp"
+                android:contentInsetEnd="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetEnd="0dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nfc_toolbar_title_select_btn"
+                        android:textColor="@android:color/white"
+                        android:layout_centerInParent="true"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                        android:layout_gravity="center" />
+                    <FrameLayout
+                        android:id="@+id/toolbar_back"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:onClick="@{activity::onBtnClick}"
+                        android:paddingLeft="@dimen/padding_15">
+
+                        <ImageButton
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerInside"
+                            android:background="@drawable/ic_arrow_l_w"/>
+                    </FrameLayout>
+                    <RelativeLayout
+                        android:id="@+id/toolbar_save"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="@dimen/padding_16"
+                        android:layout_centerVertical="true"
+                        android:onClick="@{activity::onBtnClick}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/white"
+                            android:text="@string/toolbar_save"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/switch_each_container_margin"
             android:padding="@dimen/switch_each_container_padding"
             android:elevation="@dimen/switch_each_container_eleavation"
+            android:layout_below="@+id/appbar"
             android:background="@drawable/style_switch_container">
 
             <!-- title -->
@@ -97,23 +169,6 @@
                 android:textSize="@dimen/switch_each_version_txt_size"
                 android:textColor="@color/grey_03"/>
 
-            <!-- setting -->
-            <RelativeLayout
-                android:id="@+id/switch_setting"
-                android:layout_width="@dimen/switch_each_setting_wrapper"
-                android:layout_height="@dimen/switch_each_setting_wrapper"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:onClick="@{activity::onBtnClick}">
-
-                <ImageView
-                    android:layout_width="@dimen/switch_each_setting"
-                    android:layout_height="@dimen/switch_each_setting"
-                    android:layout_centerInParent="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_switch_setting"/>
-            </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
 </layout>

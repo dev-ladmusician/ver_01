@@ -69,4 +69,15 @@ public class SwitchManager {
         }
         return null;
     }
+    @Nullable
+    public Switch getSwitchByBSID(int bsid) {
+        for(Switch item : mSwitchList) {
+            if(item.get_bsid() == bsid) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+
 }

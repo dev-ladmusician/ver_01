@@ -2,7 +2,7 @@ package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
-import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
 

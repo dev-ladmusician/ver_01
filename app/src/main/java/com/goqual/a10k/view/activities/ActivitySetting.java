@@ -125,7 +125,9 @@ implements IActivityInteraction{
 
     public void onBtnClick(View view) {
         switch (view.getId()) {
-
+            case R.id.toolbar_back:
+                finish();
+                break;
         }
     }
 
@@ -141,7 +143,7 @@ implements IActivityInteraction{
 
     @Override
     public void setTitle(String title) {
-
+//        mBinding.toolbarTitle.setText(title);
     }
 
     @Override

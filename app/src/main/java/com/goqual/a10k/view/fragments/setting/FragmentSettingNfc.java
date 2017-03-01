@@ -9,17 +9,21 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingNfcBinding;
-import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityNfcDetect;
+import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
 
+import retrofit2.adapter.rxjava.HttpException;
+
 /**
  * Created by hanwool on 2017. 2. 28..
+ * TODO Edit모드 적용
  */
 
 public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
@@ -59,6 +63,10 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public void loadingStart() {
+        if(mAdapter != null) {
+            mAdapter.clear();
+            mAdapter.notifyDataSetChanged();
+        }
         mBinding.loading.setVisibility(View.VISIBLE);
     }
 
@@ -76,6 +84,9 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
+        if(e instanceof HttpException) {
+            LogUtil.e(TAG, String.format("HTTPE::STATUS: %d, MESSAGE: %s", ((HttpException) e).code(), ((HttpException) e).message()));
+        }
     }
 
     @Override
@@ -88,6 +99,14 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     @Override
     public void onSuccess() {
 
+    }
+
+    @Override
+    public void deleteItem(int position) {
+        if(mAdapter != null) {
+            mAdapter.deleteItem(position);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -146,12 +165,19 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQ_REGISTER_NFC) {
             if(resultCode == Activity.RESULT_OK) {
-                String nfcTagId = data.getExtras().getString(ActivityNfcDetect.EXTRA_NFC_TAG_ID, null);
+                String nfcTagId = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_ID, null);
+                String nfcTagTitle = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_TITLE, null);
+                Switch item = data.getExtras().getParcelable(ActivityNfcSetup.EXTRA_SWITCH);
                 if(nfcTagId != null) {
                     LogUtil.e(TAG, "NFC_TAG_REGISTER::tagID: " + nfcTagId);
                     Nfc tag = new Nfc();
+                    tag.set_bsid(item.get_bsid());
                     tag.setTag(nfcTagId);
-//                    getPresenter().add(tag);
+                    tag.setTitle(nfcTagTitle);
+                    tag.setBtn1(item.getBtn1());
+                    tag.setBtn2(item.getBtn2());
+                    tag.setBtn3(item.getBtn3());
+                    getPresenter().add(tag);
                 }
             }
         }

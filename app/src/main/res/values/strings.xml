@@ -4,6 +4,7 @@
     <!-- common -->
     <string name="common_ok">OK</string>
     <string name="common_allow">Allow</string>
+    <string name="common_save">Save</string>
     <string name="common_retry">Retry</string>
     <string name="common_delete">Delete</string>
     <string name="common_cancel">Cancel</string>
@@ -106,8 +107,8 @@
     <string name="nfc_add_error">NFC 태그를 등록하는데 오류가 발생했습니다. 이미 중복된 데이터가 있는지 확인해주세요.</string>
     <string name="nfc_not_available_title">NFC not available</string>
     <string name="nfc_not_available_content">NFC 기능을 사용할 수 \n없는 디바이스입니다.</string>
-    <string name="nfc_toolbar_title_scan">10K</string>
-    <string name="nfc_toolbar_title_select_btn">Light state</string>
+    <string name="nfc_toolbar_title_scan">태그 스캔</string>
+    <string name="nfc_toolbar_title_select_btn">버튼 설정</string>
     <string name="nfc_toolbar_title_select_rename">10K</string>
     <string name="nfc_rename_info_title">자! 이제 마지막이에요!</string>
     <string name="nfc_rename_info_content">NFC 태그에 이름을 설정해서 관리하세요!</string>
