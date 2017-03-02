@@ -136,7 +136,6 @@ public class SimpleSocketClient extends Thread{
             OutputStreamWriter osw = new OutputStreamWriter(os);
             buffSend = new BufferedWriter(osw);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             LogUtil.e(TAG, e.getMessage(), e);
             mListener.onError(e);
             return;
@@ -202,7 +201,6 @@ public class SimpleSocketClient extends Thread{
                         }
                         mCommBlock = false;
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         LogUtil.e(TAG, e.getMessage(), e);
                         mListener.onError(e);
                     }

@@ -106,8 +106,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onError(Throwable e) {
         if(e instanceof HttpException) {
             if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
-//                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
-//                getActivity().finish();
+                startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
+                getActivity().finish();
             }
         }
     }
@@ -160,7 +160,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             connectionFailedDialog.cancel();
             connectionFailedDialog = null;
         }
-        Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+        try {
+            Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+        }
+        catch (NullPointerException e) {
+            LogUtil.e(TAG, e.getMessage(), e);
+        }
     }
 
     @Override
@@ -223,7 +228,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocketManager.destroySocketConnection();
+        getSocketManager().destroySocketConnection();
         getActivity().unregisterReceiver(networkChangeReceiver);
     }
 
@@ -266,7 +271,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
-                            // TODO
                             LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
                             switch (((EventToolbarClick) event).getStatus()) {
                                 case DONE:

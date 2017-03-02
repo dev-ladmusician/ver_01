@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemSwitch"
+            type="com.goqual.a10k.model.entity.Switch" />
+
+        <variable
+            name="activity"
+            type="com.goqual.a10k.view.activities.ActivityNfcSetup"/>
+
+        <import
+            type="android.view.View"
+            alias="View" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                android:contentInsetRight="0dp"
+                android:contentInsetEnd="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetEnd="0dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nfc_toolbar_title_select_btn"
+                        android:textColor="@android:color/white"
+                        android:layout_centerInParent="true"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                        android:layout_gravity="center" />
+                    <FrameLayout
+                        android:id="@+id/toolbar_back"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:onClick="@{activity::onBtnClick}"
+                        android:paddingLeft="@dimen/padding_15">
+
+                        <ImageButton
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerInside"
+                            android:background="@drawable/ic_arrow_l_w"/>
+                    </FrameLayout>
+                    <RelativeLayout
+                        android:id="@+id/toolbar_save"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:paddingRight="@dimen/padding_16"
+                        android:layout_centerVertical="true"
+                        android:onClick="@{activity::onBtnClick}">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/white"
+                            android:text="@string/toolbar_save"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/switch_each_container_margin"
+            android:padding="@dimen/switch_each_container_padding"
+            android:elevation="@dimen/switch_each_container_eleavation"
+            android:layout_below="@+id/appbar"
+            android:background="@drawable/style_switch_container">
+
+            <!-- title -->
+            <TextView
+                android:id="@+id/switch_each_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{itemSwitch.title}"
+                android:textColor="@color/identitiy_02"
+                android:textStyle="bold"/>
+
+            <!-- btn -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/switch_btn_1"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:onClick="@{activity::onBtnClick}"
+                    android:text="@{itemSwitch.btn1 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn1 ? @color/white : @color/grey_03}"
+                    android:background="@{itemSwitch.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+
+                <TextView
+                    android:id="@+id/switch_btn_2"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:layout_below="@id/switch_btn_1"
+                    android:layout_marginBottom="@dimen/switch_each_btn_margin"
+                    android:layout_marginTop="@dimen/switch_each_btn_margin"
+                    android:onClick="@{activity::onBtnClick}"
+                    android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
+                    android:visibility="@{itemSwitch.state &lt; 2 ? View.GONE : View.VISIBLE}"
+                    android:background="@{itemSwitch.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+
+                <TextView
+                    android:id="@+id/switch_btn_3"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:layout_below="@id/switch_btn_2"
+                    android:onClick="@{activity::onBtnClick}"
+                    android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
+                    android:visibility="@{itemSwitch.state &lt; 3 ? View.GONE : View.VISIBLE}"
+                    android:text="@{itemSwitch.btn3 ? @string/btn_on : @string/btn_off}"
+                    android:background="@{itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+            </RelativeLayout>
+
+            <!-- hw / fw -->
+            <TextView
+                android:id="@+id/switch_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:text='@{"HW " + itemSwitch.hw + " / FW " + itemSwitch.fw}'
+                android:textSize="@dimen/switch_each_version_txt_size"
+                android:textColor="@color/grey_03"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
+
+

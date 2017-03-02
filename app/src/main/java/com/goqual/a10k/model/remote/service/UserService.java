@@ -1,9 +1,11 @@
-package com.goqual.a10k.model.remote;
+package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
 
 import com.goqual.a10k.model.entity.User;
+import com.goqual.a10k.model.remote.ResultDTO;
+import com.goqual.a10k.model.remote.RetrofitManager;
 
 import java.util.List;
 

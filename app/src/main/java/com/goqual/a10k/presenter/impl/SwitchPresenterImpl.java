@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.remote.ResultDTO;
-import com.goqual.a10k.model.remote.SwitchService;
+import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;

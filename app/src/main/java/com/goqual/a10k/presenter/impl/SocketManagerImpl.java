@@ -39,6 +39,9 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     }
 
     public void tryReconnect() {
+        if(mSocketManager == null) {
+            mSocketManager = SocketIoManager.getInstance(mContext, this);
+        }
         mSocketManager.disconnect();
         mSocketManager.connect();
     }
@@ -120,16 +123,18 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     private void updateSwitchState(SocketData data) {
 
         Switch item = SwitchManager.getInstance().getSwitchByMacAddr(data.getMacaddr());
-        switch (data.getBtn()) {
-            case 1:
-                item.setBtn1(data.getOperation().equals("1"));
-                break;
-            case 2:
-                item.setBtn2(data.getOperation().equals("1"));
-                break;
-            case 3:
-                item.setBtn3(data.getOperation().equals("1"));
-                break;
+        if(item != null) {
+            switch (data.getBtn()) {
+                case 1:
+                    item.setBtn1(data.getOperation().equals("1"));
+                    break;
+                case 2:
+                    item.setBtn2(data.getOperation().equals("1"));
+                    break;
+                case 3:
+                    item.setBtn3(data.getOperation().equals("1"));
+                    break;
+            }
         }
         mView.refreshViews();
     }
@@ -151,12 +156,19 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
 
     @Override
     public void destroySocketConnection() {
-        mSocketManager.destroy();
-        mSocketManager = null;
+        if(mSocketManager != null) {
+            mSocketManager.destroy();
+            mSocketManager = null;
+        }
     }
 
     @Override
     public boolean isConnected() {
-        return mSocketManager.isConnected();
+        if(mSocketManager != null) {
+            return mSocketManager.isConnected();
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.fragments.switches;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.view.activities.ActivitySetting;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 
@@ -45,7 +47,7 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
 
     @Override
     public String getTitle() {
-        return getString(R.string.title_switch_each);
+        return String.format("%s: %s", getString(R.string.app_name), mSwitch.getTitle());
     }
 
     @Override
@@ -81,6 +83,9 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
                 operationListener.onSwitchClicked(mSwitchItemPosition, 3);
                 break;
             case R.id.switch_setting:
+                Intent intent = new Intent(getActivity(), ActivitySetting.class);
+                intent.putExtra(ActivitySetting.ITEM_SWITCH, mSwitch);
+                startActivity(intent);
                 break;
         }
     }

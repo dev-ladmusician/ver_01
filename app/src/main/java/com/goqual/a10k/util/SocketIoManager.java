@@ -37,16 +37,21 @@ public class SocketIoManager{
     private Socket mSocket;
     private boolean isConnected;
 
+    private static int mRefCount = 0;
+
     private static SocketIoManager instance;
 
     public static SocketIoManager getInstance(Context ctx, ISocketIoConnectionListener listener) {
         if(instance == null) {
             instance = new SocketIoManager(ctx, listener);
         }
+        mRefCount++;
+        LogUtil.d(TAG, "getInstance::REF:"+mRefCount);
         return instance;
     }
 
     private SocketIoManager(Context ctx, ISocketIoConnectionListener listener) {
+        LogUtil.d(TAG, "CONSTRUCTOR");
         mContext = ctx;
         mListener = listener;
         createSocket();
@@ -81,9 +86,13 @@ public class SocketIoManager{
     }
 
     public void destroy() {
-        disconnect();
-        unregisterSocketCallback();
-        mSocket = null;
+        if(--mRefCount == 0) {
+            disconnect();
+            unregisterSocketCallback();
+            mSocket = null;
+            instance = null;
+        }
+        LogUtil.d(TAG, "destroy::REF:"+mRefCount + " SOCKET: " + mSocket);
     }
 
     private void registerSocketCallback() {
@@ -104,12 +113,14 @@ public class SocketIoManager{
     }
 
     private void unregisterSocketCallback() {
-        mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);
-        mSocket.off(Socket.EVENT_RECONNECT, onReconnectingListener);
-        mSocket.off(Socket.EVENT_RECONNECT_FAILED, onReconnectFailListener);
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnectedListener);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+        if(mSocket != null) {
+            mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);
+            mSocket.off(Socket.EVENT_RECONNECT, onReconnectingListener);
+            mSocket.off(Socket.EVENT_RECONNECT_FAILED, onReconnectFailListener);
+            mSocket.off(Socket.EVENT_DISCONNECT, onDisconnectedListener);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectionTimeoutListener);
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectErrorListener);
+        }
     }
 
     private Emitter.Listener onConnectedListener = args ->{

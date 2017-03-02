@@ -11,6 +11,7 @@ import com.google.gson.stream.JsonWriter;
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.Constraint;
+import com.goqual.a10k.util.LogUtil;
 
 import java.io.IOException;
 
@@ -51,6 +52,10 @@ public class RetrofitManager {
             public Response intercept(Interceptor.Chain chain) throws IOException {
                 Request original = chain.request();
 
+
+                LogUtil.d("AA", "TOKEN::"+PreferenceHelper.getInstance(mContext).getStringValue(
+                        mContext.getString(R.string.arg_user_token), ""
+                ));
                 // Request customization: add request headers
                 Request.Builder requestBuilder = original.newBuilder()
                         .header(Constraint.CUSTOM_HEADER, getToken()); // <-- this is the important line

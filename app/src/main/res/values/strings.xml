@@ -4,6 +4,7 @@
     <!-- common -->
     <string name="common_ok">OK</string>
     <string name="common_allow">Allow</string>
+    <string name="common_save">Save</string>
     <string name="common_retry">Retry</string>
     <string name="common_delete">Delete</string>
     <string name="common_cancel">Cancel</string>
@@ -106,8 +107,8 @@
     <string name="nfc_add_error">NFC 태그를 등록하는데 오류가 발생했습니다. 이미 중복된 데이터가 있는지 확인해주세요.</string>
     <string name="nfc_not_available_title">NFC not available</string>
     <string name="nfc_not_available_content">NFC 기능을 사용할 수 \n없는 디바이스입니다.</string>
-    <string name="nfc_toolbar_title_scan">10K</string>
-    <string name="nfc_toolbar_title_select_btn">Light state</string>
+    <string name="nfc_toolbar_title_scan">태그 스캔</string>
+    <string name="nfc_toolbar_title_select_btn">버튼 설정</string>
     <string name="nfc_toolbar_title_select_rename">10K</string>
     <string name="nfc_rename_info_title">자! 이제 마지막이에요!</string>
     <string name="nfc_rename_info_content">NFC 태그에 이름을 설정해서 관리하세요!</string>
@@ -151,4 +152,31 @@
     <string name="unauthorized_title">인증실패</string>
     <string name="unauthorized_content">다시 로그인이 해주세요.</string>
     <string name="unauthorized_btn">LOGIN</string>
+
+    <!-- Switch setting -->
+    <string name="tab_title_admin">Admin</string>
+    <string name="tab_title_nfc">NFC</string>
+    <string name="tab_title_history">History</string>
+
+    <!-- Admin -->
+    <string name="switch_setting_label_admin">ADMIN</string>
+    <string name="switch_setting_label_user">USER</string>
+    <string name="switch_setting_change_admin">Change Admin</string>
+    <string name="switch_setting_chang_admin_dialog_title">ADMIN 변경</string>
+    <string name="switch_setting_chang_admin_dialog_btn_cancel">취소</string>
+    <string name="switch_setting_chang_admin_dialog_btn_submit">확인</string>
+    <string name="switch_setting_admin_add_user">버튼을 눌러 새로운 사용자를 초대하세요.</string>
+    <string name="switch_setting_admin_delete_user_title">삭제</string>
+    <string name="switch_setting_admin_delete_user_content"> 님을 \n삭제 하시겠습니까?</string>
+    <string name="swtich_change_admin_title">관리자 변경</string>
+
+    <!-- invite -->
+    <string name="invite_edit_hit">Name, Phone number</string>
+    <string name="invite_people">PEOPLE</string>
+    <string name="invite_message">10K로 손쉽게 집 조명을 제어해보세요!</string>
+    <string name="invite_no_items">검색되는 유저가 없네요...</string>
+    <string name="invite_read_contacts_granted_error_toast_message">초대 기능을 사용하기 위해서는 연락처 수집 권한이 필요 합니다.</string>
+    <string name="invite_read_contacts_granted_error_info">초대 기능을 사용하기 위해서는 \n연락처 수집 권한이 필요 합니다.</string>
+    <string name="invite_read_contacts_granted_error_info_reject_req">초대 기능을 사용하기 위해서는 \n연락처 수집 권한이 필요 합니다.\n 설정에서 권한을 활성화 해주세요!</string>
+
 </resources>

@@ -16,12 +16,12 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         String token = PreferenceHelper.getInstance(this)
                 .getStringValue(getString(R.string.arg_user_token), "");
-//        if(token.isEmpty()) {
-//            startActivity(new Intent(this, ActivityPhoneAuth.class));
-//        }
-//        else {
+        if(token.isEmpty()) {
+            startActivity(new Intent(this, ActivityPhoneAuth.class));
+        }
+        else {
             startActivity(new Intent(this, ActivityMain.class));
-//        }
+        }
         finish();
     }
 }

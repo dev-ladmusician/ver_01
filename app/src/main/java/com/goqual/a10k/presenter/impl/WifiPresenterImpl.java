@@ -15,13 +15,11 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
-import com.goqual.a10k.model.SwitchManager;
-import com.goqual.a10k.model.remote.SwitchService;
+import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.util.Constraint;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.SocketProtocols;
-import com.goqual.a10k.util.StringUtil;
 import com.goqual.a10k.util.interfaces.IRawSocketCommunicationListener;
 import com.goqual.a10k.util.switchConnect.ConnectSocketData;
 import com.goqual.a10k.util.switchConnect.SimpleSocketClient;
@@ -32,7 +30,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.http.Field;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 

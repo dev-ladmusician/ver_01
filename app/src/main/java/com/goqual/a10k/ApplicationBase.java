@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
 
 /**
  * Created by HanWool on 2017. 2. 17..
@@ -19,6 +20,7 @@ public class ApplicationBase extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        Realm.init(this);
         this.DEBUG = isDebuggable(this);
     }
 

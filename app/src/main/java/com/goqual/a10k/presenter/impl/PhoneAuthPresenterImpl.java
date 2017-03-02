@@ -5,8 +5,8 @@ import android.telephony.TelephonyManager;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
-import com.goqual.a10k.model.remote.AuthService;
-import com.goqual.a10k.model.remote.UserService;
+import com.goqual.a10k.model.remote.service.AuthService;
+import com.goqual.a10k.model.remote.service.UserService;
 import com.goqual.a10k.presenter.PhoneAuthPresenter;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityPhoneAuth;
