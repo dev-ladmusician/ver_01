@@ -6,9 +6,10 @@ import android.os.Bundle;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.remote.service.AuthService;
 import com.goqual.a10k.view.activities.ActivityMain;
 
-public class SplashActivity extends AppCompatActivity {
+public class ActivitySplash extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

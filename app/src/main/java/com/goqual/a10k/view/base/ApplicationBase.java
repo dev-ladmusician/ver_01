@@ -1,4 +1,4 @@
-package com.goqual.a10k;
+package com.goqual.a10k.view.base;
 
 import android.app.Application;
 import android.content.Context;

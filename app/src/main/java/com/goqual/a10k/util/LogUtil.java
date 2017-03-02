@@ -2,7 +2,7 @@ package com.goqual.a10k.util;
 
 import android.util.Log;
 
-import com.goqual.a10k.ApplicationBase;
+import com.goqual.a10k.view.base.ApplicationBase;
 
 
 /**
