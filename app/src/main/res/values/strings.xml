@@ -179,4 +179,14 @@
     <string name="invite_read_contacts_granted_error_info">초대 기능을 사용하기 위해서는 \n연락처 수집 권한이 필요 합니다.</string>
     <string name="invite_read_contacts_granted_error_info_reject_req">초대 기능을 사용하기 위해서는 \n연락처 수집 권한이 필요 합니다.\n 설정에서 권한을 활성화 해주세요!</string>
 
+    <!-- history -->
+    <string name="history_no_item">등록된 기록이 없습니다.</string>
+    <string name="history_info">날짜를 변경해서 그날의 기록을 확인하세요.</string>
+    <string name="history_error">기록을 가져오는데 오류가 발생했습니다.</string>
+    <string name="history_date_format">yyyy년 MM월 dd일</string>
+    <string name="history_item_control_phone">휴대폰</string>
+    <string name="history_item_control_switch">스위치</string>
+    <string name="history_item_op_on">ON</string>
+    <string name="history_item_op_off">OFF</string>
+
 </resources>
