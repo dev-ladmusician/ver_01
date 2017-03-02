@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="item"
+            type="com.goqual.a10k.model.entity.History"/>
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.HistoryViewHolder"/>
+    </data>
+<RelativeLayout
     android:id="@+id/user_item_container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height_s"
@@ -14,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:text="07:30 AM"
+        android:text="@{item.created}"
         android:textColor="@color/grey_06"/>
 
     <TextView
@@ -32,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:text="스위치"/>
+        android:text='@{item.label.equals("phone") ? @string/history_item_control_phone : @string/history_item_control_switch}'/>
 
     <TextView
         android:id="@+id/history_item_operation"
@@ -41,6 +51,8 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/history_item_method"
         android:layout_marginRight="10dp"
-        android:textColor="@color/identitiy_01"
-        android:text="ON"/>
+        android:textColor="@{item.operation ? @color/identitiy_01 : @color/grey_05}"
+        android:text="@{item.operation ? @string/history_item_op_on : @string/history_item_op_off}"/>
 </RelativeLayout>
+
+</layout>

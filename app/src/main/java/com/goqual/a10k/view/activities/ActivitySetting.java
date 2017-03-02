@@ -57,7 +57,7 @@ implements IActivityInteraction{
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitch.get_bsid()));
         mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitch));
-        mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitch.get_bsid()));
+        mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitch));
         mBinding.settingContainer.setAdapter(mAdapterPage);
         mBinding.settingContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
