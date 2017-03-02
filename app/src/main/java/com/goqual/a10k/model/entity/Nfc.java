@@ -1,7 +1,9 @@
-package com.goqual.a10k.model.realm;
+package com.goqual.a10k.model.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.Locale;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
@@ -11,7 +13,7 @@ import kotlin.NotImplementedError;
  * Created by hanwool on 2017. 2. 27..
  */
 
-public class Nfc extends RealmObject implements Parcelable{
+public class Nfc implements Parcelable{
 
     @Index
     private String tag;
@@ -157,10 +159,11 @@ public class Nfc extends RealmObject implements Parcelable{
 
     @Override
     public String toString() {
-        return String.format("<NFC> TITLE: %s TAG: %s MAC_ADDR: %s BTN1: %b, BTN2: %b, BTN3: %b,",
+        return String.format(Locale.KOREA, "<NFC> TITLE: %s TAG: %s MAC_ADDR: %s BTN_COUNT: %d, BTN1: %b, BTN2: %b, BTN3: %b,",
                 title,
                 tag,
                 macaddr,
+                btnCount,
                 btn1,
                 btn2,
                 btn3

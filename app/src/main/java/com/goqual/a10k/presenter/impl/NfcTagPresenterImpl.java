@@ -2,7 +2,7 @@ package com.goqual.a10k.presenter.impl;
 
 import android.content.Context;
 
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.NfcService;
 import com.goqual.a10k.presenter.NfcTagPresenter;
@@ -10,7 +10,6 @@ import com.goqual.a10k.util.LogUtil;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -53,6 +52,19 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                         () -> {
                             mView.loadingStop();
                         });
+    }
+
+    @Override
+    public void getItem(String tadId) {
+        getNfcService().getrNfcApi().get(tadId)
+        .subscribeOn(Schedulers.newThread())
+        .filter(result -> result.getResult() != null)
+        .map(ResultDTO::getResult)
+        .filter(item -> item != null)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(mView::addItem,
+                mView::onError,
+                mView::onSuccess);
     }
 
     @Override

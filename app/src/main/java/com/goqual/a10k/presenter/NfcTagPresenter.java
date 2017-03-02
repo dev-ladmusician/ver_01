@@ -1,6 +1,6 @@
 package com.goqual.a10k.presenter;
 
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 
 /**
  * Created by hanwool on 2017. 2. 28..
@@ -8,6 +8,7 @@ import com.goqual.a10k.model.realm.Nfc;
 
 public interface NfcTagPresenter {
     void loadItems(int switchId);
+    void getItem(String tadId);
     void delete(int position);
     void detectedNfc(String tag);
     void add(Nfc item);

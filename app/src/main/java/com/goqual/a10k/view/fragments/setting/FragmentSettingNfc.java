@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingNfcBinding;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;

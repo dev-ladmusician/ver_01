@@ -37,16 +37,21 @@ public class SocketIoManager{
     private Socket mSocket;
     private boolean isConnected;
 
+    private static int mRefCount = 0;
+
     private static SocketIoManager instance;
 
     public static SocketIoManager getInstance(Context ctx, ISocketIoConnectionListener listener) {
         if(instance == null) {
             instance = new SocketIoManager(ctx, listener);
         }
+        mRefCount++;
+        LogUtil.d(TAG, "getInstance::REF:"+mRefCount);
         return instance;
     }
 
     private SocketIoManager(Context ctx, ISocketIoConnectionListener listener) {
+        LogUtil.d(TAG, "CONSTRUCTOR");
         mContext = ctx;
         mListener = listener;
         createSocket();
@@ -81,9 +86,13 @@ public class SocketIoManager{
     }
 
     public void destroy() {
-        disconnect();
-        unregisterSocketCallback();
-        mSocket = null;
+        if(--mRefCount == 0) {
+            disconnect();
+            unregisterSocketCallback();
+            mSocket = null;
+            instance = null;
+        }
+        LogUtil.d(TAG, "destroy::REF:"+mRefCount + " SOCKET: " + mSocket);
     }
 
     private void registerSocketCallback() {

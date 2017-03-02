@@ -12,7 +12,7 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcDetectBinding;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.SocketManager;
 import com.goqual.a10k.presenter.SwitchPresenter;
@@ -50,13 +50,12 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
 
     private boolean isRegisterMode;
 
-    private Realm realm;
-
     private String mReadedTagId;
     private Nfc mReadedTag;
     private Switch mSwich;
     private NfcTagPresenter mNfcTagPresenter;
-    private SwitchPresenter mSwitchPresenter;
+
+    private boolean isSocketConnected;
 
     @Override
     protected int getLayoutId() {
@@ -69,9 +68,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
         isRegisterMode = getIntent().getAction().equals(ACTION_REGISTER_TAG);
         if(!isRegisterMode) {
             getSocketManager();
-            moveTaskToBack(true);
             mBinding.appbar.setVisibility(View.GONE);
-            realm = Realm.getDefaultInstance();
         }
         else {
             mSwich = getIntent().getParcelableExtra(EXTRA_SWITCH);
@@ -127,10 +124,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
                 startActivityForResult(setupReq, REQ_SETUP_TAG);
             }
             else {
-                Nfc item = realm.where(Nfc.class).equalTo("tag", mReadedTagId).findFirst();
-                /**
-                 * TODO REST 서버에서 NFC및 Switch 단일 아이템 가져오는 코드 필요
-                 */
+                getNfcTagPresenter().getItem(mReadedTagId);
             }
         }
     }
@@ -142,26 +136,51 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
         }
     }
 
+    private void operateSwitch(){
+        Switch iSwitch = new Switch();
+        iSwitch.setMacaddr(mReadedTag.getMacaddr());
+        iSwitch.setBtn1(!mReadedTag.getBtn1());
+        iSwitch.setBtn2(!mReadedTag.getBtn2());
+        iSwitch.setBtn3(!mReadedTag.getBtn3());
+        for (int i = 1; i <= mReadedTag.getBtnCount() ; i++) {
+            getSocketManager().operationOnOff(iSwitch, i);
+            try {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e) {
+                LogUtil.e(TAG, e.getMessage(), e);
+            }
+        }
+        finish();
+    }
+
     private SocketManager getSocketManager() {
         if(mSocketManager == null) {
             mSocketManager = new SocketManagerImpl(new SocketManager.View(){
                 @Override
                 public void onConnectionError() {
+                    LogUtil.d(TAG, "SOCKET::onConnectionError");
 
                 }
 
                 @Override
                 public void onConnected() {
-
+                    LogUtil.d(TAG, "SOCKET::onConnected");
+                    isSocketConnected = true;
+                    if(mReadedTag != null) {
+                        operateSwitch();
+                    }
                 }
 
                 @Override
                 public void onServerError(int code) {
+                    LogUtil.d(TAG, "SOCKET::onServerError:"+code);
 
                 }
 
                 @Override
                 public void refreshViews() {
+                    LogUtil.d(TAG, "SOCKET::refreshViews");
 
                 }
             }, this);
@@ -181,16 +200,16 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private SwitchPresenter getSwitchPresenter() {
-        if(mSwitchPresenter == null) {
-            mSwitchPresenter = new SwitchPresenterImpl(this, new SwitchPresenter.View() {
+    private NfcTagPresenter getNfcTagPresenter() {
+        if(mNfcTagPresenter == null) {
+            mNfcTagPresenter = new NfcTagPresenterImpl(this, new NfcTagPresenter.View<Nfc>() {
                 @Override
-                public void onSuccessRenameSwitch(int position, String title) {
+                public void onSuccess() {
 
                 }
 
                 @Override
-                public void onSuccessDeleteSwitch(int position) {
+                public void deleteItem(int position) {
 
                 }
 
@@ -215,21 +234,15 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
                 }
 
                 @Override
-                public void addItem(Object item) {
-
-                }
-            }, new AdapterPager(getSupportFragmentManager()){
-                @Override
-                public Fragment getItem(int position) {
-                    return null;
-                }
-
-                @Override
-                public int getCount() {
-                    return 0;
+                public void addItem(Nfc item) {
+                    LogUtil.e(TAG, "ADDITEM::"+item);
+                    mReadedTag = item;
+                    if(getSocketManager().isConnected()) {
+                        operateSwitch();
+                    }
                 }
             });
         }
-        return mSwitchPresenter;
+        return mNfcTagPresenter;
     }
 }

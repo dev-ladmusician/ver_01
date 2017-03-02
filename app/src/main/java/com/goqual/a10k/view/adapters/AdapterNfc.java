@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
