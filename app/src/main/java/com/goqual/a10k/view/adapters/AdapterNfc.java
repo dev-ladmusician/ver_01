@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 
 public class AdapterNfc extends RecyclerView.Adapter<NfcViewHolder>
-implements AdapterDataModel<Nfc>, AdapterDataView{
+        implements AdapterDataModel<Nfc>, AdapterDataView{
 
     private List<Nfc> mTagList = null;
     private Context mContext = null;
@@ -91,5 +92,13 @@ implements AdapterDataModel<Nfc>, AdapterDataView{
     @Override
     public void onBindViewHolder(NfcViewHolder holder, int position) {
         holder.bindView(position, mTagList.get(position), mItemClickListener);
+    }
+
+    public void setItemState(boolean state) {
+        for(Nfc item : mTagList) {
+            item.setmIsDeletable(state);
+        }
+
+        refresh();
     }
 }

@@ -8,6 +8,8 @@
         <variable
             name="itemNfc"
             type="com.goqual.a10k.model.entity.Nfc"/>
+        <import type="android.view.View"
+            alias="View"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +23,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_delete_ic_container_size"
-            android:visibility="gone"
+            android:visibility="@{itemNfc.mIsDeletable ? View.VISIBLE : View.GONE}"
             android:layout_height="match_parent">
 
             <ImageView

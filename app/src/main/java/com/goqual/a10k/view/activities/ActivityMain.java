@@ -26,6 +26,7 @@ import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.switches.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
 
@@ -139,15 +140,15 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
             case R.id.toolbar_edit:
                 switch (mEditBtnStatus.getStatus()) {
                     case DONE:
-                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.DONE));
+                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.DONE));
                         break;
                     case EDIT:
-                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.EDIT));
+                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.EDIT));
                         break;
                 }
                 break;
             case R.id.toolbar_add:
-                RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.ADD));
+                RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.ADD));
                 break;
         }
     }

@@ -6,14 +6,17 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
+import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 /**
  * Created by hanwool on 2017. 2. 28..
  */
 
-public class FragmentSettingAdmin extends BaseFragment<FragmentSettingAdminBinding>{
+public class FragmentSettingAdmin extends BaseFragment<FragmentSettingAdminBinding>
+implements IToolbarClickListener{
     public static final String TAG = FragmentSettingAdmin.class.getSimpleName();
 
 
@@ -58,4 +61,8 @@ public class FragmentSettingAdmin extends BaseFragment<FragmentSettingAdminBindi
         mBinding.setFragment(this);
     }
 
+    @Override
+    public void onClickEdit(STATUS status) {
+
+    }
 }

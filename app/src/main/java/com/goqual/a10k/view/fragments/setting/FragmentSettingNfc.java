@@ -14,10 +14,12 @@ import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.view.activities.ActivityNfcDetect;
 import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import retrofit2.adapter.rxjava.HttpException;
 
@@ -27,7 +29,7 @@ import retrofit2.adapter.rxjava.HttpException;
  */
 
 public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
-        implements NfcTagPresenter.View<Nfc>{
+        implements NfcTagPresenter.View<Nfc>, IToolbarClickListener{
     public static final String TAG = FragmentSettingNfc.class.getSimpleName();
 
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
@@ -182,5 +184,10 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onClickEdit(STATUS status) {
+        mAdapter.setItemState(status == STATUS.EDIT);
     }
 }

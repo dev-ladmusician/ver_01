@@ -7,5 +7,11 @@ import com.goqual.a10k.util.event.EventSwitchEdit;
  */
 
 public interface IToolbarClickListener {
-    void onClickEdit(EventSwitchEdit.STATUS status);
+    enum STATUS {
+        EDIT,
+        DONE,
+        HIDE,
+        ADD
+    }
+    void onClickEdit(STATUS status);
 }

@@ -6,6 +6,9 @@
         <variable
             name="activity"
             type="com.goqual.a10k.view.activities.ActivitySetting"/>
+        <variable
+            name="editSwitchStatus"
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATUS"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -66,7 +69,7 @@
                         android:textColor="@color/white"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="@string/toolbar_edit"/>
+                        android:text="@{editSwitchStatus == editSwitchStatus.EDIT ? @string/toolbar_edit : editSwitchStatus == editSwitchStatus.DONE ? @string/toolbar_done : @string/toolbar_empty}" />
                 </RelativeLayout>
             </RelativeLayout>
 
