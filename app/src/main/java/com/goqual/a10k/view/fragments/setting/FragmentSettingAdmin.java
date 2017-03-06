@@ -7,11 +7,14 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.presenter.UserPresenter;
 import com.goqual.a10k.presenter.impl.UserPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventToolbarClick;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
@@ -30,6 +33,7 @@ implements UserPresenter.View<User>{
 
     private UserPresenter mUserPresenter;
     private AdapterUser mUserAdapter;
+    private User mAdminUser;
 
     public static FragmentSettingAdmin newInstance(Switch item) {
 
@@ -76,6 +80,7 @@ implements UserPresenter.View<User>{
     @Override
     public void onLoadComplete() {
         loadingStop();
+        checkIAmAdmin();
     }
 
     @Override
@@ -85,7 +90,8 @@ implements UserPresenter.View<User>{
             getUserAdapter().addItem(item);
         }
         else {
-            mBinding.setAdminUser(item);
+            mAdminUser = item;
+            mBinding.setAdminUser(mAdminUser);
         }
     }
 
@@ -118,6 +124,16 @@ implements UserPresenter.View<User>{
         mBinding.adminUserContainer.setAdapter(getUserAdapter());
         mBinding.adminUserContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         refresh();
+    }
+
+    private void checkIAmAdmin() {
+        String myAuthKey = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_token), "");
+        if(mAdminUser.getmAuthKey().equals(myAuthKey)) {
+            RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.EDIT));
+        }
+        else {
+            RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.DONE));
+        }
     }
 
     private UserPresenter getUserPresenter() {
