@@ -66,6 +66,7 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
                 .subscribe((x) -> {
                             String accessToken = x.headers().get("access_token");
                             PreferenceHelper.getInstance(mContext).put(mContext.getString(R.string.arg_user_token), accessToken);
+                            PreferenceHelper.getInstance(mContext).put(mContext.getString(R.string.arg_user_num), phoneNumber);
                             mView.onSuccessAuthProcess();
                             mView.loadingStop();
 

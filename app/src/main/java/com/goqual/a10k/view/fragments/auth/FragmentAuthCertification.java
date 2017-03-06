@@ -88,7 +88,7 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
                 });
             }
         };
-        secondeTick.schedule(secondTickTask, 1000);
+        secondeTick.schedule(secondTickTask, 10, 1000);
     }
 
     @Nullable

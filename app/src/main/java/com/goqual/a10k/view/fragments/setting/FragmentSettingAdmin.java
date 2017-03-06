@@ -88,6 +88,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         LogUtil.d(TAG, "ITEM::" + item);
         if(!item.isadmin()) {
             getUserAdapter().addItem(item);
+            getUserAdapter().notifyDataSetChanged();
         }
         else {
             mAdminUser = item;
@@ -127,9 +128,13 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     }
 
     private void checkIAmAdmin() {
-        String myAuthKey = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_token), "");
-        if(mAdminUser.getmAuthKey().equals(myAuthKey)) {
-            RxBus.getInstance().send(new EventToolbarClick(STATUS.EDIT));
+        String myPhoneNum = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_num), "");
+        if(mAdminUser != null) {
+            if (mAdminUser.getNum().equals(myPhoneNum)) {
+                RxBus.getInstance().send(new EventToolbarClick(STATUS.EDIT));
+            } else {
+                RxBus.getInstance().send(new EventToolbarClick(STATUS.HIDE));
+            }
         }
         else {
             RxBus.getInstance().send(new EventToolbarClick(STATUS.HIDE));
