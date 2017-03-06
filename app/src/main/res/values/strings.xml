@@ -19,6 +19,7 @@
     <string name="toolbar_edit">Edit</string>
     <string name="toolbar_save">Save</string>
     <string name="toolbar_done">Done</string>
+    <string name="toolbar_empty"></string>
 
     <!-- Switch item -->
     <string name="btn_on">on</string>

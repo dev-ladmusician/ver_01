@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -12,6 +13,9 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySettingBinding;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -19,6 +23,9 @@ import com.goqual.a10k.view.fragments.setting.FragmentSettingAdmin;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingHistory;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingNfc;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+
+import rx.functions.Action1;
 
 /**
  * Created by hanwool on 2017. 2. 28..
@@ -33,6 +40,8 @@ implements IActivityInteraction{
 
     private AdapterPager mAdapterPage;
     private Switch mSwitch;
+
+    private EventToolbarClick mEventToolbarClick;
 
     @Override
     protected int getLayoutId() {
@@ -50,9 +59,28 @@ implements IActivityInteraction{
         }
         initViewPager();
         initTab();
+        subEvent();
+    }
+
+
+
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventToolbarClick) {
+                            mEventToolbarClick = (EventToolbarClick)event;
+                            mBinding.setEditSwitchStatus(mEventToolbarClick.getStatus());
+                            passToolbarClickEvent(mEventToolbarClick.getStatus());
+                        }
+                    }
+                });
     }
 
     private void initViewPager() {
+        mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATUS.EDIT);
+        mBinding.setEditSwitchStatus(mEventToolbarClick.getStatus());
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitch));
@@ -77,6 +105,13 @@ implements IActivityInteraction{
                 catch (NullPointerException e){
                     LogUtil.e(TAG, e.getMessage(), e);
                 }
+
+                if(position == 2) {
+                    mBinding.toolbarEditContainer.setVisibility(View.GONE);
+                }
+                else {
+                    mBinding.toolbarEditContainer.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -95,7 +130,6 @@ implements IActivityInteraction{
     }
 
     private void initTab() {
-
         mBinding.settingTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -128,7 +162,19 @@ implements IActivityInteraction{
             case R.id.toolbar_back:
                 finish();
                 break;
+            case R.id.toolbar_edit_container:
+                if(mEventToolbarClick.getStatus() == IToolbarClickListener.STATUS.EDIT) {
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.DONE));
+                }
+                else {
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.EDIT));
+                }
+                break;
         }
+    }
+
+    private void passToolbarClickEvent(IToolbarClickListener.STATUS status) {
+        ((IToolbarClickListener)mAdapterPage.getItem(0)).onClickEdit(status);
     }
 
     @Override

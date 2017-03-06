@@ -26,7 +26,7 @@ public class Nfc implements Parcelable{
     private String macaddr;
     private int state;
     private int btnCount;
-    private boolean mIsDeletable;
+    public boolean mIsDeletable;
 
     public Nfc() {
     }

@@ -98,8 +98,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
         RxBus.getInstance().send(
                 SwitchManager.getInstance().getCount() == 0 ?
-                        new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE) :
-                        new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                        new EventSwitchEdit(IToolbarClickListener.STATUS.HIDE) :
+                        new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
     }
 
     @Override
@@ -274,17 +274,16 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                             LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
                             switch (((EventToolbarClick) event).getStatus()) {
                                 case DONE:
-                                    passToolbarClickEvent(EventSwitchEdit.STATUS.DONE);
-                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                                    passToolbarClickEvent(IToolbarClickListener.STATUS.DONE);
+                                    RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
                                     break;
                                 case EDIT:
-                                    passToolbarClickEvent(EventSwitchEdit.STATUS.EDIT);
-
-                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.DONE));
+                                    passToolbarClickEvent(IToolbarClickListener.STATUS.EDIT);
+                                    RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.DONE));
                                     break;
                                 case ADD:
                                     startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
-                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                                    RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
                                     break;
                             }
                         }
@@ -292,7 +291,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                 });
     }
 
-    private void passToolbarClickEvent(EventSwitchEdit.STATUS status) {
+    private void passToolbarClickEvent(IToolbarClickListener.STATUS status) {
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(status);
     }
 
@@ -341,7 +340,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onSuccessDeleteSwitch(int position) {
         // 등록된 스위치가 없으면 edit hide
         if (SwitchManager.getInstance().getCount() == 0) {
-            RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE));
+            RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.HIDE));
         }
         mPagerAdapter.deleteItem(position);
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);

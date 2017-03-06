@@ -17,14 +17,14 @@ import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
-import com.goqual.a10k.view.interfaces.IFragmentInteraction;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 /**
  * Created by hanwool on 2017. 2. 28..
  */
 
 public class FragmentSettingAdmin extends BaseFragment<FragmentSettingAdminBinding>
-implements UserPresenter.View<User>{
+implements UserPresenter.View<User>, IToolbarClickListener {
     public static final String TAG = FragmentSettingAdmin.class.getSimpleName();
 
 
@@ -129,10 +129,10 @@ implements UserPresenter.View<User>{
     private void checkIAmAdmin() {
         String myAuthKey = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_token), "");
         if(mAdminUser.getmAuthKey().equals(myAuthKey)) {
-            RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.EDIT));
+            RxBus.getInstance().send(new EventToolbarClick(STATUS.EDIT));
         }
         else {
-            RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.DONE));
+            RxBus.getInstance().send(new EventToolbarClick(STATUS.HIDE));
         }
     }
 
@@ -157,4 +157,8 @@ implements UserPresenter.View<User>{
 
     }
 
+    @Override
+    public void onClickEdit(STATUS status) {
+
+    }
 }
