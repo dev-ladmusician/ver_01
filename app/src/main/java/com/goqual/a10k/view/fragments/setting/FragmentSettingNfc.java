@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingNfcBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.NfcTagPresenter;
@@ -39,13 +40,14 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     private AdapterNfc mAdapter;
     private NfcTagPresenter mPresenter;
     private Switch mSwitch;
+    private int mSwitchPosition;
 
-    public static FragmentSettingNfc newInstance(Switch item) {
+    public static FragmentSettingNfc newInstance(int item) {
 
         Bundle args = new Bundle();
 
         FragmentSettingNfc fragment = new FragmentSettingNfc();
-        args.putParcelable(EXTRA_SWITCH, item);
+        args.putInt(EXTRA_SWITCH, item);
         fragment.setArguments(args);
         return fragment;
     }
@@ -115,7 +117,8 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            mSwitch = getArguments().getParcelable(EXTRA_SWITCH);
+            mSwitchPosition = getArguments().getInt(EXTRA_SWITCH);
+            mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
         }
     }
 
@@ -158,7 +161,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         if(view.getId() == R.id.nfc_add_container) {
             Intent request = new Intent(getActivity(), ActivityNfcDetect.class);
             request.setAction(ActivityNfcDetect.ACTION_REGISTER_TAG);
-            request.putExtra(ActivityNfcDetect.EXTRA_SWITCH, mSwitch);
+            request.putExtra(ActivityNfcDetect.EXTRA_SWITCH, mSwitchPosition);
             startActivityForResult(request, REQ_REGISTER_NFC);
         }
     }

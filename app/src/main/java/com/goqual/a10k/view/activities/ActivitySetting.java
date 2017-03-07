@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySettingBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
@@ -40,6 +41,7 @@ implements IActivityInteraction{
 
     private AdapterPager mAdapterPage;
     private Switch mSwitch;
+    private int mSwitchPosition;
 
     private EventToolbarClick mEventToolbarClick;
 
@@ -52,7 +54,8 @@ implements IActivityInteraction{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getIntent() != null && getIntent().getExtras() != null) {
-            mSwitch = getIntent().getExtras().getParcelable(ITEM_SWITCH);
+            mSwitchPosition = getIntent().getExtras().getInt(ITEM_SWITCH);
+            mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
             if(mSwitch == null) {
                 throw new IllegalStateException("Empty INTENT!");
             }
@@ -83,9 +86,9 @@ implements IActivityInteraction{
         mBinding.setEditSwitchStatus(mEventToolbarClick.getStatus());
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
-        mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitch));
-        mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitch));
-        mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitch));
+        mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitchPosition));
+        mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitchPosition));
+        mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitchPosition));
         mBinding.settingContainer.setAdapter(mAdapterPage);
         mBinding.settingContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

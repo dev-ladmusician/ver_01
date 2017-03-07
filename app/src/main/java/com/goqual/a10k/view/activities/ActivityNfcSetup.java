@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcSetupBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.view.base.BaseActivity;
@@ -33,6 +34,7 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
 
     private Switch mSwitch;
+    private int mSwitchPosition;
     private Nfc mNfcTag;
     private String mNfcId;
 
@@ -44,7 +46,8 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSwitch = getIntent().getParcelableExtra(EXTRA_SWITCH);
+        mSwitchPosition = getIntent().getIntExtra(EXTRA_SWITCH, -1);
+        mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
         mNfcId = getIntent().getStringExtra(EXTRA_NFC_TAG_ID);
         initView();
     }
@@ -102,7 +105,7 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
     private void endSetting(String tagTitle) {
         Intent result = new Intent();
         result.putExtra(EXTRA_NFC_TAG_ID, mNfcId);
-        result.putExtra(EXTRA_SWITCH, mSwitch);
+        result.putExtra(EXTRA_SWITCH, mSwitchPosition);
         result.putExtra(EXTRA_NFC_TAG_TITLE, tagTitle);
         setResult(RESULT_OK, result);
         finish();

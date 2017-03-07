@@ -6,25 +6,20 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcDetectBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.SocketManager;
-import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
-import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.NfcUtil;
-import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
-
-import io.realm.Realm;
 
 /**
  * NFC 태그 리딩 액티비티. <br />
@@ -52,7 +47,8 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
 
     private String mReadedTagId;
     private Nfc mReadedTag;
-    private Switch mSwich;
+    private Switch mSwitch;
+    private int mSwitchPosition;
     private NfcTagPresenter mNfcTagPresenter;
 
     private boolean isSocketConnected;
@@ -71,7 +67,8 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             mBinding.appbar.setVisibility(View.GONE);
         }
         else {
-            mSwich = getIntent().getParcelableExtra(EXTRA_SWITCH);
+            mSwitchPosition = getIntent().getIntExtra(EXTRA_SWITCH, -1);
+            mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
             mBinding.setActivity(this);
             mBinding.appbar.setVisibility(View.VISIBLE);
         }
@@ -120,7 +117,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             if(isRegisterMode) {
                 Intent setupReq = new Intent(this, ActivityNfcSetup.class);
                 setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, mReadedTagId);
-                setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwich);
+                setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
                 startActivityForResult(setupReq, REQ_SETUP_TAG);
             }
             else {

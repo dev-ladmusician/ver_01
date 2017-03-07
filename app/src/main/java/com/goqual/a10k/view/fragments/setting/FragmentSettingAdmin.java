@@ -8,6 +8,7 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.presenter.UserPresenter;
@@ -35,12 +36,12 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     private AdapterUser mUserAdapter;
     private User mAdminUser;
 
-    public static FragmentSettingAdmin newInstance(Switch item) {
+    public static FragmentSettingAdmin newInstance(int item) {
 
         Bundle args = new Bundle();
 
         FragmentSettingAdmin fragment = new FragmentSettingAdmin();
-        args.putParcelable(EXTRA_SWITCH, item);
+        args.putInt(EXTRA_SWITCH, item);
         fragment.setArguments(args);
         return fragment;
     }
@@ -105,7 +106,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            mSwitch = getArguments().getParcelable(EXTRA_SWITCH);
+            mSwitch = SwitchManager.getInstance().getItem(getArguments().getInt(EXTRA_SWITCH));
         }
     }
 

@@ -9,7 +9,7 @@ import com.android.annotations.Nullable;
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class Switch implements Parcelable{
+public class Switch{
     private int _connectionid;
     private int _bsid;
     private int state;
@@ -211,47 +211,4 @@ public class Switch implements Parcelable{
     public void setmIsStateView(boolean mIsStateView) {
         this.mIsStateView = mIsStateView;
     }
-
-    @Override
-    public int describeContents() {
-        return _connectionid;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(_connectionid);
-        dest.writeInt(_bsid);
-        dest.writeInt(state);
-        dest.writeInt(seq);
-
-        dest.writeByte(btn1?(byte)1:(byte)0);
-        dest.writeByte(btn2?(byte)1:(byte)0);
-        dest.writeByte(btn3?(byte)1:(byte)0);
-
-        dest.writeString(hw);
-        dest.writeString(fw);
-        dest.writeString(title);
-        dest.writeString(macaddr);
-
-        dest.writeByte(isavailable?(byte)1:(byte)0);
-        dest.writeByte(outlet?(byte)1:(byte)0);
-        dest.writeByte(mIsStateView?(byte)1:(byte)0);
-
-        dest.writeString(WIFI_SSID);
-        dest.writeString(WIFI_BSSID);
-        dest.writeString(WIFI_PASSWORD);
-        dest.writeString(WIFI_CAPABILITY);
-    }
-
-    public static final Parcelable.Creator<Switch> CREATOR = new Creator<Switch>() {
-        @Override
-        public Switch createFromParcel(Parcel source) {
-            return new Switch(source);
-        }
-
-        @Override
-        public Switch[] newArray(int size) {
-            return new Switch[size];
-        }
-    };
 }

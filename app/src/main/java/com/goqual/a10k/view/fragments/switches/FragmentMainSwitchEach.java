@@ -84,7 +84,7 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
                 break;
             case R.id.switch_setting:
                 Intent intent = new Intent(getActivity(), ActivitySetting.class);
-                intent.putExtra(ActivitySetting.ITEM_SWITCH, mSwitch);
+                intent.putExtra(ActivitySetting.ITEM_SWITCH, SwitchManager.getInstance().getPosition(mSwitch));
                 startActivity(intent);
                 break;
         }

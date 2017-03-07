@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
 import com.goqual.a10k.databinding.FragmentSettingHistoryBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.History;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.HistoryPresenter;
@@ -42,12 +43,12 @@ implements HistoryPresenter.View<History>{
 
     private int mCurrentPage = 1;
 
-    public static FragmentSettingHistory newInstance(Switch item) {
+    public static FragmentSettingHistory newInstance(int item) {
 
         Bundle args = new Bundle();
 
         FragmentSettingHistory fragment = new FragmentSettingHistory();
-        args.putParcelable(EXTRA_SWITCH, item);
+        args.putInt(EXTRA_SWITCH, item);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,7 +92,7 @@ implements HistoryPresenter.View<History>{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            mSwitch = getArguments().getParcelable(EXTRA_SWITCH);
+            mSwitch = SwitchManager.getInstance().getItem(getArguments().getInt(EXTRA_SWITCH));
         }
         mViewCalendar = Calendar.getInstance();
         mViewCalendar.setTime(new Date());
