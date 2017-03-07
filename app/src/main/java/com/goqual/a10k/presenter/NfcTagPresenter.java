@@ -1,6 +1,6 @@
 package com.goqual.a10k.presenter;
 
-import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.realm.Nfc;
 
 /**
  * Created by hanwool on 2017. 2. 28..

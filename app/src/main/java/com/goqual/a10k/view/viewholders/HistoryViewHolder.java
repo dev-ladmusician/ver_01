@@ -6,9 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.goqual.a10k.databinding.ItemHistoryBinding;
-import com.goqual.a10k.databinding.ItemNfcBinding;
 import com.goqual.a10k.model.entity.History;
-import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 
 /**

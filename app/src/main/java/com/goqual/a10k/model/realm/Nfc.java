@@ -1,7 +1,9 @@
-package com.goqual.a10k.model.entity;
+package com.goqual.a10k.model.realm;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Locale;
 
@@ -13,7 +15,7 @@ import kotlin.NotImplementedError;
  * Created by hanwool on 2017. 2. 27..
  */
 
-public class Nfc implements Parcelable{
+public class Nfc extends RealmObject{
 
     @Index
     private String tag;
@@ -159,48 +161,6 @@ public class Nfc implements Parcelable{
 
     @Override
     public String toString() {
-        return String.format(Locale.KOREA, "<NFC> TITLE: %s TAG: %s MAC_ADDR: %s BTN_COUNT: %d, BTN1: %b, BTN2: %b, BTN3: %b,",
-                title,
-                tag,
-                macaddr,
-                btnCount,
-                btn1,
-                btn2,
-                btn3
-        );
-
-//        private int _nfcid;
-//        private int _bsid;
-//        private Boolean btn1;
-//        private Boolean btn2;
-//        private Boolean btn3;
-//        private String title;
-//        private String tag;
-//        private String macaddr;
-//        private int state;
-//        private int btnCount;
-//        private boolean mIsDeletable;
+        return ToStringBuilder.reflectionToString(this);
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        throw new NotImplementedError("STUB!");
-    }
-
-    public static Parcelable.Creator<Nfc> CREATOR = new Parcelable.Creator<Nfc>(){
-        @Override
-        public Nfc createFromParcel(Parcel source) {
-            return null;
-        }
-
-        @Override
-        public Nfc[] newArray(int size) {
-            return new Nfc[size];
-        }
-    };
 }

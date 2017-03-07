@@ -12,7 +12,7 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcDetectBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.SocketManager;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
@@ -20,6 +20,8 @@ import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.NfcUtil;
 import com.goqual.a10k.view.base.BaseActivity;
+
+import io.realm.Realm;
 
 /**
  * NFC 태그 리딩 액티비티. <br />
@@ -121,7 +123,11 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
                 startActivityForResult(setupReq, REQ_SETUP_TAG);
             }
             else {
-                getNfcTagPresenter().getItem(mReadedTagId);
+                Realm realm = Realm.getDefaultInstance();
+                mReadedTag = realm.where(Nfc.class).equalTo("tag", mReadedTagId).findFirst();
+                if(getSocketManager().isConnected()) {
+                    operateSwitch();
+                }
             }
         }
     }
@@ -195,51 +201,5 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private NfcTagPresenter getNfcTagPresenter() {
-        if(mNfcTagPresenter == null) {
-            mNfcTagPresenter = new NfcTagPresenterImpl(this, new NfcTagPresenter.View<Nfc>() {
-                @Override
-                public void onSuccess() {
-
-                }
-
-                @Override
-                public void deleteItem(int position) {
-
-                }
-
-                @Override
-                public void loadingStart() {
-
-                }
-
-                @Override
-                public void loadingStop() {
-
-                }
-
-                @Override
-                public void refresh() {
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void addItem(Nfc item) {
-                    LogUtil.e(TAG, "ADDITEM::"+item);
-                    mReadedTag = item;
-                    if(getSocketManager().isConnected()) {
-                        operateSwitch();
-                    }
-                }
-            });
-        }
-        return mNfcTagPresenter;
     }
 }

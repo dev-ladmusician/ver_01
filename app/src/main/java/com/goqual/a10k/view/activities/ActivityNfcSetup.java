@@ -10,10 +10,13 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcSetupBinding;
 import com.goqual.a10k.model.SwitchManager;
-import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.dialog.CustomDialog;
+
+import io.realm.Realm;
 
 /**
  * NFC 태그에 대한 스위치 설정 액티비티. <br />
