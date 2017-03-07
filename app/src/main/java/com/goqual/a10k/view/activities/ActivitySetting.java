@@ -83,7 +83,7 @@ implements IActivityInteraction{
         mBinding.setEditSwitchStatus(mEventToolbarClick.getStatus());
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
-        mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitch.get_bsid()));
+        mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitch));
         mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitch));
         mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitch));
         mBinding.settingContainer.setAdapter(mAdapterPage);

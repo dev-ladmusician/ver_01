@@ -4,6 +4,9 @@
         <variable
             name="fragment"
             type="com.goqual.a10k.view.fragments.setting.FragmentSettingAdmin"/>
+        <variable
+            name="adminUser"
+            type="com.goqual.a10k.model.entity.User"/>
     </data>
     <LinearLayout 
         android:id="@+id/activity_main"
@@ -58,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="10K_user"/>
+                    android:text="@{adminUser.num}"/>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -87,7 +90,8 @@
                     android:id="@+id/admin_add_user_in_exist_items"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_delete_ic_container_size"
-                    android:background="@color/identitiy_04">
+                    android:background="@color/identitiy_04"
+                    android:onClick="@{fragment::onBtnClick}">
 
                     <RelativeLayout
                         android:layout_width="wrap_content"

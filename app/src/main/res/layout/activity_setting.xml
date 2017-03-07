@@ -9,6 +9,8 @@
         <variable
             name="editSwitchStatus"
             type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATUS"/>
+        <import type="android.view.View"
+            alias="View"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -60,6 +62,7 @@
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
+                    android:visibility="@{editSwitchStatus == editSwitchStatus.HIDE ? View.GONE : View.VISIBLE}"
                     android:onClick="@{activity::onBtnClick}">
 
                     <TextView
