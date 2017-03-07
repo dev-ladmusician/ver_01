@@ -119,6 +119,8 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile 'io.realm:android-adapters:2.0.0'
+
     compile('io.socket:socket.io-client:0.8.3') {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
@@ -128,4 +130,12 @@ dependencies {
         transitive = true;
     }
     compile 'org.apache.commons:commons-lang3:3.5'
+    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
+        transitive = true;
+    }
+}
+crashlytics {
+    enableNdk true
+    androidNdkOut 'src/main/obj'
+    androidNdkLibsOut 'src/main/libs'
 }

@@ -70,12 +70,21 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
 
     @Override
     public void delete(int position) {
+        mView.loadingStart();
         Nfc item = (Nfc) mTagList.get(position);
         getNfcService().getrNfcApi().delete(item.get_nfcid())
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultDTO -> {
+                            try (Realm realm = Realm.getDefaultInstance()) {
+                                realm.executeTransaction(realm1 -> {
+                                    realm1.where(Nfc.class).equalTo("tag", item.getTag()).findFirst().deleteFromRealm();
+                                });
+                            }
+                            catch (Exception e) {
+                                mView.onError(e);
+                            }
                             mTagList.remove(position);
                         },
                         mView::onError,
@@ -90,14 +99,6 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rtv -> {
                             mView.loadingStop();
-                            try (Realm realm = Realm.getDefaultInstance()) {
-                                realm.executeTransaction(realm1 -> {
-                                    realm.where(Nfc.class).equalTo("tag", tag).findFirst().deleteFromRealm();
-                                });
-                            }
-                            catch (Exception e) {
-                                mView.onError(e);
-                            }
 //                            ((ActivityNfcDetected)mView).setNfc(rtv.getResult());
                         },
                         mView::onError,
@@ -122,7 +123,8 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                             try(Realm realm = Realm.getDefaultInstance()) {
                                 realm.executeTransaction(realm1 -> {
                                     Nfc nfc = result.getResult();
-                                    realm1.copyToRealm(nfc);});
+                                    realm1.copyToRealm(nfc);
+                                });
                             }
                             catch (Exception e) {
                                 mView.onError(e);

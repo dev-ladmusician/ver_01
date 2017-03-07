@@ -23,7 +23,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_delete_ic_container_size"
-            android:visibility="@{itemNfc.mIsDeletable ? View.VISIBLE : View.GONE}"
+            android:visibility="@{itemNfc.isEditing ? View.VISIBLE : View.GONE}"
+            android:onClick="@{holder::onBtnClick}"
             android:layout_height="match_parent">
 
             <ImageView
@@ -71,7 +72,7 @@
                 android:layout_height="@dimen/item_absence_btn_size"
                 android:layout_toLeftOf="@+id/item_nfc_btn_2"
                 android:layout_marginRight="@dimen/padding_16"
-                android:background="@{itemNfc.btn1 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"
+                android:background="@{itemNfc.btn1 != null &amp;&amp; itemNfc.btn1 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"
                 android:layout_centerVertical="true" />
 
             <TextView
@@ -80,14 +81,14 @@
                 android:layout_height="@dimen/item_absence_btn_size"
                 android:layout_toLeftOf="@+id/item_nfc_btn_3"
                 android:layout_marginRight="@dimen/padding_16"
-                android:background="@{itemNfc.btn2 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"
+                android:background="@{itemNfc.btn2 != null &amp;&amp; itemNfc.btn2 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"
                 android:layout_centerVertical="true" />
 
             <TextView
                 android:id="@+id/item_nfc_btn_3"
                 android:layout_width="@dimen/item_absence_btn_size"
                 android:layout_height="@dimen/item_absence_btn_size"
-                android:background="@{itemNfc.btn3 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"
+                android:background="@{itemNfc.btn3 != null &amp;&amp; itemNfc.btn3 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"
                 android:layout_centerVertical="true" />
         </LinearLayout>
     </RelativeLayout>

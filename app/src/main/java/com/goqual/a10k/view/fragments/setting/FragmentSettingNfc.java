@@ -1,6 +1,7 @@
 package com.goqual.a10k.view.fragments.setting;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,8 +20,10 @@ import com.goqual.a10k.view.activities.ActivityNfcDetect;
 import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
+import io.realm.Realm;
 import retrofit2.adapter.rxjava.HttpException;
 
 /**
@@ -39,7 +42,10 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     private AdapterNfc mAdapter;
     private NfcTagPresenter mPresenter;
     private Switch mSwitch;
+    private STATUS mCurrentState;
     private int mSwitchPosition;
+
+    private Realm realm;
 
     public static FragmentSettingNfc newInstance(int item) {
 
@@ -95,13 +101,14 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     @Override
     public void addItem(Nfc item) {
         LogUtil.d(TAG, "ITEM::" + item);
+        item.setmIsDeletable(mCurrentState == STATUS.EDIT);
         mAdapter.addItem(item);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onSuccess() {
-
+        loadingStop();
     }
 
     @Override
@@ -118,7 +125,22 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         if(getArguments() != null) {
             mSwitchPosition = getArguments().getInt(EXTRA_SWITCH);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
+            mCurrentState = STATUS.DONE;
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(realm != null) {
+            realm = Realm.getDefaultInstance();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        realm.close();
     }
 
     @Override
@@ -131,20 +153,41 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         mBinding.setFragment(this);
         mBinding.nfcContainer.setAdapter(getAdapter());
         mBinding.nfcContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
+        loadingStop();
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
+            LogUtil.d(TAG, "setOnRecyclerItemClickListener::viewID:"+viewId+" position:" + position);
+            CustomDialog customDialog = new CustomDialog(getActivity());
+            DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        getPresenter().delete(position);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+                dialog.dismiss();
+            };
 
+            customDialog.isEditable(false)
+                    .setTitleText(R.string.nfc_delete_title)
+                    .setMessageText(R.string.nfc_delete_content)
+                    .isPositiveButton(true, getString(R.string.common_delete), onClickListener)
+                    .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
+                    .show();
         });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getPresenter().loadItems(mSwitch.get_bsid());
     }
 
     private AdapterNfc getAdapter() {
         if(mAdapter == null) {
-            mAdapter = new AdapterNfc(getActivity());
+            if(realm == null) {
+                realm = Realm.getDefaultInstance();
+            }
+            mAdapter = new AdapterNfc(getActivity(), realm.where(Nfc.class).findAll());
         }
         return mAdapter;
     }
@@ -171,7 +214,8 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             if(resultCode == Activity.RESULT_OK) {
                 String nfcTagId = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_ID, null);
                 String nfcTagTitle = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_TITLE, null);
-                Switch item = data.getExtras().getParcelable(ActivityNfcSetup.EXTRA_SWITCH);
+                int itemId = data.getExtras().getInt(ActivityNfcSetup.EXTRA_SWITCH);
+                Switch item = SwitchManager.getInstance().getItem(itemId);
                 if(nfcTagId != null) {
                     LogUtil.e(TAG, "NFC_TAG_REGISTER::tagID: " + nfcTagId);
                     Nfc tag = new Nfc();
@@ -190,6 +234,8 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public void onClickEdit(STATUS status) {
+        LogUtil.d(TAG, "STATE::" + status);
+        mCurrentState = status;
         mAdapter.setItemState(status == STATUS.EDIT);
     }
 }

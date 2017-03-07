@@ -72,7 +72,7 @@
                         android:textColor="@color/white"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="@{editSwitchStatus == editSwitchStatus.EDIT ? @string/toolbar_edit : editSwitchStatus == editSwitchStatus.DONE ? @string/toolbar_done : @string/toolbar_empty}" />
+                        android:text="@{editSwitchStatus == editSwitchStatus.EDIT ? @string/toolbar_done : editSwitchStatus == editSwitchStatus.DONE ? @string/toolbar_edit : @string/toolbar_edit}" />
                 </RelativeLayout>
             </RelativeLayout>
 

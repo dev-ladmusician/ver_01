@@ -109,11 +109,11 @@ implements IActivityInteraction{
                     LogUtil.e(TAG, e.getMessage(), e);
                 }
 
-                if(position == 2) {
-                    mBinding.toolbarEditContainer.setVisibility(View.GONE);
+                if(position == 1) {
+                    mBinding.toolbarEditContainer.setVisibility(View.VISIBLE);
                 }
                 else {
-                    mBinding.toolbarEditContainer.setVisibility(View.VISIBLE);
+                    mBinding.toolbarEditContainer.setVisibility(View.GONE);
                 }
             }
 
@@ -177,7 +177,7 @@ implements IActivityInteraction{
     }
 
     private void passToolbarClickEvent(IToolbarClickListener.STATUS status) {
-        ((IToolbarClickListener)mAdapterPage.getItem(0)).onClickEdit(status);
+        ((IToolbarClickListener)mAdapterPage.getItem(mBinding.settingContainer.getCurrentItem())).onClickEdit(status);
     }
 
     @Override

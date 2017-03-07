@@ -1,15 +1,16 @@
 package com.goqual.a10k.model.realm;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.goqual.a10k.util.LogUtil;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Locale;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
-import kotlin.NotImplementedError;
 
 /**
  * Created by hanwool on 2017. 2. 27..
@@ -18,17 +19,19 @@ import kotlin.NotImplementedError;
 public class Nfc extends RealmObject{
 
     @Index
-    private String tag;
-    private int _nfcid;
-    private int _bsid;
-    private Boolean btn1;
-    private Boolean btn2;
-    private Boolean btn3;
-    private String title;
-    private String macaddr;
-    private int state;
-    private int btnCount;
+    public String tag;
+    public int _nfcid;
+    public int _bsid;
+    public Boolean btn1;
+    public Boolean btn2;
+    public Boolean btn3;
+    public String title;
+    public String macaddr;
+    public int state;
+    public int btnCount;
     public boolean mIsDeletable;
+    @Ignore
+    public boolean isEditing;
 
     public Nfc() {
     }
@@ -159,8 +162,39 @@ public class Nfc extends RealmObject{
         this.mIsDeletable = mIsDeletable;
     }
 
+    public boolean isEditing() {
+        return isEditing;
+    }
+
+    public void setEditing(boolean editing) {
+        isEditing = editing;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public void setValues() {
+        Method[] methods = this.getClass().getMethods();
+        for(Method method : methods) {
+            if(method.getName().startsWith("get")) {
+                LogUtil.d("setValues", "methodName::"+method.getName());
+                String fieldName = method.getName().replace("get", "");
+                String first = fieldName.substring(0, 1);
+                first = first.toLowerCase();
+                fieldName = first + fieldName.substring(1);
+                LogUtil.d("setValues", "fieldName::"+fieldName);
+                try {
+                    Field field = this.getClass().getField(fieldName);
+                    field.set(this, method.invoke(this));
+                }
+                catch (NoSuchFieldException |
+                        IllegalAccessException |
+                        InvocationTargetException e) {
+                    LogUtil.e("setValues", e.getMessage(), e);
+                }
+            }
+        }
     }
 }
