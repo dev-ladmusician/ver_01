@@ -76,9 +76,7 @@ public class UserPresenterImpl implements UserPresenter {
                         () -> mView.refresh());
     }
 
-
-
-    public UserService getUserService() {
+    private UserService getUserService() {
         if (mUserService == null)
             mUserService = new UserService(mContext);
 

@@ -25,17 +25,14 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     private View<Nfc> mView;
     private Context mContext;
     private NfcService mNfcService;
-    private ArrayList<Nfc> mTagList;
 
     public NfcTagPresenterImpl(Context mContext, View mView) {
         this.mView = mView;
         this.mContext = mContext;
-        this.mTagList = new ArrayList<>();
     }
 
     @Override
     public void loadItems(int switchId) {
-        mTagList.clear();
         mView.loadingStart();
         LogUtil.d(TAG, "loadItems::switchId: " + switchId);
         getNfcService().getrNfcApi().gets(switchId)
@@ -45,14 +42,9 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                 .filter(items -> items != null && !items.isEmpty())
                 .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((item) -> {
-                            mView.addItem(item);
-                            mTagList.add(item);
-                        },
+                .subscribe(mView::addItem,
                         mView::onError,
-                        () -> {
-                            mView.loadingStop();
-                        });
+                        mView::onSuccess);
     }
 
     @Override
@@ -69,23 +61,21 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     }
 
     @Override
-    public void delete(int position) {
+    public void delete(int nfc_id) {
         mView.loadingStart();
-        Nfc item = (Nfc) mTagList.get(position);
-        getNfcService().getrNfcApi().delete(item.get_nfcid())
+        getNfcService().getrNfcApi().delete(nfc_id)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultDTO -> {
                             try (Realm realm = Realm.getDefaultInstance()) {
                                 realm.executeTransaction(realm1 -> {
-                                    realm1.where(Nfc.class).equalTo("tag", item.getTag()).findFirst().deleteFromRealm();
+                                    realm1.where(Nfc.class).equalTo("_nfcid", nfc_id).findFirst().deleteFromRealm();
                                 });
                             }
                             catch (Exception e) {
                                 mView.onError(e);
                             }
-                            mTagList.remove(position);
                         },
                         mView::onError,
                         mView::onSuccess);

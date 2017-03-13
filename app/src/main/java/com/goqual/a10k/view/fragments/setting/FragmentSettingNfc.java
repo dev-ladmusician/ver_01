@@ -11,6 +11,7 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingNfcBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.NfcWrap;
 import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.NfcTagPresenter;
@@ -24,6 +25,7 @@ import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.adapter.rxjava.HttpException;
 
 /**
@@ -102,7 +104,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     public void addItem(Nfc item) {
         LogUtil.d(TAG, "ITEM::" + item);
         item.setmIsDeletable(mCurrentState == STATUS.EDIT);
-        mAdapter.addItem(item);
+        mAdapter.addItem(new NfcWrap(item));
         mAdapter.notifyDataSetChanged();
     }
 
@@ -160,7 +162,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        getPresenter().delete(position);
+                        getPresenter().delete(getAdapter().getItem(position)._nfcid);
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
@@ -187,7 +189,13 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             if(realm == null) {
                 realm = Realm.getDefaultInstance();
             }
-            mAdapter = new AdapterNfc(getActivity(), realm.where(Nfc.class).findAll());
+            RealmResults<Nfc> realmResults = realm.where(Nfc.class).findAll();
+            mAdapter = new AdapterNfc(getActivity());
+            for(Nfc nfc : realmResults) {
+                NfcWrap nfcWrap = new NfcWrap(nfc);
+                LogUtil.d(TAG, "NFCWRAP::" + nfcWrap.toString());
+                mAdapter.addItem(nfcWrap);
+            }
         }
         return mAdapter;
     }

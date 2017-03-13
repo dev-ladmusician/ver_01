@@ -206,7 +206,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                             mSocketClient.connect();
                             mSocketClient.start();
                         }
-                        catch (IllegalThreadStateException e){
+                        catch (NullPointerException | IllegalThreadStateException e){
                             LogUtil.e(TAG, e.getMessage(), e);
                             endConnect10K();
                         }
@@ -464,6 +464,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
             Collections.sort(scanResultList, new WifiLevelDescCompare());
             boolean isSwitchFinded = false;
             for(ScanResult result : scanResultList) {
+                LogUtil.d("WIFI_SCAN", result.toString());
                 isSwitchFinded = isSwitchFinded || (result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2));
                 if(result.frequency < WIFI_FREQUENCY_MAX_VALUE) {
                     if(!(result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2))) {

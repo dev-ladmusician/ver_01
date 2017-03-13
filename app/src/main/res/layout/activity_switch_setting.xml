@@ -5,7 +5,7 @@
     <data>
         <variable
             name="activity"
-            type="com.goqual.a10k.view.activities.ActivitySetting"/>
+            type="com.goqual.a10k.view.activities.ActivitySwitchSetting"/>
         <variable
             name="editSwitchStatus"
             type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATUS"/>

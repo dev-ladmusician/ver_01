@@ -14,6 +14,7 @@
     <!-- title -->
     <string name="title_switch_list">All Switches</string>
     <string name="title_switch_each">10K</string>
+    <string name="title_app_setting">Setting</string>
 
     <!-- toolbar -->
     <string name="toolbar_edit">Edit</string>
@@ -33,6 +34,7 @@
     <!-- args -->
     <string name="arg_user_token">USER_TOKEN</string>
     <string name="arg_user_num">USER_NUM</string>
+    <string name="arg_user_fcm_token">USER_FCM_TOKEN</string>
     <string name="arg_switch_id">SWITCH_ID</string>
     <string name="arg_switch_state">SWITCH_STATE</string>
     <string name="arg_switch_position">SWITCH_POSITION</string>
@@ -157,6 +159,7 @@
     <!-- Switch setting -->
     <string name="tab_title_admin">Admin</string>
     <string name="tab_title_nfc">NFC</string>
+    <string name="tab_title_absence">Absence</string>
     <string name="tab_title_history">History</string>
 
     <!-- Admin -->
@@ -189,5 +192,49 @@
     <string name="history_item_control_switch">스위치</string>
     <string name="history_item_op_on">ON</string>
     <string name="history_item_op_off">OFF</string>
+
+    <!-- setting -->
+    <string name="setting_item_faq">자주묻는 질문</string>
+    <string name="setting_item_noti">공지사항</string>
+    <string name="setting_item_help">도움말</string>
+    <string name="setting_item_info">정보</string>
+    <string name="setting_item_logout">Logout</string>
+
+    <!-- Timer -->
+    <string name="timer_toolbar_cancel">Cancel</string>
+    <string name="timer_toolbar_save">Save</string>
+    <string name="timer_menu_switch">Switch</string>
+
+    <string name="alarm_no_item">아침과 저녁을 10K와 함께 해보세요!</string>
+    <string name="alarm_repeat_everyday">Everyday</string>
+    <string name="alarm_repeat_sun">sun</string>
+    <string name="alarm_repeat_mon">mon</string>
+    <string name="alarm_repeat_tue">tue</string>
+    <string name="alarm_repeat_wed">wed</string>
+    <string name="alarm_repeat_thur">thur</string>
+    <string name="alarm_repeat_fri">fri</string>
+    <string name="alarm_repeat_sat">sat</string>
+    <string name="alarm_repeat_never">never</string>
+    <string name="alarm_repeat">Repeat</string>
+    <string name="alarm_sound">Sound</string>
+    <string name="alarm_sound_default">default</string>
+
+    <string name="alarm_delete_title">삭제</string>
+    <string name="alarm_delete_content">\n알람을 삭제 하시겠습니까?</string>
+    <string name="alarm_delete_error">알람을 삭제하는데 오류가 발생했습니다.</string>
+
+    <string name="select_switch_no_item">등록된 스위치가 없습니다.</string>
+    <string name="select_switch_title">Switch</string>
+
+    <string name="absence_no_item">10K로 집을 안전하게 지켜보세요!</string>
+    <string name="absence_menu_on">Light on</string>
+    <string name="absence_menu_off">Light off</string>
+
+    <string name="absence_delete_title">삭제</string>
+    <string name="absence_delete_content">\n부재모드를 삭제 하시겠습니까?</string>
+    <string name="absence_delete_error">부재모드를 삭제하는데 오류가 발생했습니다.</string>
+    <string name="absence_select_btn_info">부재모드시 작동한 버튼을 \n선택해 주세요.</string>
+    <string name="absence_error">정보를 모두 입력해주세요.</string>
+    <string name="absence_error_time">올바른 시간 정보를 입력해주세요.</string>
 
 </resources>

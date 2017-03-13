@@ -31,8 +31,9 @@
         <activity android:name=".view.activities.ActivityMain" />
         <activity android:name=".view.activities.ActivitySwitchConnection"/>
         <activity android:name=".view.activities.ActivityPhoneAuth"/>
-        <activity android:name=".view.activities.ActivitySetting"/>
+        <activity android:name=".view.activities.ActivitySwitchSetting"/>
         <activity android:name=".view.activities.ActivityNfcSetup"/>
+        <activity android:name=".view.activities.ActivityAlarmEdit"/>
 
         <activity android:name=".view.activities.ActivityNfcDetect">
             <intent-filter>
@@ -49,6 +50,17 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <service android:name=".util.FbInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".util.FcmMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="io.fabric.ApiKey"

@@ -107,12 +107,23 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
+
+    compile('io.socket:socket.io-client:0.8.3') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
+        transitive = true;
+    }
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
@@ -120,22 +131,15 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile 'io.realm:android-adapters:2.0.0'
-
-    compile('io.socket:socket.io-client:0.8.3') {
-        // excluding org.json which is provided by Android
-        exclude group: 'org.json', module: 'json'
-    }
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
-        transitive = true;
-    }
     compile 'org.apache.commons:commons-lang3:3.5'
-    compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
-        transitive = true;
-    }
+    compile 'com.google.firebase:firebase-core:10.2.0'
+    compile 'com.google.firebase:firebase-messaging:10.2.0'
+    testCompile 'junit:junit:4.12'
 }
 crashlytics {
     enableNdk true
     androidNdkOut 'src/main/obj'
     androidNdkLibsOut 'src/main/libs'
 }
+
+apply plugin: 'com.google.gms.google-services'

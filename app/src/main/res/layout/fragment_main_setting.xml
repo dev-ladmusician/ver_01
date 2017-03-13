@@ -1,21 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
-            name="activity"
+            name="fragment"
             type="com.goqual.a10k.view.fragments.FragmentMainSetting"/>
     </data>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/padding_16"
+        android:paddingRight="@dimen/padding_16"
+        android:paddingTop="@dimen/padding_20"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        tools:context="com.goqual.a10k.view.activity.ActivityMain">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="setting" />
-    </RelativeLayout>
+            android:clipToPadding="false"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/setting_faq"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginLeft="@dimen/setting_item_margin"
+                android:layout_marginRight="@dimen/setting_item_margin"
+                android:background="@drawable/style_border_radius_w"
+                android:onClick="@{fragment::onBtnClick}">
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/img_setting_faq"
+                        android:src="@drawable/ic_setting_faq"
+                        android:layout_width="@dimen/setting_item_img_size"
+                        android:layout_height="@dimen/setting_item_img_size" />
+
+                    <TextView
+                        android:id="@+id/img_setting_faq_text"
+                        android:layout_below="@+id/img_setting_faq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/grey_06"
+                        android:layout_marginTop="@dimen/setting_item_text_margin_top"
+                        android:text="@string/setting_item_faq" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/setting_noti"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/setting_item_height"
+
+                android:layout_marginLeft="@dimen/setting_item_margin"
+                android:layout_marginRight="@dimen/setting_item_margin"
+                android:background="@drawable/style_border_radius_w"
+                android:onClick="@{fragment::onBtnClick}">
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/img_setting_noti"
+                        android:src="@drawable/ic_setting_noti"
+                        android:layout_width="@dimen/setting_item_img_size"
+                        android:layout_height="@dimen/setting_item_img_size" />
+
+                    <TextView
+                        android:id="@+id/img_setting_noti_text"
+                        android:layout_below="@+id/img_setting_noti"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/grey_06"
+                        android:layout_marginTop="@dimen/setting_item_text_margin_top"
+                        android:text="@string/setting_item_noti" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/setting_item_big_margin"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/setting_help"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginLeft="@dimen/setting_item_margin"
+                android:layout_marginRight="@dimen/setting_item_margin"
+                android:background="@drawable/style_border_radius_w"
+                android:onClick="@{fragment::onBtnClick}">
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/img_setting_help"
+                        android:src="@drawable/ic_setting_help"
+                        android:layout_width="@dimen/setting_item_img_size"
+                        android:layout_height="@dimen/setting_item_img_size" />
+
+                    <TextView
+                        android:id="@+id/img_setting_help_text"
+                        android:layout_below="@+id/img_setting_help"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/grey_06"
+                        android:layout_marginTop="@dimen/setting_item_text_margin_top"
+                        android:text="@string/setting_item_help" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/setting_info"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/setting_item_height"
+
+                android:layout_marginLeft="@dimen/setting_item_margin"
+                android:layout_marginRight="@dimen/setting_item_margin"
+                android:background="@drawable/style_border_radius_w"
+                android:onClick="@{fragment::onBtnClick}">
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/img_setting_info"
+                        android:src="@drawable/ic_setting_info"
+                        android:layout_width="@dimen/setting_item_img_size"
+                        android:layout_height="@dimen/setting_item_img_size" />
+
+                    <TextView
+                        android:id="@+id/img_setting_noti_info"
+                        android:layout_below="@+id/img_setting_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/grey_06"
+                        android:layout_marginTop="@dimen/setting_item_text_margin_top"
+                        android:text="@string/setting_item_info" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/setting_logout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_logout_height"
+            android:layout_marginTop="@dimen/setting_logout_margintop"
+            android:onClick="@{fragment::onBtnClick}">
+
+            <TextView
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/identitiy_02"
+                android:textStyle="bold"
+                android:textSize="@dimen/setting_logout_txt_size"
+                android:text="@string/setting_item_logout"/>
+        </RelativeLayout>
+    </LinearLayout>
 </layout>

@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -10,16 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.databinding.ActivitySettingBinding;
+import com.goqual.a10k.databinding.ActivitySwitchSettingBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.fragments.setting.FragmentSettingAbsence;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingAdmin;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingHistory;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingNfc;
@@ -32,10 +31,10 @@ import rx.functions.Action1;
  * Created by hanwool on 2017. 2. 28..
  */
 
-public class ActivitySetting extends BaseActivity<ActivitySettingBinding>
+public class ActivitySwitchSetting extends BaseActivity<ActivitySwitchSettingBinding>
 implements IActivityInteraction{
 
-    public static final String TAG = ActivitySetting.class.getSimpleName();
+    public static final String TAG = ActivitySwitchSetting.class.getSimpleName();
 
     public static final String ITEM_SWITCH = "item_switch";
 
@@ -47,7 +46,7 @@ implements IActivityInteraction{
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_setting;
+        return R.layout.activity_switch_setting;
     }
 
     @Override
@@ -88,6 +87,7 @@ implements IActivityInteraction{
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitchPosition));
         mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitchPosition));
+        mAdapterPage.addItem(FragmentSettingAbsence.newInstance(mSwitchPosition));
         mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitchPosition));
         mBinding.settingContainer.setAdapter(mAdapterPage);
         mBinding.settingContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -152,6 +152,7 @@ implements IActivityInteraction{
 
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_admin));
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_nfc));
+        mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_absence));
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_history));
     }
 

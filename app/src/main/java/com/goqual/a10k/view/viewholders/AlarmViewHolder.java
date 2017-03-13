@@ -5,33 +5,32 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.goqual.a10k.databinding.ItemNfcBinding;
-import com.goqual.a10k.model.entity.NfcWrap;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.databinding.ItemAlarmBinding;
+import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 
 /**
  * Created by HanWool on 2017. 2. 20..
  */
 
-public class NfcViewHolder extends RecyclerView.ViewHolder {
+public class AlarmViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
-    ItemNfcBinding binding;
+    ItemAlarmBinding binding;
 
     private int mPosition;
     private OnRecyclerItemClickListener mListener;
 
-    public NfcViewHolder(View itemView, Context ctx) {
+    public AlarmViewHolder(View itemView, Context ctx) {
         super(itemView);
         mContext = ctx;
         binding = DataBindingUtil.bind(itemView);
         binding.setHolder(this);
     }
 
-    public void bindView(int position, NfcWrap item, OnRecyclerItemClickListener listener) {
+    public void bindView(int position, Alarm item, OnRecyclerItemClickListener listener) {
         mListener = listener;
         mPosition = position;
-        binding.setItemNfc(item);
+        binding.setItem(item);
     }
 
     public void onBtnClick(View view) {

@@ -93,7 +93,8 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
 
     @Override
     public String getFcmToken() {
-        return "";
+        return PreferenceHelper.getInstance(mContext)
+                .getStringValue(mContext.getString(R.string.arg_user_fcm_token), "");
     }
 
     public AuthService getAuthService() {

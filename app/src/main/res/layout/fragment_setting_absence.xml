@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="fragment"
-            type="com.goqual.a10k.view.fragments.FragmentMainAlarm"/>
+            type="com.goqual.a10k.view.fragments.setting.FragmentSettingAbsence"/>
     </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
         <RelativeLayout
-            android:id="@+id/alarm_no_item_container"
+            android:id="@+id/absence_no_item_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/style_border_bottom_grey"
             android:layout_marginTop="@dimen/padding_16"
             android:paddingTop="@dimen/padding_16"
             android:paddingBottom="@dimen/padding_16"
-            android:visibility="visible"
-            android:onClick="@{fragment::onBtnClick}">
+            android:visibility="gone">
 
             <ImageView
-                android:id="@+id/alarm_no_item_img_plus"
+                android:id="@+id/absence_no_item_img_plus"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_plus_b"
@@ -34,15 +41,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_below="@+id/alarm_no_item_img_plus"
+                android:layout_below="@+id/absence_no_item_img_plus"
                 android:layout_marginTop="@dimen/padding_16"
-                android:text="@string/alarm_no_item"/>
+                android:text="@string/absence_no_item"/>
         </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 
         <ProgressBar
             android:id="@+id/loading"
@@ -51,5 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
     </RelativeLayout>
+
 
 </layout>

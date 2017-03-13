@@ -125,8 +125,12 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             else {
                 Realm realm = Realm.getDefaultInstance();
                 mReadedTag = realm.where(Nfc.class).equalTo("tag", mReadedTagId).findFirst();
-                if(getSocketManager().isConnected()) {
+                LogUtil.e(TAG, "TAG??::" + mReadedTag);
+                if(mReadedTag != null && getSocketManager().isConnected()) {
                     operateSwitch();
+                }
+                else {
+                    finish();
                 }
             }
         }

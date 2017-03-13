@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="activity"
+            type="com.goqual.a10k.view.activities.ActivityAlarmSwitchSelect"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/toolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/identitiy_02"
+            android:elevation="3dp"
+            android:paddingLeft="@dimen/padding_16"
+            android:paddingRight="@dimen/padding_16">
+
+            <TextView
+                android:id="@+id/timer_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/title_switch_list"
+                android:textColor="@color/white"
+                android:textSize="@dimen/toolbar_plus_icon_size"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/timer_toolbar_cancel"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="@string/timer_toolbar_cancel"
+                android:gravity="center|left"
+                android:textColor="@color/white"
+                android:onClick="@{activity::onBtnClick}" />
+
+            <TextView
+                android:id="@+id/timer_toolbar_save"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:gravity="center|right"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:text="@string/timer_toolbar_save"
+                android:onClick="@{activity::onBtnClick}" />
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</layout>

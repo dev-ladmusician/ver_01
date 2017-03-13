@@ -14,7 +14,7 @@ import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.view.activities.ActivitySetting;
+import com.goqual.a10k.view.activities.ActivitySwitchSetting;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 
@@ -83,8 +83,8 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
                 operationListener.onSwitchClicked(mSwitchItemPosition, 3);
                 break;
             case R.id.switch_setting:
-                Intent intent = new Intent(getActivity(), ActivitySetting.class);
-                intent.putExtra(ActivitySetting.ITEM_SWITCH, SwitchManager.getInstance().getPosition(mSwitch));
+                Intent intent = new Intent(getActivity(), ActivitySwitchSetting.class);
+                intent.putExtra(ActivitySwitchSetting.ITEM_SWITCH, SwitchManager.getInstance().getPosition(mSwitch));
                 startActivity(intent);
                 break;
         }

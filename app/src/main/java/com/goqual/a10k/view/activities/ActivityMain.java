@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -127,6 +128,11 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void setTitle(String title) {
         LogUtil.d(TAG, title);
         mBinding.toolbarTitle.setText(title);
+    }
+
+    public void handleLogin() {
+        startActivity(new Intent(this, ActivityPhoneAuth.class));
+        finish();
     }
 
     @Override

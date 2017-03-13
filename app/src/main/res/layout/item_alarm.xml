@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.AlarmViewHolder"/>
+        <variable
+            name="item"
+            type="com.goqual.a10k.model.entity.Alarm"/>
+
+        <import type="android.view.View"
+            alias="View"/>
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/item_alarm_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_timer_height"
+        android:paddingLeft="@dimen/padding_20"
+        android:paddingRight="@dimen/padding_20"
+        android:background="@drawable/style_border_bottom_grey">
+
+        <RelativeLayout
+            android:id="@+id/item_alarm_delete"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/item_delete_ic_container_size"
+            android:visibility="@{item.mIsDeletable? View.VISIBLE : View.GONE}"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="@dimen/item_delete_ic_size"
+                android:layout_height="@dimen/item_delete_ic_size"
+                android:src="@drawable/ic_delete"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                android:layout_alignParentLeft="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_alarm_content_container"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/item_alarm_delete"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/item_alarm_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="7:30 AM"
+                android:textSize="23dp" />
+
+            <TextView
+                android:id="@+id/item_alarm_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_alarm_time"
+                android:textColor="@color/grey_03"
+                android:textSize="@dimen/item_sub_title"
+                android:text="content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/item_alarm_btn_container"
+            android:layout_marginLeft="@dimen/padding_16"
+            android:layout_toRightOf="@+id/item_alarm_content_container">
+
+            <TextView
+                android:id="@+id/item_alarm_repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textColor="@color/grey_05"
+                android:textSize="@dimen/item_sub_content_s"
+                android:text="sun mon tue wed thur fri sat"/>
+        </RelativeLayout>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/item_alarm_active"
+            android:layout_width="72dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true" />
+
+        <!--<ImageView-->
+        <!--android:id="@+id/item_alarm_active"-->
+        <!--android:layout_width="72dp"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:src="@drawable/img_alarm_on" />-->
+    </RelativeLayout>
+
+</layout>
