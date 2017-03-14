@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityMain;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
@@ -34,6 +35,8 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
     public abstract void onBtnClick(View view);
 
     protected IActivityInteraction mActivityInteraction;
+
+    private boolean mFragmentVisible;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,4 +106,14 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
 
     @Override
     public abstract String getTitle();
+
+    @Override
+    public void setFragmentVisible(boolean isVisible) {
+        LogUtil.d("setFragmentVisible", "VISIBLE::" + isVisible);
+        mFragmentVisible = isVisible;
+    }
+
+    public boolean isFragmentVisible() {
+        return mFragmentVisible;
+    }
 }

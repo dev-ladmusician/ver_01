@@ -83,8 +83,8 @@ public class FragmentAlarmSelectSwitch extends BaseFragment<FragmentAlarmSelectS
                         .isEditable(false)
                         .setTitleText(R.string.alarm_select_switch_title)
                         .setMessageText(String.format("%s %s", item.getTitle(), getString(R.string.alarm_select_switch_content)))
-                        .isPositiveButton(true, getString(R.string.common_ok), onClickListener)
-                        .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
+                        .setPositiveButton(getString(R.string.common_ok), onClickListener)
+                        .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                         .show();
             });
         }

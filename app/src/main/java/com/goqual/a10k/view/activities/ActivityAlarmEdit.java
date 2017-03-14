@@ -1,6 +1,8 @@
 package com.goqual.a10k.view.activities;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -11,10 +13,12 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmEditBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.model.entity.Repeat;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
 import org.parceler.Parcels;
@@ -27,12 +31,18 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
         implements IActivityInteraction{
     public static final String TAG = ActivityAlarmEdit.class.getSimpleName();
 
+    public static final String EXTRA_ALARM = "extra_alarm";
+
     private static final int REQ_GET_SWITCH = 101;
     private static final int REQ_GET_REPEAT = 102;
     private static final int REQ_GET_SOUND = 103;
 
+    private static final String TIME_FORMAT_STRING = "HH:mm";
+
     private Switch mSwitch;
     private Repeat mRepeat;
+    private Uri mRingtoneUri;
+    private String mRingtoneName;
 
     @Override
     protected int getLayoutId() {
@@ -64,16 +74,39 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
         super.onCreate(savedInstanceState);
         mBinding.setActivity(this);
         mBinding.setSwitchItem(new Switch());
+        mRingtoneName = getString(R.string.alarm_sound_default);
+        mRingtoneUri = Uri.EMPTY;
+        mRepeat = new Repeat();
     }
 
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.timer_toolbar_cancel:
+                setResult(RESULT_CANCELED);
                 finish();
                 break;
             case R.id.timer_toolbar_save:
                 if(mSwitch == null) {
-                    Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_no_item), Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_error_no_selected_switch), Snackbar.LENGTH_SHORT).show();
+                }
+                else {
+                    Alarm alarm = new Alarm();
+                    String alarmTime;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarm.setHour(mBinding.addAlarmTime.getHour());
+                        alarm.setMin(mBinding.addAlarmTime.getMinute());
+                    } else {
+                        alarm.setHour(mBinding.addAlarmTime.getCurrentHour());
+                        alarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
+                    }
+                    alarm.setRepeats(mRepeat);
+                    alarm.setSwitch(mSwitch);
+                    alarm.setRingtone(mRingtoneUri == Uri.EMPTY ? getString(R.string.alarm_sound_default) : mRingtoneUri.toString());
+                    alarm.setRingtone_title(mRingtoneName);
+                    Intent result = getIntent();
+                    result.putExtra(EXTRA_ALARM, Parcels.wrap(alarm));
+                    setResult(RESULT_OK, result);
+                    finish();
                 }
                 break;
             case R.id.alarm_menu_switch:

@@ -9,6 +9,7 @@ import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.DialogCustomBinding;
@@ -54,6 +55,12 @@ public class CustomDialog extends Dialog{
         mBinding.setDialog(this);
         mBinding.setItem(mModel);
         setContentView(mBinding.getRoot());
+
+        if(mModel.isEditable) {
+            mBinding.dialogEdit.requestFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
     }
 
     public CustomDialog setTitleText(String title) {

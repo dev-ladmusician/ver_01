@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchEachBinding;
-import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
@@ -22,7 +21,7 @@ import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListBinding>{
+public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchEachBinding> {
     public static final String TAG = FragmentMainSwitchEach.class.getSimpleName();
 
     private final static String ARG_POSITION = "arg_position";

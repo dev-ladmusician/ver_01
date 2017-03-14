@@ -86,35 +86,38 @@ public class Repeat{
         if(sun && mon && tue && wed && thu && fri && sat) {
             return ctx.getString(R.string.alarm_repeat_everyday);
         }
+        if(!sun && !mon && !tue && !wed && !thu && !fri && !sat) {
+            return ctx.getString(R.string.alarm_repeat_never);
+        }
         if(sun) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_sun));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
         if(mon) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_mon));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
         if(tue) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_tue));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
         if(wed) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_wed));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
         if(thu) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_thur));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
         if(fri) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_fri));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
         if(sat) {
             stringBuilder.append(ctx.getString(R.string.alarm_repeat_sat));
-            stringBuilder.append(" | ");
+            stringBuilder.append(" ");
         }
-        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(" | "));
+        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(" "));
         return stringBuilder.toString();
     }
 }

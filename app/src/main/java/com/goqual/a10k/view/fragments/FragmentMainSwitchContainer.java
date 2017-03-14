@@ -1,4 +1,4 @@
-package com.goqual.a10k.view.fragments.switches;
+package com.goqual.a10k.view.fragments;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -36,6 +36,7 @@ import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
@@ -277,19 +278,21 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
                             LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
-                            switch (((EventToolbarClick) event).getStatus()) {
-                                case DONE:
-                                    passToolbarClickEvent(IToolbarClickListener.STATUS.DONE);
-                                    RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
-                                    break;
-                                case EDIT:
-                                    passToolbarClickEvent(IToolbarClickListener.STATUS.EDIT);
-                                    RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.DONE));
-                                    break;
-                                case ADD:
-                                    startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
-                                    RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
-                                    break;
+                            if(isFragmentVisible()) {
+                                switch (((EventToolbarClick) event).getStatus()) {
+                                    case DONE:
+                                        passToolbarClickEvent(IToolbarClickListener.STATUS.DONE);
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
+                                        break;
+                                    case EDIT:
+                                        passToolbarClickEvent(IToolbarClickListener.STATUS.EDIT);
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.DONE));
+                                        break;
+                                    case ADD:
+                                        startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
+                                        break;
+                                }
                             }
                         }
                     }
@@ -300,7 +303,15 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(status);
     }
 
+    public void setCurrentPage(int currentPage) {
+        mCurrentPage = currentPage;
+        if(mPagerAdapter != null && mPagerAdapter.getCount()>0) {
+            mBinding.viewPager.setCurrentItem(mCurrentPage);
+        }
+    }
+
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        int currentPage = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         }
@@ -309,6 +320,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         public void onPageSelected(int position) {
             mTitle = ((BaseFragment)mPagerAdapter.getItem(position)).getTitle();
             mActivityInteraction.setTitle(mTitle);
+
+            ((IFragmentInteraction)mPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
+            ((IFragmentInteraction)mPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
+            currentPage = position;
         }
 
         @Override

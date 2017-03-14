@@ -8,9 +8,13 @@
         <variable
             name="item"
             type="com.goqual.a10k.model.entity.Alarm"/>
+        <variable
+            name="ctx"
+            type="android.content.Context"/>
 
         <import type="android.view.View"
             alias="View"/>
+
     </data>
 
     <RelativeLayout
@@ -27,7 +31,8 @@
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_delete_ic_container_size"
             android:visibility="@{item.mIsDeletable? View.VISIBLE : View.GONE}"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:onClick="@{holder::onBtnClick}">
 
             <ImageView
                 android:layout_width="@dimen/item_delete_ic_size"
@@ -51,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:text="7:30 AM"
+                android:text="@{item.makeTimeString()}"
                 android:textSize="23dp" />
 
             <TextView
@@ -61,7 +66,7 @@
                 android:layout_below="@+id/item_alarm_time"
                 android:textColor="@color/grey_03"
                 android:textSize="@dimen/item_sub_title"
-                android:text="content" />
+                android:text="@{item.title}" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -78,7 +83,7 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/grey_05"
                 android:textSize="@dimen/item_sub_content_s"
-                android:text="sun mon tue wed thur fri sat"/>
+                android:text="@{item.makeDayString(ctx)}"/>
         </RelativeLayout>
 
         <android.support.v7.widget.SwitchCompat
@@ -86,7 +91,8 @@
             android:layout_width="72dp"
             android:layout_height="36dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:checked="@{item.state}"/>
 
         <!--<ImageView-->
         <!--android:id="@+id/item_alarm_active"-->

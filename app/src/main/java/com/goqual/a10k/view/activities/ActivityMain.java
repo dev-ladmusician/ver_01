@@ -1,7 +1,6 @@
 package com.goqual.a10k.view.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -14,7 +13,6 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
-import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
@@ -25,8 +23,9 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.FragmentMainAlarm;
 import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
-import com.goqual.a10k.view.fragments.switches.FragmentMainSwitchContainer;
+import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
@@ -154,7 +153,9 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                 }
                 break;
             case R.id.toolbar_add:
-                RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.ADD));
+                if(mBinding.mainPager.getCurrentItem() == 0) {
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.ADD));
+                }
                 break;
         }
     }
@@ -163,6 +164,9 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             mBinding.mainPager.setCurrentItem(tab.getPosition(), true);
+            if(tab.getPosition() == 0) {
+                ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
+            }
         }
 
         @Override
@@ -177,9 +181,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     };
 
     private ViewPager.OnPageChangeListener mainPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+        int currentPage = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            LogUtil.d(TAG, String.format("position:%d poOffset:%f poOffsetPixels:%d", position, positionOffset, positionOffsetPixels));
         }
 
         @Override
@@ -192,6 +197,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
             catch (NullPointerException e){
                 LogUtil.e(TAG, e.getMessage(), e);
             }
+
+            ((IFragmentInteraction)fragmentPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
+            ((IFragmentInteraction)fragmentPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
+            currentPage = position;
         }
 
         @Override

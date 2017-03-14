@@ -1,14 +1,7 @@
 package com.goqual.a10k.model.realm;
 
-import com.goqual.a10k.util.LogUtil;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import io.realm.NfcRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;

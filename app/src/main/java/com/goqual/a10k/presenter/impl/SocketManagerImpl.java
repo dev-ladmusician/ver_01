@@ -121,7 +121,6 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
     }
 
     private void updateSwitchState(SocketData data) {
-
         Switch item = SwitchManager.getInstance().getSwitchByMacAddr(data.getMacaddr());
         if(item != null) {
             switch (data.getBtn()) {

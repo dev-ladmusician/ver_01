@@ -1,8 +1,10 @@
 package com.goqual.a10k.view.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,19 @@ import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
+import com.goqual.a10k.util.event.EventToolbarClick;
+import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.activities.ActivityAlarmEdit;
+import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+
+import org.parceler.Parcels;
+
+import rx.functions.Action1;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
@@ -26,6 +38,8 @@ import com.goqual.a10k.view.base.BaseFragment;
 public class FragmentMainAlarm extends BaseFragment<FragmentMainAlarmBinding>
 implements AlarmPresenter.View<Alarm>{
     public static final String TAG = FragmentMainAlarm.class.getSimpleName();
+
+    private static final int REQ_NEW_ALARM = 101;
 
     private AlarmPresenter mPresenter;
     private AdapterAlarm mAdapter;
@@ -49,12 +63,12 @@ implements AlarmPresenter.View<Alarm>{
 
     @Override
     public void onSuccessDelete() {
-
+//        Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_delete_error), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFailDelete(int position) {
-
+        Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_delete_error), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -107,12 +121,25 @@ implements AlarmPresenter.View<Alarm>{
         super.onViewCreated(view, savedInstanceState);
         initRecyclerView();
         getPresenter().loadItems();
+        subEvent();
     }
 
     private void initRecyclerView() {
         mBinding.setFragment(this);
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
-
+            if(viewId == R.id.item_alarm_delete) {
+                new CustomDialog(getActivity())
+                        .setTitleText(R.string.alarm_delete_title)
+                        .setMessageText(R.string.alarm_delete_content)
+                        .setPositiveButton(getString(R.string.common_delete), (dialog, which) -> {
+                            getPresenter().delete(position);
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            }
         });
         mBinding.listContainer.setAdapter(getAdapter());
         mBinding.listContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -134,7 +161,46 @@ implements AlarmPresenter.View<Alarm>{
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.alarm_no_item_container) {
-            startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
+            startActivityForResult(new Intent(getActivity(), ActivityAlarmEdit.class), REQ_NEW_ALARM);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK && data != null) {
+            if(requestCode == REQ_NEW_ALARM) {
+                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmEdit.EXTRA_ALARM));
+                getPresenter().add(alarm);
+                getAdapter().addItem(alarm);
+            }
+        }
+    }
+
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventToolbarClick) {
+                            LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
+                            if(isFragmentVisible()) {
+                                switch (((EventToolbarClick) event).getStatus()) {
+                                    case DONE:
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
+                                        getAdapter().setDeletable(false);
+                                        break;
+                                    case EDIT:
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.DONE));
+                                        getAdapter().setDeletable(true);
+                                        break;
+                                    case ADD:
+                                        startActivityForResult(new Intent(getActivity(), ActivityAlarmEdit.class), REQ_NEW_ALARM);
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                });
     }
 }

@@ -25,6 +25,7 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         mContext = ctx;
         binding = DataBindingUtil.bind(itemView);
         binding.setHolder(this);
+        binding.setCtx(mContext);
     }
 
     public void bindView(int position, Alarm item, OnRecyclerItemClickListener listener) {

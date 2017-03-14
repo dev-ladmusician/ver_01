@@ -32,6 +32,7 @@ public class AlarmPresenterImpl implements AlarmPresenter {
 
     @Override
     public void add(Alarm item) {
+        mView.loadingStart();
         getAlarmService().getAlarmApi().add(
                 item.get_bsid(),
                 item.getRingtone(),
