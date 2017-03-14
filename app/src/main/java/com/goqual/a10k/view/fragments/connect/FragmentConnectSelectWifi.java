@@ -80,8 +80,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                         .setTitleText(R.string.rename_title)
                         .setMessageText(R.string.rename_content)
                         .setEditTextHint(R.string.rename_edit_hint)
-                        .isPositiveButton(true, getString(R.string.rename_btn_txt), onClickListener)
-                        .isNegativeButtonEnable(false, "", null)
+                        .setPositiveButton(getString(R.string.rename_btn_txt), onClickListener)
                         .show();
             }
         });
@@ -117,8 +116,8 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
         customDialog.isEditable(true)
                 .setTitleText(String.format("%s%s", getString(R.string.select_wifi_pass_dialog_title), ssid))
                 .setMessageText(R.string.select_wifi_pass_dialog_content)
-                .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
-                .isPositiveButton(true, getString(R.string.common_ok), onClickListener);
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_ok), onClickListener);
         customDialog.show();
     }
 
@@ -169,8 +168,8 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                 .isEditable(false)
                 .setTitleText(R.string.select_wifi_error_dialog_title)
                 .setMessageText(R.string.select_wifi_error_dialog_content)
-                .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
-                .isPositiveButton(true, getString(R.string.common_retry), onClickListener);
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_retry), onClickListener);
         dialog.show();
     }
 
@@ -227,8 +226,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                                 .isEditable(false)
                                 .setTitleText(R.string.permission_dialog_title)
                                 .setMessageText(R.string.permission_dialog_message)
-                                .isPositiveButton(true, getString(R.string.common_allow), onClickListener)
-                                .isNegativeButtonEnable(false, "", null)
+                                .setPositiveButton(getString(R.string.common_allow), onClickListener)
                                 .show();
                     }
                 }

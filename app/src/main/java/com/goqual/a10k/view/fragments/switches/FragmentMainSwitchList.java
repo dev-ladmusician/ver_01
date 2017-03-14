@@ -12,7 +12,6 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
@@ -146,12 +145,12 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     getDeleteDialog().isEditable(false)
                             .setTitleText(R.string.switch_delete_title)
                             .setMessageText(R.string.switch_delete_content)
-                            .isPositiveButton(true, getString(R.string.common_delete), ((dialog, i) -> {
+                            .setPositiveButton(getString(R.string.common_delete), ((dialog, i) -> {
                                 ((ISwitchOperationListener) getParentFragment()).onSwitchDelete(
                                         position);
                                 getDeleteDialog().dismiss();
                             }))
-                            .isNegativeButtonEnable(true, getString(R.string.common_cancel), ((dialog, i) -> {
+                            .setNegativeButton(getString(R.string.common_cancel), ((dialog, i) -> {
                                 getDeleteDialog().dismiss();
                             }))
                             .show();
@@ -162,7 +161,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     getRenameDialog().isEditable(true)
                             .setTitleText(R.string.switch_rename_title)
                             .setEditTextHint(R.string.switch_rename_hit)
-                            .isPositiveButton(true, getString(R.string.common_ok), (dialog, which)-> {
+                            .setPositiveButton(getString(R.string.common_ok), (dialog, which)-> {
                                 if (getRenameDialog().getEditTextMessage().length() != 0) {
                                     ((ISwitchOperationListener) getParentFragment()).onSwitchRename(
                                             position, getRenameDialog().getEditTextMessage());
@@ -170,7 +169,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                                 }
 
                             })
-                            .isNegativeButtonEnable(true, getString(R.string.common_cancel), (dialog, which) -> {
+                            .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
                                 getRenameDialog().setEditTextMessage("");
                                 getRenameDialog().dismiss();
                             })

@@ -139,8 +139,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                     };
                     connectionFailedDialog = new CustomDialog(getActivity())
                             .isEditable(false)
-                            .isNegativeButtonEnable(true, getString(R.string.common_quit), onClickListener)
-                            .isPositiveButton(true, getString(R.string.common_retry), onClickListener)
+                            .setNegativeButton(getString(R.string.common_quit), onClickListener)
+                            .setPositiveButton(getString(R.string.common_retry), onClickListener)
                             .setTitleText(R.string.socket_connection_error_title)
                             .setMessageText(R.string.socket_connection_error_content);
                     connectionFailedDialog.show();

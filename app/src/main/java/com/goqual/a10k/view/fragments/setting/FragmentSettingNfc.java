@@ -173,8 +173,8 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             customDialog.isEditable(false)
                     .setTitleText(R.string.nfc_delete_title)
                     .setMessageText(R.string.nfc_delete_content)
-                    .isPositiveButton(true, getString(R.string.common_delete), onClickListener)
-                    .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
+                    .setPositiveButton(getString(R.string.common_delete), onClickListener)
+                    .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                     .show();
         });
     }
