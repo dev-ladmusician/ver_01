@@ -30,9 +30,15 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_setting_absence;
+    }
+
+    @Override
+    public void onBtnClick(View view) {
+
     }
 
     @Override

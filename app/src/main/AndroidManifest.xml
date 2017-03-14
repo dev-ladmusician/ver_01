@@ -34,6 +34,8 @@
         <activity android:name=".view.activities.ActivitySwitchSetting"/>
         <activity android:name=".view.activities.ActivityNfcSetup"/>
         <activity android:name=".view.activities.ActivityAlarmEdit"/>
+        <activity android:name=".view.activities.ActivityAlarmSwitchSelect"/>
+        <activity android:name=".view.activities.ActivityAlarmRepeat"/>
 
         <activity android:name=".view.activities.ActivityNfcDetect">
             <intent-filter>

@@ -6,6 +6,12 @@
         <variable
             name="activity"
             type="com.goqual.a10k.view.activities.ActivityAlarmEdit"/>
+        <variable
+            name="switchItem"
+            type="com.goqual.a10k.model.entity.Switch"/>
+        <import
+            type="android.view.View"
+            alias="View"/>
     </data>
     <RelativeLayout
         android:id="@+id/activity_main"
@@ -70,13 +76,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:background="@color/white"
-                    android:timePickerMode="spinner"></TimePicker>
+                    android:timePickerMode="spinner"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/alarm_divider_height"
-                android:background="@color/grey_02"></RelativeLayout>
+                android:background="@color/grey_02"/>
 
             <RelativeLayout
                 android:id="@+id/alarm_menu_switch"
@@ -99,7 +105,7 @@
                     android:layout_marginRight="@dimen/padding_16"
                     android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="@{switchItem == null ? View.GONE : View.VISIBLE}"
                     android:layout_height="wrap_content">
 
                     <TextView
@@ -109,7 +115,7 @@
                         android:layout_toLeftOf="@+id/alarm_btn_1"
                         android:layout_marginRight="@dimen/padding_16"
                         android:textColor="@color/grey_03"
-                        android:text="title"/>
+                        android:text="@{switchItem.title}"/>
 
                     <TextView
                         android:id="@+id/alarm_btn_1"
@@ -117,8 +123,8 @@
                         android:layout_height="@dimen/item_absence_btn_size"
                         android:layout_toLeftOf="@+id/item_alarm_btn_2"
                         android:layout_marginRight="@dimen/padding_16"
-                        android:background="@drawable/style_btn_circle_grey"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true"
+                        android:background="@{switchItem!=null &amp;&amp; switchItem.btn1 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
 
                     <TextView
                         android:id="@+id/alarm_btn_2"
@@ -126,15 +132,17 @@
                         android:layout_height="@dimen/item_absence_btn_size"
                         android:layout_toLeftOf="@+id/item_alarm_btn_3"
                         android:layout_marginRight="@dimen/padding_16"
-                        android:background="@drawable/style_btn_circle_grey"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true"
+                        android:visibility="@{switchItem!=null &amp;&amp; switchItem.state &lt; 2 ? View.GONE : View.VISIBLE}"
+                        android:background="@{switchItem!=null &amp;&amp; switchItem.btn2 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
 
                     <TextView
                         android:id="@+id/alarm_btn_3"
                         android:layout_width="@dimen/item_absence_btn_size"
                         android:layout_height="@dimen/item_absence_btn_size"
-                        android:background="@drawable/style_btn_circle_grey"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true"
+                        android:visibility="@{switchItem!=null &amp;&amp; switchItem.state &lt; 3 ? View.GONE : View.VISIBLE}"
+                        android:background="@{switchItem!=null &amp;&amp; switchItem.btn3 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
                 </LinearLayout>
 
                 <android.support.v7.widget.AppCompatImageView

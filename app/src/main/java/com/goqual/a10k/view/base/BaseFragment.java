@@ -31,6 +31,7 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
     protected B mBinding;
 
     protected abstract int getLayoutId();
+    public abstract void onBtnClick(View view);
 
     protected IActivityInteraction mActivityInteraction;
 

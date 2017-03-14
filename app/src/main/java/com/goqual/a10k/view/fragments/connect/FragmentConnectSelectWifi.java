@@ -180,6 +180,11 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     }
 
     @Override
+    public void onBtnClick(View view) {
+
+    }
+
+    @Override
     public String getTitle() {
         return null;
     }

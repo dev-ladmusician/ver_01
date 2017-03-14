@@ -45,7 +45,7 @@ public class SwitchManager {
     }
 
     public Switch getItem(int position) {
-        if(position>=mSwitchList.size()) {
+        if(position>=mSwitchList.size() || position < 0) {
             return null;
         }
         return mSwitchList.get(position);

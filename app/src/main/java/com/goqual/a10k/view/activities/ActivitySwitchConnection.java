@@ -3,6 +3,7 @@ package com.goqual.a10k.view.activities;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySwitchConnectionBinding;
@@ -66,6 +67,11 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
     @Override
     protected int getLayoutId() {
         return R.layout.activity_switch_connection;
+    }
+
+    @Override
+    public void onBtnClick(View view) {
+
     }
 
     @Override

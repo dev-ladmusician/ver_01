@@ -204,6 +204,10 @@
     <string name="timer_toolbar_cancel">Cancel</string>
     <string name="timer_toolbar_save">Save</string>
     <string name="timer_menu_switch">Switch</string>
+    <string name="alarm_select_switch_title">스위치 선택</string>
+    <string name="alarm_select_switch_content">스위치를 선택하시겠어요?</string>
+
+    <string name="alarm_error_no_selected_switch">선택된 스위치가 없습니다.</string>
 
     <string name="alarm_no_item">아침과 저녁을 10K와 함께 해보세요!</string>
     <string name="alarm_repeat_everyday">Everyday</string>

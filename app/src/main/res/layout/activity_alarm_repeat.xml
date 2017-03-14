@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="activity"
+            type="com.goqual.a10k.view.activities.ActivityAlarmRepeat"/>
+        <variable
+            name="repeats"
+            type="com.goqual.a10k.model.entity.Repeat"/>
+        <import
+            type="android.view.View"
+            alias="View"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- header -->
+        <RelativeLayout
+            android:id="@+id/toolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/identitiy_02"
+            android:elevation="3dp"
+            android:paddingLeft="@dimen/padding_16"
+            android:paddingRight="@dimen/padding_16">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/nfc_toolbar_title_select_btn"
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_ic_size_xxs"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:id="@+id/toolbar_back"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:onClick="@{activity::onBtnClick}">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_arrow_l_w" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/toolbar_save"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/white"
+                    android:text="@string/toolbar_save"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!-- content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_sun_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="0"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_sun" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_sun_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.sun ? View.VISIBLE : View.GONE}"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_mon_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="1"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_mon" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_mon_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.mon ? View.VISIBLE : View.GONE}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_tues_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="2"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_tue" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_tues_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.tue ? View.VISIBLE : View.GONE}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_wed_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="3"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_wed" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_wed_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.wed ? View.VISIBLE : View.GONE}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_thur_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="4"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_thur" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_thur_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.thu ? View.VISIBLE : View.GONE}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_fri_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="5"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_fri" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_fri_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.fri ? View.VISIBLE : View.GONE}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/add_alarm_repeat_sat_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height_s"
+                android:background="@drawable/style_border_bottom_grey"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16"
+                android:tag="6"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/alarm_repeat_sat" />
+
+                <ImageView
+                    android:id="@+id/add_alarm_repeat_sat_img"
+                    android:layout_width="@dimen/item_arrow_size"
+                    android:layout_height="@dimen/item_arrow_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_check_b"
+                    android:visibility="@{repeats.sat ? View.VISIBLE : View.GONE}" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -5,6 +5,7 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
@@ -14,6 +15,7 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
     protected B mBinding;
 
     protected abstract int getLayoutId();
+    public abstract void onBtnClick(View view);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

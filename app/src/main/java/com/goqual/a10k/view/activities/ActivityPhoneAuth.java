@@ -52,6 +52,11 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
+    public void onBtnClick(View view) {
+
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {

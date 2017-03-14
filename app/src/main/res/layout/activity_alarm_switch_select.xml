@@ -48,6 +48,7 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/white"
                 android:text="@string/timer_toolbar_save"
+                android:visibility="gone"
                 android:onClick="@{activity::onBtnClick}" />
         </RelativeLayout>
         <FrameLayout

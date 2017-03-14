@@ -9,14 +9,14 @@ import com.android.annotations.Nullable;
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class Switch{
+public class Switch implements Cloneable{
     private int _connectionid;
     private int _bsid;
     private int state;
     private int seq;
-    @Nullable private Boolean btn1;
-    @Nullable private Boolean btn2;
-    @Nullable private Boolean btn3;
+    private boolean btn1;
+    private boolean btn2;
+    private boolean btn3;
     private String hw;
     private String fw;
     public String title;
@@ -31,27 +31,6 @@ public class Switch{
     private String WIFI_CAPABILITY = "";
 
     public Switch() {
-    }
-
-    public Switch(Parcel in) {
-        _connectionid = in.readInt();
-        _bsid = in.readInt();
-        state = in.readInt();
-        seq = in.readInt();
-        btn1 = in.readByte()==1;
-        btn2 = in.readByte()==1;
-        btn3 = in.readByte()==1;
-        hw = in.readString();
-        fw = in.readString();
-        title = in.readString();
-        macaddr = in.readString();
-        isavailable = in.readByte()==1;
-        outlet = in.readByte()==1;
-        mIsStateView = in.readByte()==1;
-        WIFI_SSID = in.readString();
-        WIFI_BSSID = in.readString();
-        WIFI_PASSWORD = in.readString();
-        WIFI_CAPABILITY = in.readString();
     }
 
     // BS
@@ -210,5 +189,30 @@ public class Switch{
 
     public void setmIsStateView(boolean mIsStateView) {
         this.mIsStateView = mIsStateView;
+    }
+
+    @Override
+    public Switch clone() throws CloneNotSupportedException {
+        Switch newSwitch = (Switch) super.clone();
+
+        newSwitch.set_connectionid(this.get_connectionid());
+        newSwitch.set_bsid(this.get_bsid());
+        newSwitch.setState(this.getState());
+        newSwitch.setSeq(this.getSeq());
+        newSwitch.setBtn1(this.getBtn1());
+        newSwitch.setBtn2(this.getBtn2());
+        newSwitch.setBtn3(this.getBtn3());
+        newSwitch.setHw(this.getHw());
+        newSwitch.setFw(this.getFw());
+        newSwitch.setTitle(this.getTitle());
+        newSwitch.setMacaddr(this.getMacaddr());
+        newSwitch.setIsavailable(this.isavailable());
+        newSwitch.setOutlet(this.isOutlet());
+        newSwitch.setmIsStateView(this.ismIsStateView());
+        newSwitch.setWIFI_SSID(this.getWIFI_SSID());
+        newSwitch.setWIFI_BSSID(this.getWIFI_BSSID());
+        newSwitch.setWIFI_PASSWORD(this.getWIFI_PASSWORD());
+        newSwitch.setWIFI_CAPABILITY(this.getWIFI_CAPABILITY());
+        return newSwitch;
     }
 }

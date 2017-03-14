@@ -30,6 +30,11 @@ public class FragmentMainNoti extends BaseFragment<FragmentMainSwitchListBinding
     }
 
     @Override
+    public void onBtnClick(View view) {
+
+    }
+
+    @Override
     public String getTitle() {
         return getString(R.string.title_switch_each);
     }
