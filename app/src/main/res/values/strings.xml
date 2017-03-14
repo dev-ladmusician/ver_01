@@ -31,6 +31,10 @@
     <string name="btn_str_on">1</string>
     <string name="btn_str_off">0</string>
 
+    <!-- Internet Error -->
+    <string name="internet_error_title">인터넷 연결에러</string>
+    <string name="internet_error_content">인터넷 상태를 확인해 주세요.</string>
+
     <!-- args -->
     <string name="arg_user_token">USER_TOKEN</string>
     <string name="arg_user_num">USER_NUM</string>
@@ -210,15 +214,15 @@
     <string name="alarm_error_no_selected_switch">선택된 스위치가 없습니다.</string>
 
     <string name="alarm_no_item">아침과 저녁을 10K와 함께 해보세요!</string>
-    <string name="alarm_repeat_everyday">Everyday</string>
-    <string name="alarm_repeat_sun">sun</string>
-    <string name="alarm_repeat_mon">mon</string>
-    <string name="alarm_repeat_tue">tue</string>
-    <string name="alarm_repeat_wed">wed</string>
-    <string name="alarm_repeat_thur">thur</string>
-    <string name="alarm_repeat_fri">fri</string>
-    <string name="alarm_repeat_sat">sat</string>
-    <string name="alarm_repeat_never">never</string>
+    <string name="alarm_repeat_everyday">매일</string>
+    <string name="alarm_repeat_sun">일</string>
+    <string name="alarm_repeat_mon">월</string>
+    <string name="alarm_repeat_tue">화</string>
+    <string name="alarm_repeat_wed">수</string>
+    <string name="alarm_repeat_thur">목</string>
+    <string name="alarm_repeat_fri">금</string>
+    <string name="alarm_repeat_sat">토</string>
+    <string name="alarm_repeat_never">안함</string>
     <string name="alarm_repeat">Repeat</string>
     <string name="alarm_sound">Sound</string>
     <string name="alarm_sound_default">default</string>

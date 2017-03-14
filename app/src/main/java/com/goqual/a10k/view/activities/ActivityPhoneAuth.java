@@ -111,8 +111,8 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         customDialog.isEditable(false)
                 .setTitleText(R.string.auth_certi_title)
                 .setMessageText(message)
-                .isPositiveButton(true, getString(R.string.common_retry), onClickListener)
-                .isNegativeButtonEnable(false, getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_retry), onClickListener)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                 .show();
 
     }

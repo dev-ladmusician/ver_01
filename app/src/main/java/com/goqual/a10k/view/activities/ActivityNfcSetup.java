@@ -12,11 +12,8 @@ import com.goqual.a10k.databinding.ActivityNfcSetupBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.dialog.CustomDialog;
-
-import io.realm.Realm;
 
 /**
  * NFC 태그에 대한 스위치 설정 액티비티. <br />
@@ -97,8 +94,8 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
                         .setTitleText(R.string.nfc_rename_info_title)
                         .setMessageText(R.string.nfc_rename_info_content)
                         .setEditTextHint(R.string.nfc_rename_hint)
-                        .isPositiveButton(true, getString(R.string.common_save), onClickListener)
-                        .isNegativeButtonEnable(true, getString(R.string.common_delete), onClickListener)
+                        .setPositiveButton(getString(R.string.common_save), onClickListener)
+                        .setNegativeButton(getString(R.string.common_delete), onClickListener)
                         .show();
                 break;
         }

@@ -76,15 +76,15 @@ public class CustomDialog extends Dialog{
         return this;
     }
 
-    public CustomDialog isPositiveButton(boolean enable, String text, OnClickListener onClickListener) {
-        mModel.setPositiveButton(enable);
+    public CustomDialog setPositiveButton(String text, OnClickListener onClickListener) {
+        mModel.setPositiveButton(true);
         mModel.setPositiveButtonText(text);
         mOnPositiveClickListener = onClickListener;
         return this;
     }
 
-    public CustomDialog isNegativeButtonEnable(boolean enable, String text, OnClickListener onClickListener) {
-        mModel.setNegativeButton(enable);
+    public CustomDialog setNegativeButton(String text, OnClickListener onClickListener) {
+        mModel.setNegativeButton(true);
         mModel.setNegativeButtonText(text);
         mOnNegativeClickListener = onClickListener;
         return this;
