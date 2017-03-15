@@ -57,6 +57,11 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public void loadingStart() {
         mBinding.loading.setVisibility(View.VISIBLE);
     }

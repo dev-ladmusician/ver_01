@@ -43,7 +43,12 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
 
     @Override
     public String getTitle() {
-        return null;
+        return "Absence";
+    }
+
+    @Override
+    public boolean hasToolbarMenus() {
+        return false;
     }
 
     @Override

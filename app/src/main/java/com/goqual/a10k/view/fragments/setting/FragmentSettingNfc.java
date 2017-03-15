@@ -73,6 +73,11 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public void loadingStart() {
         if(mAdapter != null) {
             mAdapter.clear();

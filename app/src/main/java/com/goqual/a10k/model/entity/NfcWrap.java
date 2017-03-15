@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * Created by hanwool on 2017. 3. 8..
  */
 
-public class NfcWrap {
+public class NfcWrap implements BaseRealmWraper<Nfc>{
     public String tag;
     public int _nfcid;
     public int _bsid;
@@ -35,6 +35,11 @@ public class NfcWrap {
         btnCount = nfcItem.getBtnCount();
         mIsDeletable = nfcItem.ismIsDeletable();
         isEditing = false;
+    }
+
+    @Override
+    public Nfc getRealmObject() {
+        return new Nfc(_nfcid, _bsid, btn1, btn2, btn3, title, tag, macaddr, state, btnCount, mIsDeletable);
     }
 
     public String getTag() {

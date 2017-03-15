@@ -43,6 +43,8 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     private Menu menu;
     private AdapterPager fragmentPagerAdapter;
 
+    private boolean isScrollUserInteraction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +142,12 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         System.exit(0);
     }
 
+    private void setToolbarMenuVisibillity(boolean visibillity) {
+        int visible = visibillity ? View.VISIBLE : View.GONE;
+        mBinding.toolbarAdd.setVisibility(visible);
+        mBinding.toolbarEdit.setVisibility(visible);
+    }
+
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_edit:
@@ -164,7 +172,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             mBinding.mainPager.setCurrentItem(tab.getPosition(), true);
-            if(tab.getPosition() == 0) {
+            if(tab.getPosition() == 0 && !isScrollUserInteraction) {
                 ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
             }
         }
@@ -182,6 +190,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
 
     private ViewPager.OnPageChangeListener mainPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
         int currentPage = 0;
+        int lastState = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             LogUtil.d(TAG, String.format("position:%d poOffset:%f poOffsetPixels:%d", position, positionOffset, positionOffsetPixels));
@@ -201,11 +210,19 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
             ((IFragmentInteraction)fragmentPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
             ((IFragmentInteraction)fragmentPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
             currentPage = position;
+            setToolbarMenuVisibillity((((BaseFragment) fragmentPagerAdapter.getItem(position)).hasToolbarMenus()));
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
+            LogUtil.d(TAG, String.format("state:%d", state));
+            if(state == ViewPager.SCROLL_STATE_SETTLING) {
+                isScrollUserInteraction = lastState == 1;
+            }
+            else {
+                isScrollUserInteraction = false;
+            }
+            lastState = state;
         }
 
         private void invalidateFragmentMenus(int position){

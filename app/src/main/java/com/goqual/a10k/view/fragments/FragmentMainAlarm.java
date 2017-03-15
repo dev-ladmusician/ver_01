@@ -58,7 +58,12 @@ implements AlarmPresenter.View<Alarm>{
 
     @Override
     public String getTitle() {
-        return getString(R.string.title_switch_each);
+        return getString(R.string.title_alarm);
+    }
+
+    @Override
+    public boolean hasToolbarMenus() {
+        return true;
     }
 
     @Override
@@ -155,6 +160,15 @@ implements AlarmPresenter.View<Alarm>{
     private AdapterAlarm getAdapter() {
         if(mAdapter == null) {
             mAdapter = new AdapterAlarm(getActivity());
+            mAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
+                switch (viewId) {
+                    case R.id.item_alarm_active:
+                        Alarm alarm = mAdapter.getItem(position);
+                        alarm.setState(!alarm.isState());
+                        getPresenter().update(alarm);
+                        break;
+                }
+            });
         }
         return mAdapter;
     }

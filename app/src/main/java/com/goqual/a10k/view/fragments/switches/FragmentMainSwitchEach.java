@@ -50,6 +50,11 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchEachB
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSwitchItemPosition = -1;

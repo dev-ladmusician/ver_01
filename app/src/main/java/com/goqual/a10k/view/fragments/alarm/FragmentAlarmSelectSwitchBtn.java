@@ -59,6 +59,11 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {

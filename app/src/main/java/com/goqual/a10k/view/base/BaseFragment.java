@@ -33,6 +33,7 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment
 
     protected abstract int getLayoutId();
     public abstract void onBtnClick(View view);
+    public abstract boolean hasToolbarMenus();
 
     protected IActivityInteraction mActivityInteraction;
 

@@ -43,7 +43,12 @@ public class FragmentMainSetting extends BaseFragment<FragmentMainSettingBinding
 
     @Override
     public String getTitle() {
-        return getString(R.string.title_switch_each);
+        return getString(R.string.title_app_setting);
+    }
+
+    @Override
+    public boolean hasToolbarMenus() {
+        return false;
     }
 
     @Nullable

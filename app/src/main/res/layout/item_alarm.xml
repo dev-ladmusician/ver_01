@@ -92,7 +92,7 @@
             android:layout_height="36dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:checked="@{item.state}"/>
+            android:checked="@{item.state}" />
 
         <!--<ImageView-->
         <!--android:id="@+id/item_alarm_active"-->

@@ -48,6 +48,11 @@ public class FragmentAlarmSelectSwitch extends BaseFragment<FragmentAlarmSelectS
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public String getTitle() {
         return null;
     }

@@ -188,6 +188,11 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return true;
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.fragment_main_switch_container;
     }

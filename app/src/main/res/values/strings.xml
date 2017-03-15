@@ -15,6 +15,8 @@
     <string name="title_switch_list">All Switches</string>
     <string name="title_switch_each">10K</string>
     <string name="title_app_setting">Setting</string>
+    <string name="title_noti">Noti</string>
+    <string name="title_alarm">Alarm</string>
 
     <!-- toolbar -->
     <string name="toolbar_edit">Edit</string>
@@ -203,6 +205,11 @@
     <string name="setting_item_help">도움말</string>
     <string name="setting_item_info">정보</string>
     <string name="setting_item_logout">Logout</string>
+
+    <!-- noti -->
+    <string name="noti_content_day_ago"> days ago</string>
+    <string name="noti_content_day_ago_today">today</string>
+    <string name="noti_no_item">아직 받은 알람이 없어요!</string>
 
     <!-- Timer -->
     <string name="timer_toolbar_cancel">Cancel</string>

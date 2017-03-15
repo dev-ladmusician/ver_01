@@ -61,6 +61,11 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public void onConnectSuccess() {
         mHandler.post(new Runnable() {
             @Override

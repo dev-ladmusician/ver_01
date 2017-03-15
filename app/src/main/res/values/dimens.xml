@@ -107,6 +107,12 @@
     <dimen name="alarm_clock_wrapper_height">230dp</dimen>
     <dimen name="alarm_divider_height">20dp</dimen>
 
+    <!-- noti -->
+    <dimen name="item_noti_ic_size">25dp</dimen>
+    <dimen name="item_noti_date_margin_top">3dp</dimen>
+    <dimen name="item_noti_content_size">13dp</dimen>
+    <dimen name="item_noti_date_txt_size">10dp</dimen>
+
     <!-- setting -->
     <dimen name="setting_item_radius">5dp</dimen>
     <dimen name="setting_item_margin">5dp</dimen>
