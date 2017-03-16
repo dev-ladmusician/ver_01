@@ -10,6 +10,7 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_deny">Deny</string>
     <string name="common_quit">Quit</string>
+    <string name="common_quit_toast">한번 더 누르시면 종료됩니다.</string>
 
     <!-- title -->
     <string name="title_switch_list">All Switches</string>

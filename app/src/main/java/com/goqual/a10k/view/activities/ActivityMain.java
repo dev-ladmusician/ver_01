@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
+import com.goqual.a10k.util.BackPressUtil;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
@@ -36,6 +37,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public static final String TAG = ActivityMain.class.getSimpleName();
 
     private EventSwitchEdit mEditBtnStatus;
+    private BackPressUtil backPressUtil;
 
     @Override
     protected int getLayoutId() { return R.layout.activity_main; }
@@ -51,6 +53,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         LogUtil.e(TAG, "ON_CREATE!!!");
         mBinding.setActivity(this);
         initView();
+        backPressUtil = new BackPressUtil(this);
     }
 
 
@@ -232,4 +235,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
             invalidateOptionsMenu(); //or respectively its support method.
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backPressUtil.onBackPressed();
+    }
 }
