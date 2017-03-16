@@ -90,7 +90,6 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
             public synchronized void afterTextChanged(Editable s) {
                 super.afterTextChanged(s);
                 String ss = s.toString();
-                PhoneNumberUtils
                 if(PhoneNumberUtils.isGlobalPhoneNumber(ss)) {
                     LogUtil.d(TAG, "afterTextChanged::isWellFormedSmsAddress:true::" + ss);
                     mBinding.authPhoneBtnNext.setEnabled(true);

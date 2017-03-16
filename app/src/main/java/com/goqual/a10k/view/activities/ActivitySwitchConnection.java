@@ -82,6 +82,7 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
                 .beginTransaction()
                 .add(mBinding.activityMain.getId(), FragmentConnectInfo.newInstance())
                 .commit();
+        setDetectNetworkError(false);
     }
 
     private ConnectPresenter getPresenter() {

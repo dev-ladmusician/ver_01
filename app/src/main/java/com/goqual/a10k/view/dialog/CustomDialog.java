@@ -26,6 +26,7 @@ public class CustomDialog extends Dialog{
     private DialogModel mModel;
     private OnClickListener mOnPositiveClickListener;
     private OnClickListener mOnNegativeClickListener;
+    private boolean mIsShowing;
 
     public CustomDialog(@NonNull Context context) {
         super(context);
@@ -61,6 +62,12 @@ public class CustomDialog extends Dialog{
             InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
+        setOnDismissListener(dialog -> {
+            mIsShowing = false;
+        });
+        setOnCancelListener(dialog -> {
+            mIsShowing = false;
+        });
     }
 
     public CustomDialog setTitleText(String title) {
@@ -140,4 +147,26 @@ public class CustomDialog extends Dialog{
         }
     }
 
+    @Override
+    public void show() {
+        mIsShowing = true;
+        super.show();
+    }
+
+    @Override
+    public void dismiss() {
+        mIsShowing = false;
+        super.dismiss();
+    }
+
+    @Override
+    public void cancel() {
+        mIsShowing = false;
+        super.cancel();
+    }
+
+    @Override
+    public boolean isShowing() {
+        return mIsShowing;
+    }
 }
