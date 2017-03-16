@@ -9,6 +9,7 @@ import com.goqual.a10k.model.remote.RetrofitManager;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.GET;
 import rx.Observable;
 
@@ -21,12 +22,12 @@ public class VersionService {
                         .getRetrofitBuilder(ctx).create(VersionApi.class);
     }
 
-    public VersionApi getNotiApi() {
+    public VersionApi getVerionApi() {
         return mNotiApi;
     }
 
     public interface VersionApi {
         @GET("10K")
-        Observable<ResultDTO<List<Version>>> gets();
+        Observable<Version> get();
     }
 }

@@ -2,6 +2,8 @@ package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
+import com.goqual.a10k.model.entity.NfcWrap;
+import com.goqual.a10k.model.entity.PagenationWrapper;
 import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
@@ -31,19 +33,20 @@ public class NfcService {
     }
 
     public interface NfcApi {
-        @GET("nfc/{switchId}")
-        Observable<ResultDTO<List<Nfc>>> gets(
-                @Path("switchId") int switchId
+        @GET("nfc/{switchId}/{page}")
+        Observable<ResultDTO<PagenationWrapper<NfcWrap>>> gets(
+                @Path("switchId") int switchId,
+                @Path("page") int page
         );
 
         @GET("nfc/detected/{tag}")
-        Observable<ResultDTO<Nfc>> get(
+        Observable<ResultDTO<NfcWrap>> get(
                 @Path("tag") String tag
         );
 
         @FormUrlEncoded
         @PUT("nfc")
-        Observable<ResultDTO<Nfc>> put(
+        Observable<ResultDTO<NfcWrap>> put(
                 @Field("nfcId") int nfcId,
                 @Field("switchId") int switchId,
                 @Field("tag") String tag,
@@ -55,7 +58,7 @@ public class NfcService {
 
         @FormUrlEncoded
         @POST("nfc")
-        Observable<ResultDTO<Nfc>> add(
+        Observable<ResultDTO<NfcWrap>> add(
                 @Field("switchId") int switchId,
                 @Field("tag") String tag,
                 @Field("btn1") Boolean btn1,
@@ -66,7 +69,7 @@ public class NfcService {
 
         @FormUrlEncoded
         @HTTP(path = "nfc", method = "DELETE", hasBody = true)
-        Observable<ResultDTO<Nfc>> delete(
+        Observable<ResultDTO<NfcWrap>> delete(
                 @Field("nfcId") int nfcId
         );
     }

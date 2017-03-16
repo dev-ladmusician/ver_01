@@ -3,6 +3,7 @@ package com.goqual.a10k.presenter.impl;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.History;
+import com.goqual.a10k.model.entity.PagenationWrapper;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.HistoryService;
 import com.goqual.a10k.presenter.HistoryPresenter;
@@ -36,8 +37,7 @@ public class HistoryPresenterImpl implements HistoryPresenter {
         getHistoryService().getHistoryApi().gets(switchId, year, month, day, page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
-                .map(ResultDTO::getResult)
-                .filter(items -> items != null && !items.isEmpty())
+                .map(PagenationWrapper::getResult)
                 .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {

@@ -37,7 +37,7 @@
                 android:textColor="@color/grey_06"
                 android:textSize="@dimen/item_noti_content_size"
                 android:lines="2"
-                android:text="더 훌륭한 APP으로 업그레이드 되었어요 [app store로 이동]"/>
+                android:text="@{item.message}"/>
 
             <TextView
                 android:id="@+id/item_noti_date"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_03"
                 android:textSize="@dimen/item_noti_date_txt_size"
-                android:text="1 days ago"/>
+                android:text="@{item.getDateString(holder.context)}"/>
         </RelativeLayout>
     </RelativeLayout>
 

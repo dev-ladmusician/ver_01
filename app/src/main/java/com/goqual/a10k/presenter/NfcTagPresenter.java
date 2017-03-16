@@ -7,7 +7,7 @@ import com.goqual.a10k.model.realm.Nfc;
  */
 
 public interface NfcTagPresenter {
-    void loadItems(int switchId);
+    void loadItems(int switchId, int page);
     void getItem(String tadId);
     void delete(int position);
     void detectedNfc(String tag);

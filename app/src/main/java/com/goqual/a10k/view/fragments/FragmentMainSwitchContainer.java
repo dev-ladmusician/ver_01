@@ -105,6 +105,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void onError(Throwable e) {
+        LogUtil.e(TAG, e.getMessage(), e);
         if(e instanceof HttpException) {
             if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
                 startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
@@ -115,44 +116,45 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void addItem(Switch item) {
+        LogUtil.d(TAG, "ITEM::" + item);
         mPagerAdapter.addItem(item);
         getSocketManager().refreshConnectedRoom();
     }
 
     @Override
     public void onConnectionError() {
-        if(mHandler != null) {
-            mHandler.post(() -> {
-                if(connectionFailedDialog == null) {
-                    DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
-                        switch (which) {
-                            case Dialog.BUTTON_POSITIVE:
-                                dialog.dismiss();
-                                mSocketManager.tryReconnect();
-                                break;
-                            case Dialog.BUTTON_NEGATIVE:
-                                // finish app;
-                                dialog.dismiss();
-                                connectionFailedDialog = null;
-                                ((IActivityInteraction)getActivity()).finishApp();
-                                break;
-                        }
-                    };
-                    connectionFailedDialog = new CustomDialog(getActivity())
-                            .isEditable(false)
-                            .setNegativeButton(getString(R.string.common_quit), onClickListener)
-                            .setPositiveButton(getString(R.string.common_retry), onClickListener)
-                            .setTitleText(R.string.socket_connection_error_title)
-                            .setMessageText(R.string.socket_connection_error_content);
-                    connectionFailedDialog.show();
-                }
-                else {
-                    if(!connectionFailedDialog.isShowing()) {
-                        connectionFailedDialog.show();
-                    }
-                }
-            });
-        }
+//        if(mHandler != null) {
+//            mHandler.post(() -> {
+//                if(connectionFailedDialog == null) {
+//                    DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+//                        switch (which) {
+//                            case Dialog.BUTTON_POSITIVE:
+//                                dialog.dismiss();
+//                                mSocketManager.tryReconnect();
+//                                break;
+//                            case Dialog.BUTTON_NEGATIVE:
+//                                // finish app;
+//                                dialog.dismiss();
+//                                connectionFailedDialog = null;
+//                                ((IActivityInteraction)getActivity()).finishApp();
+//                                break;
+//                        }
+//                    };
+//                    connectionFailedDialog = new CustomDialog(getActivity())
+//                            .isEditable(false)
+//                            .setNegativeButton(getString(R.string.common_quit), onClickListener)
+//                            .setPositiveButton(getString(R.string.common_retry), onClickListener)
+//                            .setTitleText(R.string.socket_connection_error_title)
+//                            .setMessageText(R.string.socket_connection_error_content);
+//                    connectionFailedDialog.show();
+//                }
+//                else {
+//                    if(!connectionFailedDialog.isShowing()) {
+//                        connectionFailedDialog.show();
+//                    }
+//                }
+//            });
+//        }
     }
 
     @Override
@@ -232,8 +234,9 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         mPagerAdapter.refresh();
 
         SwitchManager.getInstance().clear();
+        // TODO: page
         getPresenter()
-                .loadItems();
+                .loadItems(1);
     }
 
     @Override

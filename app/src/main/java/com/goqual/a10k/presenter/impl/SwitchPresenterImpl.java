@@ -4,11 +4,15 @@ import android.content.Context;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.PagenationWrapper;
+import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
@@ -22,17 +26,19 @@ import static com.goqual.a10k.view.activities.ActivityMain.TAG;
  */
 
 public class SwitchPresenterImpl implements SwitchPresenter {
-    private View mView;
+    private View<Switch> mView;
     private FragmentStatePagerAdapter mAdapter;
     private SwitchService mSwitchService = null;
     private Context mContext = null;
 
-    public SwitchPresenterImpl(Context ctx, SwitchPresenter.View view, FragmentStatePagerAdapter adapter) {
+    public SwitchPresenterImpl(Context ctx, SwitchPresenter.View<Switch> view, FragmentStatePagerAdapter adapter) {
         mContext = ctx;
         mView = view;
         mAdapter = adapter;
     }
+
     @Override
+    @Deprecated
     public void loadItems() {
         getSwitchService().getSwitchApi().gets()
                 .subscribeOn(Schedulers.newThread())
@@ -45,18 +51,24 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                             SwitchManager.getInstance().addItem(item);
                             mView.addItem(item);
                         },
-                        (e) -> {
-                            if (e instanceof HttpException) {
-                                HttpException error = (HttpException) e;
-                                if (error.code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
-                                    LogUtil.e(TAG, "unauthorized exception error");
-                                    mView.onError(e);
-                                }
-                            } else {
-                                e.printStackTrace();
-                                LogUtil.e(TAG, "anonymous error");
-                            }
+                        mView::onError,
+                        mView::refresh);
+    }
+
+    @Override
+    public void loadItems(int page) {
+        getSwitchService().getSwitchApi().gets(page)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .map(PagenationWrapper::getResult)
+                .filter(items -> items != null && !items.isEmpty())
+                .flatMap(Observable::from)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((item) -> {
+                            SwitchManager.getInstance().addItem(item);
+                            mView.addItem(item);
                         },
+                        mView::onError,
                         mView::refresh);
     }
 
@@ -93,6 +105,34 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                         },
                         Throwable::printStackTrace,
                         () -> mAdapter.notifyDataSetChanged());
+    }
+
+    @Override
+    public void getByBsid(int _bsid) {
+        getSwitchService().getSwitchApi().getSwitchByBsid(_bsid)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .map(ResultDTO::getResult)
+                .filter(items -> items != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            mView.addItem(resultDTO);
+                        },
+                        Throwable::printStackTrace,
+                        () -> mAdapter.notifyDataSetChanged());
+    }
+
+    @Override
+    public void add(String macaddr, String title, int count) {
+        getSwitchService().getSwitchApi().add(macaddr, title, count)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((x) -> {
+                            mView.loadingStop();
+                        },
+                        e -> mView.onError(e),
+                        mView::loadingStop
+                );
     }
 
     public SwitchService getSwitchService() {

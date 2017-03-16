@@ -1,5 +1,7 @@
 package com.goqual.a10k.model.remote;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by ladmusician on 2016. 12. 9..
  */
@@ -19,5 +21,10 @@ public class ResultDTO<T> {
     }
     public void setResult(T result) {
         this.result = result;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

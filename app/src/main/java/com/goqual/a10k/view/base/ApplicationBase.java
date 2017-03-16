@@ -8,6 +8,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by HanWool on 2017. 2. 17..
@@ -22,7 +23,13 @@ public class ApplicationBase extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         Realm.init(this);
-        this.DEBUG = isDebuggable(this);
+        DEBUG = isDebuggable(this);
+        if(DEBUG) {
+            RealmConfiguration defaultConf = new RealmConfiguration.Builder()
+                    .deleteRealmIfMigrationNeeded()
+                    .build();
+            Realm.setDefaultConfiguration(defaultConf);
+        }
     }
 
     /**

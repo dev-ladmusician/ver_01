@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
@@ -11,7 +13,7 @@ import android.support.annotation.Nullable;
 public class Switch implements Cloneable{
     private int _connectionid;
     private int _bsid;
-    private int state;
+    private int btnCount;
     private int seq;
     private boolean btn1;
     private boolean btn2;
@@ -21,6 +23,7 @@ public class Switch implements Cloneable{
     public String title;
     private String macaddr;
     private boolean isavailable;
+    private Integer _absenceid;
     private boolean outlet;
     public boolean mIsStateView;
 
@@ -51,12 +54,12 @@ public class Switch implements Cloneable{
         this._bsid = _bsid;
     }
 
-    public int getState() {
-        return state;
+    public int getBtnCount() {
+        return btnCount;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setBtnCount(int btnCount) {
+        this.btnCount = btnCount;
     }
 
     public int getSeq() {
@@ -67,30 +70,27 @@ public class Switch implements Cloneable{
         this.seq = seq;
     }
 
-    @Nullable
-    public Boolean getBtn1() {
+    public boolean isBtn1() {
         return btn1;
     }
 
-    public void setBtn1(@Nullable Boolean btn1) {
+    public void setBtn1(boolean btn1) {
         this.btn1 = btn1;
     }
 
-    @Nullable
-    public Boolean getBtn2() {
+    public boolean isBtn2() {
         return btn2;
     }
 
-    public void setBtn2(@Nullable Boolean btn2) {
+    public void setBtn2(boolean btn2) {
         this.btn2 = btn2;
     }
 
-    @Nullable
-    public Boolean getBtn3() {
+    public boolean isBtn3() {
         return btn3;
     }
 
-    public void setBtn3(@Nullable Boolean btn3) {
+    public void setBtn3(boolean btn3) {
         this.btn3 = btn3;
     }
 
@@ -134,12 +134,28 @@ public class Switch implements Cloneable{
         this.isavailable = isavailable;
     }
 
+    public Integer get_absenceid() {
+        return _absenceid;
+    }
+
+    public void set_absenceid(Integer _absenceid) {
+        this._absenceid = _absenceid;
+    }
+
     public boolean isOutlet() {
         return outlet;
     }
 
     public void setOutlet(boolean outlet) {
         this.outlet = outlet;
+    }
+
+    public boolean ismIsStateView() {
+        return mIsStateView;
+    }
+
+    public void setmIsStateView(boolean mIsStateView) {
+        this.mIsStateView = mIsStateView;
     }
 
     public String getWIFI_SSID() {
@@ -182,25 +198,18 @@ public class Switch implements Cloneable{
         this.AP_SERVER_PORT = AP_SERVER_PORT;
     }
 
-    public boolean ismIsStateView() {
-        return mIsStateView;
-    }
-
-    public void setmIsStateView(boolean mIsStateView) {
-        this.mIsStateView = mIsStateView;
-    }
-
     @Override
     public Switch clone() throws CloneNotSupportedException {
         Switch newSwitch = (Switch) super.clone();
 
         newSwitch.set_connectionid(this.get_connectionid());
         newSwitch.set_bsid(this.get_bsid());
-        newSwitch.setState(this.getState());
+        newSwitch.setBtnCount(this.getBtnCount());
         newSwitch.setSeq(this.getSeq());
-        newSwitch.setBtn1(this.getBtn1());
-        newSwitch.setBtn2(this.getBtn2());
-        newSwitch.setBtn3(this.getBtn3());
+        newSwitch.setBtn1(this.isBtn1());
+        newSwitch.setBtn2(this.isBtn2());
+        newSwitch.setBtn3(this.isBtn3());
+        newSwitch.set_absenceid(this.get_absenceid());
         newSwitch.setHw(this.getHw());
         newSwitch.setFw(this.getFw());
         newSwitch.setTitle(this.getTitle());
@@ -213,5 +222,10 @@ public class Switch implements Cloneable{
         newSwitch.setWIFI_PASSWORD(this.getWIFI_PASSWORD());
         newSwitch.setWIFI_CAPABILITY(this.getWIFI_CAPABILITY());
         return newSwitch;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

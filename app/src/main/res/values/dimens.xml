@@ -91,6 +91,9 @@
     <dimen name="auth_btn_margin_top">20dp</dimen>
     <dimen name="auth_txt_margin_top">20dp</dimen>
 
+    <!-- invite -->
+    <dimen name="item_invite_num">130dp</dimen>
+
     <!-- admin -->
     <dimen name="admin_user_ic_size">25dp</dimen>
     <dimen name="admin_user_add_ic_size">20dp</dimen>

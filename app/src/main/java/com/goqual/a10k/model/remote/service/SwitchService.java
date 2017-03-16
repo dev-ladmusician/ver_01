@@ -2,12 +2,15 @@ package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
+import com.goqual.a10k.model.entity.PagenationWrapper;
+import com.goqual.a10k.model.entity.SimplifySwitch;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
 
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -36,12 +39,23 @@ public class SwitchService {
 
     public interface SwitchApi {
         @GET("switch/{macaddr}")
-        Observable<ResultDTO<Switch>> get(
+        Observable<Switch> get(
                 @Path("macaddr") String macaddr
         );
 
-        @GET("connections")
-        Observable<ResultDTO<List<Switch>>> gets();
+        @GET("switch/bsid/{_bsid}")
+        Observable<ResultDTO<Switch>> getSwitchByBsid(
+                @Path("_bsid") int _bsid
+        );
+
+        @GET("connection")
+        Observable<ResultDTO<List<Switch>>> gets(
+        );
+
+        @GET("connection/{page}")
+        Observable<PagenationWrapper<Switch>> gets(
+                @Path("page") int page
+        );
 
         @FormUrlEncoded
         @HTTP(path = "connection", method = "DELETE", hasBody = true)

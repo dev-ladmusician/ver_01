@@ -2,6 +2,7 @@ package com.goqual.a10k.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -70,6 +71,13 @@ public class CustomDialog extends Dialog{
         });
     }
 
+    @Override
+    protected void onStop() {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mBinding.dialogEdit.getWindowToken(), 0);
+        super.onStop();
+    }
+
     public CustomDialog setTitleText(String title) {
         mModel.setTitle(title);
         return this;
@@ -121,13 +129,11 @@ public class CustomDialog extends Dialog{
 
     public CustomDialog setEditTextMessage(String message) {
         mModel.setEditTextMessage(message);
-        mBinding.setItem(mModel);
         return this;
     }
 
     public CustomDialog setEditTextMessage(@StringRes int messageId) {
         mModel.setEditTextMessage(mContext.getString(messageId));
-        mBinding.setItem(mModel);
         return this;
     }
 

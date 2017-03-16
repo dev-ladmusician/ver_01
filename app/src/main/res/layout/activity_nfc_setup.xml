@@ -141,7 +141,7 @@
                     android:onClick="@{activity::onBtnClick}"
                     android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
                     android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
-                    android:visibility="@{itemSwitch.state &lt; 2 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{itemSwitch.btnCount &lt; 2 ? View.GONE : View.VISIBLE}"
                     android:background="@{itemSwitch.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
 
                 <TextView
@@ -153,7 +153,7 @@
                     android:layout_below="@id/switch_btn_2"
                     android:onClick="@{activity::onBtnClick}"
                     android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
-                    android:visibility="@{itemSwitch.state &lt; 3 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{itemSwitch.btnCount &lt; 3 ? View.GONE : View.VISIBLE}"
                     android:text="@{itemSwitch.btn3 ? @string/btn_on : @string/btn_off}"
                     android:background="@{itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>

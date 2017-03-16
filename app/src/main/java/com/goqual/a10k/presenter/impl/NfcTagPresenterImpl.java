@@ -2,11 +2,14 @@ package com.goqual.a10k.presenter.impl;
 
 import android.content.Context;
 
+import com.goqual.a10k.model.entity.NfcWrap;
 import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.NfcService;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.util.LogUtil;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
 
@@ -31,18 +34,26 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
         this.mContext = mContext;
     }
 
-    @Override
-    public void loadItems(int switchId) {
+    public void loadItems(int switchId, int page) {
         mView.loadingStart();
         LogUtil.d(TAG, "loadItems::switchId: " + switchId);
-        getNfcService().getrNfcApi().gets(switchId)
+        getNfcService().getrNfcApi().gets(switchId, page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .map(ResultDTO::getResult)
                 .filter(items -> items != null && !items.isEmpty())
-                .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::addItem,
+                .subscribe(result -> {
+                            LogUtil.d(TAG, result.toString());
+                            for (NfcWrap item : result.getResult()) {
+                                mView.addItem(item.getRealmObject());
+                            }
+                            if (result.getLastPage() > 1 && result.getPage() < result.getLastPage()) {
+                                loadItems(switchId, result.getPage() + 1);
+                            } else if (result.getLastPage() == result.getPage()) {
+                                mView.onSuccess();
+                            }
+                        },
                         mView::onError,
                         mView::onSuccess);
     }
@@ -55,7 +66,7 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                 .map(ResultDTO::getResult)
                 .filter(item -> item != null)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::addItem,
+                .subscribe(item -> mView.addItem(item.getRealmObject()),
                         mView::onError,
                         mView::onSuccess);
     }
@@ -112,7 +123,7 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                             mView.loadingStop();
                             try(Realm realm = Realm.getDefaultInstance()) {
                                 realm.executeTransaction(realm1 -> {
-                                    Nfc nfc = result.getResult();
+                                    Nfc nfc = result.getResult().getRealmObject();
                                     realm1.copyToRealm(nfc);
                                 });
                             }

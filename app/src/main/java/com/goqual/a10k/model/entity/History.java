@@ -1,5 +1,10 @@
 package com.goqual.a10k.model.entity;
 
+import com.goqual.a10k.util.LogUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -38,7 +43,16 @@ public class History {
     }
 
     public String getCreated() {
-        return created;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            Date date = simpleDateFormat.parse(created.replace("Z", "").replace("T", " "));
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm a");
+            return simpleDateFormat1.format(date);
+        }
+        catch (ParseException e) {
+            LogUtil.e("History", e.getMessage(), e);
+            return "";
+        }
     }
 
     public void setCreated(String created) {

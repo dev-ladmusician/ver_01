@@ -15,6 +15,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
+import com.goqual.a10k.model.entity.SimplifySwitch;
+import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.util.Constraint;
@@ -25,12 +27,16 @@ import com.goqual.a10k.util.switchConnect.ConnectSocketData;
 import com.goqual.a10k.util.switchConnect.SimpleSocketClient;
 import com.goqual.a10k.util.switchConnect.WifiLevelDescCompare;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -66,7 +72,8 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     private String mSwitchHwVersion;
     private String mSwitchFwVertion;
     private String mSwitchTitle;
-    private boolean isConnectionSuccessed;
+    private boolean isConnectionSuccess;
+    private boolean switchAvail;
 
     private SwitchService mSwitchService;
 
@@ -147,7 +154,29 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                         },
                         () -> {
                             LogUtil.d(TAG, "onCompleted::");
-                            mView.onRegisterSuccess();
+                        });
+    }
+
+    @Override
+    public void checkSwitchConnected() {
+        LogUtil.d("SWITCH_CONNECT", "ASFASF");
+        getSwitchService().getSwitchApi().get(mSwitchId)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                            LogUtil.d("SWITCH_CONNECT", "onNext::" + result);
+                            switchAvail = result.isavailable();
+                            if(switchAvail) {
+                                mView.onSwitchConnected();
+                            }
+                            else {
+                                mView.switchNotConnected();
+                            }
+                        },
+                        e -> {
+                            LogUtil.e("SWITCH_CONNECT", e.getMessage(), e);
+                            mView.switchNotConnected();
                         });
     }
 
@@ -370,7 +399,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
         LogUtil.d(TAG, "onResEndConnection::" + data.toString());
         if(data.getData().length() > 0 && data.getData().equals(Integer.toString(SocketProtocols.DATA_SUCCESS))) {
             endConnect10K();
-            isConnectionSuccessed = true;
+            isConnectionSuccess = true;
             mView.onConnectSuccess();
         } else {
             LogUtil.d(TAG, "onResEndConnection::ERROR:" + data.toString());
@@ -478,7 +507,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                     }
                 }
             }
-            if(!isSwitchFinded && !isConnectionSuccessed) {
+            if(!isSwitchFinded && !isConnectionSuccess) {
                 mView.noSwitchFound();
             }
             mView.onScanEnd();

@@ -41,7 +41,7 @@ public class Absence {
         this.start_min = 0;
         this.end_hour = 22;
         this.end_min = 30;
-        this.btncount = mSwitch.getState();
+        this.btncount = mSwitch.getBtnCount();
         this.state = true;
     }
 

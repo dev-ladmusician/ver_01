@@ -45,7 +45,7 @@ public class RetrofitManager {
         mContext = ctx;
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         httpClient.addInterceptor(logging);
         httpClient.addInterceptor(new Interceptor() {
             @Override

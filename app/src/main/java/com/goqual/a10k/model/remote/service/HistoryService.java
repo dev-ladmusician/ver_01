@@ -3,6 +3,7 @@ package com.goqual.a10k.model.remote.service;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.History;
+import com.goqual.a10k.model.entity.PagenationWrapper;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
 
@@ -27,7 +28,7 @@ public class HistoryService {
 
     public interface HistoryApi {
         @GET("history/{switchId}/{year}/{month}/{day}/{page}")
-        Observable<ResultDTO<List<History>>> gets(
+        Observable<PagenationWrapper<History>> gets(
                 @Path("switchId") int switchId,
                 @Path("year") int year,
                 @Path("month") int month,

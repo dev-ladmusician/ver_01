@@ -19,7 +19,7 @@ import com.goqual.a10k.view.dialog.CustomDialog;
  */
 
 public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatActivity
-implements NetworkPresenter.View{
+        implements NetworkPresenter.View{
     protected B mBinding;
 
     private CustomDialog mNetworkErrorDialog;
@@ -75,12 +75,12 @@ implements NetworkPresenter.View{
         getPresenter();
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
         mNetworkErrorDialog = new CustomDialog(this)
-        .setTitleText(R.string.internet_error_title)
-        .setMessageText(R.string.internet_error_content)
-        .setNegativeButton(getString(R.string.common_quit), (dialog, which) -> {
-            ActivityCompat.finishAffinity(this);
-            System.exit(0);
-        });
+                .setTitleText(R.string.internet_error_title)
+                .setMessageText(R.string.internet_error_content)
+                .setNegativeButton(getString(R.string.common_quit), (dialog, which) -> {
+                    ActivityCompat.finishAffinity(this);
+                    System.exit(0);
+                });
     }
 
     @Override

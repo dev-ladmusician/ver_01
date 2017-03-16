@@ -211,9 +211,9 @@ public class Alarm {
 
     public void setSwitch(Switch item) {
         set_bsid(item.get_bsid());
-        setBtn1(item.getBtn1());
-        setBtn2(item.getBtn2());
-        setBtn3(item.getBtn3());
+        setBtn1(item.isBtn1());
+        setBtn2(item.isBtn2());
+        setBtn3(item.isBtn3());
     }
 
     @Override

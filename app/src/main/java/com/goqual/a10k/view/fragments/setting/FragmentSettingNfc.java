@@ -235,9 +235,9 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
                     tag.set_bsid(item.get_bsid());
                     tag.setTag(nfcTagId);
                     tag.setTitle(nfcTagTitle);
-                    tag.setBtn1(item.getBtn1());
-                    tag.setBtn2(item.getBtn2());
-                    tag.setBtn3(item.getBtn3());
+                    tag.setBtn1(item.isBtn1());
+                    tag.setBtn2(item.isBtn2());
+                    tag.setBtn3(item.isBtn3());
                     getPresenter().add(tag);
                 }
             }

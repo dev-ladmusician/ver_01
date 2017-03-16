@@ -6,4 +6,5 @@ package com.goqual.a10k.presenter;
 
 public interface BasePresenter {
     void loadItems();
+    void loadItems(int page);
 }

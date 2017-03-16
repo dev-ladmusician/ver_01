@@ -20,6 +20,8 @@
     <color name="grey_06">#3B3B40</color>
     <color name="grey_07">#8C8B91</color>
 
+    <color name="transparant_white">#ccffffff</color>
+
     <color name="bg">#F0EFF5</color>
 
     <color name="transparent_b">#B3000000</color>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="activity"
+            type="com.goqual.a10k.view.activities.ActivityInviteUser"/>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- toolbar -->
+            <RelativeLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/identitiy_02"
+                android:elevation="3dp"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16">
+
+                <RelativeLayout
+                    android:id="@+id/toolbar_back"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{activity::onBtnClick}">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ic_arrow_l_w" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:text="10K"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/toolbar_plus_icon_size"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <!-- content -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/grey_02"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/search_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/invite_edit_hit"
+                    android:gravity="center"
+                    android:textSize="12dp"
+                    android:maxLines="1"
+                    android:ems="15"
+                    android:ellipsize="end"
+                    android:background="@drawable/style_border_radius_w"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_24"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/invite_label_people"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/invite_people"
+                    android:layout_marginLeft="@dimen/padding_16"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/invite_container"
+                    android:layout_marginTop="@dimen/padding_16"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/style_border_top_grey"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_centerInParent="true"
+            android:indeterminateDrawable="@drawable/style_progressbar"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/invite_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="@string/invite_read_contacts_granted_error_info"/>
+    </RelativeLayout>
+</layout>
+
+

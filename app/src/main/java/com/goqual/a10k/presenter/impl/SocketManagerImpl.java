@@ -54,13 +54,13 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
             String btnState;
             switch (btnNumber) {
                 case 1:
-                    btnState = !item.getBtn1() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
+                    btnState = !item.isBtn1() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
                     break;
                 case 2:
-                    btnState = !item.getBtn2() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
+                    btnState = !item.isBtn2() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
                     break;
                 case 3:
-                    btnState = !item.getBtn3() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
+                    btnState = !item.isBtn3() ? mContext.getString(R.string.btn_str_on) : mContext.getString(R.string.btn_str_off);
                     break;
                 default:
                     btnState = mContext.getString(R.string.btn_str_on);

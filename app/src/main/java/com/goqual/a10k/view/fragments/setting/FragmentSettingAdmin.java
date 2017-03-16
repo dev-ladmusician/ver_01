@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.fragments.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
+import com.goqual.a10k.view.activities.ActivityInviteUser;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
@@ -94,7 +96,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public void addItem(User item) {
-        LogUtil.d(TAG, "ITEM::" + item);
+        LogUtil.d(TAG, "USER::" + item);
         if(!item.isadmin()) {
             getUserAdapter().addItem(item);
             getUserAdapter().notifyDataSetChanged();
@@ -185,7 +187,9 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     }
 
     public void onBtnClick(View view) {
-
+        if(view.getId() == R.id.admin_add_user_in_exist_items) {
+            startActivity(new Intent(getActivity(), ActivityInviteUser.class));
+        }
     }
 
     @Override

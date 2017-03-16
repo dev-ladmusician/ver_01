@@ -78,7 +78,7 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
                             if(((EventToolbarClick) event).getState() == IToolbarClickListener.STATE.DONE) {
-                                ((IAlarmInteraction)getActivity()).setBtns(mSwitch.getBtn1(), mSwitch.getBtn2(), mSwitch.getBtn3());
+                                ((IAlarmInteraction)getActivity()).setBtns(mSwitch.isBtn1(), mSwitch.isBtn2(), mSwitch.isBtn3());
                             }
                         }
                     }
@@ -98,13 +98,13 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.switch_btn_1:
-                mSwitch.setBtn1(!mSwitch.getBtn1());
+                mSwitch.setBtn1(!mSwitch.isBtn1());
                 break;
             case R.id.switch_btn_2:
-                mSwitch.setBtn2(!mSwitch.getBtn2());
+                mSwitch.setBtn2(!mSwitch.isBtn2());
                 break;
             case R.id.switch_btn_3:
-                mSwitch.setBtn3(!mSwitch.getBtn3());
+                mSwitch.setBtn3(!mSwitch.isBtn3());
                 break;
         }
         mBinding.setItemSwitch(mSwitch);

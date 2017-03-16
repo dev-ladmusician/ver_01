@@ -5,9 +5,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.model.remote.service.UserService;
-import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -15,14 +13,15 @@ import rx.schedulers.Schedulers;
  * Created by hanwool on 2017. 3. 13..
  */
 
-public class FbInstanceIdService extends FirebaseInstanceIdService {
-    public static final String TAG = FbInstanceIdService.class.getSimpleName();
+public class FcmInstanceIdService extends FirebaseInstanceIdService {
+    public static final String TAG = FcmInstanceIdService.class.getSimpleName();
 
     private UserService mService;
 
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
+        LogUtil.d(TAG, "onTokenRefresh");
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
 
         String originToken = PreferenceHelper.getInstance(getApplicationContext())

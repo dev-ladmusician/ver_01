@@ -51,6 +51,7 @@
     <string name="arg_alarm">arg_alarm</string>
     <string name="arg_absence">arg_absence</string>
     <string name="arg_nfc">arg_nfc</string>
+    <string name="arg_wifi_pass">arg_wifi_pass</string>
 
     <!-- Switch -->
     <string name="switch_delete_title">삭제</string>
@@ -189,6 +190,10 @@
     <string name="invite_read_contacts_granted_error_toast_message">초대 기능을 사용하기 위해서는 연락처 수집 권한이 필요 합니다.</string>
     <string name="invite_read_contacts_granted_error_info">초대 기능을 사용하기 위해서는 \n연락처 수집 권한이 필요 합니다.</string>
     <string name="invite_read_contacts_granted_error_info_reject_req">초대 기능을 사용하기 위해서는 \n연락처 수집 권한이 필요 합니다.\n 설정에서 권한을 활성화 해주세요!</string>
+    <string name="invite_dialog_title">누군가의 초대를 받았습니다.</string>
+    <string name="invite_dialog_content">초대를 수락 하시겠습니까?</string>
+    <string name="invite_user_dialog_title">초대하기</string>
+    <string name="invite_user_dialog_content">님을 초대하시겠어요?</string>
 
     <!-- history -->
     <string name="history_no_item">등록된 기록이 없습니다.</string>
@@ -208,6 +213,8 @@
     <string name="setting_item_logout">Logout</string>
 
     <!-- noti -->
+    <string name="noti_content_min_ago"> minutes ago</string>
+    <string name="noti_content_hour_ago"> hours ago</string>
     <string name="noti_content_day_ago"> days ago</string>
     <string name="noti_content_day_ago_today">today</string>
     <string name="noti_no_item">아직 받은 알람이 없어요!</string>
@@ -256,4 +263,5 @@
     <!-- Absence -->
     <string name="absence_start_text">시작</string>
     <string name="absence_end_text">종료</string>
+    <string name="switch_absence_mode">부재모드가 설정된 스위치입니다.</string>
 </resources>

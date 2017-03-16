@@ -25,7 +25,8 @@
         android:layout_height="@dimen/item_setting_admin"
         android:paddingLeft="@dimen/padding_20"
         android:paddingRight="@dimen/padding_20"
-        android:background="@drawable/selector_list">
+        android:background="@drawable/selector_list"
+        android:onClick="@{holder::onBtnClick}">
 
         <TextView
             android:id="@+id/wifi_ssid"
@@ -41,8 +42,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:textColor="@color/identitiy_01"
-            android:text="@string/item_wifi_connect"
-            android:onClick="@{holder::onBtnClick}"/>
+            android:text="@string/item_wifi_connect"/>
     </RelativeLayout>
 
 </layout>

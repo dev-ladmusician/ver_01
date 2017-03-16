@@ -65,13 +65,13 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.switch_btn_1:
-                mSwitch.setBtn1(!mSwitch.getBtn1());
+                mSwitch.setBtn1(!mSwitch.isBtn1());
                 break;
             case R.id.switch_btn_2:
-                mSwitch.setBtn2(!mSwitch.getBtn2());
+                mSwitch.setBtn2(!mSwitch.isBtn2());
                 break;
             case R.id.switch_btn_3:
-                mSwitch.setBtn3(!mSwitch.getBtn3());
+                mSwitch.setBtn3(!mSwitch.isBtn3());
                 break;
             case R.id.toolbar_back:
                 setResult(RESULT_CANCELED);

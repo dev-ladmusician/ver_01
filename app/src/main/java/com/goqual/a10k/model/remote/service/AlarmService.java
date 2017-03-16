@@ -3,6 +3,7 @@ package com.goqual.a10k.model.remote.service;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.Alarm;
+import com.goqual.a10k.model.entity.PagenationWrapper;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
 
@@ -14,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import rx.Observable;
 
 public class AlarmService {
@@ -30,8 +32,10 @@ public class AlarmService {
     }
 
     public interface AlarmApi {
-        @GET("alarm")
-        Observable<ResultDTO<List<Alarm>>> gets();
+        @GET("alarm/{page}")
+        Observable<PagenationWrapper<Alarm>> gets(
+                @Path("page") int page
+        );
 
         @FormUrlEncoded
         @PUT("alarm")

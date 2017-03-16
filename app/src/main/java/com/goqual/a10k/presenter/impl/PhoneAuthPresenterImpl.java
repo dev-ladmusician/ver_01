@@ -37,6 +37,7 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     @Override
     public void requestSmsToken(String phoneNumber) {
         mView.loadingStart();
+        phoneNumber = phoneNumber.replaceAll("-", "");
         getAuthService().getAuthApi().getCertification(phoneNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

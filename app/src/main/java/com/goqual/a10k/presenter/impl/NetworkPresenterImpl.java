@@ -32,6 +32,8 @@ public class NetworkPresenterImpl implements NetworkPresenter {
     private NotiService mNotiService;
     private Context mContext;
 
+    private static boolean mNetworkConnected;
+
     public NetworkPresenterImpl(Context ctx, View mView) {
         this.mContext = ctx;
         this.mView = mView;
@@ -39,13 +41,23 @@ public class NetworkPresenterImpl implements NetworkPresenter {
 
     @Override
     public void onResume() {
-        mContext.registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
-        mContext.registerReceiver(networkStateReceiver, new IntentFilter("android.net.wifi.WIFI_STATE_CHANGED"));
+        try {
+            mContext.registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+            mContext.registerReceiver(networkStateReceiver, new IntentFilter("android.net.wifi.WIFI_STATE_CHANGED"));
+        }
+        catch (Exception e) {
+            LogUtil.e(TAG, e.getMessage(), e);
+        }
     }
 
     @Override
     public void onStop() {
-        mContext.unregisterReceiver(networkStateReceiver);
+        try {
+            mContext.unregisterReceiver(networkStateReceiver);
+        }
+        catch (IllegalArgumentException e) {
+            LogUtil.e(TAG, e.getMessage(), e);
+        }
     }
 
     private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
@@ -53,32 +65,41 @@ public class NetworkPresenterImpl implements NetworkPresenter {
         public void onReceive(Context context, Intent intent) {
             ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+
             if(info != null && info.isConnected()) {
                 LogUtil.d(TAG, info.toString());
                 LogUtil.d(TAG, "NETWORK CONNECTED");
-                // TODO: ping
-//                new VersionService(mContext).getNotiApi().gets()
-//                        .subscribeOn(Schedulers.newThread())
-//                        .filter(result -> result.getResult() != null)
-//                        .map(ResultDTO::getResult)
-//                        .filter(items -> items != null && !items.isEmpty())
-//                        .flatMap(items -> Observable.from(items))
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe((item)->{
-//                                    mView.onConnected();
-//                                    LogUtil.d(TAG, "VERSION::"+ ToStringBuilder.reflectionToString(item));
-//                                },
-//                                e->{
-//                                    mView.onDisconnected();
-//                                    LogUtil.e(TAG, e.getMessage(), e);
-//                                },
-//                                ()->{}
-//                        );
-                mView.onConnected();
+                if(!mNetworkConnected) {
+                    // TODO: ping
+                    new VersionService(mContext).getVerionApi().get()
+                            .subscribeOn(Schedulers.newThread())
+                            .filter(result -> (result != null))
+                            .filter(items -> items != null)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((item) -> {
+                                        mView.onConnected();
+                                        LogUtil.d(TAG, "VERSION::" + ToStringBuilder.reflectionToString(item));
+                                        mNetworkConnected = true;
+                                    },
+                                    e -> {
+                                        if (e instanceof java.net.ConnectException) {
+                                            mView.onDisconnected();
+                                            mNetworkConnected = false;
+                                        } else {
+                                            mView.onConnected();
+                                            mNetworkConnected = true;
+                                        }
+                                        LogUtil.e(TAG, e.getMessage(), e);
+                                    },
+                                    () -> {
+                                    }
+                            );
+                }
             }
             else {
                 LogUtil.d(TAG, "NETWORK DISCONNECTED");
                 mView.onDisconnected();
+                mNetworkConnected = false;
             }
         }
     };

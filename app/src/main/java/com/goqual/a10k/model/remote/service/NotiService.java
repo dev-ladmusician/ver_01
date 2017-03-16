@@ -4,6 +4,7 @@ import android.content.Context;
 
 
 import com.goqual.a10k.model.entity.NotiWrap;
+import com.goqual.a10k.model.entity.PagenationWrapper;
 import com.goqual.a10k.model.realm.Noti;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
@@ -11,6 +12,7 @@ import com.goqual.a10k.model.remote.RetrofitManager;
 import java.util.List;
 
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import rx.Observable;
 
 public class NotiService {
@@ -27,7 +29,9 @@ public class NotiService {
     }
 
     public interface NotiApi {
-        @GET("noti")
-        Observable<ResultDTO<List<NotiWrap>>> gets();
+        @GET("noti/{page}")
+        Observable<PagenationWrapper<NotiWrap>> gets(
+                @Path("page") int page
+        );
     }
 }

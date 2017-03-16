@@ -60,7 +60,7 @@ implements NotiPresenter.View<NotiWrap>{
     @Override
     public void refresh() {
         getAdapter().clear();
-        getNotiPresenter().loadItems();
+        getNotiPresenter().loadItems(1);
     }
 
     @Override
@@ -116,7 +116,8 @@ implements NotiPresenter.View<NotiWrap>{
         mBinding.setFragment(this);
         mBinding.notiContainer.setAdapter(getAdapter());
         mBinding.notiContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getNotiPresenter().loadItems();
+        // TODO: page
+        getNotiPresenter().loadItems(1);
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -137,7 +138,7 @@ implements NotiPresenter.View<NotiWrap>{
             mAdapter = new AdapterNoti(getActivity());
             mAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
                 NotiWrap noti = getAdapter().getItem(position);
-                noti.get_typeid()
+                noti.get_typeid();
             });
         }
         return mAdapter;

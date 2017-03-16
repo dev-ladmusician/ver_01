@@ -62,6 +62,7 @@ implements IActivityInteraction{
         initViewPager();
         initTab();
         subEvent();
+        setTitle(mSwitch.getTitle());
     }
 
 

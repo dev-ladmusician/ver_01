@@ -150,5 +150,22 @@
                     android:background="@{itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>
         </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparant_white"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="@{itemSwitch._absenceid != null ? View.VISIBLE : View.GONE}">
+            <ImageView
+                android:layout_width="@dimen/txt_title"
+                android:layout_height="@dimen/txt_title"
+                android:layout_margin="@dimen/padding_15"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/txt_title"
+                android:text="@string/switch_absence_mode" />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

@@ -134,7 +134,21 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
 
     @Override
     public void onError(Throwable e) {
+        LogUtil.e(TAG, e.getMessage(), e);
 
+        CustomDialog customDialog = new CustomDialog(this);
+        DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
+            dialog.dismiss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(mBinding.fragmentContainer.getId(), FragmentAuthPhone.newInstance(getPresenter().getPhoneNumber()))
+                    .commit();
+        };
+        customDialog.isEditable(false)
+                .setTitleText(R.string.auth_certi_title)
+                .setMessageText(R.string.auth_phone_error_content)
+                .setPositiveButton(getString(R.string.common_retry), onClickListener)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .show();
     }
 
     @Override

@@ -123,7 +123,8 @@ implements AlarmPresenter.View<Alarm>{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerView();
-        getPresenter().loadItems();
+        // TODO: page
+        getPresenter().loadItems(1);
         subEvent();
     }
 
