@@ -43,8 +43,8 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     }
 
     @Override
-    public void onClickEdit(STATUS status) {
-        getAdapter().setItemState(status == STATUS.EDIT);
+    public void onClickEdit(STATE STATE) {
+        getAdapter().setItemState(STATE == STATE.EDIT);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.list_empty:
-                RxBus.getInstance().send(new EventToolbarClick(STATUS.ADD));
+                RxBus.getInstance().send(new EventToolbarClick(STATE.ADD));
                 break;
         }
     }

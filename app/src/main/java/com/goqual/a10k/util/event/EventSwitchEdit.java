@@ -8,17 +8,17 @@ import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 public class EventSwitchEdit {
 
-    private IToolbarClickListener.STATUS status;
+    private IToolbarClickListener.STATE state;
 
-    public IToolbarClickListener.STATUS getStatus() {
-        return status;
+    public IToolbarClickListener.STATE getSTATE() {
+        return state;
     }
 
     /**
      * 바꿀 스테이터스를 던져야 함!!!
-     * @param status 바꿀 스테이터스
+     * @param state 바꿀 스테이터스
      */
-    public EventSwitchEdit(IToolbarClickListener.STATUS status) {
-        this.status = status;
+    public EventSwitchEdit(IToolbarClickListener.STATE state) {
+        this.state = state;
     }
 }

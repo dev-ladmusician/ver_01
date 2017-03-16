@@ -2,57 +2,115 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
+            name="item"
+            type="com.goqual.a10k.model.entity.Absence"/>
+        <variable
             name="fragment"
             type="com.goqual.a10k.view.fragments.setting.FragmentSettingAbsence"/>
+        <import type="android.view.View"
+            alias="View"/>
     </data>
     <RelativeLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <RelativeLayout
-            android:id="@+id/absence_no_item_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/style_border_bottom_grey"
-            android:layout_marginTop="@dimen/padding_16"
-            android:paddingTop="@dimen/padding_16"
-            android:paddingBottom="@dimen/padding_16"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/switch_each_container_margin"
+            android:padding="@dimen/switch_each_container_padding"
+            android:elevation="@dimen/switch_each_container_eleavation"
+            android:background="@drawable/style_switch_container">
 
-            <ImageView
-                android:id="@+id/absence_no_item_img_plus"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_plus_b"
-                android:layout_centerHorizontal="true"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/item_height_30"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
+                <TextView
+                    android:id="@+id/start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/txt_title"
+                    android:text="@{item.getStartTimeString()}"
+                    android:onClick="@{fragment::onBtnClick}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="-"
+                    android:textSize="@dimen/txt_title"
+                    android:layout_marginLeft="@dimen/padding_15"
+                    android:layout_marginRight="@dimen/padding_15"/>
+                <TextView
+                    android:id="@+id/end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/txt_title"
+                    android:text="@{item.getEndTimeString()}"
+                    android:onClick="@{fragment::onBtnClick}"/>
+            </LinearLayout>
 
-            <TextView
+            <!-- btn -->
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_below="@+id/absence_no_item_img_plus"
-                android:layout_marginTop="@dimen/padding_16"
-                android:text="@string/absence_no_item"/>
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/switch_btn_1"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:onClick="@{fragment::onBtnClick}"
+                    android:text="@{item.btn1 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{item.btn1 ? @color/white : @color/grey_03}"
+                    android:background="@{item.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+
+                <TextView
+                    android:id="@+id/switch_btn_2"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:layout_below="@id/switch_btn_1"
+                    android:layout_marginBottom="@dimen/switch_each_btn_margin"
+                    android:layout_marginTop="@dimen/switch_each_btn_margin"
+                    android:onClick="@{fragment::onBtnClick}"
+                    android:text="@{item.btn2 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{item.btn2 ? @color/white : @color/grey_03}"
+                    android:visibility="@{item.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
+                    android:background="@{item.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+
+                <TextView
+                    android:id="@+id/switch_btn_3"
+                    android:layout_width="@dimen/switch_each_btn_size"
+                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:gravity="center"
+                    android:textSize="@dimen/switch_each_btn_txt_size"
+                    android:layout_below="@id/switch_btn_2"
+                    android:onClick="@{fragment::onBtnClick}"
+                    android:textColor="@{item.btn3 ? @color/white : @color/grey_03}"
+                    android:visibility="@{item.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
+                    android:text="@{item.btn3 ? @string/btn_on : @string/btn_off}"
+                    android:background="@{item.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+            </RelativeLayout>
+
+            <!-- setting -->
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch_enable"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/switch_each_setting_wrapper"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:checked="@{item.state}">
+            </android.support.v7.widget.SwitchCompat>
         </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/loading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
     </RelativeLayout>
-
-
 </layout>

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainAlarmBinding;
-import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
@@ -21,7 +20,6 @@ import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.activities.ActivityAlarmEdit;
-import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -196,20 +194,20 @@ implements AlarmPresenter.View<Alarm>{
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
-                            LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
+                            LogUtil.e(TAG, "EVENT STATE :: " + ((EventToolbarClick) event).getState());
                             if(isFragmentVisible()) {
-                                switch (((EventToolbarClick) event).getStatus()) {
+                                switch (((EventToolbarClick) event).getState()) {
                                     case DONE:
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
                                         getAdapter().setDeletable(false);
                                         break;
                                     case EDIT:
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.DONE));
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.DONE));
                                         getAdapter().setDeletable(true);
                                         break;
                                     case ADD:
                                         startActivityForResult(new Intent(getActivity(), ActivityAlarmEdit.class), REQ_NEW_ALARM);
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATUS.EDIT));
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
                                         break;
                                 }
                             }

@@ -13,6 +13,7 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainNotiBinding;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.entity.NotiWrap;
+import com.goqual.a10k.model.realm.Noti;
 import com.goqual.a10k.presenter.NotiPresenter;
 import com.goqual.a10k.presenter.impl.NotiPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
@@ -135,7 +136,8 @@ implements NotiPresenter.View<NotiWrap>{
         if(mAdapter == null) {
             mAdapter = new AdapterNoti(getActivity());
             mAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
-
+                NotiWrap noti = getAdapter().getItem(position);
+                noti.get_typeid()
             });
         }
         return mAdapter;

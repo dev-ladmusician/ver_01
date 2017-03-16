@@ -10,10 +10,10 @@
 
         <variable
             name="eventSwitEditEnum"
-            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATUS"/>
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"/>
 
         <import
-            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATUS"
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"
             alias="editStatusEnum" />
 
         <import

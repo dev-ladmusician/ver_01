@@ -71,7 +71,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                     public void call(Object event) {
                         if(event instanceof EventSwitchEdit) {
                             mEditBtnStatus = (EventSwitchEdit)event;
-                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getStatus());
+                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getSTATE());
                         }
                     }
                 });
@@ -151,18 +151,18 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_edit:
-                switch (mEditBtnStatus.getStatus()) {
+                switch (mEditBtnStatus.getSTATE()) {
                     case DONE:
-                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.DONE));
+                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
                         break;
                     case EDIT:
-                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.EDIT));
+                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.EDIT));
                         break;
                 }
                 break;
             case R.id.toolbar_add:
                 if(mBinding.mainPager.getCurrentItem() == 0) {
-                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.ADD));
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.ADD));
                 }
                 break;
         }

@@ -9,11 +9,8 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmSwitchSelectBinding;
-import com.goqual.a10k.model.SwitchManager;
-import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
-import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitch;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitchBtn;
@@ -94,7 +91,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
                 finish();
                 break;
             case R.id.timer_toolbar_save:
-                RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.DONE));
+                RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
                 break;
         }
     }

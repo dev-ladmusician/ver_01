@@ -1,27 +1,19 @@
 package com.goqual.a10k.view.fragments.alarm;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentAlarmSelectSwitchBtnBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.functions.Action1;
 
@@ -85,7 +77,7 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
-                            if(((EventToolbarClick) event).getStatus() == IToolbarClickListener.STATUS.DONE) {
+                            if(((EventToolbarClick) event).getState() == IToolbarClickListener.STATE.DONE) {
                                 ((IAlarmInteraction)getActivity()).setBtns(mSwitch.getBtn1(), mSwitch.getBtn2(), mSwitch.getBtn3());
                             }
                         }

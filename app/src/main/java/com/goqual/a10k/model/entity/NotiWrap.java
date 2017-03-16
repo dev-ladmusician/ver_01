@@ -10,6 +10,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 
 public class NotiWrap implements BaseRealmWraper<Noti>{
+    public static final int APP_UPDATE = 1;
+    public static final int ABSENCE_MODE = 2;
+    public static final int DELETE_CONNECTION = 3;
+    public static final int CHANGE_ADMIN = 4;
+    public static final int INVITE = 5;
+    public static final int NEW_CONNECTION = 6;
+
     private int _notiid;
     private int _typeid;
     private int date;

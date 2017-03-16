@@ -252,4 +252,7 @@
     <string name="absence_error">정보를 모두 입력해주세요.</string>
     <string name="absence_error_time">올바른 시간 정보를 입력해주세요.</string>
 
+    <!-- Absence -->
+    <string name="absence_start_text">시작</string>
+    <string name="absence_end_text">종료</string>
 </resources>

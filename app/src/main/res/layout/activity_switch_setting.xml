@@ -7,8 +7,8 @@
             name="activity"
             type="com.goqual.a10k.view.activities.ActivitySwitchSetting"/>
         <variable
-            name="editSwitchStatus"
-            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATUS"/>
+            name="editSwitchState"
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"/>
         <import type="android.view.View"
             alias="View"/>
     </data>
@@ -62,7 +62,7 @@
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:visibility="@{editSwitchStatus == editSwitchStatus.HIDE ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{editSwitchState == editSwitchState.HIDE ? View.GONE : View.VISIBLE}"
                     android:onClick="@{activity::onBtnClick}">
 
                     <TextView
@@ -72,7 +72,7 @@
                         android:textColor="@color/white"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="@{editSwitchStatus == editSwitchStatus.EDIT ? @string/toolbar_done : editSwitchStatus == editSwitchStatus.DONE ? @string/toolbar_edit : @string/toolbar_edit}" />
+                        android:text="@{editSwitchState == editSwitchState.EDIT ? @string/toolbar_done : editSwitchState == editSwitchState.DONE ? @string/toolbar_edit : @string/toolbar_edit}" />
                 </RelativeLayout>
             </RelativeLayout>
 

@@ -14,11 +14,14 @@ import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.presenter.UserPresenter;
 import com.goqual.a10k.presenter.impl.UserPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+
+import rx.functions.Action1;
 
 /**
  * Created by hanwool on 2017. 2. 28..
@@ -58,7 +61,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public boolean hasToolbarMenus() {
-        return false;
+        return true;
     }
 
     @Override
@@ -124,6 +127,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+        subEvent();
     }
 
     private void initView(){
@@ -137,13 +141,14 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         String myPhoneNum = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_num), "");
         if(mAdminUser != null) {
             if (mAdminUser.getNum().equals(myPhoneNum)) {
-                RxBus.getInstance().send(new EventToolbarClick(STATUS.EDIT));
+                RxBus.getInstance().send(new EventToolbarClick(STATE.DONE));
             } else {
-                RxBus.getInstance().send(new EventToolbarClick(STATUS.HIDE));
+
+                RxBus.getInstance().send(new EventToolbarClick(STATE.HIDE));
             }
         }
         else {
-            RxBus.getInstance().send(new EventToolbarClick(STATUS.HIDE));
+            RxBus.getInstance().send(new EventToolbarClick(STATE.HIDE));
         }
     }
 
@@ -164,12 +169,27 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         return mUserAdapter;
     }
 
+    private void subEvent() {
+        RxBus.getInstance().toObserverable()
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if(event instanceof EventSwitchEdit) {
+                            LogUtil.d(TAG, "event?"+((EventSwitchEdit) event).getSTATE());
+                            if(((EventSwitchEdit) event).getSTATE() == STATE.EDIT) {
+
+                            }
+                        }
+                    }
+                });
+    }
+
     public void onBtnClick(View view) {
 
     }
 
     @Override
-    public void onClickEdit(STATUS status) {
+    public void onClickEdit(STATE STATE) {
 
     }
 }

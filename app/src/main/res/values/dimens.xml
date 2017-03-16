@@ -12,6 +12,7 @@
     <dimen name="padding_32">32dp</dimen>
 
     <dimen name="margin_40">40dp</dimen>
+    <dimen name="item_height_30">30dp</dimen>
     <dimen name="item_height_100">100dp</dimen>
     <dimen name="txt_title">17dp</dimen>
     <dimen name="txt_info">15dp</dimen>

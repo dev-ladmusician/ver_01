@@ -8,17 +8,17 @@ import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 public class EventToolbarClick {
 
-    private IToolbarClickListener.STATUS status;
+    private IToolbarClickListener.STATE state;
 
-    public IToolbarClickListener.STATUS getStatus() {
-        return status;
+    public IToolbarClickListener.STATE getState() {
+        return state;
     }
 
     /**
      * 현재 스테이터스를 던져야 함!!!
-     * @param status 현재 스테이터스
+     * @param state 현재 스테이터스
      */
-    public EventToolbarClick(IToolbarClickListener.STATUS status) {
-        this.status = status;
+    public EventToolbarClick(IToolbarClickListener.STATE state) {
+        this.state = state;
     }
 }

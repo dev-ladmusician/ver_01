@@ -73,16 +73,16 @@ implements IActivityInteraction{
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
                             mEventToolbarClick = (EventToolbarClick)event;
-                            mBinding.setEditSwitchStatus(mEventToolbarClick.getStatus());
-                            passToolbarClickEvent(mEventToolbarClick.getStatus());
+                            mBinding.setEditSwitchState(mEventToolbarClick.getState());
+                            passToolbarClickEvent(mEventToolbarClick.getState());
                         }
                     }
                 });
     }
 
     private void initViewPager() {
-        mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATUS.EDIT);
-        mBinding.setEditSwitchStatus(mEventToolbarClick.getStatus());
+        mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATE.EDIT);
+        mBinding.setEditSwitchState(mEventToolbarClick.getState());
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitchPosition));
@@ -109,7 +109,7 @@ implements IActivityInteraction{
                     LogUtil.e(TAG, e.getMessage(), e);
                 }
 
-                if(position == 1) {
+                if(((BaseFragment)mAdapterPage.getItem(position)).hasToolbarMenus()) {
                     mBinding.toolbarEditContainer.setVisibility(View.VISIBLE);
                 }
                 else {
@@ -167,18 +167,18 @@ implements IActivityInteraction{
                 finish();
                 break;
             case R.id.toolbar_edit_container:
-                if(mEventToolbarClick.getStatus() == IToolbarClickListener.STATUS.EDIT) {
-                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.DONE));
+                if(mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT) {
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
                 }
                 else {
-                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATUS.EDIT));
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.EDIT));
                 }
                 break;
         }
     }
 
-    private void passToolbarClickEvent(IToolbarClickListener.STATUS status) {
-        ((IToolbarClickListener)mAdapterPage.getItem(mBinding.settingContainer.getCurrentItem())).onClickEdit(status);
+    private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
+        ((IToolbarClickListener)mAdapterPage.getItem(mBinding.settingContainer.getCurrentItem())).onClickEdit(state);
     }
 
     @Override

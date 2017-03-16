@@ -44,7 +44,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     private AdapterNfc mAdapter;
     private NfcTagPresenter mPresenter;
     private Switch mSwitch;
-    private STATUS mCurrentState;
+    private STATE mCurrentState;
     private int mSwitchPosition;
 
     private Realm realm;
@@ -74,7 +74,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public boolean hasToolbarMenus() {
-        return false;
+        return true;
     }
 
     @Override
@@ -101,14 +101,14 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
         if(e instanceof HttpException) {
-            LogUtil.e(TAG, String.format("HTTPE::STATUS: %d, MESSAGE: %s", ((HttpException) e).code(), ((HttpException) e).message()));
+            LogUtil.e(TAG, String.format("HTTPE::STATE: %d, MESSAGE: %s", ((HttpException) e).code(), ((HttpException) e).message()));
         }
     }
 
     @Override
     public void addItem(Nfc item) {
         LogUtil.d(TAG, "ITEM::" + item);
-        item.setmIsDeletable(mCurrentState == STATUS.EDIT);
+        item.setmIsDeletable(mCurrentState == STATE.EDIT);
         mAdapter.addItem(new NfcWrap(item));
         mAdapter.notifyDataSetChanged();
     }
@@ -132,7 +132,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         if(getArguments() != null) {
             mSwitchPosition = getArguments().getInt(EXTRA_SWITCH);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
-            mCurrentState = STATUS.DONE;
+            mCurrentState = STATE.DONE;
         }
     }
 
@@ -246,9 +246,9 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     }
 
     @Override
-    public void onClickEdit(STATUS status) {
-        LogUtil.d(TAG, "STATE::" + status);
-        mCurrentState = status;
-        mAdapter.setItemState(status == STATUS.EDIT);
+    public void onClickEdit(STATE STATE) {
+        LogUtil.d(TAG, "STATE::" + STATE);
+        mCurrentState = STATE;
+        mAdapter.setItemState(STATE == STATE.EDIT);
     }
 }
