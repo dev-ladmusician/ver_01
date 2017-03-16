@@ -1,6 +1,7 @@
 package com.goqual.a10k.model;
 
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
+
 import com.goqual.a10k.model.entity.Switch;
 
 import java.util.ArrayList;

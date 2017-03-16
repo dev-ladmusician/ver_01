@@ -3,6 +3,10 @@ package com.goqual.a10k.view.fragments.auth;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +79,28 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
 
     private void initView() {
         mBinding.setFragment(this);
+        mBinding.authPhoneEdit.addTextChangedListener(new PhoneNumberFormattingTextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(TAG, String.format("beforeTextChanged::string:%s, start:%d, count:%d, after:%d", s, start, count, after));
+                super.beforeTextChanged(s, start, count, after);
+            }
+
+            @Override
+            public synchronized void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                String ss = s.toString();
+                PhoneNumberUtils
+                if(PhoneNumberUtils.isGlobalPhoneNumber(ss)) {
+                    LogUtil.d(TAG, "afterTextChanged::isWellFormedSmsAddress:true::" + ss);
+                    mBinding.authPhoneBtnNext.setEnabled(true);
+                }
+                else {
+                    LogUtil.d(TAG, "afterTextChanged::isWellFormedSmsAddress:false" + ss);
+                    mBinding.authPhoneBtnNext.setEnabled(false);
+                }
+            }
+        });
         mBinding.authPhoneEdit.setText(phoneNumber);
     }
 

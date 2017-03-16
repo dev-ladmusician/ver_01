@@ -12,9 +12,9 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
     public String tag;
     public int _nfcid;
     public int _bsid;
-    public Boolean btn1;
-    public Boolean btn2;
-    public Boolean btn3;
+    public boolean btn1;
+    public boolean btn2;
+    public boolean btn3;
     public String title;
     public String macaddr;
     public int state;
@@ -66,27 +66,27 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
         this._bsid = _bsid;
     }
 
-    public Boolean getBtn1() {
+    public boolean getBtn1() {
         return btn1;
     }
 
-    public void setBtn1(Boolean btn1) {
+    public void setBtn1(boolean btn1) {
         this.btn1 = btn1;
     }
 
-    public Boolean getBtn2() {
+    public boolean getBtn2() {
         return btn2;
     }
 
-    public void setBtn2(Boolean btn2) {
+    public void setBtn2(boolean btn2) {
         this.btn2 = btn2;
     }
 
-    public Boolean getBtn3() {
+    public boolean getBtn3() {
         return btn3;
     }
 
-    public void setBtn3(Boolean btn3) {
+    public void setBtn3(boolean btn3) {
         this.btn3 = btn3;
     }
 

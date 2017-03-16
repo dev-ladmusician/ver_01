@@ -2,8 +2,7 @@ package com.goqual.a10k.model.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
