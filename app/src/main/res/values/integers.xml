@@ -7,4 +7,10 @@
     <integer name="frag_select_wifi">1</integer>
     <integer name="frag_set_switch">2</integer>
     <integer name="frag_rename">3</integer>
+
+    <!-- switch setting -->
+    <integer name="frag_switch_setting_admin">0</integer>
+    <integer name="frag_switch_setting_nfc">1</integer>
+    <integer name="frag_switch_setting_absence">2</integer>
+    <integer name="frag_switch_setting_history">3</integer>
 </resources>

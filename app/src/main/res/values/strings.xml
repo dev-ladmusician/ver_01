@@ -258,6 +258,9 @@
     <string name="absence_start_text">시작</string>
     <string name="absence_end_text">종료</string>
     <string name="switch_absence_mode">부재모드가 설정된 스위치입니다.</string>
+    <string name="absence_info_client">Admin 권한이 있어야\n수정할 수 있습니다</string>
+    <string name="absence_info_admin">부재모드 활성 시 회원들도\n 제어할 수 없습니다</string>
+
 
 
 

@@ -46,13 +46,15 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
         phoneNumber = phoneNumber.substring(3, phoneNumber.length());
         phoneNumber = "0" + phoneNumber;
 
+        final String phoneNumFinal = phoneNumber;
+
         getAuthService().getAuthApi().getCertification(phoneNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rtv -> {
                             LogUtil.d(TAG, "CERT::" + rtv);
                             LogUtil.d(TAG, "CERT::" + rtv.getResult().getCertifinum());
-                            mView.onSuccessPhoneNumberAuth(getPhoneNumber(), rtv.getResult().getCertifinum());
+                            mView.onSuccessPhoneNumberAuth(phoneNumFinal, rtv.getResult().getCertifinum());
                             mView.loadingStop();
                         },
                         (e) -> {

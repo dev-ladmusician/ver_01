@@ -2,12 +2,9 @@ package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
-
 import com.goqual.a10k.model.entity.Absence;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
-
-import java.util.List;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -15,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import rx.Observable;
 
 public class AbsenceService {
@@ -31,8 +29,10 @@ public class AbsenceService {
     }
 
     public interface AbsenceApi {
-        @GET("absence")
-        Observable<ResultDTO<List<Absence>>> gets();
+        @GET("absence/{switchId}")
+        Observable<ResultDTO<Absence>> get(
+                @Path("switchId") int switchId
+        );
 
         @FormUrlEncoded
         @PUT("absence")

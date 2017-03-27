@@ -1,9 +1,5 @@
 package com.goqual.a10k.model.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -13,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Switch implements Cloneable{
     private int _connectionid;
     private int _bsid;
-    private int btnCount;
+    private int btncount;
     private int seq;
     private boolean btn1;
     private boolean btn2;
@@ -55,11 +51,11 @@ public class Switch implements Cloneable{
     }
 
     public int getBtnCount() {
-        return btnCount;
+        return btncount;
     }
 
     public void setBtnCount(int btnCount) {
-        this.btnCount = btnCount;
+        this.btncount = btnCount;
     }
 
     public int getSeq() {
