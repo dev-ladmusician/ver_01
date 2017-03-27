@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="activity"
+            type="com.goqual.a10k.view.activities.ActivitySwitchSetting"/>
+        <variable
+            name="editSwitchState"
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"/>
+        <import type="android.view.View"
+            alias="View"/>
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@color/identitiy_02"
+                android:elevation="3dp"
+                android:paddingLeft="@dimen/padding_16"
+                android:paddingRight="@dimen/padding_16">
+
+                <RelativeLayout
+                    android:id="@+id/toolbar_back"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{activity::onBtnClick}">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ic_arrow_l_w"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:text="10K"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/toolbar_plus_icon_size"
+                    android:textColor="@color/white" />
+
+                <RelativeLayout
+                    android:id="@+id/toolbar_edit_container"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:visibility="@{editSwitchState == editSwitchState.HIDE ? View.GONE : View.VISIBLE}"
+                    android:onClick="@{activity::onBtnClick}">
+
+                    <TextView
+                        android:id="@+id/toolbar_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@{editSwitchState == editSwitchState.EDIT ? @string/toolbar_done : editSwitchState == editSwitchState.DONE ? @string/toolbar_edit : @string/toolbar_edit}" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/setting_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/identitiy_02"
+                android:elevation="3dp"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/white"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="#b3ffffff" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/setting_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

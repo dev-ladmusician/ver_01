@@ -5,17 +5,51 @@
 
     <data>
         <variable
-            name="activity"
+            name="fragment"
             type="com.goqual.a10k.view.fragments.FragmentMainAlarm"/>
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/alarm_no_item_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_border_bottom_grey"
+            android:layout_marginTop="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_16"
+            android:paddingBottom="@dimen/padding_16"
+            android:visibility="visible"
+            android:onClick="@{fragment::onBtnClick}">
 
-        <TextView
+            <ImageView
+                android:id="@+id/alarm_no_item_img_plus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_plus_b"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/alarm_no_item_img_plus"
+                android:layout_marginTop="@dimen/padding_16"
+                android:text="@string/alarm_no_item"/>
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="alarm" />
+            android:layout_centerInParent="true" />
     </RelativeLayout>
+
 </layout>

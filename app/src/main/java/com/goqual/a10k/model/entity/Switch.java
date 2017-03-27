@@ -1,24 +1,29 @@
 package com.goqual.a10k.model.entity;
 
-import com.android.annotations.Nullable;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class Switch {
+public class Switch implements Cloneable{
     private int _connectionid;
     private int _bsid;
-    private int state;
+    private int btnCount;
     private int seq;
-    @Nullable private Boolean btn1;
-    @Nullable private Boolean btn2;
-    @Nullable private Boolean btn3;
+    private boolean btn1;
+    private boolean btn2;
+    private boolean btn3;
     private String hw;
     private String fw;
     public String title;
     private String macaddr;
     private boolean isavailable;
+    private Integer _absenceid;
     private boolean outlet;
     public boolean mIsStateView;
 
@@ -26,6 +31,9 @@ public class Switch {
     private String WIFI_BSSID = "";
     private String WIFI_PASSWORD = "";
     private String WIFI_CAPABILITY = "";
+
+    public Switch() {
+    }
 
     // BS
     private int AP_SERVER_PORT = 5050;
@@ -46,12 +54,12 @@ public class Switch {
         this._bsid = _bsid;
     }
 
-    public int getState() {
-        return state;
+    public int getBtnCount() {
+        return btnCount;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public void setBtnCount(int btnCount) {
+        this.btnCount = btnCount;
     }
 
     public int getSeq() {
@@ -62,30 +70,27 @@ public class Switch {
         this.seq = seq;
     }
 
-    @Nullable
-    public Boolean getBtn1() {
+    public boolean isBtn1() {
         return btn1;
     }
 
-    public void setBtn1(@Nullable Boolean btn1) {
+    public void setBtn1(boolean btn1) {
         this.btn1 = btn1;
     }
 
-    @Nullable
-    public Boolean getBtn2() {
+    public boolean isBtn2() {
         return btn2;
     }
 
-    public void setBtn2(@Nullable Boolean btn2) {
+    public void setBtn2(boolean btn2) {
         this.btn2 = btn2;
     }
 
-    @Nullable
-    public Boolean getBtn3() {
+    public boolean isBtn3() {
         return btn3;
     }
 
-    public void setBtn3(@Nullable Boolean btn3) {
+    public void setBtn3(boolean btn3) {
         this.btn3 = btn3;
     }
 
@@ -129,12 +134,28 @@ public class Switch {
         this.isavailable = isavailable;
     }
 
+    public Integer get_absenceid() {
+        return _absenceid;
+    }
+
+    public void set_absenceid(Integer _absenceid) {
+        this._absenceid = _absenceid;
+    }
+
     public boolean isOutlet() {
         return outlet;
     }
 
     public void setOutlet(boolean outlet) {
         this.outlet = outlet;
+    }
+
+    public boolean ismIsStateView() {
+        return mIsStateView;
+    }
+
+    public void setmIsStateView(boolean mIsStateView) {
+        this.mIsStateView = mIsStateView;
     }
 
     public String getWIFI_SSID() {
@@ -177,11 +198,34 @@ public class Switch {
         this.AP_SERVER_PORT = AP_SERVER_PORT;
     }
 
-    public boolean ismIsStateView() {
-        return mIsStateView;
+    @Override
+    public Switch clone() throws CloneNotSupportedException {
+        Switch newSwitch = (Switch) super.clone();
+
+        newSwitch.set_connectionid(this.get_connectionid());
+        newSwitch.set_bsid(this.get_bsid());
+        newSwitch.setBtnCount(this.getBtnCount());
+        newSwitch.setSeq(this.getSeq());
+        newSwitch.setBtn1(this.isBtn1());
+        newSwitch.setBtn2(this.isBtn2());
+        newSwitch.setBtn3(this.isBtn3());
+        newSwitch.set_absenceid(this.get_absenceid());
+        newSwitch.setHw(this.getHw());
+        newSwitch.setFw(this.getFw());
+        newSwitch.setTitle(this.getTitle());
+        newSwitch.setMacaddr(this.getMacaddr());
+        newSwitch.setIsavailable(this.isavailable());
+        newSwitch.setOutlet(this.isOutlet());
+        newSwitch.setmIsStateView(this.ismIsStateView());
+        newSwitch.setWIFI_SSID(this.getWIFI_SSID());
+        newSwitch.setWIFI_BSSID(this.getWIFI_BSSID());
+        newSwitch.setWIFI_PASSWORD(this.getWIFI_PASSWORD());
+        newSwitch.setWIFI_CAPABILITY(this.getWIFI_CAPABILITY());
+        return newSwitch;
     }
 
-    public void setmIsStateView(boolean mIsStateView) {
-        this.mIsStateView = mIsStateView;
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

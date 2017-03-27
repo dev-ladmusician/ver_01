@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.fragments.switches;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +10,10 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchEachBinding;
-import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.view.activities.ActivitySwitchSetting;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 
@@ -20,7 +21,7 @@ import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
  * Created by ladmusician on 2017. 2. 20..
  */
 
-public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListBinding>{
+public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchEachBinding> {
     public static final String TAG = FragmentMainSwitchEach.class.getSimpleName();
 
     private final static String ARG_POSITION = "arg_position";
@@ -45,7 +46,12 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
 
     @Override
     public String getTitle() {
-        return getString(R.string.title_switch_each);
+        return String.format("%s: %s", getString(R.string.app_name), mSwitch.getTitle());
+    }
+
+    @Override
+    public boolean hasToolbarMenus() {
+        return false;
     }
 
     @Override
@@ -81,6 +87,9 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchListB
                 operationListener.onSwitchClicked(mSwitchItemPosition, 3);
                 break;
             case R.id.switch_setting:
+                Intent intent = new Intent(getActivity(), ActivitySwitchSetting.class);
+                intent.putExtra(ActivitySwitchSetting.ITEM_SWITCH, SwitchManager.getInstance().getPosition(mSwitch));
+                startActivity(intent);
                 break;
         }
     }

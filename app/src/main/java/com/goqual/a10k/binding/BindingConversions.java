@@ -1,7 +1,15 @@
 package com.goqual.a10k.binding;
 
 import android.databinding.BindingConversion;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.view.View;
+
+import com.goqual.a10k.util.LogUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by TedPark on 2017. 2. 16..

@@ -16,7 +16,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/partial_toolbar_nfc" />
+            <include layout="@layout/partial_toolbar_nfc"
+                android:id="@+id/toolbar_include"/>
             <LinearLayout
                 android:id="@+id/list_wrap"
                 android:layout_width="match_parent"

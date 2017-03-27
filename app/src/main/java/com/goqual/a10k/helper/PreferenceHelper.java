@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Map;
+
 /**
  * Created by ladmusician on 4/6/16.
  */
@@ -38,6 +40,16 @@ public class PreferenceHelper {
         }
 
         editor.commit();
+    }
+
+    public void deleteAllValues() {
+        SharedPreferences pref = mContext.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        Map<String, ?> values = pref.getAll();
+        for(String key : values.keySet()) {
+            editor.remove(key);
+        }
+        editor.apply();
     }
 
     public int getValue(String key, int dftInt) {

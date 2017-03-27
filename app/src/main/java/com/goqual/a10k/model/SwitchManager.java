@@ -1,6 +1,7 @@
 package com.goqual.a10k.model;
 
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
+
 import com.goqual.a10k.model.entity.Switch;
 
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class SwitchManager {
     }
 
     public Switch getItem(int position) {
+        if(position>=mSwitchList.size() || position < 0) {
+            return null;
+        }
         return mSwitchList.get(position);
     }
 
@@ -69,4 +73,15 @@ public class SwitchManager {
         }
         return null;
     }
+    @Nullable
+    public Switch getSwitchByBSID(int bsid) {
+        for(Switch item : mSwitchList) {
+            if(item.get_bsid() == bsid) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+
 }

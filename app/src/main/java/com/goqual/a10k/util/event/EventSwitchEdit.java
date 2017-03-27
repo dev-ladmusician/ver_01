@@ -1,27 +1,24 @@
 package com.goqual.a10k.util.event;
 
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+
 /**
  * Created by ladmusician on 2017. 2. 22..
  */
 
 public class EventSwitchEdit {
-    public enum STATUS {
-        EDIT,
-        DONE,
-        HIDE
-    }
 
-    private STATUS status;
+    private IToolbarClickListener.STATE state;
 
-    public STATUS getStatus() {
-        return status;
+    public IToolbarClickListener.STATE getSTATE() {
+        return state;
     }
 
     /**
      * 바꿀 스테이터스를 던져야 함!!!
-     * @param status 바꿀 스테이터스
+     * @param state 바꿀 스테이터스
      */
-    public EventSwitchEdit(STATUS status) {
-        this.status = status;
+    public EventSwitchEdit(IToolbarClickListener.STATE state) {
+        this.state = state;
     }
 }

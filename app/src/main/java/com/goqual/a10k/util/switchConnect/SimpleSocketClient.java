@@ -1,6 +1,5 @@
 package com.goqual.a10k.util.switchConnect;
 
-import android.content.Context;
 import android.net.Network;
 import android.os.Build;
 
@@ -45,7 +44,7 @@ public class SimpleSocketClient extends Thread{
     private static String mAddr;
     private static int mPort;
 
-    private boolean mConnected = false;
+    private boolean isConnected = false;
     private boolean mCommBlock = false;
 
     private static String aLine = "";
@@ -82,6 +81,7 @@ public class SimpleSocketClient extends Thread{
                 mSocket = new Socket();
                 mSocket.connect(socketAddress, 5000);
             }
+
             mListener.onConnected();
         } catch (IOException e) {
             mListener.onError(e);
@@ -136,18 +136,17 @@ public class SimpleSocketClient extends Thread{
             OutputStreamWriter osw = new OutputStreamWriter(os);
             buffSend = new BufferedWriter(osw);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             LogUtil.e(TAG, e.getMessage(), e);
             mListener.onError(e);
             return;
         }
-        mConnected = true;
+        isConnected = true;
         try{
             sendingThread = new Thread() {
                 @Override
                 public void run() {
                     while (!interrupted()) {
-                        if(mConnected) {
+                        if(isConnected) {
                             if(!mCommBlock && commQueue.size()>0) {
                                 byte[] pa = commQueue.poll();
                                 LogUtil.d(TAG, "sendString :: SENDING\nCOMM_BLOCK: " + mCommBlock +
@@ -173,7 +172,7 @@ public class SimpleSocketClient extends Thread{
         LogUtil.d(TAG, "socket_thread loop started");
         try {
             while (!isInterrupted()) {
-                if(mConnected) {
+                if(isConnected) {
                     try {
                         if(receiveBuffer == null) {
                             receiveBuffer = new ArrayList<>();
@@ -202,7 +201,6 @@ public class SimpleSocketClient extends Thread{
                         }
                         mCommBlock = false;
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         LogUtil.e(TAG, e.getMessage(), e);
                         mListener.onError(e);
                     }
@@ -213,12 +211,12 @@ public class SimpleSocketClient extends Thread{
             LogUtil.d(TAG, "socket_thread loop terminated");
             mListener.onError(e);
             disconnect();
-            mConnected = false;
+            isConnected = false;
         }
     }
 
     synchronized public boolean isConnected() {
-        return mConnected;
+        return isConnected;
     }
 
     public void sendPacket(byte[] msg) {

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="item"
+            type="com.goqual.a10k.model.entity.History"/>
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.HistoryViewHolder"/>
+    </data>
+<RelativeLayout
+    android:id="@+id/user_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height_s"
+    android:orientation="horizontal"
+    android:background="@drawable/style_border_bottom_grey"
+    android:paddingLeft="@dimen/padding_16"
+    android:paddingRight="@dimen/padding_16">
+
+    <TextView
+        android:id="@+id/history_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:text="@{item.getCreated()}"
+        android:textColor="@color/grey_06"/>
+
+    <TextView
+        android:id="@+id/history_item_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:text="Somebody"
+        android:textColor="@color/grey_03"/>
+
+    <TextView
+        android:id="@+id/history_item_method"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text='@{item.label.equals("phone") ? @string/history_item_control_phone : @string/history_item_control_switch}'/>
+
+    <TextView
+        android:id="@+id/history_item_operation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/history_item_method"
+        android:layout_marginRight="10dp"
+        android:textColor="@{item.operation ? @color/identitiy_01 : @color/grey_05}"
+        android:text="@{item.operation ? @string/history_item_op_on : @string/history_item_op_off}"/>
+</RelativeLayout>
+
+</layout>

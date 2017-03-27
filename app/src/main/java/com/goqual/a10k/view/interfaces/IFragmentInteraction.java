@@ -8,5 +8,9 @@ import android.support.v7.widget.Toolbar;
  */
 
 public interface IFragmentInteraction {
+    boolean VISIBLE = true;
+    boolean INVISIBLE = false;
+
     String getTitle();
+    void setFragmentVisible(boolean isVisible);
 }

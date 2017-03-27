@@ -5,8 +5,8 @@ import android.telephony.TelephonyManager;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
-import com.goqual.a10k.model.remote.AuthService;
-import com.goqual.a10k.model.remote.UserService;
+import com.goqual.a10k.model.remote.service.AuthService;
+import com.goqual.a10k.model.remote.service.UserService;
 import com.goqual.a10k.presenter.PhoneAuthPresenter;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityPhoneAuth;
@@ -37,6 +37,7 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     @Override
     public void requestSmsToken(String phoneNumber) {
         mView.loadingStart();
+        phoneNumber = phoneNumber.replaceAll("-", "");
         getAuthService().getAuthApi().getCertification(phoneNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -66,6 +67,7 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
                 .subscribe((x) -> {
                             String accessToken = x.headers().get("access_token");
                             PreferenceHelper.getInstance(mContext).put(mContext.getString(R.string.arg_user_token), accessToken);
+                            PreferenceHelper.getInstance(mContext).put(mContext.getString(R.string.arg_user_num), phoneNumber);
                             mView.onSuccessAuthProcess();
                             mView.loadingStop();
 
@@ -92,7 +94,8 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
 
     @Override
     public String getFcmToken() {
-        return "";
+        return PreferenceHelper.getInstance(mContext)
+                .getStringValue(mContext.getString(R.string.arg_user_fcm_token), "");
     }
 
     public AuthService getAuthService() {

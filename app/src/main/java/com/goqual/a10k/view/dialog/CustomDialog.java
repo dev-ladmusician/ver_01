@@ -2,6 +2,7 @@ package com.goqual.a10k.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.DialogCustomBinding;
@@ -25,6 +27,7 @@ public class CustomDialog extends Dialog{
     private DialogModel mModel;
     private OnClickListener mOnPositiveClickListener;
     private OnClickListener mOnNegativeClickListener;
+    private boolean mIsShowing;
 
     public CustomDialog(@NonNull Context context) {
         super(context);
@@ -54,6 +57,25 @@ public class CustomDialog extends Dialog{
         mBinding.setDialog(this);
         mBinding.setItem(mModel);
         setContentView(mBinding.getRoot());
+
+        if(mModel.isEditable) {
+            mBinding.dialogEdit.requestFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+        setOnDismissListener(dialog -> {
+            mIsShowing = false;
+        });
+        setOnCancelListener(dialog -> {
+            mIsShowing = false;
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mBinding.dialogEdit.getWindowToken(), 0);
+        super.onStop();
     }
 
     public CustomDialog setTitleText(String title) {
@@ -76,15 +98,15 @@ public class CustomDialog extends Dialog{
         return this;
     }
 
-    public CustomDialog isPositiveButton(boolean enable, String text, OnClickListener onClickListener) {
-        mModel.setPositiveButton(enable);
+    public CustomDialog setPositiveButton(String text, OnClickListener onClickListener) {
+        mModel.setPositiveButton(true);
         mModel.setPositiveButtonText(text);
         mOnPositiveClickListener = onClickListener;
         return this;
     }
 
-    public CustomDialog isNegativeButtonEnable(boolean enable, String text, OnClickListener onClickListener) {
-        mModel.setNegativeButton(enable);
+    public CustomDialog setNegativeButton(String text, OnClickListener onClickListener) {
+        mModel.setNegativeButton(true);
         mModel.setNegativeButtonText(text);
         mOnNegativeClickListener = onClickListener;
         return this;
@@ -107,13 +129,11 @@ public class CustomDialog extends Dialog{
 
     public CustomDialog setEditTextMessage(String message) {
         mModel.setEditTextMessage(message);
-        mBinding.setItem(mModel);
         return this;
     }
 
     public CustomDialog setEditTextMessage(@StringRes int messageId) {
         mModel.setEditTextMessage(mContext.getString(messageId));
-        mBinding.setItem(mModel);
         return this;
     }
 
@@ -133,4 +153,26 @@ public class CustomDialog extends Dialog{
         }
     }
 
+    @Override
+    public void show() {
+        mIsShowing = true;
+        super.show();
+    }
+
+    @Override
+    public void dismiss() {
+        mIsShowing = false;
+        super.dismiss();
+    }
+
+    @Override
+    public void cancel() {
+        mIsShowing = false;
+        super.cancel();
+    }
+
+    @Override
+    public boolean isShowing() {
+        return mIsShowing;
+    }
 }

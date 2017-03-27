@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.NotiViewHolder"/>
+        <variable
+            name="item"
+            type="com.goqual.a10k.model.entity.NotiWrap"/>
+    </data>
+    <RelativeLayout
+        android:id="@+id/item_noti_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_timer_height"
+        android:paddingLeft="@dimen/padding_16"
+        android:paddingRight="@dimen/padding_16"
+        android:background="@drawable/style_border_bottom_grey">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/item_noti_ic"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/item_noti_ic_size"
+            android:layout_height="@dimen/item_noti_ic_size"
+            android:src="@drawable/ic_noti" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/padding_16"
+            android:layout_toRightOf="@+id/item_noti_ic">
+
+            <TextView
+                android:id="@+id/item_noti_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_06"
+                android:textSize="@dimen/item_noti_content_size"
+                android:lines="2"
+                android:text="@{item.message}"/>
+
+            <TextView
+                android:id="@+id/item_noti_date"
+                android:layout_below="@+id/item_noti_content"
+                android:layout_marginTop="@dimen/item_noti_date_margin_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_03"
+                android:textSize="@dimen/item_noti_date_txt_size"
+                android:text="@{item.getDateString(holder.context)}"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

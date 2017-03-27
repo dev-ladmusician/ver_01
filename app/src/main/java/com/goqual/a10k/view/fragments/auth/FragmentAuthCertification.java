@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentAuthCertificationBinding;
+import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
@@ -59,6 +60,11 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
@@ -82,11 +88,12 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
                                     getString(R.string.auth_certi_dialog_certifinum_timeover));
                         }
                         mBinding.authCertiTxtCount.setText(String.format(Locale.KOREA, "%d%s", mMinueteCount--, getString(R.string.auth_certi_unit)));
+                        LogUtil.d(TAG, "mMinueteCount: " + mMinueteCount);
                     }
                 });
             }
         };
-        secondeTick.schedule(secondTickTask, 1000);
+        secondeTick.schedule(secondTickTask, 10, 1000);
     }
 
     @Nullable

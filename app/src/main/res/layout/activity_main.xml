@@ -10,10 +10,10 @@
 
         <variable
             name="eventSwitEditEnum"
-            type="com.goqual.a10k.util.event.EventSwitchEdit.STATUS"/>
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"/>
 
         <import
-            type="com.goqual.a10k.util.event.EventSwitchEdit.STATUS"
+            type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"
             alias="editStatusEnum" />
 
         <import
@@ -61,7 +61,7 @@
                             android:id="@+id/toolbar_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Toolbar Title"
+                            android:text="@string/app_name"
                             android:textColor="@android:color/white"
                             android:layout_centerInParent="true"
                             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"

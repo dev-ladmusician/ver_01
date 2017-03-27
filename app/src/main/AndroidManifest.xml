@@ -10,15 +10,20 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
-        android:name=".ApplicationBase"
+        android:name=".view.base.ApplicationBase"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activities.SplashActivity">
+        <activity android:name=".view.activities.ActivitySplash"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,6 +33,43 @@
         <activity android:name=".view.activities.ActivityMain" />
         <activity android:name=".view.activities.ActivitySwitchConnection"/>
         <activity android:name=".view.activities.ActivityPhoneAuth"/>
+        <activity android:name=".view.activities.ActivitySwitchSetting"/>
+        <activity android:name=".view.activities.ActivityNfcSetup"/>
+        <activity android:name=".view.activities.ActivityAlarmEdit"/>
+        <activity android:name=".view.activities.ActivityAlarmSwitchSelect"/>
+        <activity android:name=".view.activities.ActivityAlarmRepeat"/>
+        <activity android:name=".view.activities.ActivityInviteUser"/>
+
+        <activity android:name=".view.activities.ActivityNfcDetect">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name=".util.FcmInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".util.FcmMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="64f5f9c9ffd9affb768b3d25da9a3d94472ca35f" />
     </application>
 
 </manifest>

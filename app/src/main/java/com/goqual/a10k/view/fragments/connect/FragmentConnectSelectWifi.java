@@ -20,13 +20,18 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentConnectSelectWifiBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.presenter.impl.WifiPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterWifiScanResult;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by hanwool on 2017. 2. 23..
@@ -42,6 +47,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     private Handler mHandler;
 
     private static final int REQ_LOCATION_PERMMISION = 111;
+    private int mSwitchConnectCheckCount;
 
     public static FragmentConnectSelectWifi newInstance() {
 
@@ -61,30 +67,58 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     }
 
     @Override
-    public void onConnectSuccess() {
+    public boolean hasToolbarMenus() {
+        return false;
+    }
+
+    @Override
+    public void onSwitchConnected() {
+        LogUtil.d("SWITCH_CONNECT", "onSwitchConnected");
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 LogUtil.d(TAG, "onConnectSuccess");
                 CustomDialog customDialog = new CustomDialog(getActivity());
-                DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
-                    switch (which) {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            getPresenter().setName(customDialog.getEditTextMessage());
-                            break;
-                    }
-                    dialog.dismiss();
-                };
                 customDialog
                         .isEditable(true)
                         .setTitleText(R.string.rename_title)
                         .setMessageText(R.string.rename_content)
                         .setEditTextHint(R.string.rename_edit_hint)
-                        .isPositiveButton(true, getString(R.string.rename_btn_txt), onClickListener)
-                        .isNegativeButtonEnable(false, "", null)
+                        .setPositiveButton(getString(R.string.rename_btn_txt), (dialog, which) -> {
+                            getPresenter().setName(customDialog.getEditTextMessage());
+                            dialog.dismiss();
+                        })
                         .show();
             }
         });
+    }
+
+    @Override
+    public void switchNotConnected() {
+        LogUtil.d("SWITCH_CONNECT", "switchNotConnected");
+        if(mSwitchConnectCheckCount <= 3) {
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    getPresenter().checkSwitchConnected();
+                }
+            }, 3000);
+            mSwitchConnectCheckCount += 1;
+        }
+        else {
+            ((ActivitySwitchConnection)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
+        }
+    }
+
+    @Override
+    public void onConnectSuccess() {
+        LogUtil.d("SWITCH_CONNECT", "onConnectSuccess");
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getPresenter().checkSwitchConnected();
+            }
+        }, 5000);
     }
 
     @Override
@@ -109,6 +143,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                     getPresenter().connect10K();
                     mBinding.listWrap.setVisibility(View.GONE);
                     mBinding.setSwitchLoadingContainer.setVisibility(View.VISIBLE);
+                    PreferenceHelper.getInstance(getActivity()).put(getString(R.string.arg_wifi_pass) + ssid, customDialog.getEditTextMessage());
                     break;
             }
             dialog.dismiss();
@@ -116,9 +151,10 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
 
         customDialog.isEditable(true)
                 .setTitleText(String.format("%s%s", getString(R.string.select_wifi_pass_dialog_title), ssid))
+                .setEditTextMessage(PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_wifi_pass) + ssid, ""))
                 .setMessageText(R.string.select_wifi_pass_dialog_content)
-                .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
-                .isPositiveButton(true, getString(R.string.common_ok), onClickListener);
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_ok), onClickListener);
         customDialog.show();
     }
 
@@ -169,14 +205,19 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                 .isEditable(false)
                 .setTitleText(R.string.select_wifi_error_dialog_title)
                 .setMessageText(R.string.select_wifi_error_dialog_content)
-                .isNegativeButtonEnable(true, getString(R.string.common_cancel), onClickListener)
-                .isPositiveButton(true, getString(R.string.common_retry), onClickListener);
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_retry), onClickListener);
         dialog.show();
     }
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_connect_select_wifi;
+    }
+
+    @Override
+    public void onBtnClick(View view) {
+
     }
 
     @Override
@@ -198,6 +239,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
         else {
             scanWifi();
         }
+        mSwitchConnectCheckCount = 0;
     }
 
     @Override
@@ -227,8 +269,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                                 .isEditable(false)
                                 .setTitleText(R.string.permission_dialog_title)
                                 .setMessageText(R.string.permission_dialog_message)
-                                .isPositiveButton(true, getString(R.string.common_allow), onClickListener)
-                                .isNegativeButtonEnable(false, "", null)
+                                .setPositiveButton(getString(R.string.common_allow), onClickListener)
                                 .show();
                     }
                 }
@@ -256,9 +297,12 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
         mBinding.listContainer.setAdapter(getAdapter());
         mBinding.listContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
-            if(viewId == R.id.wifi_connect) {
+            if(viewId == R.id.item_wifi_container) {
                 getPresenter().onClick(position);
             }
+        });
+        mBinding.toolbarInclude.toolbarBack.setOnClickListener(v -> {
+            ((ActivitySwitchConnection)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
         });
     }
 

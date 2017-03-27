@@ -1,6 +1,6 @@
 package com.goqual.a10k.view.activities;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
-import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.util.BackPressUtil;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
@@ -24,8 +24,10 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.FragmentMainAlarm;
 import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
-import com.goqual.a10k.view.fragments.switches.FragmentMainSwitchContainer;
+import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IFragmentInteraction;
+import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
 
@@ -35,6 +37,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public static final String TAG = ActivityMain.class.getSimpleName();
 
     private EventSwitchEdit mEditBtnStatus;
+    private BackPressUtil backPressUtil;
 
     @Override
     protected int getLayoutId() { return R.layout.activity_main; }
@@ -42,16 +45,15 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     private Menu menu;
     private AdapterPager fragmentPagerAdapter;
 
+    private boolean isScrollUserInteraction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtil.e(TAG, "ON_CREATE!!!");
         mBinding.setActivity(this);
         initView();
-//        PreferenceHelper.getInstance(this)
-//                .put(getString(R.string.arg_user_token),
-//                        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNDg3NjUwOTc2LCJleHAiOjE0ODgxNzY1NzZ9.z4eJQRtAcGYJFyEWikVYYHrtmcfOl1R3c9bsFy5VNTI");
-
+        backPressUtil = new BackPressUtil(this);
     }
 
 
@@ -72,7 +74,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                     public void call(Object event) {
                         if(event instanceof EventSwitchEdit) {
                             mEditBtnStatus = (EventSwitchEdit)event;
-                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getStatus());
+                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getSTATE());
                         }
                     }
                 });
@@ -132,26 +134,39 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         mBinding.toolbarTitle.setText(title);
     }
 
+    public void handleLogin() {
+        startActivity(new Intent(this, ActivityPhoneAuth.class));
+        finish();
+    }
+
     @Override
     public void finishApp() {
         ActivityCompat.finishAffinity(this);
         System.exit(0);
     }
 
+    private void setToolbarMenuVisibillity(boolean visibillity) {
+        int visible = visibillity ? View.VISIBLE : View.GONE;
+        mBinding.toolbarAdd.setVisibility(visible);
+        mBinding.toolbarEdit.setVisibility(visible);
+    }
+
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_edit:
-                switch (mEditBtnStatus.getStatus()) {
+                switch (mEditBtnStatus.getSTATE()) {
                     case DONE:
-                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.DONE));
+                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
                         break;
                     case EDIT:
-                        RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.EDIT));
+                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.EDIT));
                         break;
                 }
                 break;
             case R.id.toolbar_add:
-                RxBus.getInstance().send(new EventToolbarClick(EventToolbarClick.STATUS.ADD));
+                if(mBinding.mainPager.getCurrentItem() == 0) {
+                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.ADD));
+                }
                 break;
         }
     }
@@ -160,6 +175,9 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             mBinding.mainPager.setCurrentItem(tab.getPosition(), true);
+            if(tab.getPosition() == 0 && !isScrollUserInteraction) {
+                ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
+            }
         }
 
         @Override
@@ -174,9 +192,11 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     };
 
     private ViewPager.OnPageChangeListener mainPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+        int currentPage = 0;
+        int lastState = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            LogUtil.d(TAG, String.format("position:%d poOffset:%f poOffsetPixels:%d", position, positionOffset, positionOffsetPixels));
         }
 
         @Override
@@ -189,11 +209,23 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
             catch (NullPointerException e){
                 LogUtil.e(TAG, e.getMessage(), e);
             }
+
+            ((IFragmentInteraction)fragmentPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
+            ((IFragmentInteraction)fragmentPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
+            currentPage = position;
+            setToolbarMenuVisibillity((((BaseFragment) fragmentPagerAdapter.getItem(position)).hasToolbarMenus()));
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
-
+            LogUtil.d(TAG, String.format("state:%d", state));
+            if(state == ViewPager.SCROLL_STATE_SETTLING) {
+                isScrollUserInteraction = lastState == 1;
+            }
+            else {
+                isScrollUserInteraction = false;
+            }
+            lastState = state;
         }
 
         private void invalidateFragmentMenus(int position){
@@ -203,4 +235,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
             invalidateOptionsMenu(); //or respectively its support method.
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backPressUtil.onBackPressed();
+    }
 }

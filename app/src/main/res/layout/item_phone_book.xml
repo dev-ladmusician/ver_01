@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="holder"
+            type="com.goqual.a10k.view.viewholders.PhoneBookViewHolder"/>
+        <variable
+            name="phone"
+            type="com.goqual.a10k.model.entity.Phone"/>
+    </data>
+    <RelativeLayout
+        android:id="@+id/item_invite_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_setting_admin"
+        android:paddingLeft="@dimen/padding_20"
+        android:paddingRight="@dimen/padding_20"
+        android:background="@drawable/style_border_bottom_grey"
+        android:onClick="@{holder::onBtnClick}">
+
+        <ImageView
+            android:id="@+id/item_user_ic"
+            android:layout_width="@dimen/admin_user_ic_size"
+            android:layout_height="@dimen/admin_user_ic_size"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:src="@{phone.getPhoto(holder)}"/>
+
+        <TextView
+            android:id="@+id/item_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/item_user_ic"
+            android:layout_marginLeft="@dimen/padding_28"
+            android:text="@{phone.displayName}"/>
+
+        <TextView
+            android:id="@+id/item_user_num"
+            android:layout_width="@dimen/item_invite_num"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="left"
+            android:text="@{phone.number}"/>
+    </RelativeLayout>
+
+</layout>

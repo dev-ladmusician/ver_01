@@ -13,6 +13,7 @@ public interface WifiPresenter {
     void connect10K();
     void setName(String name);
     void destroy();
+    void checkSwitchConnected();
 
     interface View<T>{
         void onConnectError();
@@ -26,5 +27,8 @@ public interface WifiPresenter {
         void onScanStart();
 
         void openPassDialog(String ssid);
+
+        void onSwitchConnected();
+        void switchNotConnected();
     }
 }

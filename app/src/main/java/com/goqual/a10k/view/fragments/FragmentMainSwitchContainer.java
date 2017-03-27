@@ -1,4 +1,4 @@
-package com.goqual.a10k.view.fragments.switches;
+package com.goqual.a10k.view.fragments;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -36,6 +36,7 @@ import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
@@ -98,12 +99,13 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
         RxBus.getInstance().send(
                 SwitchManager.getInstance().getCount() == 0 ?
-                        new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE) :
-                        new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
+                        new EventSwitchEdit(IToolbarClickListener.STATE.HIDE) :
+                        new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
     }
 
     @Override
     public void onError(Throwable e) {
+        LogUtil.e(TAG, e.getMessage(), e);
         if(e instanceof HttpException) {
             if(((HttpException)e).code() == HttpResponseCode.ERROR_UNAUTHORIZED) {
                 startActivity(new Intent(getActivity(), ActivityPhoneAuth.class));
@@ -114,44 +116,45 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void addItem(Switch item) {
+        LogUtil.d(TAG, "ITEM::" + item);
         mPagerAdapter.addItem(item);
         getSocketManager().refreshConnectedRoom();
     }
 
     @Override
     public void onConnectionError() {
-        if(mHandler != null) {
-            mHandler.post(() -> {
-                if(connectionFailedDialog == null) {
-                    DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
-                        switch (which) {
-                            case Dialog.BUTTON_POSITIVE:
-                                dialog.dismiss();
-                                mSocketManager.tryReconnect();
-                                break;
-                            case Dialog.BUTTON_NEGATIVE:
-                                // finish app;
-                                dialog.dismiss();
-                                connectionFailedDialog = null;
-                                ((IActivityInteraction)getActivity()).finishApp();
-                                break;
-                        }
-                    };
-                    connectionFailedDialog = new CustomDialog(getActivity())
-                            .isEditable(false)
-                            .isNegativeButtonEnable(true, getString(R.string.common_quit), onClickListener)
-                            .isPositiveButton(true, getString(R.string.common_retry), onClickListener)
-                            .setTitleText(R.string.socket_connection_error_title)
-                            .setMessageText(R.string.socket_connection_error_content);
-                    connectionFailedDialog.show();
-                }
-                else {
-                    if(!connectionFailedDialog.isShowing()) {
-                        connectionFailedDialog.show();
-                    }
-                }
-            });
-        }
+//        if(mHandler != null) {
+//            mHandler.post(() -> {
+//                if(connectionFailedDialog == null) {
+//                    DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+//                        switch (which) {
+//                            case Dialog.BUTTON_POSITIVE:
+//                                dialog.dismiss();
+//                                mSocketManager.tryReconnect();
+//                                break;
+//                            case Dialog.BUTTON_NEGATIVE:
+//                                // finish app;
+//                                dialog.dismiss();
+//                                connectionFailedDialog = null;
+//                                ((IActivityInteraction)getActivity()).finishApp();
+//                                break;
+//                        }
+//                    };
+//                    connectionFailedDialog = new CustomDialog(getActivity())
+//                            .isEditable(false)
+//                            .setNegativeButton(getString(R.string.common_quit), onClickListener)
+//                            .setPositiveButton(getString(R.string.common_retry), onClickListener)
+//                            .setTitleText(R.string.socket_connection_error_title)
+//                            .setMessageText(R.string.socket_connection_error_content);
+//                    connectionFailedDialog.show();
+//                }
+//                else {
+//                    if(!connectionFailedDialog.isShowing()) {
+//                        connectionFailedDialog.show();
+//                    }
+//                }
+//            });
+//        }
     }
 
     @Override
@@ -160,7 +163,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             connectionFailedDialog.cancel();
             connectionFailedDialog = null;
         }
-        Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+        try {
+            Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+        }
+        catch (NullPointerException e) {
+            LogUtil.e(TAG, e.getMessage(), e);
+        }
     }
 
     @Override
@@ -182,8 +190,18 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     @Override
+    public boolean hasToolbarMenus() {
+        return true;
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.fragment_main_switch_container;
+    }
+
+    @Override
+    public void onBtnClick(View view) {
+
     }
 
     @Override
@@ -216,14 +234,15 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         mPagerAdapter.refresh();
 
         SwitchManager.getInstance().clear();
+        // TODO: page
         getPresenter()
-                .loadItems();
+                .loadItems(1);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocketManager.destroySocketConnection();
+        getSocketManager().destroySocketConnection();
         getActivity().unregisterReceiver(networkChangeReceiver);
     }
 
@@ -266,33 +285,41 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
                     @Override
                     public void call(Object event) {
                         if(event instanceof EventToolbarClick) {
-                            // TODO
-                            LogUtil.e(TAG, "EVENT STATUS :: " + ((EventToolbarClick) event).getStatus());
-                            switch (((EventToolbarClick) event).getStatus()) {
-                                case DONE:
-                                    passToolbarClickEvent(EventSwitchEdit.STATUS.DONE);
-                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
-                                    break;
-                                case EDIT:
-                                    passToolbarClickEvent(EventSwitchEdit.STATUS.EDIT);
-
-                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.DONE));
-                                    break;
-                                case ADD:
-                                    startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
-                                    RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.EDIT));
-                                    break;
+                            LogUtil.e(TAG, "EVENT STATE :: " + ((EventToolbarClick) event).getState());
+                            if(isFragmentVisible()) {
+                                switch (((EventToolbarClick) event).getState()) {
+                                    case DONE:
+                                        passToolbarClickEvent(IToolbarClickListener.STATE.DONE);
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
+                                        break;
+                                    case EDIT:
+                                        passToolbarClickEvent(IToolbarClickListener.STATE.EDIT);
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.DONE));
+                                        break;
+                                    case ADD:
+                                        startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
+                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
+                                        break;
+                                }
                             }
                         }
                     }
                 });
     }
 
-    private void passToolbarClickEvent(EventSwitchEdit.STATUS status) {
-        ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(status);
+    private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
+        ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
+    }
+
+    public void setCurrentPage(int currentPage) {
+        mCurrentPage = currentPage;
+        if(mPagerAdapter != null && mPagerAdapter.getCount()>0) {
+            mBinding.viewPager.setCurrentItem(mCurrentPage);
+        }
     }
 
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
+        int currentPage = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         }
@@ -301,6 +328,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         public void onPageSelected(int position) {
             mTitle = ((BaseFragment)mPagerAdapter.getItem(position)).getTitle();
             mActivityInteraction.setTitle(mTitle);
+
+            ((IFragmentInteraction)mPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
+            ((IFragmentInteraction)mPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
+            currentPage = position;
         }
 
         @Override
@@ -337,7 +368,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     public void onSuccessDeleteSwitch(int position) {
         // 등록된 스위치가 없으면 edit hide
         if (SwitchManager.getInstance().getCount() == 0) {
-            RxBus.getInstance().send(new EventSwitchEdit(EventSwitchEdit.STATUS.HIDE));
+            RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.HIDE));
         }
         mPagerAdapter.deleteItem(position);
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
