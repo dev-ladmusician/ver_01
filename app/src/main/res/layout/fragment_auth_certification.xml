@@ -41,7 +41,7 @@
                 android:textColor="@color/grey_07"
                 android:paddingBottom="@dimen/padding_15"
                 android:maxLength="4"
-                android:textSize="@dimen/txt_40" />
+                android:textSize="@dimen/txt_info" />
 
             <TextView
                 android:id="@+id/auth_certi_txt_count"
@@ -51,7 +51,7 @@
                 android:layout_alignParentRight="true"
                 android:textColor="@color/identitiy_01"
                 android:textStyle="bold"
-                android:textSize="@dimen/txt_40"
+                android:textSize="@dimen/txt_info"
                 android:text="@string/auth_certi_count" />
 
             <RelativeLayout

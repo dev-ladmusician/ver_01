@@ -10,6 +10,7 @@ public interface PhoneAuthPresenter {
     void requestSmsToken(String phoneNumber);
     void requestAppToken(String phoneNumber, String smsToken);
     String getPhoneNumber();
+    String getPhoneNumberCountryCode();
     String getFcmToken();
 
 

@@ -68,7 +68,8 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     private void initFirstFragment() {
-        BaseFragment baseFragment = FragmentAuthPhone.newInstance(getPresenter().getPhoneNumber());
+        BaseFragment baseFragment = FragmentAuthPhone.newInstance(
+                getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode());
         getSupportFragmentManager().beginTransaction()
                 .add(mBinding.fragmentContainer.getId(), baseFragment)
                 .commit();
@@ -105,7 +106,9 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
             getSupportFragmentManager().beginTransaction()
-                    .replace(mBinding.fragmentContainer.getId(), FragmentAuthPhone.newInstance(getPresenter().getPhoneNumber()))
+                    .replace(mBinding.fragmentContainer.getId(),
+                            FragmentAuthPhone.newInstance(
+                                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()))
                     .commit();
         };
         customDialog.isEditable(false)
@@ -140,7 +143,9 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
             getSupportFragmentManager().beginTransaction()
-                    .replace(mBinding.fragmentContainer.getId(), FragmentAuthPhone.newInstance(getPresenter().getPhoneNumber()))
+                    .replace(mBinding.fragmentContainer.getId(),
+                            FragmentAuthPhone.newInstance(
+                                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()))
                     .commit();
         };
         customDialog.isEditable(false)
