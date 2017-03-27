@@ -38,21 +38,6 @@
     <string name="internet_error_title">인터넷 연결에러</string>
     <string name="internet_error_content">인터넷 상태를 확인해 주세요.</string>
 
-    <!-- args -->
-    <string name="arg_user_token">USER_TOKEN</string>
-    <string name="arg_user_num">USER_NUM</string>
-    <string name="arg_user_fcm_token">USER_FCM_TOKEN</string>
-    <string name="arg_switch_id">SWITCH_ID</string>
-    <string name="arg_switch_state">SWITCH_STATE</string>
-    <string name="arg_switch_position">SWITCH_POSITION</string>
-    <string name="arg_switch_btn1">switch_btn_1</string>
-    <string name="arg_switch_btn2">switch_btn_2</string>
-    <string name="arg_switch_btn3">switch_btn_3</string>
-    <string name="arg_alarm">arg_alarm</string>
-    <string name="arg_absence">arg_absence</string>
-    <string name="arg_nfc">arg_nfc</string>
-    <string name="arg_wifi_pass">arg_wifi_pass</string>
-
     <!-- Switch -->
     <string name="switch_delete_title">삭제</string>
     <string name="switch_delete_content">스위치를 \n목록에서 삭제 하시겠습니까?</string>
@@ -273,4 +258,23 @@
     <string name="absence_start_text">시작</string>
     <string name="absence_end_text">종료</string>
     <string name="switch_absence_mode">부재모드가 설정된 스위치입니다.</string>
+
+
+
+
+
+    <!-- args -->
+    <string name="arg_user_token">USER_TOKEN</string>
+    <string name="arg_user_num">USER_NUM</string>
+    <string name="arg_user_fcm_token">USER_FCM_TOKEN</string>
+    <string name="arg_switch_id">SWITCH_ID</string>
+    <string name="arg_switch_state">SWITCH_STATE</string>
+    <string name="arg_switch_position">SWITCH_POSITION</string>
+    <string name="arg_switch_btn1">switch_btn_1</string>
+    <string name="arg_switch_btn2">switch_btn_2</string>
+    <string name="arg_switch_btn3">switch_btn_3</string>
+    <string name="arg_alarm">arg_alarm</string>
+    <string name="arg_absence">arg_absence</string>
+    <string name="arg_nfc">arg_nfc</string>
+    <string name="arg_wifi_pass">arg_wifi_pass</string>
 </resources>

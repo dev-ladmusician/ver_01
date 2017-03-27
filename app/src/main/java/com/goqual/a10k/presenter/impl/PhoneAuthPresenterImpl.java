@@ -38,10 +38,19 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     public void requestSmsToken(String phoneNumber) {
         mView.loadingStart();
         phoneNumber = phoneNumber.replaceAll("-", "");
+
+        /**
+         * TODO::
+         * generic하게 valid한 폰넘 만들기
+         */
+        phoneNumber = phoneNumber.substring(3, phoneNumber.length());
+        phoneNumber = "0" + phoneNumber;
+
         getAuthService().getAuthApi().getCertification(phoneNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(rtv -> {
+                            LogUtil.d(TAG, "CERT::" + rtv);
                             LogUtil.d(TAG, "CERT::" + rtv.getResult().getCertifinum());
                             mView.onSuccessPhoneNumberAuth(getPhoneNumber(), rtv.getResult().getCertifinum());
                             mView.loadingStop();
@@ -90,6 +99,12 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     public String getPhoneNumber() {
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         return parsePhoneNumber(telephonyManager.getLine1Number());
+    }
+
+    @Override
+    public String getPhoneNumberCountryCode() {
+        TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getSimCountryIso();
     }
 
     @Override
