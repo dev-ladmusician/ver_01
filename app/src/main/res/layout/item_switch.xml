@@ -163,6 +163,7 @@
             android:background="@color/transparant_white"
             android:orientation="horizontal"
             android:gravity="center"
+            android:paddingBottom="1dp"
             android:visibility="@{itemSwitch._absenceid != null ? View.VISIBLE : View.GONE}">
 
             <ImageView
