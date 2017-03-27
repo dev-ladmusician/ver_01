@@ -4,7 +4,6 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.TimePicker;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingAbsenceBinding;
@@ -15,6 +14,7 @@ import com.goqual.a10k.presenter.AbsencePresenter;
 import com.goqual.a10k.presenter.impl.AbsencePresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.ISettingAdminListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,7 +27,7 @@ import java.util.Date;
  */
 
 public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceBinding>
-        implements AbsencePresenter.View<Absence>, IToolbarClickListener{
+        implements AbsencePresenter.View<Absence>, IToolbarClickListener, ISettingAdminListener {
     public static final String TAG = FragmentSettingAbsence.class.getSimpleName();
     private AbsencePresenter mPresenter;
     private Switch mSwitch;
@@ -39,6 +39,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
     private Absence mItem;
     private boolean isItemFromServer;
+    private boolean mIsAdmin;
 
     private STATE mCurrentState;
 
@@ -49,6 +50,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         FragmentSettingAbsence fragment = new FragmentSettingAbsence();
         args.putInt(EXTRA_SWITCH, item);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -145,7 +147,16 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
                     mItem.setBtn3(!mItem.isBtn3());
                     break;
             }
+
             mBinding.setItem(mItem);
+        }
+
+        switch (view.getId()) {
+            case R.id.switch_enable:
+                if (this.mIsAdmin) {
+                    LogUtil.e(TAG, "check click");
+                }
+                break;
         }
     }
 
@@ -189,4 +200,15 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         return mPresenter;
     }
 
+    @Override
+    public void setAdmin(boolean isAdmin) {
+        this.mIsAdmin = isAdmin;
+        mBinding.switchEnable.setClickable(isAdmin);
+
+        if(isAdmin) {
+            mBinding.absenceInfo.setText(getString(R.string.absence_info_admin));
+        } else {
+            mBinding.absenceInfo.setText(getString(R.string.absence_info_client));
+        }
+    }
 }

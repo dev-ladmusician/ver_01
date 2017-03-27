@@ -21,6 +21,7 @@ import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.activities.ActivityInviteUser;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.ISettingInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
@@ -143,13 +144,15 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         String myPhoneNum = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_num), "");
         if(mAdminUser != null) {
             if (mAdminUser.getNum().equals(myPhoneNum)) {
+                ((ISettingInteraction)getActivity()).setAdmin(true);
                 RxBus.getInstance().send(new EventToolbarClick(STATE.DONE));
             } else {
-
+                ((ISettingInteraction)getActivity()).setAdmin(false);
                 RxBus.getInstance().send(new EventToolbarClick(STATE.HIDE));
             }
         }
         else {
+            ((ISettingInteraction)getActivity()).setAdmin(false);
             RxBus.getInstance().send(new EventToolbarClick(STATE.HIDE));
         }
     }

@@ -21,23 +21,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/switch_each_container_margin"
-            android:padding="@dimen/switch_each_container_padding"
+            android:padding="20dp"
             android:elevation="@dimen/switch_each_container_eleavation"
             android:background="@drawable/style_switch_container">
 
+            <!-- absence time -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/item_height_30"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:layout_centerHorizontal="true">
+
                 <TextView
                     android:id="@+id/start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/txt_title"
+                    android:textSize="@dimen/txt_info"
                     android:text="@{item.getStartTimeString()}"
                     android:onClick="@{fragment::onBtnClick}"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -46,12 +50,13 @@
                     android:textSize="@dimen/txt_title"
                     android:layout_marginLeft="@dimen/padding_15"
                     android:layout_marginRight="@dimen/padding_15"/>
+
                 <TextView
                     android:id="@+id/end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/txt_title"
+                    android:textSize="@dimen/txt_info"
                     android:text="@{item.getEndTimeString()}"
                     android:onClick="@{fragment::onBtnClick}"/>
             </LinearLayout>
@@ -64,8 +69,8 @@
 
                 <TextView
                     android:id="@+id/switch_btn_1"
-                    android:layout_width="@dimen/switch_each_btn_size"
-                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:onClick="@{fragment::onBtnClick}"
@@ -75,8 +80,8 @@
 
                 <TextView
                     android:id="@+id/switch_btn_2"
-                    android:layout_width="@dimen/switch_each_btn_size"
-                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_1"
@@ -90,8 +95,8 @@
 
                 <TextView
                     android:id="@+id/switch_btn_3"
-                    android:layout_width="@dimen/switch_each_btn_size"
-                    android:layout_height="@dimen/switch_each_btn_size"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_2"
@@ -102,6 +107,29 @@
                     android:background="@{item.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>
 
+            <!-- absence info -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/item_height_30"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/absence_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Admin 권한이 있어야\n수정할 수 있습니다."
+                    android:textSize="@dimen/txt_info_s"
+                    android:textColor="@color/grey_05"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/padding_15"
+                    android:layout_marginRight="@dimen/padding_15"/>
+            </LinearLayout>
+
             <!-- setting -->
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/switch_enable"
@@ -109,7 +137,8 @@
                 android:layout_height="@dimen/switch_each_setting_wrapper"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:checked="@{item.state}">
+                android:checked="@{item.state}"
+                android:onClick="@{fragment::onBtnClick}">
             </android.support.v7.widget.SwitchCompat>
         </RelativeLayout>
     </RelativeLayout>

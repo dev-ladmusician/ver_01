@@ -22,7 +22,8 @@ import com.goqual.a10k.view.fragments.setting.FragmentSettingAbsence;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingAdmin;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingHistory;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingNfc;
-import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.ISettingAdminListener;
+import com.goqual.a10k.view.interfaces.ISettingInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
@@ -32,7 +33,7 @@ import rx.functions.Action1;
  */
 
 public class ActivitySwitchSetting extends BaseActivity<ActivitySwitchSettingBinding>
-implements IActivityInteraction{
+implements ISettingInteraction {
 
     public static final String TAG = ActivitySwitchSetting.class.getSimpleName();
 
@@ -41,6 +42,7 @@ implements IActivityInteraction{
     private AdapterPager mAdapterPage;
     private Switch mSwitch;
     private int mSwitchPosition;
+    private boolean mIsAdmin;
 
     private EventToolbarClick mEventToolbarClick;
 
@@ -200,5 +202,18 @@ implements IActivityInteraction{
     @Override
     public void finishApp() {
 
+    }
+
+    @Override
+    public boolean checkAdmin() {
+        return this.mIsAdmin;
+    }
+
+    @Override
+    public void setAdmin(boolean isAdmin) {
+        this.mIsAdmin = isAdmin;
+        ((ISettingAdminListener)mAdapterPage.getItem(
+                getResources().getInteger(R.integer.frag_switch_setting_absence)
+        )).setAdmin(isAdmin);
     }
 }

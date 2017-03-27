@@ -35,7 +35,7 @@ public class UserService {
 
     public interface UserApi {
         @GET("connection/getUsers/{switchId}")
-        Observable<List<User>> gets(
+        Observable<ResultDTO<List<User>>> gets(
                 @Path("switchId") int switchId
         );
 

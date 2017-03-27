@@ -52,9 +52,10 @@ public class UserPresenterImpl implements UserPresenter {
     public void loadItems(int switchId) {
         getUserService().getUserApi().gets(switchId)
                 .subscribeOn(Schedulers.newThread())
-                .filter(result -> result != null)
+                .filter(result -> result.getResult() != null)
+                .map(ResultDTO::getResult)
                 .filter(items -> items != null && !items.isEmpty())
-                .flatMap(items -> Observable.from(items))
+                .flatMap(Observable::from)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::addItem,
                         mView::onError,
