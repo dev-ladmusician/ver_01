@@ -47,7 +47,7 @@ public class ActivitySplash extends AppCompatActivity {
                     .show();
         }
         else {
-            PreferenceHelper.getInstance(this).put(getString(R.string.arg_user_token), "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzQ3LCJpYXQiOjE0OTAyNTY5NDEsImV4cCI6MTQ5MDc4MjU0MX0.tRwW9E3aTHinO0Hn4CLfx4MHG9kOkGaK_Y9LC7LOvWs");
+            //PreferenceHelper.getInstance(this).put(getString(R.string.arg_user_token), "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzQ3LCJpYXQiOjE0OTAyNTY5NDEsImV4cCI6MTQ5MDc4MjU0MX0.tRwW9E3aTHinO0Hn4CLfx4MHG9kOkGaK_Y9LC7LOvWs");
             String token = PreferenceHelper.getInstance(this)
                     .getStringValue(getString(R.string.arg_user_token), "");
             String fcm = PreferenceHelper.getInstance(this)
