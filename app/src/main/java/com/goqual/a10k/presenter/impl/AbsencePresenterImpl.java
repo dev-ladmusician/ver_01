@@ -9,7 +9,6 @@ import com.goqual.a10k.presenter.AbsencePresenter;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -68,25 +67,25 @@ public class AbsencePresenterImpl implements AbsencePresenter {
     @Override
     @Deprecated
     public void loadItems() {
-        getAbsenceService().getAbsenceApi().gets()
+        throw new NotImplementedException("Stub!");
+    }
+
+    @Override
+    public void loadItems(int page) {
+        int switchId = page;
+        getAbsenceService().getAbsenceApi().get(switchId)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .map(ResultDTO::getResult)
-                .filter(items -> items != null && !items.isEmpty())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                            Absence item = result.get(0);
+                            Absence item = result;
                             mAbsence = item;
                             mView.addItem(item);
                             mView.loadingStop();
                         },
                         mView::onError,
                         mView::refresh);
-    }
-
-    @Override
-    public void loadItems(int page) {
-        throw new NotImplementedException("Stub!");
     }
 
     @Override

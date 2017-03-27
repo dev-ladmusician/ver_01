@@ -40,6 +40,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     private Absence mItem;
     private boolean isItemFromServer;
     private boolean mIsAdmin;
+    private boolean mIsChange;
 
     private STATE mCurrentState;
 
@@ -110,6 +111,8 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             else {
                 getPresenter().add(mItem);
             }
+        } else {
+
         }
     }
 
@@ -155,6 +158,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             case R.id.switch_enable:
                 if (this.mIsAdmin) {
                     LogUtil.e(TAG, "check click");
+                    getPresenter().update(mItem);
                 }
                 break;
         }
@@ -183,7 +187,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBinding.setFragment(this);
-        getPresenter().loadItems();
+        getPresenter().loadItems(mSwitch.get_bsid());
 
         mItem = new Absence(mSwitch);
         mBinding.setItem(mItem);
