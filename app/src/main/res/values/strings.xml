@@ -61,6 +61,15 @@
     <string name="add_switch">새로운 10k 등록하기</string>
     <string name="error_delete_switch">스위치를 삭제하는데 오류가 발생했습니다.</string>
 
+    <!-- Error -->
+    <string name="error_dialog_title">에러!</string>
+    <string name="error_string_server">서버에 에러가 발생하였습니다.</string>
+    <string name="error_string_auth">계정 인증에 문제가 발생하였습니다.</string>
+    <string name="error_string_realm">데이터베이스를 불러오는데\n문제가 발생하였습니다.</string>
+    <string name="error_string_network">네트워크에 문제가 있습니다.\n다시시도해 주세요</string>
+    <string name="error_string_socket">스위치와 통신하는데\n문제가 발생하였습니다.</string>
+    <string name="error_string_unknown">알수없는 에러가 발생하였습니다.</string>
+
     <!-- Socket -->
     <string name="socket_connection_error_title">통신 연결 실패</string>
     <string name="socket_connection_error_content">서버와 통신이 원활하지 않습니다.</string>

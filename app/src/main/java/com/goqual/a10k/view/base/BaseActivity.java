@@ -1,6 +1,7 @@
 package com.goqual.a10k.view.base;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.presenter.NetworkPresenter;
 import com.goqual.a10k.presenter.impl.NetworkPresenterImpl;
+import com.goqual.a10k.util.ErrorHandler;
+import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 import com.goqual.a10k.view.dialog.CustomDialog;
 
 /**
@@ -19,7 +22,7 @@ import com.goqual.a10k.view.dialog.CustomDialog;
  */
 
 public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatActivity
-        implements NetworkPresenter.View{
+        implements NetworkPresenter.View, BaseErrorHandler{
     protected B mBinding;
 
     private CustomDialog mNetworkErrorDialog;
@@ -47,7 +50,22 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
 
     @Override
     public void onError(Throwable e) {
+        new CustomDialog(this)
+                .setTitleText(R.string.error_dialog_title)
+                .setMessageText(ErrorHandler.makeErrorString(this, e))
+                .setPositiveButton(getString(R.string.common_retry), (dialog, which) -> {
+                    refresh();
+                })
+                .setNegativeButton(getString(R.string.common_quit), (dialog, which) -> {
+                    finish();
+                })
+                .show();
+    }
 
+    @Override
+    public void restartAuth() {
+        startActivity(new Intent(this, ActivityPhoneAuth.class));
+        finish();
     }
 
     @Override
