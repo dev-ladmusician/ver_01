@@ -14,7 +14,6 @@ import com.goqual.a10k.presenter.AbsencePresenter;
 import com.goqual.a10k.presenter.impl.AbsencePresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
-import com.goqual.a10k.view.interfaces.ISettingAdminListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,25 +26,21 @@ import java.util.Date;
  */
 
 public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceBinding>
-        implements AbsencePresenter.View<Absence>, IToolbarClickListener, ISettingAdminListener {
+        implements AbsencePresenter.View<Absence>, IToolbarClickListener {
     public static final String TAG = FragmentSettingAbsence.class.getSimpleName();
     private AbsencePresenter mPresenter;
     private Switch mSwitch;
+    private Absence mAbsenceItem;
 
     public static final String TIME_FORMAT_STRING = "HH:mm a";
-
-    public enum BTN_STATE{ON, OFF, NONE}
-
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
-    private Absence mItem;
     private boolean isItemFromServer;
-    private boolean mIsAdmin;
     private boolean mIsChange;
 
+    public enum BTN_STATE{ON, OFF, NONE}
     private STATE mCurrentState;
 
     public static FragmentSettingAbsence newInstance(int item) {
-
         Bundle args = new Bundle();
 
         FragmentSettingAbsence fragment = new FragmentSettingAbsence();
@@ -94,8 +89,8 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     public void addItem(Absence item) {
         LogUtil.d(TAG, ToStringBuilder.reflectionToString(item));
         if(item.get_bsid() == mSwitch.get_bsid()) {
-            mItem = item;
-            mBinding.setItem(mItem);
+            mAbsenceItem = item;
+            mBinding.setItem(mAbsenceItem);
             isItemFromServer = true;
         }
     }
@@ -106,10 +101,10 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         mCurrentState = state;
         if(mCurrentState == STATE.DONE) {
             if(isItemFromServer) {
-                getPresenter().update(mItem);
+                getPresenter().update(mAbsenceItem);
             }
             else {
-                getPresenter().add(mItem);
+                getPresenter().add(mAbsenceItem);
             }
         } else {
 
@@ -125,40 +120,40 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
                 case R.id.start_time:
                     new TimePickerDialog(getActivity(), (view1, hourOfDay, minute) -> {
                         LogUtil.d(TAG, String.format("start_time::hourOfDay:%d, minute:%d", hourOfDay, minute));
-                        mItem.setStart_hour(hourOfDay);
-                        mItem.setStart_min(minute);
-                        mBinding.setItem(mItem);
+                        mAbsenceItem.setStart_hour(hourOfDay);
+                        mAbsenceItem.setStart_min(minute);
+                        mBinding.setItem(mAbsenceItem);
                     }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
                             .show();
                     break;
                 case R.id.end_time:
                     new TimePickerDialog(getActivity(), (view1, hourOfDay, minute) -> {
                         LogUtil.d(TAG, String.format("start_time::hourOfDay:%d, minute:%d", hourOfDay, minute));
-                        mItem.setEnd_hour(hourOfDay);
-                        mItem.setEnd_min(minute);
-                        mBinding.setItem(mItem);
+                        mAbsenceItem.setEnd_hour(hourOfDay);
+                        mAbsenceItem.setEnd_min(minute);
+                        mBinding.setItem(mAbsenceItem);
                     }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
                             .show();
                     break;
                 case R.id.switch_btn_1:
-                    mItem.setBtn1(!mItem.isBtn1());
+                    mAbsenceItem.setBtn1(!mAbsenceItem.isBtn1());
                     break;
                 case R.id.switch_btn_2:
-                    mItem.setBtn2(!mItem.isBtn2());
+                    mAbsenceItem.setBtn2(!mAbsenceItem.isBtn2());
                     break;
                 case R.id.switch_btn_3:
-                    mItem.setBtn3(!mItem.isBtn3());
+                    mAbsenceItem.setBtn3(!mAbsenceItem.isBtn3());
                     break;
             }
 
-            mBinding.setItem(mItem);
+            mBinding.setItem(mAbsenceItem);
         }
 
         switch (view.getId()) {
             case R.id.switch_enable:
-                if (this.mIsAdmin) {
+                if (this.mSwitch.isadmin()) {
                     LogUtil.e(TAG, "check click");
-                    getPresenter().update(mItem);
+                    getPresenter().update(mAbsenceItem);
                 }
                 break;
         }
@@ -171,7 +166,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
 
     @Override
     public boolean hasToolbarMenus() {
-        return true;
+        return mSwitch.isadmin();
     }
 
     @Override
@@ -189,30 +184,21 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         mBinding.setFragment(this);
         getPresenter().loadItems(mSwitch.get_bsid());
 
-        mItem = new Absence(mSwitch);
-        mBinding.setItem(mItem);
+        mAbsenceItem = new Absence(mSwitch);
+        mBinding.setItem(mAbsenceItem);
+
+        mBinding.switchEnable.setEnabled(mSwitch.isadmin());
+
         mBinding.switchEnable.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mItem.setState(isChecked);
-            mBinding.setItem(mItem);
+            mAbsenceItem.setState(isChecked);
+            mBinding.setItem(mAbsenceItem);
         });
     }
 
     private AbsencePresenter getPresenter() {
         if(mPresenter == null) {
-            mPresenter = new AbsencePresenterImpl(getActivity(), this, mItem);
+            mPresenter = new AbsencePresenterImpl(getActivity(), this, mAbsenceItem);
         }
         return mPresenter;
-    }
-
-    @Override
-    public void setAdmin(boolean isAdmin) {
-        this.mIsAdmin = isAdmin;
-        mBinding.switchEnable.setClickable(isAdmin);
-
-        if(isAdmin) {
-            mBinding.absenceInfo.setText(getString(R.string.absence_info_admin));
-        } else {
-            mBinding.absenceInfo.setText(getString(R.string.absence_info_client));
-        }
     }
 }

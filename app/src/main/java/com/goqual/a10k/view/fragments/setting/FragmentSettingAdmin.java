@@ -21,7 +21,6 @@ import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.activities.ActivityInviteUser;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
-import com.goqual.a10k.view.interfaces.ISettingInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
 import rx.functions.Action1;
@@ -33,7 +32,6 @@ import rx.functions.Action1;
 public class FragmentSettingAdmin extends BaseFragment<FragmentSettingAdminBinding>
 implements UserPresenter.View<User>, IToolbarClickListener {
     public static final String TAG = FragmentSettingAdmin.class.getSimpleName();
-
 
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
     private Switch mSwitch;
@@ -144,15 +142,12 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         String myPhoneNum = PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_user_num), "");
         if(mAdminUser != null) {
             if (mAdminUser.getNum().equals(myPhoneNum)) {
-                ((ISettingInteraction)getActivity()).setAdmin(true);
                 RxBus.getInstance().send(new EventToolbarClick(STATE.DONE));
             } else {
-                ((ISettingInteraction)getActivity()).setAdmin(false);
                 RxBus.getInstance().send(new EventToolbarClick(STATE.HIDE));
             }
         }
         else {
-            ((ISettingInteraction)getActivity()).setAdmin(false);
             RxBus.getInstance().send(new EventToolbarClick(STATE.HIDE));
         }
     }
