@@ -62,7 +62,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public boolean hasToolbarMenus() {
-        return true;
+        return mSwitch.isadmin();
     }
 
     @Override
