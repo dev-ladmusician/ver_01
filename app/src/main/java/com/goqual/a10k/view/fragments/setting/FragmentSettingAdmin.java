@@ -60,6 +60,10 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         return getString(R.string.tab_title_admin);
     }
 
+    /**
+     * admin일 경우 Edit 기능 사용
+     * @return
+     */
     @Override
     public boolean hasToolbarMenus() {
         return mSwitch.isadmin();
