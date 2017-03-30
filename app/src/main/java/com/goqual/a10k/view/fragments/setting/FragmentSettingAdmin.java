@@ -62,7 +62,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     /**
      * admin일 경우 Edit 기능 사용
-     * @return admin 유무
+     * @return admin 유무 (Edit 기능 사용 유무)
      */
     @Override
     public boolean hasToolbarMenus() {
