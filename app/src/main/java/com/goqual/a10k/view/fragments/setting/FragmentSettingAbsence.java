@@ -15,6 +15,7 @@ import com.goqual.a10k.presenter.impl.AbsencePresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -34,11 +35,10 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
 
     public static final String TIME_FORMAT_STRING = "HH:mm a";
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
-    private boolean isItemFromServer;
     private boolean mIsChange;
 
     public enum BTN_STATE{ON, OFF, NONE}
-    private STATE mCurrentState;
+    private STATE mCurrentToolbarState;
 
     public static FragmentSettingAbsence newInstance(int item) {
         Bundle args = new Bundle();
@@ -77,7 +77,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
 
     @Override
     public void refresh() {
-
+        mIsChange = false;
     }
 
     @Override
@@ -91,29 +91,25 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         if(item.get_bsid() == mSwitch.get_bsid()) {
             mAbsenceItem = item;
             mBinding.setItem(mAbsenceItem);
-            isItemFromServer = true;
         }
     }
 
     @Override
     public void onClickEdit(STATE state) {
         LogUtil.d(TAG, "eventState?" + state);
-        mCurrentState = state;
-        if(mCurrentState == STATE.DONE) {
-            if(isItemFromServer) {
-                getPresenter().update(mAbsenceItem);
-            }
-            else {
-                getPresenter().add(mAbsenceItem);
-            }
+        mCurrentToolbarState = state;
+        if(mCurrentToolbarState == STATE.DONE) {
+            if (mIsChange) getPresenter().update(mAbsenceItem);
         } else {
 
         }
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
     }
 
     @Override
     public void onBtnClick(View view) {
-        if(mCurrentState == STATE.EDIT) {
+        if(mCurrentToolbarState == STATE.EDIT) {
+            mIsChange = true;
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date(System.currentTimeMillis()));
             switch (view.getId()) {
@@ -144,6 +140,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
                 case R.id.switch_btn_3:
                     mAbsenceItem.setBtn3(!mAbsenceItem.isBtn3());
                     break;
+
             }
 
             mBinding.setItem(mAbsenceItem);
@@ -151,8 +148,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
 
         switch (view.getId()) {
             case R.id.switch_enable:
-                if (this.mSwitch.isadmin()) {
-                    LogUtil.e(TAG, "check click");
+                if (mSwitch.isadmin()) {
                     getPresenter().update(mAbsenceItem);
                 }
                 break;
@@ -175,7 +171,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         if(getArguments() != null) {
             mSwitch = SwitchManager.getInstance().getItem(getArguments().getInt(EXTRA_SWITCH));
         }
-        mCurrentState = STATE.DONE;
+        mCurrentToolbarState = STATE.DONE;
     }
 
     @Override

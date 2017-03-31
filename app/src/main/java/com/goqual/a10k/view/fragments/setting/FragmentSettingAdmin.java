@@ -196,6 +196,6 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public void onClickEdit(STATE STATE) {
-
+        getUserAdapter().setDeletable(STATE == STATE.EDIT);
     }
 }

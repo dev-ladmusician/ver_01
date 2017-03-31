@@ -14,7 +14,6 @@ import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -24,15 +23,14 @@ import com.goqual.a10k.view.fragments.setting.FragmentSettingHistory;
 import com.goqual.a10k.view.fragments.setting.FragmentSettingNfc;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
-
-import rx.functions.Action1;
+import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
 /**
  * Created by hanwool on 2017. 2. 28..
  */
 
 public class ActivitySwitchSetting extends BaseActivity<ActivitySwitchSettingBinding>
-implements IActivityInteraction {
+implements IActivityInteraction, IToolbarInteraction {
 
     public static final String TAG = ActivitySwitchSetting.class.getSimpleName();
 
@@ -41,7 +39,6 @@ implements IActivityInteraction {
     private AdapterPager mAdapterPage;
     private Switch mSwitch;
     private int mSwitchPosition;
-    private boolean mIsAdmin;
 
     private EventToolbarClick mEventToolbarClick;
 
@@ -51,40 +48,31 @@ implements IActivityInteraction {
     }
 
     @Override
+    public void setTitle(CharSequence title) {
+        mBinding.toolbarTitle.setText(title);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getIntent() != null && getIntent().getExtras() != null) {
+        if (getIntent() != null && getIntent().getExtras() != null) {
             mSwitchPosition = getIntent().getExtras().getInt(ITEM_SWITCH);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
-            if(mSwitch == null) {
+            if (mSwitch == null) {
                 throw new IllegalStateException("Empty INTENT!");
             }
         }
         initViewPager();
         initTab();
-        subEvent();
         setTitle(mSwitch.getTitle());
-    }
 
-
-
-    private void subEvent() {
-        RxBus.getInstance().toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if(event instanceof EventToolbarClick) {
-                            mEventToolbarClick = (EventToolbarClick)event;
-                            mBinding.setEditSwitchState(mEventToolbarClick.getState());
-                            passToolbarClickEvent(mEventToolbarClick.getState());
-                        }
-                    }
-                });
+        if (mSwitch.isadmin()) mBinding.setEditSwitchState(IToolbarClickListener.STATE.DONE);
+        else mBinding.setEditSwitchState(IToolbarClickListener.STATE.HIDE);
     }
 
     private void initViewPager() {
         mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATE.EDIT);
-        mBinding.setEditSwitchState(mEventToolbarClick.getState());
+        //mBinding.setEditSwitchState(mEventToolbarClick.getState());
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitchPosition));
@@ -158,23 +146,18 @@ implements IActivityInteraction {
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_history));
     }
 
-    @Override
-    public void setTitle(CharSequence title) {
-        mBinding.toolbarTitle.setText(title);
-    }
-
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_back:
                 finish();
                 break;
             case R.id.toolbar_edit_container:
-                if(mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT) {
-                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
-                }
-                else {
-                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.EDIT));
-                }
+                LogUtil.e(TAG, "click edit :: " + mEventToolbarClick.getState());
+                if (mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT)
+                    mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
+                else
+                    mEventToolbarClick.setState(IToolbarClickListener.STATE.EDIT);
+                passToolbarClickEvent(mEventToolbarClick.getState());
                 break;
         }
     }
@@ -196,6 +179,14 @@ implements IActivityInteraction {
     @Override
     public void setTitle(String title) {
 //        mBinding.toolbarTitle.setText(title);
+    }
+
+    @Override
+    public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
+        if (STATE == IToolbarClickListener.STATE.DONE)
+            mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
+        else
+            mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
     }
 
     @Override

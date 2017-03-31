@@ -5,9 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.goqual.a10k.databinding.ItemNotiBinding;
 import com.goqual.a10k.databinding.ItemPhoneBookBinding;
-import com.goqual.a10k.model.entity.NotiWrap;
 import com.goqual.a10k.model.entity.Phone;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 
