@@ -61,6 +61,8 @@ implements IActivityInteraction, IToolbarInteraction {
             if (mSwitch == null) {
                 throw new IllegalStateException("Empty INTENT!");
             }
+
+            mBinding.toolbarTitle.setText(mSwitch.getTitle());
         }
         initViewPager();
         initTab();
