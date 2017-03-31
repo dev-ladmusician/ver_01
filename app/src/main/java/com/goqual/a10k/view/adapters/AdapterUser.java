@@ -115,4 +115,12 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
         mItemList.remove(position);
         mItemList.add(admin);
     }
+
+    public void setDeletable(boolean state) {
+        for(User item : mItemList) {
+            item.setmIsDeletable(state);
+        }
+
+        refresh();
+    }
 }

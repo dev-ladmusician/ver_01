@@ -8,6 +8,9 @@
         <variable
             name="holder"
             type="com.goqual.a10k.view.viewholders.UserViewHolder"/>
+        <import
+            alias="View"
+            type="android.view.View" />
     </data>
     <RelativeLayout
         android:id="@+id/item_user_container"
@@ -22,7 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_delete_ic_container_size"
-            android:visibility="gone"
+            android:visibility="@{user.mIsDeletable ? View.VISIBLE : View.GONE}"
             android:layout_height="match_parent">
 
             <ImageView
@@ -40,6 +43,7 @@
             android:layout_height="@dimen/admin_user_ic_size"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            android:visibility="@{user.mIsDeletable ? View.GONE : View.VISIBLE}"
             android:src="@drawable/ic_user"/>
 
         <TextView
