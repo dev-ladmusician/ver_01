@@ -6,7 +6,6 @@ import org.parceler.Parcel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -21,9 +20,9 @@ public class Absence {
     private int end_hour;
     private int end_min;
     private int _bsid;
-    private boolean btn1;
-    private boolean btn2;
-    private boolean btn3;
+    public boolean btn1;
+    public boolean btn2;
+    public boolean btn3;
     private String title;
     private boolean state;
     private int btncount; // count of btn in switch

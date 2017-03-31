@@ -13,7 +13,7 @@ public class User {
     private String name;
     private String mAuthKey;
     private String mPubKey;
-    private boolean mIsDeletable;
+    public boolean mIsDeletable;
     private boolean mChecked;
 
     public String getmAuthKey() {
