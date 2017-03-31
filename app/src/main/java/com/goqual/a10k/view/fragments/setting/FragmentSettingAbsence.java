@@ -38,7 +38,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     private boolean mIsChange;
 
     public enum BTN_STATE{ON, OFF, NONE}
-    private STATE mCurrentToolbarState;
+    private STATE mCurrentToolbarState = STATE.DONE;
 
     public static FragmentSettingAbsence newInstance(int item) {
         Bundle args = new Bundle();
@@ -100,8 +100,13 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         mCurrentToolbarState = state;
         if(mCurrentToolbarState == STATE.DONE) {
             if (mIsChange) getPresenter().update(mAbsenceItem);
+            mBinding.switchBtn1.setEnabled(false);
+            mBinding.switchBtn2.setEnabled(false);
+            mBinding.switchBtn3.setEnabled(false);
         } else {
-
+            mBinding.switchBtn1.setEnabled(true);
+            mBinding.switchBtn2.setEnabled(true);
+            mBinding.switchBtn3.setEnabled(true);
         }
         ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
     }
@@ -112,6 +117,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mIsChange = true;
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date(System.currentTimeMillis()));
+
             switch (view.getId()) {
                 case R.id.start_time:
                     new TimePickerDialog(getActivity(), (view1, hourOfDay, minute) -> {
@@ -189,6 +195,10 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mAbsenceItem.setState(isChecked);
             mBinding.setItem(mAbsenceItem);
         });
+
+        mBinding.switchBtn1.setEnabled(false);
+        mBinding.switchBtn2.setEnabled(false);
+        mBinding.switchBtn3.setEnabled(false);
     }
 
     private AbsencePresenter getPresenter() {

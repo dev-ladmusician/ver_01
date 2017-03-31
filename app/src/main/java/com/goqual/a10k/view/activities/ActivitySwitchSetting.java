@@ -71,7 +71,7 @@ implements IActivityInteraction, IToolbarInteraction {
     }
 
     private void initViewPager() {
-        mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATE.EDIT);
+        mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATE.DONE);
         //mBinding.setEditSwitchState(mEventToolbarClick.getState());
         mBinding.setActivity(this);
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
