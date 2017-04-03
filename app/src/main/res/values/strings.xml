@@ -172,7 +172,7 @@
     <string name="switch_setting_chang_admin_dialog_btn_cancel">취소</string>
     <string name="switch_setting_chang_admin_dialog_btn_submit">확인</string>
     <string name="switch_setting_admin_add_user">버튼을 눌러 새로운 사용자를 초대하세요.</string>
-    <string name="switch_setting_admin_delete_user_title">삭제</string>
+    <string name="switch_setting_admin_delete_user_title">연결 해제</string>
     <string name="switch_setting_admin_delete_user_content"> 님을 \n삭제 하시겠습니까?</string>
     <string name="swtich_change_admin_title">관리자 변경</string>
 

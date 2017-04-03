@@ -2,7 +2,6 @@ package com.goqual.a10k.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,7 +19,7 @@ import com.goqual.a10k.model.entity.DialogModel;
  * Created by hanwool on 2017. 2. 22..
  */
 
-public class CustomDialog extends Dialog{
+public class CustomDialog extends Dialog {
 
     private Context mContext = null;
     private DialogCustomBinding mBinding = null;

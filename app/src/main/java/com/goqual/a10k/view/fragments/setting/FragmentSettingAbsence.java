@@ -96,7 +96,6 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
 
     @Override
     public void onClickEdit(STATE state) {
-        LogUtil.d(TAG, "eventState?" + state);
         mCurrentToolbarState = state;
         if(mCurrentToolbarState == STATE.DONE) {
             if (mIsChange) getPresenter().update(mAbsenceItem);
