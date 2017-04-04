@@ -201,6 +201,7 @@
     <string name="history_item_control_switch">스위치</string>
     <string name="history_item_op_on">ON</string>
     <string name="history_item_op_off">OFF</string>
+    <string name="history_item_somebody">Somebody</string>
 
     <!-- setting -->
     <string name="setting_item_faq">자주묻는 질문</string>

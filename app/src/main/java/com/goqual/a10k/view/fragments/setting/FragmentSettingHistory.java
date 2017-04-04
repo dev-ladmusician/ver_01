@@ -170,6 +170,8 @@ implements HistoryPresenter.View<History>, com.wdullaer.materialdatetimepicker.d
 
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-
+        mViewCalendar.set(year, monthOfYear, dayOfMonth);
+        mBinding.historyTxtDate.setText(mSimpleDateFormat.format(mViewCalendar.getTime()));
+        getHistoryPresenter().get(mSwitch.get_bsid(), year, monthOfYear+1, dayOfMonth, 1);
     }
 }

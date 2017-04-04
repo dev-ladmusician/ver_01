@@ -15,6 +15,7 @@ public class History {
     private int _logid;
     private boolean operation;
     private int btn;
+    public String num;
     private String created;
     private String label;
 
@@ -65,6 +66,14 @@ public class History {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
     }
 
     @Override
