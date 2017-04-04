@@ -36,13 +36,13 @@
         android:text="@{item.num == null ? @string/history_item_somebody : item.num}"
         android:textColor="@color/grey_03"/>
 
-    <TextView
+    <ImageView
         android:id="@+id/history_item_method"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:text='@{item.label.equals("phone") ? @string/history_item_control_phone : @string/history_item_control_switch}'/>
+        android:src='@{item.label.equals("phone") ? @drawable/ic_history_phone : @drawable/ic_history_hand}' />
 
     <TextView
         android:id="@+id/history_item_operation"
