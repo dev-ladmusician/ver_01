@@ -3,12 +3,10 @@ package com.goqual.a10k.presenter.impl;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.History;
-import com.goqual.a10k.model.entity.PagenationWrapper;
 import com.goqual.a10k.model.remote.service.HistoryService;
 import com.goqual.a10k.presenter.HistoryPresenter;
 import com.goqual.a10k.view.adapters.AdapterHistory;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -30,15 +28,20 @@ public class HistoryPresenterImpl implements HistoryPresenter {
 
     @Override
     public void get(int switchId, int year, int month, int day, int page) {
-        mHistoryAdapter.clear();
+        //mHistoryAdapter.clear();
         mView.loadingStart();
+
         getHistoryService().getHistoryApi().gets(switchId, year, month, day, page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
-                .map(PagenationWrapper::getResult)
-                .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::addItem,
+                .subscribe((result) -> {
+                            mView.setPage(result.getPage());
+                            mView.setLastPage(result.getLastPage());
+                            for(History each : result.getResult()) {
+                                mView.addItem(each);
+                            }
+                        },
                         mView::onError,
                         mView::refresh
                 );
