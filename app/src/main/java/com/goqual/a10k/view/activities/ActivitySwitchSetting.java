@@ -187,8 +187,10 @@ implements IActivityInteraction, IToolbarInteraction {
     public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
         if (STATE == IToolbarClickListener.STATE.DONE)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
-        else
+        else if (STATE == IToolbarClickListener.STATE.EDIT)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
+        else
+            mBinding.setEditSwitchState(IToolbarClickListener.STATE.HIDE);
     }
 
     @Override

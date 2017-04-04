@@ -28,12 +28,17 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         binding.setHolder(this);
     }
 
-    public void bindView(int position, User item, OnRecyclerItemClickListener listener) {
+    public void bindView(int position, User item, OnRecyclerItemClickListener listener, boolean isBqorderView) {
         mListener = listener;
         mPosition = position;
         binding.setUser(item);
+        binding.setBorderView(isBqorderView);
 
         binding.itemUserDelete.setOnClickListener(v -> {
+            listener.onItemClick(binding.itemUserDelete.getId(), position);
+        });
+
+        binding.itemUserContainer.setOnClickListener(v -> {
             listener.onItemClick(binding.itemUserDelete.getId(), position);
         });
     }

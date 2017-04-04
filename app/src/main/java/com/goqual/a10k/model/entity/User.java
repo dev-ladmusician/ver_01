@@ -14,7 +14,7 @@ public class User {
     private String mAuthKey;
     private String mPubKey;
     public boolean mIsDeletable;
-    private boolean mChecked;
+    public boolean mChecked;
 
     public String getmAuthKey() {
         return mAuthKey;

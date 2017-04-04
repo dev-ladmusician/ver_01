@@ -19,6 +19,7 @@ import com.goqual.a10k.view.activities.ActivityInviteUser;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.dialog.CustomListDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
@@ -35,9 +36,8 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     private UserPresenter mUserPresenter;
     private AdapterUser mUserAdapter;
-    private User mAdminUser;
+    private CustomListDialog mListDialog = null;
 
-    public enum BTN_STATE{ON, OFF, NONE}
     private STATE mCurrentToolbarState = STATE.DONE;
 
     public static FragmentSettingAdmin newInstance(int item) {
@@ -94,6 +94,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     @Override
     public void onLoadComplete() {
         loadingStop();
+        getUserAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -101,17 +102,26 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         LogUtil.d(TAG, "USER::" + item);
         if(!item.isadmin()) {
             getUserAdapter().addItem(item);
-            getUserAdapter().notifyDataSetChanged();
         }
         else {
-            mAdminUser = item;
-            mBinding.setAdminUser(mAdminUser);
+            getUserAdapter().setAdmin(item);
+            mBinding.setAdminUser(item);
         }
     }
 
     @Override
     public void handleChangeAdmin(int position) {
+        User admin = getUserAdapter().getAdmin();
+        getUserAdapter().setAdmin(getUserAdapter().getItem(position));
+        getUserAdapter().addItem(admin);
+        getUserAdapter().refresh();
 
+        mBinding.setAdminUser(getUserAdapter().getAdmin());
+
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
+        onClickEdit(STATE.DONE);
+
+        getListDialog().dismiss();
     }
 
     @Override
@@ -157,7 +167,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
                     getUserPresenter().delete(position);
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
-
+                    dialog.dismiss();
                     break;
             }
             dialog.dismiss();
@@ -170,6 +180,25 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             .setPositiveButton(getString(R.string.common_delete), onClickListener)
             .setNegativeButton(getString(R.string.common_cancel), onClickListener)
             .show();
+    }
+
+    private void onClickChangeAdmin() {
+        DialogInterface.OnClickListener onClickListener = (dialog1, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    LogUtil.e(TAG, "SELECTED POSITION :: " + getListDialog().getSelectedPosition());
+                    getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    getListDialog().dismiss();
+                    break;
+            }
+        };
+
+        getListDialog().setTitleText(R.string.swtich_change_admin_title)
+                .setPositiveButton(getString(R.string.common_save), onClickListener)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .show();
     }
 
     private UserPresenter getUserPresenter() {
@@ -192,6 +221,8 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     public void onBtnClick(View view) {
         if(view.getId() == R.id.admin_add_user_in_exist_items) {
             startActivity(new Intent(getActivity(), ActivityInviteUser.class));
+        } else if (view.getId() == R.id.admin_change_admin) {
+            onClickChangeAdmin();
         }
     }
 
@@ -206,5 +237,12 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             mBinding.adminChangeAdmin.setVisibility(View.VISIBLE);
         }
         ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+    }
+
+    private CustomListDialog getListDialog() {
+        if (mListDialog == null)
+            mListDialog = new CustomListDialog(getContext(), getUserAdapter().getmItemList());
+
+        return mListDialog;
     }
 }
