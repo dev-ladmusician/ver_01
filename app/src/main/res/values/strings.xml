@@ -188,6 +188,9 @@
     <string name="invite_dialog_content">초대를 수락 하시겠습니까?</string>
     <string name="invite_user_dialog_title">초대하기</string>
     <string name="invite_user_dialog_content">님을 초대하시겠어요?</string>
+    <string name="invite_error_dialog_title">초대 실패</string>
+    <string name="invite_error_dialog_content">님을 \n해당 스위치에 초대하는데 \n오류가 발생했습니다.</string>
+    <string name="invite_user_invited">초대</string>
 
     <!-- history -->
     <string name="history_no_item">등록된 기록이 없습니다.</string>

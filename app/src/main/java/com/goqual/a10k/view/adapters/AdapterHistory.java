@@ -71,6 +71,11 @@ implements AdapterDataModel<History>, AdapterDataView{
     }
 
     @Override
+    public List<History> getItems() {
+        return this.mHistoryList;
+    }
+
+    @Override
     public void updateItem(int position, History item) {
         this.mHistoryList.set(position, item);
         refresh();

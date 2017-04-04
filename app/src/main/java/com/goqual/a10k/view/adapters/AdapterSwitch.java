@@ -68,6 +68,11 @@ implements AdapterDataModel<Switch>, AdapterDataView{
     }
 
     @Override
+    public List<Switch> getItems() {
+        return this.mSwitchList;
+    }
+
+    @Override
     public void updateItem(int position, Switch item) {
         this.mSwitchList.set(position, item);
     }

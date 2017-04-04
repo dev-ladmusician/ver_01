@@ -2,8 +2,6 @@ package com.goqual.a10k.model.remote.service;
 
 import android.content.Context;
 
-
-import com.goqual.a10k.model.entity.InviteUser;
 import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
@@ -37,13 +35,6 @@ public class UserService {
         @GET("connection/getUsers/{switchId}")
         Observable<ResultDTO<List<User>>> gets(
                 @Path("switchId") int switchId
-        );
-
-        @FormUrlEncoded
-        @PUT("invite")
-        Observable<ResultDTO<List<InviteUser>>> checkUserIsJoinedAndConnected(
-                @Field("nums") String[] nums,
-                @Field("switchId") int _bsid
         );
 
         @FormUrlEncoded

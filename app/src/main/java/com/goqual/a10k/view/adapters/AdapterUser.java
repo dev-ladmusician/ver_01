@@ -87,6 +87,11 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
     }
 
     @Override
+    public List<User> getItems() {
+        return this.mItemList;
+    }
+
+    @Override
     public void updateItem(int position, User item) {
         mItemList.set(position, item);
     }

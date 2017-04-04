@@ -111,6 +111,16 @@ public class CustomDialog extends Dialog {
         return this;
     }
 
+    public CustomDialog setPositiveButton(boolean state) {
+        mModel.setPositiveButton(state);
+        return this;
+    }
+
+    public CustomDialog setNegativeButton(boolean state) {
+        mModel.setNegativeButton(state);
+        return this;
+    }
+
     public CustomDialog isEditable(boolean enable) {
         mModel.setEditable(enable);
         return this;

@@ -8,7 +8,10 @@ import android.support.annotation.Nullable;
 
 public interface PhoneBookPresenter {
     void loadItems(@Nullable String query);
+    void checkUser(int bsId, int position);
 
-    interface View<T> extends BasePresenterView{
+    interface View<T> extends BasePresenterView {
+        void successInvite(int position);
+        void errorInvite(int position);
     }
 }

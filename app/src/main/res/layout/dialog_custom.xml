@@ -50,7 +50,6 @@
                 android:visibility="@{item.message != null ? View.VISIBLE : View.GONE}"
                 android:text="@{item.message}" />
 
-
             <EditText
                 android:id="@+id/dialog_edit"
                 android:layout_below="@+id/dialog_content"

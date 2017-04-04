@@ -11,6 +11,7 @@ public interface AdapterDataModel<T> {
     int getSize();
     void clear();
     T getItem(int position);
+    List<T> getItems();
     void updateItem(int position, T item);
     void updateItems(List<T> items);
     void refresh();
