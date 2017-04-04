@@ -81,9 +81,8 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public void refresh() {
-        loadingStart();
-        getUserAdapter().clear();
-        getUserPresenter().loadItems(mSwitch.get_bsid());
+        loadingStop();
+        getUserAdapter().refresh();
     }
 
     @Override
@@ -140,7 +139,11 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         initView();
+
+        getUserAdapter().clear();
+        getUserPresenter().loadItems(mSwitch.get_bsid());
 
         getUserAdapter().setOnRecyclerItemClickListener((id, position) -> {
             switch (id) {
