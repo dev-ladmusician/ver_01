@@ -161,18 +161,19 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
         if(mAdapter == null) {
             mAdapter = new AdapterPhoneBook(this);
             mAdapter.setOnRecyclerItemClickListener(((viewId, position) -> {
-                Phone user = getAdapter().getItem(position);
-
-                getDialog()
-                        .setTitleText(R.string.invite_user_dialog_title)
-                        .setMessageText(user.getDisplayName() + getString(R.string.invite_user_dialog_content))
-                        .setPositiveButton(getString(R.string.common_ok), (dialog, which) -> {
-                            handleClickUser(position);
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
-                            dialog.dismiss();
-                        }).show();
+                if (!getAdapter().getItem(position).isInvited) {
+                    Phone user = getAdapter().getItem(position);
+                    getDialog()
+                            .setTitleText(R.string.invite_user_dialog_title)
+                            .setMessageText(user.getDisplayName() + getString(R.string.invite_user_dialog_content))
+                            .setPositiveButton(getString(R.string.common_ok), (dialog, which) -> {
+                                handleClickUser(position);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                                dialog.dismiss();
+                            }).show();
+                }
             }));
         }
         return mAdapter;
