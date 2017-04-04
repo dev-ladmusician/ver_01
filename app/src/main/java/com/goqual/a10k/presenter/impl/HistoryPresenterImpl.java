@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.goqual.a10k.model.entity.History;
 import com.goqual.a10k.model.entity.PagenationWrapper;
-import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.HistoryService;
 import com.goqual.a10k.presenter.HistoryPresenter;
 import com.goqual.a10k.view.adapters.AdapterHistory;
-import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -40,12 +38,9 @@ public class HistoryPresenterImpl implements HistoryPresenter {
                 .map(PagenationWrapper::getResult)
                 .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                            mHistoryAdapter.addItem(item);
-                            mView.addItem(item);
-                        },
+                .subscribe(mView::addItem,
                         mView::onError,
-                        mView::loadingStop
+                        mView::refresh
                 );
     }
 

@@ -45,7 +45,6 @@ implements AdapterDataModel<History>, AdapterDataView{
     @Override
     public void addItem(History item) {
         this.mHistoryList.add(item);
-        refresh();
     }
 
     @Override

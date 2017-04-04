@@ -1,14 +1,11 @@
 package com.goqual.a10k.view.fragments.setting;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.DatePicker;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
 import com.goqual.a10k.databinding.FragmentSettingHistoryBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.History;
@@ -29,7 +26,7 @@ import java.util.Locale;
  */
 
 public class FragmentSettingHistory extends BaseFragment<FragmentSettingHistoryBinding>
-implements HistoryPresenter.View<History>{
+implements HistoryPresenter.View<History>, com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
     public static final String TAG = FragmentSettingHistory.class.getSimpleName();
 
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
@@ -65,7 +62,18 @@ implements HistoryPresenter.View<History>{
 
     @Override
     public void refresh() {
+        loadingStop();
+        mHistoryAdapter.refresh();
 
+        LogUtil.e(TAG, "item count :: " + mHistoryAdapter.getItemCount());
+
+        if (mHistoryAdapter.getItemCount() == 0) {
+            mBinding.historyContainer.setVisibility(View.GONE);
+            mBinding.historyNoItem.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.historyContainer.setVisibility(View.VISIBLE);
+            mBinding.historyNoItem.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -75,7 +83,7 @@ implements HistoryPresenter.View<History>{
 
     @Override
     public void addItem(History item) {
-        LogUtil.d(TAG, "addItem::"+item);
+        mHistoryAdapter.addItem(item);
     }
 
     @Override
@@ -116,6 +124,7 @@ implements HistoryPresenter.View<History>{
         mHistoryAdapter = new AdapterHistory(getActivity());
         mBinding.historyContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.historyContainer.setAdapter(mHistoryAdapter);
+
         getHistoryPresenter().get(mSwitch.get_bsid(),
                 mViewCalendar.get(Calendar.YEAR),
                 mViewCalendar.get(Calendar.MONTH)+1,
@@ -132,17 +141,35 @@ implements HistoryPresenter.View<History>{
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.history_txt_date) {
-            new DatePickerDialog(getActivity(),
-                    (view1, year, month, dayOfMonth) -> {
-                        mViewCalendar.set(year, month, dayOfMonth);
-                        getHistoryPresenter().get(mSwitch.get_bsid(), year, month+1, dayOfMonth, 1);
-                        mBinding.historyTxtDate.setText(mSimpleDateFormat.format(mViewCalendar.getTime()));
-                    },
-                    mViewCalendar.get(Calendar.YEAR),
-                    mViewCalendar.get(Calendar.MONTH),
-                    mViewCalendar.get(Calendar.DAY_OF_MONTH))
-                    .show();
+
+            Calendar now = Calendar.getInstance();
+            com.wdullaer.materialdatetimepicker.date.DatePickerDialog datepickerDialog =
+                    com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(
+                            FragmentSettingHistory.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+            datepickerDialog.setMaxDate(now);
+            datepickerDialog.show(getActivity().getFragmentManager(), "test");
+
+
+
+//            new DatePickerDialog(getActivity(),
+//                    (view1, year, month, dayOfMonth) -> {
+//                        mViewCalendar.set(year, month, dayOfMonth);
+//                        getHistoryPresenter().get(mSwitch.get_bsid(), year, month+1, dayOfMonth, 1);
+//                        mBinding.historyTxtDate.setText(mSimpleDateFormat.format(mViewCalendar.getTime()));
+//                    },
+//                    mViewCalendar.get(Calendar.YEAR),
+//                    mViewCalendar.get(Calendar.MONTH),
+//                    mViewCalendar.get(Calendar.DAY_OF_MONTH))
+//                    .show();
         }
     }
 
+    @Override
+    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+
+    }
 }
