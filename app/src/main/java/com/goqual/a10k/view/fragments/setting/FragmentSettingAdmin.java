@@ -83,6 +83,8 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     public void refresh() {
         loadingStop();
         getUserAdapter().refresh();
+
+        setToolbarHideNoneConnectedUser();
     }
 
     @Override
@@ -94,6 +96,8 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     public void onLoadComplete() {
         loadingStop();
         getUserAdapter().notifyDataSetChanged();
+
+        setToolbarHideNoneConnectedUser();
     }
 
     @Override
@@ -158,7 +162,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         mBinding.setFragment(this);
         mBinding.adminUserContainer.setAdapter(getUserAdapter());
         mBinding.adminUserContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
-        refresh();
+        //refresh();
     }
 
     private void onClickDeleteItem(int position) {
@@ -247,5 +251,12 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             mListDialog = new CustomListDialog(getContext(), getUserAdapter().getmItemList());
 
         return mListDialog;
+    }
+
+    private void setToolbarHideNoneConnectedUser() {
+        if (getUserAdapter().getItemCount() == 0) {
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
+            mBinding.adminChangeAdmin.setVisibility(View.GONE);
+        }
     }
 }
