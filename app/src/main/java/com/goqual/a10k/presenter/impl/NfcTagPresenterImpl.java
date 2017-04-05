@@ -44,9 +44,10 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                             for(Nfc each : result.getResult()) {
                                 mView.addItem(each);
 
-                                mRealm.beginTransaction();
-                                mRealm.insert(new NfcRealm(each));
-                                mRealm.commitTransaction();
+                                // insert realm
+//                                mRealm.beginTransaction();
+//                                mRealm.insert(new NfcRealm(each));
+//                                mRealm.commitTransaction();
                             }
                         },
                         (e) -> {

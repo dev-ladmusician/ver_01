@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -17,6 +18,7 @@ import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.activities.ActivityNfcDetect;
 import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
@@ -91,6 +93,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public void refresh() {
+        mBinding.refresh.setRefreshing(false);
         mAdapter.refresh();
     }
 
@@ -139,7 +142,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     @Override
     public void onStop() {
         super.onStop();
-        mRealm.close();
+        getRealmInstance().close();
     }
 
     @Override
@@ -151,6 +154,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     @Override
     public void onResume() {
         super.onResume();
+        getAdapter().clear();
         loadItems();
     }
 
@@ -183,6 +187,16 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
                     break;
             }
         });
+
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAdapter().clear();
+                setPage(1);
+                loadItems();
+            }
+        });
     }
 
     @Override
@@ -195,15 +209,29 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         mLastPage = lastPage;
     }
 
-    private void loadItems() {
-        if (((IActivityInteraction)getActivity()).getPreferenceHelper()
-                .getBooleanValue(getString(R.string.arg_nfc_is_loaded))) {
-            getPresenter().loadItemsInRealm(mCurrentPage);
-        } else {
-            getPresenter().loadItems(mSwitch.get_bsid(), mCurrentPage);
-            ((IActivityInteraction)getActivity()).getPreferenceHelper().put(
-                    getString(R.string.arg_nfc_is_loaded), true);
+    @Override
+    public void checkLoadMore() {
+        if (mCurrentPage < mLastPage) {
+            mCurrentPage = mCurrentPage + 1;
+            loadItems();
         }
+    }
+
+    @Override
+    public void loadItems() {
+        getPresenter().loadItems(mSwitch.get_bsid(), mCurrentPage);
+
+        /**
+         * TODO realm database 활용 :: pagination
+         */
+//        if (((IActivityInteraction)getActivity()).getPreferenceHelper()
+//                .getBooleanValue(getString(R.string.arg_nfc_is_loaded))) {
+//            getPresenter().loadItemsInRealm(mCurrentPage);
+//        } else {
+//            getPresenter().loadItems(mSwitch.get_bsid(), mCurrentPage);
+//            ((IActivityInteraction)getActivity()).getPreferenceHelper().put(
+//                    getString(R.string.arg_nfc_is_loaded), true);
+//        }
     }
 
     /**
@@ -256,7 +284,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     private AdapterNfc getAdapter() {
         if (mAdapter == null)
-            mAdapter = new AdapterNfc(getActivity());
+            mAdapter = new AdapterNfc(getActivity(), this);
         return mAdapter;
     }
 

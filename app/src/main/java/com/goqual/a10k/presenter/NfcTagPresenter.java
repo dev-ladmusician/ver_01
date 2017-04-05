@@ -20,5 +20,7 @@ public interface NfcTagPresenter {
     interface View<T> extends BasePresenterView<T>{
         void onSuccess();
         void deleteItem(int position);
+        void loadItems();
+        void checkLoadMore();
     }
 }
