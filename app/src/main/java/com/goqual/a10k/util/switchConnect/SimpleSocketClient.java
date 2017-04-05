@@ -46,6 +46,7 @@ public class SimpleSocketClient extends Thread{
 
     private boolean isConnected = false;
     private boolean mCommBlock = false;
+    private static boolean mIsRunning = false;
 
     private static String aLine = "";
     private LinkedBlockingQueue<byte[]> commQueue = new LinkedBlockingQueue<>();
@@ -83,6 +84,7 @@ public class SimpleSocketClient extends Thread{
             }
 
             mListener.onConnected();
+            mIsRunning = true;
         } catch (IOException e) {
             mListener.onError(e);
             return false;
@@ -119,6 +121,8 @@ public class SimpleSocketClient extends Thread{
     @Override
     public void interrupt() {
         super.interrupt();
+        mIsRunning = false;
+        instance = null;
     }
 
     @Override
@@ -244,5 +248,9 @@ public class SimpleSocketClient extends Thread{
 
     public void setNetwork(Network network) {
         mNetwork = network;
+    }
+
+    public boolean isRunning() {
+        return mIsRunning;
     }
 }
