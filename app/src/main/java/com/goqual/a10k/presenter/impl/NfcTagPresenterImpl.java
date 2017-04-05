@@ -6,6 +6,7 @@ import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.model.remote.service.NfcService;
 import com.goqual.a10k.presenter.NfcTagPresenter;
+import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import io.realm.Realm;
@@ -23,12 +24,13 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     private View<Nfc> mView;
     private Context mContext;
     private NfcService mNfcService;
+    private AdapterDataModel<Nfc> mAdapter;
     private Realm mRealm;
 
-    public NfcTagPresenterImpl(Context mContext, View mView, Realm realm) {
+    public NfcTagPresenterImpl(Context mContext, View mView, AdapterDataModel model) {
         this.mView = mView;
         this.mContext = mContext;
-        this.mRealm = realm;
+        this.mAdapter = model;
     }
 
     public void loadItems(int switchId, int page) {
@@ -84,24 +86,20 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     }
 
     @Override
-    public void delete(int nfc_id) {
-//        mView.loadingStart();
-//        getNfcService().getrNfcApi().delete(nfc_id)
-//                .subscribeOn(Schedulers.newThread())
-//                .filter(result -> result.getResult() != null)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(resultDTO -> {
-//                            try (Realm realm = Realm.getDefaultInstance()) {
-//                                realm.executeTransaction(realm1 -> {
-//                                    realm1.where(Nfc.class).equalTo("_nfcid", nfc_id).findFirst().deleteFromRealm();
-//                                });
-//                            }
-//                            catch (Exception e) {
-//                                mView.onError(e);
-//                            }
-//                        },
-//                        mView::onError,
-//                        mView::onSuccess);
+    public void delete(int position) {
+        mView.loadingStart();
+        getNfcService().getrNfcApi().delete(mAdapter.getItem(position).get_nfcid())
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            mAdapter.deleteItem(position);
+                        },
+                        mView::onError,
+                        () -> {
+                            mView.loadingStop();
+                            mView.refresh();
+                        });
     }
 
     @Override

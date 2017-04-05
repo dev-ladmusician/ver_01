@@ -21,7 +21,6 @@ import com.goqual.a10k.view.activities.ActivityNfcDetect;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
-import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
@@ -97,8 +96,6 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
-        ((IActivityInteraction)getActivity()).getPreferenceHelper().put(
-                getString(R.string.arg_nfc_is_loaded), false);
     }
 
     @Override
@@ -167,7 +164,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
                     DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
-                                getPresenter().delete(getAdapter().getItem(position)._nfcid);
+                                getPresenter().delete(position);
                                 break;
                             case DialogInterface.BUTTON_NEGATIVE:
                                 break;
@@ -294,7 +291,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     private NfcTagPresenter getPresenter() {
         if(mPresenter == null) {
-            mPresenter = new NfcTagPresenterImpl(getActivity(), this, getRealmInstance());
+            mPresenter = new NfcTagPresenterImpl(getActivity(), this, getAdapter());
         }
         return mPresenter;
     }
