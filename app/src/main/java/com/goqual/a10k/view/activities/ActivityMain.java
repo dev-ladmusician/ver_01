@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.BackPressUtil;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventSwitchEdit;
@@ -240,5 +241,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void onBackPressed() {
         super.onBackPressed();
         backPressUtil.onBackPressed();
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
     }
 }

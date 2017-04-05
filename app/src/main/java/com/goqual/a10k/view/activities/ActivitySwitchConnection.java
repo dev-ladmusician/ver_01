@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySwitchConnectionBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.presenter.ConnectPresenter;
 import com.goqual.a10k.presenter.impl.ConnectPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
@@ -132,5 +133,10 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
     @Override
     public void finishApp() {
 
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
     }
 }

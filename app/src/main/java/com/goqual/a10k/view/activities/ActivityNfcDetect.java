@@ -12,10 +12,9 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcDetectBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.SocketManager;
-import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.NfcUtil;
@@ -48,7 +47,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
     private boolean isRegisterMode;
 
     private String mReadedTagId;
-    private Nfc mReadedTag;
+    private NfcRealm mReadedTag;
     private Switch mSwitch;
     private int mSwitchPosition;
     private NfcTagPresenter mNfcTagPresenter;
@@ -124,7 +123,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             }
             else {
                 Realm realm = Realm.getDefaultInstance();
-                mReadedTag = realm.where(Nfc.class).equalTo("tag", mReadedTagId).findFirst();
+                mReadedTag = realm.where(NfcRealm.class).equalTo("tag", mReadedTagId).findFirst();
                 LogUtil.e(TAG, "TAG??::" + mReadedTag);
                 if(mReadedTag != null && getSocketManager().isConnected()) {
                     operateSwitch();

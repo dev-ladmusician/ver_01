@@ -15,6 +15,7 @@ import com.goqual.a10k.presenter.impl.HistoryPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterHistory;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +27,7 @@ import java.util.Locale;
  */
 
 public class FragmentSettingHistory extends BaseFragment<FragmentSettingHistoryBinding>
-implements HistoryPresenter.View<History>, com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
+implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
     public static final String TAG = FragmentSettingHistory.class.getSimpleName();
 
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
@@ -188,11 +189,11 @@ implements HistoryPresenter.View<History>, com.wdullaer.materialdatetimepicker.d
 
     @Override
     public void setPage(int page) {
-        this.mCurrentPage = page;
+        mCurrentPage = page;
     }
 
     @Override
     public void setLastPage(int lastPage) {
-        this.mLastPage = lastPage;
+        mLastPage = lastPage;
     }
 }

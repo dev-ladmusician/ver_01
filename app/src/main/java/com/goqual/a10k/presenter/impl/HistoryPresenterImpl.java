@@ -6,6 +6,7 @@ import com.goqual.a10k.model.entity.History;
 import com.goqual.a10k.model.remote.service.HistoryService;
 import com.goqual.a10k.presenter.HistoryPresenter;
 import com.goqual.a10k.view.adapters.AdapterHistory;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -36,8 +37,8 @@ public class HistoryPresenterImpl implements HistoryPresenter {
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((result) -> {
-                            mView.setPage(result.getPage());
-                            mView.setLastPage(result.getLastPage());
+                            ((IPaginationPage)mView).setPage(result.getPage());
+                            ((IPaginationPage)mView).setLastPage(result.getLastPage());
                             for(History each : result.getResult()) {
                                 mView.addItem(each);
                             }

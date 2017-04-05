@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmSwitchSelectBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.base.BaseActivity;
@@ -94,5 +95,10 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
                 RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
                 break;
         }
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
     }
 }

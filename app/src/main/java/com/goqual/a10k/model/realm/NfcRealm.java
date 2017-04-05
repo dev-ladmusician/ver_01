@@ -1,28 +1,39 @@
-package com.goqual.a10k.model.entity;
+package com.goqual.a10k.model.realm;
 
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.Index;
+
 /**
- * Created by hanwool on 2017. 3. 8..
+ * Created by hanwool on 2017. 2. 27..
  */
 
-public class NfcWrap implements BaseRealmWraper<Nfc>{
+public class NfcRealm extends RealmObject{
+
+    @Index
     public String tag;
+    @Index
     public int _nfcid;
     public int _bsid;
-    public boolean btn1;
-    public boolean btn2;
-    public boolean btn3;
+    public Boolean btn1;
+    public Boolean btn2;
+    public Boolean btn3;
     public String title;
     public String macaddr;
     public int state;
     public int btnCount;
     public boolean mIsDeletable;
+    @Ignore
     public boolean isEditing;
 
-    public NfcWrap(Nfc nfcItem) {
+    public NfcRealm() {
+    }
+
+    public NfcRealm(Nfc nfcItem) {
         tag = nfcItem.getTag();
         _nfcid = nfcItem.get_nfcid();
         _bsid = nfcItem.get_bsid();
@@ -37,17 +48,18 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
         isEditing = false;
     }
 
-    @Override
-    public Nfc getRealmObject() {
-        return new Nfc(_nfcid, _bsid, btn1, btn2, btn3, title, tag, macaddr, state, btnCount, mIsDeletable);
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
+    public NfcRealm(int _nfcid, int _bsid, Boolean btn1, Boolean btn2, Boolean btn3, String title, String tag, String macaddr, int state, int btnCount, boolean mIsDeletable) {
+        this._nfcid = _nfcid;
+        this._bsid = _bsid;
+        this.btn1 = btn1;
+        this.btn2 = btn2;
+        this.btn3 = btn3;
+        this.title = title;
         this.tag = tag;
+        this.macaddr = macaddr;
+        this.state = state;
+        this.btnCount = btnCount;
+        this.mIsDeletable = mIsDeletable;
     }
 
     public int get_nfcid() {
@@ -66,27 +78,51 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
         this._bsid = _bsid;
     }
 
-    public boolean getBtn1() {
+    /**
+     * 설정될 동작의 반대값(켜지면 false == 현재 스테이트)
+     * @return 스위치 동작
+     */
+    public Boolean getBtn1() {
         return btn1;
     }
 
-    public void setBtn1(boolean btn1) {
+    /**
+     * 하고자 하는 것의 반대값(켜고싶으면 false == 현재 스테이트)
+     * @param btn1 스위치 동작
+     */
+    public void setBtn1(Boolean btn1) {
         this.btn1 = btn1;
     }
 
-    public boolean getBtn2() {
+    /**
+     * 설정될 동작의 반대값(켜지면 false == 현재 스테이트)
+     * @return 스위치 동작
+     */
+    public Boolean getBtn2() {
         return btn2;
     }
 
-    public void setBtn2(boolean btn2) {
+    /**
+     * 하고자 하는 것의 반대값(켜고싶으면 false == 현재 스테이트)
+     * @param btn2 스위치 동작
+     */
+    public void setBtn2(Boolean btn2) {
         this.btn2 = btn2;
     }
 
-    public boolean getBtn3() {
+    /**
+     * 설정될 동작의 반대값(켜지면 false == 현재 스테이트)
+     * @return 스위치 동작
+     */
+    public Boolean getBtn3() {
         return btn3;
     }
 
-    public void setBtn3(boolean btn3) {
+    /**
+     * 하고자 하는 것의 반대값(켜고싶으면 false == 현재 스테이트)
+     * @param btn3 스위치 동작
+     */
+    public void setBtn3(Boolean btn3) {
         this.btn3 = btn3;
     }
 
@@ -96,6 +132,14 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getMacaddr() {
@@ -142,4 +186,5 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }

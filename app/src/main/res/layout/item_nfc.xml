@@ -7,7 +7,7 @@
             type="com.goqual.a10k.view.viewholders.NfcViewHolder"/>
         <variable
             name="itemNfc"
-            type="com.goqual.a10k.model.entity.NfcWrap"/>
+            type="com.goqual.a10k.model.entity.Nfc"/>
         <import type="android.view.View"
             alias="View"/>
     </data>

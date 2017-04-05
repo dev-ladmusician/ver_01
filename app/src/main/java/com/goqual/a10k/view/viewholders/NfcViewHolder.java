@@ -6,8 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.goqual.a10k.databinding.ItemNfcBinding;
-import com.goqual.a10k.model.entity.NfcWrap;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 
 /**
@@ -28,7 +27,7 @@ public class NfcViewHolder extends RecyclerView.ViewHolder {
         binding.setHolder(this);
     }
 
-    public void bindView(int position, NfcWrap item, OnRecyclerItemClickListener listener) {
+    public void bindView(int position, Nfc item, OnRecyclerItemClickListener listener) {
         mListener = listener;
         mPosition = position;
         binding.setItemNfc(item);

@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySwitchSettingBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
@@ -196,5 +197,10 @@ implements IActivityInteraction, IToolbarInteraction {
     @Override
     public void finishApp() {
 
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return new PreferenceHelper(this);
     }
 }

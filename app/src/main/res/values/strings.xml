@@ -282,6 +282,7 @@
     <string name="arg_switch_btn3">switch_btn_3</string>
     <string name="arg_alarm">arg_alarm</string>
     <string name="arg_absence">arg_absence</string>
-    <string name="arg_nfc">arg_nfc</string>
     <string name="arg_wifi_pass">arg_wifi_pass</string>
+
+    <string name="arg_nfc_is_loaded">arg_nfc_is_loaded</string>
 </resources>
