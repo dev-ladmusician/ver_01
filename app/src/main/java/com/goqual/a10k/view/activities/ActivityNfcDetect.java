@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -63,11 +62,11 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isRegisterMode = getIntent().getAction().equals(ACTION_REGISTER_TAG);
+
         if(!isRegisterMode) {
             getSocketManager();
             mBinding.appbar.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             mSwitchPosition = getIntent().getIntExtra(EXTRA_SWITCH, -1);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
             mBinding.setActivity(this);
@@ -115,11 +114,13 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             mReadedTagId = new java.math.BigInteger(tag.getId()).toString(16);
             LogUtil.d(TAG, "onNewIntent " + action + "::" + mReadedTagId);
+
             if(isRegisterMode) {
                 Intent setupReq = new Intent(this, ActivityNfcSetup.class);
                 setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, mReadedTagId);
                 setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
-                startActivityForResult(setupReq, REQ_SETUP_TAG);
+                startActivity(setupReq);
+                finish();
             }
             else {
                 Realm realm = Realm.getDefaultInstance();
@@ -194,15 +195,15 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
         return mSocketManager;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQ_SETUP_TAG) {
-            if(resultCode == Activity.RESULT_OK) {
-                data.setAction(ACTION_REGISTER_TAG);
-                setResult(Activity.RESULT_OK, data);
-                finish();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(requestCode == REQ_SETUP_TAG) {
+//            if(resultCode == Activity.RESULT_OK) {
+//                data.setAction(ACTION_REGISTER_TAG);
+//                setResult(Activity.RESULT_OK, data);
+//                finish();
+//            }
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 }

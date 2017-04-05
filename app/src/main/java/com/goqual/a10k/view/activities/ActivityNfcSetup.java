@@ -1,7 +1,6 @@
 package com.goqual.a10k.view.activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Menu;
@@ -12,6 +11,9 @@ import com.goqual.a10k.databinding.ActivityNfcSetupBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.presenter.NfcTagCreatePresenter;
+import com.goqual.a10k.presenter.impl.NfcTagCreatePresenterImpl;
+import com.goqual.a10k.util.KeyPadUtil;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.dialog.CustomDialog;
 
@@ -25,7 +27,8 @@ import com.goqual.a10k.view.dialog.CustomDialog;
  * @date 2017. 2. 28.
  */
 
-public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
+public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding>
+    implements NfcTagCreatePresenter.View {
 
     public static final String TAG = ActivityNfcSetup.class.getSimpleName();
 
@@ -35,8 +38,8 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
 
     private Switch mSwitch;
     private int mSwitchPosition;
-    private Nfc mNfcTag;
     private String mNfcId;
+    private NfcTagCreatePresenter mPresenter = null;
 
     @Override
     protected int getLayoutId() {
@@ -85,9 +88,9 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
                             endSetting(dialog.getEditTextMessage());
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
-
                             break;
                     }
+                    KeyPadUtil.KeyPadDown(getApplicationContext(), dialog.getEditText());
                     dialog.dismiss();
                 };
                 dialog.isEditable(true)
@@ -103,11 +106,33 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding> {
     }
 
     private void endSetting(String tagTitle) {
-        Intent result = new Intent();
-        result.putExtra(EXTRA_NFC_TAG_ID, mNfcId);
-        result.putExtra(EXTRA_SWITCH, mSwitchPosition);
-        result.putExtra(EXTRA_NFC_TAG_TITLE, tagTitle);
-        setResult(RESULT_OK, result);
+        getPresenter().add(new Nfc(
+                mSwitch.get_bsid(),
+                mSwitch.isBtn1(),
+                mSwitch.isBtn2(),
+                mSwitch.isBtn3(),
+                mNfcId,
+                tagTitle));
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onFinish() {
         finish();
+    }
+
+    private NfcTagCreatePresenter getPresenter() {
+        if (mPresenter == null)
+            mPresenter = new NfcTagCreatePresenterImpl(getApplicationContext(), this);
+        return mPresenter;
     }
 }

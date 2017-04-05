@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.fragments.setting;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +13,11 @@ import com.goqual.a10k.databinding.FragmentSettingNfcBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.activities.ActivityNfcDetect;
-import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -243,33 +240,34 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             Intent request = new Intent(getActivity(), ActivityNfcDetect.class);
             request.setAction(ActivityNfcDetect.ACTION_REGISTER_TAG);
             request.putExtra(ActivityNfcDetect.EXTRA_SWITCH, mSwitchPosition);
-            startActivityForResult(request, REQ_REGISTER_NFC);
+            startActivity(request);
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQ_REGISTER_NFC) {
-            if(resultCode == Activity.RESULT_OK) {
-                String nfcTagId = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_ID, null);
-                String nfcTagTitle = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_TITLE, null);
-                int itemId = data.getExtras().getInt(ActivityNfcSetup.EXTRA_SWITCH);
-                Switch item = SwitchManager.getInstance().getItem(itemId);
-                if(nfcTagId != null) {
-                    LogUtil.e(TAG, "NFC_TAG_REGISTER::tagID: " + nfcTagId);
-                    NfcRealm tag = new NfcRealm();
-                    tag.set_bsid(item.get_bsid());
-                    tag.setTag(nfcTagId);
-                    tag.setTitle(nfcTagTitle);
-                    tag.setBtn1(item.isBtn1());
-                    tag.setBtn2(item.isBtn2());
-                    tag.setBtn3(item.isBtn3());
-                    getPresenter().add(tag);
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(requestCode == REQ_REGISTER_NFC) {
+//            if(resultCode == Activity.RESULT_OK) {
+//                String nfcTagId = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_ID, null);
+//                String nfcTagTitle = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_TITLE, null);
+//                int itemId = data.getExtras().getInt(ActivityNfcSetup.EXTRA_SWITCH);
+//                Switch item = SwitchManager.getInstance().getItem(itemId);
+//
+//                if(nfcTagId != null) {
+//                    LogUtil.e(TAG, "NFC_TAG_REGISTER::tagID: " + nfcTagId);
+//                    NfcRealm tag = new NfcRealm();
+//                    tag.set_bsid(item.get_bsid());
+//                    tag.setTag(nfcTagId);
+//                    tag.setTitle(nfcTagTitle);
+//                    tag.setBtn1(item.isBtn1());
+//                    tag.setBtn2(item.isBtn2());
+//                    tag.setBtn3(item.isBtn3());
+//                    getPresenter().add(tag);
+//                }
+//            }
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     /**
      * parent activity toolbar click event

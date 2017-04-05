@@ -126,8 +126,7 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
 //                item.getBtn1(),
 //                item.getBtn2(),
 //                item.getBtn3(),
-//                item.getTitle()
-//        )
+//                item.getTitle())
 //                .subscribeOn(Schedulers.newThread())
 //                .filter(result -> result.getResult() != null)
 //                .observeOn(AndroidSchedulers.mainThread())

@@ -61,24 +61,10 @@
                             android:layout_alignParentLeft="true"
                             android:src="@drawable/ic_arrow_l_w"/>
                     </RelativeLayout>
-
-                    <!--<FrameLayout-->
-                        <!--android:id="@+id/toolbar_back"-->
-                        <!--android:layout_width="50dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:onClick="@{activity::onBtnClick}"-->
-                        <!--android:paddingLeft="@dimen/padding_15">-->
-
-                        <!--<ImageButton-->
-                            <!--android:layout_width="15dp"-->
-                            <!--android:layout_height="15dp"-->
-                            <!--android:layout_gravity="center"-->
-                            <!--android:scaleType="centerInside"-->
-                            <!--android:background="@drawable/ic_arrow_l_w"/>-->
-                    <!--</FrameLayout>-->
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
+
         <ImageView
             android:layout_below="@+id/appbar"
             android:layout_width="wrap_content"

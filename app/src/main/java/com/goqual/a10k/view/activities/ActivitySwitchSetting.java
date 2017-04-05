@@ -59,6 +59,7 @@ implements IActivityInteraction, IToolbarInteraction {
         if (getIntent() != null && getIntent().getExtras() != null) {
             mSwitchPosition = getIntent().getExtras().getInt(ITEM_SWITCH);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
+
             if (mSwitch == null) {
                 throw new IllegalStateException("Empty INTENT!");
             }
