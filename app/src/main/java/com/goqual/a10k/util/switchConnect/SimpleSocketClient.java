@@ -127,7 +127,8 @@ public class SimpleSocketClient extends Thread{
     }
 
     private void loop() {
-        if(mSocket == null)         return;
+        if(mSocket == null) return;
+
         try {
             is = mSocket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);

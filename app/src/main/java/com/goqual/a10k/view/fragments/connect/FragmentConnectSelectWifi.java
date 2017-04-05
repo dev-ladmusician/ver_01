@@ -86,6 +86,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                         .setEditTextHint(R.string.rename_edit_hint)
                         .setPositiveButton(getString(R.string.rename_btn_txt), (dialog, which) -> {
                             getPresenter().setName(customDialog.getEditTextMessage());
+                            KeyPadUtil.KeyPadDown(getActivity(), customDialog.getEditText());
                             dialog.dismiss();
                         })
                         .show();

@@ -15,8 +15,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 
-import com.goqual.a10k.model.entity.SimplifySwitch;
-import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.util.Constraint;
@@ -27,16 +25,12 @@ import com.goqual.a10k.util.switchConnect.ConnectSocketData;
 import com.goqual.a10k.util.switchConnect.SimpleSocketClient;
 import com.goqual.a10k.util.switchConnect.WifiLevelDescCompare;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -119,11 +113,13 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     public void connect10K() {
         LogUtil.d(TAG, "connect10K::" + m10KResult);
         if(m10KResult != null) {
+
+            // check wifi enable
             mNetworkId = getWifiManager().addNetwork(getWifiConfiguration());
+
             if(mNetworkId != -1 && getWifiManager().enableNetwork(mNetworkId, true)) {
                 LogUtil.d(TAG, "connect10K::SUCCESS:" + mNetworkId);
-            }
-            else {
+            } else {
                 LogUtil.d(TAG, "addNetwork::FAILED:" + mNetworkId);
                 mView.onConnectError();
                 endConnect10K();
@@ -165,8 +161,8 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                 .filter(result -> result != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                            LogUtil.d("SWITCH_CONNECT", "onNext::" + result);
-                            switchAvail = result.isavailable();
+                            LogUtil.d("SWITCH_CONNECT", "checkSwitchAvailable ::" + result.getResult().isavailable());
+                            switchAvail = result.getResult().isavailable();
                             if(switchAvail) {
                                 mView.onSwitchConnected();
                             }
@@ -177,6 +173,9 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                         e -> {
                             LogUtil.e("SWITCH_CONNECT", e.getMessage(), e);
                             mView.switchNotConnected();
+                        },
+                        () -> {
+
                         });
     }
 
@@ -234,6 +233,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                             mSocketClient.setNetwork(network);
                             mSocketClient.connect();
                             mSocketClient.start();
+                            LogUtil.e(TAG, "networkChangeReceiver :: thread start");
                         }
                         catch (NullPointerException | IllegalThreadStateException e){
                             LogUtil.e(TAG, e.getMessage(), e);
@@ -493,7 +493,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
             Collections.sort(scanResultList, new WifiLevelDescCompare());
             boolean isSwitchFinded = false;
             for(ScanResult result : scanResultList) {
-                LogUtil.d("WIFI_SCAN", result.toString());
+                //LogUtil.d("WIFI_SCAN", result.toString());
                 isSwitchFinded = isSwitchFinded || (result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2));
                 if(result.frequency < WIFI_FREQUENCY_MAX_VALUE) {
                     if(!(result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2))) {
@@ -513,6 +513,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
             mView.onScanEnd();
         }
     };
+
     private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         /**
          * 네트워크 변경을 감시합니다.
@@ -529,7 +530,8 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                     NetworkInfo networkInfo = (NetworkInfo)intent.getExtras().get("networkInfo");
                     if(networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                         if (!getSocketClient().isConnected()) {
-                            LogUtil.d(TAG, "networkChangeReceiver :: 10K");
+
+                            LogUtil.e(TAG, "networkChangeReceiver :: 10K");
                             startSetting10K();
                         }
                     }
