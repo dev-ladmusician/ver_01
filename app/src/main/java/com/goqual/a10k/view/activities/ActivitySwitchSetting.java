@@ -105,8 +105,7 @@ implements IActivityInteraction, IToolbarInteraction {
 
                 if(((BaseFragment)mAdapterPage.getItem(position)).hasToolbarMenus()) {
                     mBinding.toolbarEditContainer.setVisibility(View.VISIBLE);
-                }
-                else {
+                }  else {
                     mBinding.toolbarEditContainer.setVisibility(View.GONE);
                 }
             }
@@ -191,8 +190,8 @@ implements IActivityInteraction, IToolbarInteraction {
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
         else if (STATE == IToolbarClickListener.STATE.EDIT)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
-        else
-            mBinding.setEditSwitchState(IToolbarClickListener.STATE.HIDE);
+
+        mBinding.setEditSwitchState(STATE);
     }
 
     @Override

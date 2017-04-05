@@ -14,7 +14,6 @@ public interface NfcTagPresenter {
     void getItem(String tadId);
     void delete(int position);
     void detectedNfc(String tag);
-    void add(NfcRealm item);
     void update(Nfc item);
 
     interface View<T> extends BasePresenterView<T>{

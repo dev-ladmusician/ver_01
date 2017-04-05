@@ -23,6 +23,7 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
 import io.realm.Realm;
 
@@ -42,13 +43,14 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     private AdapterNfc mAdapter;
     private NfcTagPresenter mPresenter;
     private Switch mSwitch;
-    private STATE mCurrentState;
     private int mSwitchPosition;
 
     private Realm mRealm;
 
     private int mCurrentPage = 1;
     private int mLastPage = 1;
+
+    private STATE mCurrentToolbarState = STATE.DONE;
 
     public static FragmentSettingNfc newInstance(int item) {
         Bundle args = new Bundle();
@@ -74,7 +76,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public boolean hasToolbarMenus() {
-        return true;
+        return getAdapter().getItemCount() > 0;
     }
 
     @Override
@@ -91,6 +93,8 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     public void refresh() {
         mBinding.refresh.setRefreshing(false);
         mAdapter.refresh();
+
+        setToolbarHandler();
     }
 
     @Override
@@ -105,15 +109,12 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public void onSuccess() {
-        loadingStop();
+        //loadingStop();
     }
 
     @Override
     public void deleteItem(int position) {
-        if(mAdapter != null) {
-            mAdapter.deleteItem(position);
-            mAdapter.notifyDataSetChanged();
-        }
+        mAdapter.deleteItem(position);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         if(getArguments() != null) {
             mSwitchPosition = getArguments().getInt(EXTRA_SWITCH);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
-            mCurrentState = STATE.DONE;
+            mCurrentToolbarState = STATE.DONE;
         }
     }
 
@@ -241,13 +242,24 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     /**
      * parent activity toolbar click event
-     * @param STATE
+     * @param state
      */
     @Override
-    public void onClickEdit(STATE STATE) {
-        LogUtil.d(TAG, "STATE::" + STATE);
-        mCurrentState = STATE;
-        mAdapter.setItemState(STATE == STATE.EDIT);
+    public void onClickEdit(STATE state) {
+        LogUtil.d(TAG, "STATE::" + state);
+
+        mCurrentToolbarState = state;
+        mAdapter.setItemState(state == STATE.EDIT);
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+    }
+
+    private void setToolbarHandler() {
+        mAdapter.setItemState(false);
+        if (getAdapter().getItemCount() == 0) {
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
+        } else {
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.DONE);
+        }
     }
 
     private AdapterNfc getAdapter() {
