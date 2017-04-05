@@ -100,6 +100,8 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding>
                         .setPositiveButton(getString(R.string.common_save), onClickListener)
                         .setNegativeButton(getString(R.string.common_delete), onClickListener)
                         .show();
+
+
                 break;
         }
         mBinding.setItemSwitch(mSwitch);

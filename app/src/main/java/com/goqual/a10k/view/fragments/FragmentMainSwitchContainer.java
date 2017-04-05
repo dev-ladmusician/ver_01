@@ -189,7 +189,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void onBtnClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.list_empty:
+                break;
+        }
     }
 
     @Override

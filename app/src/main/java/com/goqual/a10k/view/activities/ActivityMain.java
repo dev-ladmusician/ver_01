@@ -17,7 +17,6 @@ import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.BackPressUtil;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -132,12 +131,6 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         System.exit(0);
     }
 
-    private void setToolbarMenuVisibillity(boolean visibillity) {
-        int visible = visibillity ? View.VISIBLE : View.GONE;
-        mBinding.toolbarAdd.setVisibility(visible);
-        mBinding.toolbarEdit.setVisibility(visible);
-    }
-
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_edit:
@@ -148,10 +141,16 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                 passToolbarClickEvent(mEventToolbarClick.getState());
                 break;
             case R.id.toolbar_add:
-                if(mBinding.mainPager.getCurrentItem() == 0) {
-                    RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.ADD));
-                }
+                handleAddClick();
                 break;
+        }
+    }
+
+    private void handleAddClick() {
+        if (mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_switch)) {
+            startActivity(new Intent(this, ActivitySwitchConnection.class));
+        } else {
+            startActivity(new Intent(this, ActivityAlarmEdit.class));
         }
     }
 
@@ -201,7 +200,6 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     };
 
     private ViewPager.OnPageChangeListener mainPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-        int currentPage = 0;
         int lastState = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -72,6 +73,10 @@ public class CustomDialog extends Dialog {
             KeyPadUtil.KeyPadDown(mContext, mBinding.dialogEdit);
             mIsShowing = false;
         });
+
+        if (mModel.isPasswdType) {
+            mBinding.dialogEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
     }
 
     @Override
@@ -132,6 +137,11 @@ public class CustomDialog extends Dialog {
 
     public CustomDialog setEditTextHint(String hint) {
         mModel.setEditTextHint(hint);
+        return this;
+    }
+
+    public CustomDialog setEditPasswdType(boolean type) {
+        mModel.setPasswdType(type);
         return this;
     }
 

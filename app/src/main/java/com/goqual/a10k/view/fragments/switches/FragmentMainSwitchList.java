@@ -1,6 +1,7 @@
 package com.goqual.a10k.view.fragments.switches;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -122,6 +124,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.list_empty:
+                startActivity(new Intent(mContext, ActivitySwitchConnection.class));
                 break;
         }
     }

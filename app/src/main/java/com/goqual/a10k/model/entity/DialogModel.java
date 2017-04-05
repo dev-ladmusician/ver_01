@@ -14,6 +14,7 @@ public class DialogModel {
     public boolean isEditable;
     public boolean isSetPositiveButton;
     public boolean isSetNegativeButton;
+    public boolean isPasswdType;
 
     public DialogModel() {
         isEditable = false;
@@ -98,5 +99,13 @@ public class DialogModel {
 
     public void setSetNegativeButton(boolean setNegativeButton) {
         isSetNegativeButton = setNegativeButton;
+    }
+
+    public boolean isPasswdType() {
+        return isPasswdType;
+    }
+
+    public void setPasswdType(boolean passwdType) {
+        isPasswdType = passwdType;
     }
 }
