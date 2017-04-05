@@ -131,7 +131,7 @@
                         android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
                         android:textStyle="bold"
                         android:gravity="center"
-                        android:visibility="@{itemSwitch.btnCount == 1 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{itemSwitch.btncount == 1 ? View.GONE : View.VISIBLE}"
                         android:background="@{itemSwitch._absenceid == null ? itemSwitch.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off : itemSwitch.btn2 ? @drawable/style_circle_grey : @drawable/style_circle_white }"/>
 
                     <TextView
@@ -140,7 +140,7 @@
                         android:layout_height="@dimen/item_switch_size_btn"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:visibility="@{itemSwitch.btnCount == 1 ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{itemSwitch.btncount == 1 ? View.VISIBLE : View.GONE}"
                         android:background="@drawable/style_circle_grey"/>
                 </RelativeLayout>
 
@@ -161,7 +161,7 @@
                         android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
                         android:textStyle="bold"
                         android:gravity="center"
-                        android:visibility="@{itemSwitch.btnCount != 3 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{itemSwitch.btncount != 3 ? View.GONE : View.VISIBLE}"
                         android:background="@{itemSwitch._absenceid == null ? itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off : itemSwitch.btn3 ? @drawable/style_circle_grey : @drawable/style_circle_white }"/>
 
                     <TextView
@@ -170,7 +170,7 @@
                         android:layout_height="@dimen/item_switch_size_btn"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:visibility="@{itemSwitch.btnCount != 3 ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{itemSwitch.btncount != 3 ? View.VISIBLE : View.GONE}"
                         android:background="@drawable/style_circle_grey"/>
                 </RelativeLayout>
             </RelativeLayout>

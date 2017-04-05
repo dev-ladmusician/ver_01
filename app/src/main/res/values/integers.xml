@@ -2,6 +2,12 @@
 <resources>
     <integer name="main_viewpager_count">4</integer>
 
+    <!-- main -->
+    <integer name="frag_main_switch">0</integer>
+    <integer name="frag_main_alarm">1</integer>
+    <integer name="frag_main_noti">2</integer>
+    <integer name="frag_main_setting">3</integer>
+
     <!-- connection -->
     <integer name="frag_info">0</integer>
     <integer name="frag_select_wifi">1</integer>

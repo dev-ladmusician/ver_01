@@ -2,19 +2,15 @@ package com.goqual.a10k.presenter.impl;
 
 import android.content.Context;
 
-import com.goqual.a10k.model.entity.NfcWrap;
-import com.goqual.a10k.model.realm.Nfc;
-import com.goqual.a10k.model.remote.ResultDTO;
+import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.model.remote.service.NfcService;
 import com.goqual.a10k.presenter.NfcTagPresenter;
-import com.goqual.a10k.util.LogUtil;
-
-import org.apache.commons.lang3.NotImplementedException;
-
-import java.util.ArrayList;
+import com.goqual.a10k.view.adapters.model.AdapterDataModel;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import io.realm.Realm;
-import rx.Observable;
+import io.realm.RealmResults;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -28,111 +24,96 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     private View<Nfc> mView;
     private Context mContext;
     private NfcService mNfcService;
+    private AdapterDataModel<Nfc> mAdapter;
+    private Realm mRealm;
 
-    public NfcTagPresenterImpl(Context mContext, View mView) {
+    public NfcTagPresenterImpl(Context mContext, View mView, AdapterDataModel model) {
         this.mView = mView;
         this.mContext = mContext;
+        this.mAdapter = model;
     }
 
     public void loadItems(int switchId, int page) {
         mView.loadingStart();
-        LogUtil.d(TAG, "loadItems::switchId: " + switchId);
         getNfcService().getrNfcApi().gets(switchId, page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
-                .map(ResultDTO::getResult)
-                .filter(items -> items != null && !items.isEmpty())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                            LogUtil.d(TAG, result.toString());
-                            for (NfcWrap item : result.getResult()) {
-                                mView.addItem(item.getRealmObject());
-                            }
-                            if (result.getLastPage() > 1 && result.getPage() < result.getLastPage()) {
-                                loadItems(switchId, result.getPage() + 1);
-                            } else if (result.getLastPage() == result.getPage()) {
-                                mView.onSuccess();
+                            ((IPaginationPage)mView).setPage(result.getPage());
+                            ((IPaginationPage)mView).setLastPage(result.getLastPage());
+
+                            for(Nfc each : result.getResult()) {
+                                mView.addItem(each);
+
+                                // insert realm
+//                                mRealm.beginTransaction();
+//                                mRealm.insert(new NfcRealm(each));
+//                                mRealm.commitTransaction();
                             }
                         },
-                        mView::onError,
-                        mView::onSuccess);
+                        (e) -> {
+                            mView.onError(e);
+                            mView.loadingStop();
+                        },
+                        () -> {
+                            mView.refresh();
+                            mView.loadingStop();
+                        });
+    }
+
+    @Override
+    public void loadItemsInRealm(int page) {
+        RealmResults<NfcRealm> realmResults = mRealm.where(NfcRealm.class).findAll();
+        for(NfcRealm nfcRealm : realmResults) {
+            mView.addItem(new Nfc(nfcRealm));
+        }
+        mView.loadingStop();
+        mView.refresh();
     }
 
     @Override
     public void getItem(String tadId) {
-        getNfcService().getrNfcApi().get(tadId)
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .map(ResultDTO::getResult)
-                .filter(item -> item != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> mView.addItem(item.getRealmObject()),
-                        mView::onError,
-                        mView::onSuccess);
+//        getNfcService().getrNfcApi().get(tadId)
+//                .subscribeOn(Schedulers.newThread())
+//                .filter(result -> result.getResult() != null)
+//                .map(ResultDTO::getResult)
+//                .filter(item -> item != null)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(item -> mView.addItem(item.getRealmObject()),
+//                        mView::onError,
+//                        mView::onSuccess);
     }
 
     @Override
-    public void delete(int nfc_id) {
+    public void delete(int position) {
         mView.loadingStart();
-        getNfcService().getrNfcApi().delete(nfc_id)
+        getNfcService().getrNfcApi().delete(mAdapter.getItem(position).get_nfcid())
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultDTO -> {
-                            try (Realm realm = Realm.getDefaultInstance()) {
-                                realm.executeTransaction(realm1 -> {
-                                    realm1.where(Nfc.class).equalTo("_nfcid", nfc_id).findFirst().deleteFromRealm();
-                                });
-                            }
-                            catch (Exception e) {
-                                mView.onError(e);
-                            }
+                            mView.deleteItem(position);
                         },
                         mView::onError,
-                        mView::onSuccess);
+                        () -> {
+                            mView.loadingStop();
+                            mView.refresh();
+                        });
     }
 
     @Override
     public void detectedNfc(String tag) {
-        getNfcService().getrNfcApi().get(tag)
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(rtv -> {
-                            mView.loadingStop();
-//                            ((ActivityNfcDetected)mView).setNfc(rtv.getResult());
-                        },
-                        mView::onError,
-                        mView::onSuccess);
-    }
-
-    @Override
-    public void add(Nfc item) {
-        getNfcService().getrNfcApi().add(
-                item.get_bsid(),
-                item.getTag(),
-                item.getBtn1(),
-                item.getBtn2(),
-                item.getBtn3(),
-                item.getTitle()
-        )
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                            mView.loadingStop();
-                            try(Realm realm = Realm.getDefaultInstance()) {
-                                realm.executeTransaction(realm1 -> {
-                                    Nfc nfc = result.getResult().getRealmObject();
-                                    realm1.copyToRealm(nfc);
-                                });
-                            }
-                            catch (Exception e) {
-                                mView.onError(e);
-                            }
-                        },
-                        mView::onError,
-                        mView::onSuccess);
+//        getNfcService().getrNfcApi().get(tag)
+//                .subscribeOn(Schedulers.newThread())
+//                .filter(result -> result.getResult() != null)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(rtv -> {
+//                            mView.loadingStop();
+////                            ((ActivityNfcDetected)mView).setNfc(rtv.getResult());
+//                        },
+//                        mView::onError,
+//                        mView::onSuccess);
     }
 
     @Override

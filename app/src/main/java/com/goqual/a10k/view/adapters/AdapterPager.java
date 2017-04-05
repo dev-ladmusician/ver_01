@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -23,8 +22,6 @@ public class AdapterPager extends FragmentStatePagerAdapter {
         fragmentLists = new ArrayList<>();
     }
 
-
-
     @Override
     public CharSequence getPageTitle(int position) {
         return fragmentLists.get(position).getTitle();
@@ -37,7 +34,6 @@ public class AdapterPager extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        LogUtil.e(TAG, "get items");
         return fragmentLists.get(position);
     }
 

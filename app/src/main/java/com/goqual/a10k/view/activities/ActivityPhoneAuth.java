@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityPhoneAuthBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.presenter.impl.PhoneAuthPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
@@ -31,15 +32,13 @@ import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
  */
 
 public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
-        implements IActivityInteraction,
-        PhoneAuthPresenter.View, IAuthActivityInteraction{
+        implements IActivityInteraction, PhoneAuthPresenter.View, IAuthActivityInteraction{
 
     public enum ERROR_REASON{
         CONNECTION_ERROR,
         TIMEOUT,
         WRONG_NUMBER_FORMAT
     }
-
     public static final String TAG = ActivityPhoneAuth.class.getSimpleName();
 
     private static final int PHONE_NUMBER_PERMISSION_REQ = 112;
@@ -203,5 +202,10 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
             mPresenter = new PhoneAuthPresenterImpl(this, this);
         }
         return mPresenter;
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
     }
 }

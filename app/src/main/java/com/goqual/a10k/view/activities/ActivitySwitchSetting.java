@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySwitchSettingBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
@@ -58,6 +59,7 @@ implements IActivityInteraction, IToolbarInteraction {
         if (getIntent() != null && getIntent().getExtras() != null) {
             mSwitchPosition = getIntent().getExtras().getInt(ITEM_SWITCH);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
+
             if (mSwitch == null) {
                 throw new IllegalStateException("Empty INTENT!");
             }
@@ -90,21 +92,18 @@ implements IActivityInteraction, IToolbarInteraction {
 
             @Override
             public void onPageSelected(int position) {
-
                 setTitle(((BaseFragment) mAdapterPage.getItem(position)).getTitle());
+
                 try {
                     invalidateFragmentMenus(position);
                     mBinding.settingTabs.getTabAt(position).select();
-
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e){
                     LogUtil.e(TAG, e.getMessage(), e);
                 }
 
                 if(((BaseFragment)mAdapterPage.getItem(position)).hasToolbarMenus()) {
                     mBinding.toolbarEditContainer.setVisibility(View.VISIBLE);
-                }
-                else {
+                }  else {
                     mBinding.toolbarEditContainer.setVisibility(View.GONE);
                 }
             }
@@ -154,7 +153,6 @@ implements IActivityInteraction, IToolbarInteraction {
                 finish();
                 break;
             case R.id.toolbar_edit_container:
-                LogUtil.e(TAG, "click edit :: " + mEventToolbarClick.getState());
                 if (mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT)
                     mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
                 else
@@ -189,12 +187,17 @@ implements IActivityInteraction, IToolbarInteraction {
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
         else if (STATE == IToolbarClickListener.STATE.EDIT)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
-        else
-            mBinding.setEditSwitchState(IToolbarClickListener.STATE.HIDE);
+
+        mBinding.setEditSwitchState(STATE);
     }
 
     @Override
     public void finishApp() {
 
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return new PreferenceHelper(this);
     }
 }

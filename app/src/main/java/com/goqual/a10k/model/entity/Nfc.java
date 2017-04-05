@@ -1,6 +1,6 @@
 package com.goqual.a10k.model.entity;
 
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.realm.NfcRealm;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * Created by hanwool on 2017. 3. 8..
  */
 
-public class NfcWrap implements BaseRealmWraper<Nfc>{
+public class Nfc implements BaseRealmWraper<NfcRealm>{
     public String tag;
     public int _nfcid;
     public int _bsid;
@@ -18,11 +18,20 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
     public String title;
     public String macaddr;
     public int state;
-    public int btnCount;
+    public int btncount;
     public boolean mIsDeletable;
     public boolean isEditing;
 
-    public NfcWrap(Nfc nfcItem) {
+    public Nfc(int _bsid, boolean btn1, boolean btn2, boolean btn3, String tag, String title) {
+        this._bsid = _bsid;
+        this.btn1 = btn1;
+        this.btn2 = btn2;
+        this.btn3 = btn3;
+        this.tag = tag;
+        this.title = title;
+    }
+
+    public Nfc(NfcRealm nfcItem) {
         tag = nfcItem.getTag();
         _nfcid = nfcItem.get_nfcid();
         _bsid = nfcItem.get_bsid();
@@ -32,14 +41,14 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
         title = nfcItem.getTitle();
         macaddr = nfcItem.getMacaddr();
         state = nfcItem.getState();
-        btnCount = nfcItem.getBtnCount();
+        btncount = nfcItem.getBtnCount();
         mIsDeletable = nfcItem.ismIsDeletable();
         isEditing = false;
     }
 
     @Override
-    public Nfc getRealmObject() {
-        return new Nfc(_nfcid, _bsid, btn1, btn2, btn3, title, tag, macaddr, state, btnCount, mIsDeletable);
+    public NfcRealm getRealmObject() {
+        return new NfcRealm(_nfcid, _bsid, btn1, btn2, btn3, title, tag, macaddr, state, btncount, mIsDeletable);
     }
 
     public String getTag() {
@@ -114,12 +123,12 @@ public class NfcWrap implements BaseRealmWraper<Nfc>{
         this.state = state;
     }
 
-    public int getBtnCount() {
-        return btnCount;
+    public int getBtncount() {
+        return btncount;
     }
 
-    public void setBtnCount(int btnCount) {
-        this.btnCount = btnCount;
+    public void setBtncount(int btncount) {
+        this.btncount = btncount;
     }
 
     public boolean ismIsDeletable() {

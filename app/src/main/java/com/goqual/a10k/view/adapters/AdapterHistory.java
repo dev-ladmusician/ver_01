@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.History;
 import com.goqual.a10k.presenter.HistoryPresenter;
-import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -106,7 +105,6 @@ implements AdapterDataModel<History>, AdapterDataView {
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
         holder.bindView(position, mHistoryList.get(position), mItemClickListener);
-        LogUtil.e(TAG, "position :: " + position + " last position :: " + mHistoryList.size());
 
         if (position == getItemCount() - 1) {
             mView.loadItems();

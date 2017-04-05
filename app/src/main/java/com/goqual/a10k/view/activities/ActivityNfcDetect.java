@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -12,10 +11,9 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcDetectBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.SocketManager;
-import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.NfcUtil;
@@ -48,11 +46,10 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
     private boolean isRegisterMode;
 
     private String mReadedTagId;
-    private Nfc mReadedTag;
+    private NfcRealm mReadedTag;
     private Switch mSwitch;
     private int mSwitchPosition;
     private NfcTagPresenter mNfcTagPresenter;
-
     private boolean isSocketConnected;
 
     @Override
@@ -64,11 +61,11 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isRegisterMode = getIntent().getAction().equals(ACTION_REGISTER_TAG);
+
         if(!isRegisterMode) {
             getSocketManager();
             mBinding.appbar.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             mSwitchPosition = getIntent().getIntExtra(EXTRA_SWITCH, -1);
             mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
             mBinding.setActivity(this);
@@ -116,15 +113,17 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             mReadedTagId = new java.math.BigInteger(tag.getId()).toString(16);
             LogUtil.d(TAG, "onNewIntent " + action + "::" + mReadedTagId);
+
             if(isRegisterMode) {
                 Intent setupReq = new Intent(this, ActivityNfcSetup.class);
                 setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, mReadedTagId);
                 setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
-                startActivityForResult(setupReq, REQ_SETUP_TAG);
+                startActivity(setupReq);
+                finish();
             }
             else {
                 Realm realm = Realm.getDefaultInstance();
-                mReadedTag = realm.where(Nfc.class).equalTo("tag", mReadedTagId).findFirst();
+                mReadedTag = realm.where(NfcRealm.class).equalTo("tag", mReadedTagId).findFirst();
                 LogUtil.e(TAG, "TAG??::" + mReadedTag);
                 if(mReadedTag != null && getSocketManager().isConnected()) {
                     operateSwitch();
@@ -193,17 +192,5 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             }, this);
         }
         return mSocketManager;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQ_SETUP_TAG) {
-            if(resultCode == Activity.RESULT_OK) {
-                data.setAction(ACTION_REGISTER_TAG);
-                setResult(Activity.RESULT_OK, data);
-                finish();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
