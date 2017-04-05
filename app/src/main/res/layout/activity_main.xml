@@ -78,7 +78,7 @@
                             android:textColor="@color/white"
                             android:onClick="@{activity::onBtnClick}"
                             android:visibility="@{eventSwitEditEnum == editStatusEnum.HIDE ? View.GONE : View.VISIBLE}"
-                            android:text="@{eventSwitEditEnum == editStatusEnum.EDIT ? @string/toolbar_edit : @string/toolbar_done}" />
+                            android:text="@{eventSwitEditEnum == editStatusEnum.EDIT ? @string/toolbar_done : @string/toolbar_edit}" />
 
                         <RelativeLayout
                             android:id="@+id/toolbar_add"

@@ -92,14 +92,12 @@ implements IActivityInteraction, IToolbarInteraction {
 
             @Override
             public void onPageSelected(int position) {
-
                 setTitle(((BaseFragment) mAdapterPage.getItem(position)).getTitle());
+
                 try {
                     invalidateFragmentMenus(position);
                     mBinding.settingTabs.getTabAt(position).select();
-
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e){
                     LogUtil.e(TAG, e.getMessage(), e);
                 }
 
@@ -155,7 +153,6 @@ implements IActivityInteraction, IToolbarInteraction {
                 finish();
                 break;
             case R.id.toolbar_edit_container:
-                LogUtil.e(TAG, "click edit :: " + mEventToolbarClick.getState());
                 if (mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT)
                     mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
                 else

@@ -13,13 +13,7 @@ import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.SocketIoManager;
 import com.goqual.a10k.util.SocketProtocols;
-import com.goqual.a10k.util.event.EventSocketIO;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.util.interfaces.ISocketIoConnectionListener;
-
-import java.net.Socket;
-
-import rx.functions.Action1;
 
 /**
  * Created by HanWool on 2017. 2. 21..

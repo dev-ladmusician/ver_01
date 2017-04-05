@@ -158,6 +158,9 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
             switch (viewId) {
+                case R.id.item_nfc_container:
+                    LogUtil.e(TAG, "item click");
+                    break;
                 case R.id.item_nfc_delete:
                     CustomDialog customDialog = new CustomDialog(getActivity());
                     DialogInterface.OnClickListener onClickListener = (dialog, which) -> {

@@ -16,7 +16,6 @@ import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.util.BackPressUtil;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
 import com.goqual.a10k.util.event.EventToolbarClick;
 import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.adapters.AdapterPager;
@@ -27,17 +26,18 @@ import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
-import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
-import rx.functions.Action1;
+import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.DONE;
+import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.EDIT;
 
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
-        implements IActivityInteraction{
+        implements IActivityInteraction, IToolbarInteraction {
     public static final String TAG = ActivityMain.class.getSimpleName();
 
-    private EventSwitchEdit mEditBtnStatus;
+    private EventToolbarClick mEventToolbarClick;
     private BackPressUtil backPressUtil;
 
     @Override
@@ -63,22 +63,8 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         initViewPager();
         initMainTab();
 
+        mEventToolbarClick = new EventToolbarClick(IToolbarClickListener.STATE.DONE);
         mBinding.toolbarEdit.setVisibility(View.GONE);
-
-        subEvent();
-    }
-
-    private void subEvent() {
-        RxBus.getInstance().toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if(event instanceof EventSwitchEdit) {
-                            mEditBtnStatus = (EventSwitchEdit)event;
-                            mBinding.setEventSwitEditEnum(((EventSwitchEdit) event).getSTATE());
-                        }
-                    }
-                });
     }
 
     private void initToolbar() {
@@ -155,14 +141,11 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_edit:
-                switch (mEditBtnStatus.getSTATE()) {
-                    case DONE:
-                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
-                        break;
-                    case EDIT:
-                        RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.EDIT));
-                        break;
-                }
+                if (mEventToolbarClick.getState() == EDIT)
+                    mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
+                else
+                    mEventToolbarClick.setState(EDIT);
+                passToolbarClickEvent(mEventToolbarClick.getState());
                 break;
             case R.id.toolbar_add:
                 if(mBinding.mainPager.getCurrentItem() == 0) {
@@ -170,6 +153,35 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                 }
                 break;
         }
+    }
+
+    private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
+        if (mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_switch) ||
+                mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_alarm)) {
+            ((IToolbarClickListener)fragmentPagerAdapter.getItem(mBinding.mainPager.getCurrentItem())).onClickEdit(state);
+        }
+    }
+
+    /**
+     * set visible toolbar add
+     */
+    private void setToolbarAddVisibility() {
+        if (mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_noti) ||
+                mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_setting)) {
+            mBinding.toolbarAdd.setVisibility(View.GONE);
+        } else {
+            mBinding.toolbarAdd.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * set visible toolbar edit
+     * fragment단에서 호출출
+    * @param state
+     */
+    @Override
+    public void setToolbarEdit(IToolbarClickListener.STATE state) {
+        mBinding.setEventSwitEditEnum(state);
     }
 
     private TabLayout.OnTabSelectedListener mainTapSelectedListener = new TabLayout.OnTabSelectedListener() {
@@ -180,15 +192,11 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                 ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
             }
         }
-
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
         }
-
         @Override
         public void onTabReselected(TabLayout.Tab tab) {
-
         }
     };
 
@@ -197,24 +205,34 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         int lastState = 0;
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            LogUtil.d(TAG, String.format("position:%d poOffset:%f poOffsetPixels:%d", position, positionOffset, positionOffsetPixels));
         }
 
         @Override
         public void onPageSelected(int position) {
+            LogUtil.e(TAG, "main page selection :: " + position);
+
+            // main toolbar title
             setTitle(((BaseFragment)fragmentPagerAdapter.getItem(position)).getTitle());
+
+            // add버튼 gone or visible
+            setToolbarAddVisibility();
+
+            // 페이지가 변경되면 toolbar 모두를 DONE모드로
+            mEventToolbarClick.setState(DONE);
+            passToolbarClickEvent(mEventToolbarClick.getState());
+
             try {
                 invalidateFragmentMenus(position);
                 mBinding.mainTaps.getTabAt(position).select();
-            }
-            catch (NullPointerException e){
+            } catch (NullPointerException e){
                 LogUtil.e(TAG, e.getMessage(), e);
             }
 
-            ((IFragmentInteraction)fragmentPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
-            ((IFragmentInteraction)fragmentPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
-            currentPage = position;
-            setToolbarMenuVisibillity((((BaseFragment) fragmentPagerAdapter.getItem(position)).hasToolbarMenus()));
+            if(((BaseFragment)fragmentPagerAdapter.getItem(position)).hasToolbarMenus()) {
+                setToolbarEdit(IToolbarClickListener.STATE.DONE);
+            }  else {
+                setToolbarEdit(IToolbarClickListener.STATE.HIDE);
+            }
         }
 
         @Override
