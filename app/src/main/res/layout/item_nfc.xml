@@ -48,6 +48,7 @@
                 android:layout_width="@dimen/footer_ic_size"
                 android:layout_height="@dimen/footer_ic_size"
                 android:src="@drawable/ic_nfc"/>
+
             <TextView
                 android:id="@+id/item_nfc_title"
                 android:layout_width="wrap_content"
@@ -66,31 +67,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <!-- TODO: 으아아아아악 -->
-            <!--<TextView-->
-                <!--android:id="@+id/item_nfc_btn_1"-->
-                <!--android:layout_width="@dimen/item_absence_btn_size"-->
-                <!--android:layout_height="@dimen/item_absence_btn_size"-->
-                <!--android:layout_toLeftOf="@+id/item_nfc_btn_2"-->
-                <!--android:layout_marginRight="@dimen/padding_16"-->
-                <!--android:background="@{itemNfc.btn1 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"-->
-                <!--android:layout_centerVertical="true" />-->
+            <TextView
+                android:id="@+id/item_switch_btn_state_1"
+                android:layout_width="@dimen/item_ic_size_xxs"
+                android:layout_height="@dimen/item_ic_size_xxs"
+                android:layout_toLeftOf="@+id/item_absence_btn_2"
+                android:layout_marginRight="@dimen/padding_16"
+                android:background="@{itemNfc.btn1 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
+                android:layout_centerVertical="true" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/item_nfc_btn_2"-->
-                <!--android:layout_width="@dimen/item_absence_btn_size"-->
-                <!--android:layout_height="@dimen/item_absence_btn_size"-->
-                <!--android:layout_toLeftOf="@+id/item_nfc_btn_3"-->
-                <!--android:layout_marginRight="@dimen/padding_16"-->
-                <!--android:background="@{itemNfc.btn2 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"-->
-                <!--android:layout_centerVertical="true" />-->
+            <TextView
+                android:id="@+id/item_switch_btn_state_2"
+                android:layout_width="@dimen/item_ic_size_xxs"
+                android:layout_height="@dimen/item_ic_size_xxs"
+                android:layout_toLeftOf="@+id/item_absence_btn_3"
+                android:layout_marginRight="@dimen/padding_16"
+                android:visibility="@{itemNfc.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
+                android:background="@{itemNfc.btn2 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
+                android:layout_centerVertical="true" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/item_nfc_btn_3"-->
-                <!--android:layout_width="@dimen/item_absence_btn_size"-->
-                <!--android:layout_height="@dimen/item_absence_btn_size"-->
-                <!--android:background="@{itemNfc.btn3 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}"-->
-                <!--android:layout_centerVertical="true" />-->
+            <TextView
+                android:id="@+id/item_switch_btn_state_3"
+                android:layout_width="@dimen/item_ic_size_xxs"
+                android:layout_height="@dimen/item_ic_size_xxs"
+                android:layout_marginRight="@dimen/padding_16"
+                android:visibility="@{itemNfc.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
+                android:background="@{itemNfc.btn3 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
+                android:layout_centerVertical="true" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

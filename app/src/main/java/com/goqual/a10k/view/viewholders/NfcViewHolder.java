@@ -8,6 +8,7 @@ import android.view.View;
 import com.goqual.a10k.databinding.ItemNfcBinding;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
+import com.goqual.a10k.view.customviews.CustomViewBtnStates;
 
 /**
  * Created by HanWool on 2017. 2. 20..
@@ -18,6 +19,7 @@ public class NfcViewHolder extends RecyclerView.ViewHolder {
     ItemNfcBinding binding;
 
     private int mPosition;
+    private CustomViewBtnStates mBtnStates;
     private OnRecyclerItemClickListener mListener;
 
     public NfcViewHolder(View itemView, Context ctx) {

@@ -50,7 +50,6 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
     private Switch mSwitch;
     private int mSwitchPosition;
     private NfcTagPresenter mNfcTagPresenter;
-
     private boolean isSocketConnected;
 
     @Override
@@ -194,16 +193,4 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
         }
         return mSocketManager;
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if(requestCode == REQ_SETUP_TAG) {
-//            if(resultCode == Activity.RESULT_OK) {
-//                data.setAction(ACTION_REGISTER_TAG);
-//                setResult(Activity.RESULT_OK, data);
-//                finish();
-//            }
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
 }

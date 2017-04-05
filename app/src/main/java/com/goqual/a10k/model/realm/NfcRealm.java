@@ -43,7 +43,7 @@ public class NfcRealm extends RealmObject{
         title = nfcItem.getTitle();
         macaddr = nfcItem.getMacaddr();
         state = nfcItem.getState();
-        btnCount = nfcItem.getBtnCount();
+        btnCount = nfcItem.getBtncount();
         mIsDeletable = nfcItem.ismIsDeletable();
         isEditing = false;
     }

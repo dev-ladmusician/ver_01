@@ -100,8 +100,6 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
     @Override
     public void addItem(Nfc item) {
-        //LogUtil.d(TAG, "ITEM::" + item);
-        //item.setmIsDeletable(mCurrentState == STATE.EDIT);
         mAdapter.addItem(item);
     }
 
@@ -240,31 +238,6 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             startActivity(request);
         }
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if(requestCode == REQ_REGISTER_NFC) {
-//            if(resultCode == Activity.RESULT_OK) {
-//                String nfcTagId = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_ID, null);
-//                String nfcTagTitle = data.getExtras().getString(ActivityNfcSetup.EXTRA_NFC_TAG_TITLE, null);
-//                int itemId = data.getExtras().getInt(ActivityNfcSetup.EXTRA_SWITCH);
-//                Switch item = SwitchManager.getInstance().getItem(itemId);
-//
-//                if(nfcTagId != null) {
-//                    LogUtil.e(TAG, "NFC_TAG_REGISTER::tagID: " + nfcTagId);
-//                    NfcRealm tag = new NfcRealm();
-//                    tag.set_bsid(item.get_bsid());
-//                    tag.setTag(nfcTagId);
-//                    tag.setTitle(nfcTagTitle);
-//                    tag.setBtn1(item.isBtn1());
-//                    tag.setBtn2(item.isBtn2());
-//                    tag.setBtn3(item.isBtn3());
-//                    getPresenter().add(tag);
-//                }
-//            }
-//        }
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
 
     /**
      * parent activity toolbar click event

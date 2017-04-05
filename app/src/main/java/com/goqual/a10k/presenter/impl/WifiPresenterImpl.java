@@ -134,7 +134,7 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
     @Override
     public void setName(String name) {
         mSwitchTitle = name;
-        LogUtil.d(TAG, String.format(Locale.KOREA, "<SWITCH DATA> id: %s\nname: %s\nbtnCount: %d\nHW: %s\nFW: %s",
+        LogUtil.d(TAG, String.format(Locale.KOREA, "<SWITCH DATA> id: %s\nname: %s\nbtncount: %d\nHW: %s\nFW: %s",
                 mSwitchId,
                 mSwitchTitle,
                 mSwitchBtnCount,

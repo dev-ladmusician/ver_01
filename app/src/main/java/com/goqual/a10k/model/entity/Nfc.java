@@ -18,7 +18,7 @@ public class Nfc implements BaseRealmWraper<NfcRealm>{
     public String title;
     public String macaddr;
     public int state;
-    public int btnCount;
+    public int btncount;
     public boolean mIsDeletable;
     public boolean isEditing;
 
@@ -41,14 +41,14 @@ public class Nfc implements BaseRealmWraper<NfcRealm>{
         title = nfcItem.getTitle();
         macaddr = nfcItem.getMacaddr();
         state = nfcItem.getState();
-        btnCount = nfcItem.getBtnCount();
+        btncount = nfcItem.getBtnCount();
         mIsDeletable = nfcItem.ismIsDeletable();
         isEditing = false;
     }
 
     @Override
     public NfcRealm getRealmObject() {
-        return new NfcRealm(_nfcid, _bsid, btn1, btn2, btn3, title, tag, macaddr, state, btnCount, mIsDeletable);
+        return new NfcRealm(_nfcid, _bsid, btn1, btn2, btn3, title, tag, macaddr, state, btncount, mIsDeletable);
     }
 
     public String getTag() {
@@ -123,12 +123,12 @@ public class Nfc implements BaseRealmWraper<NfcRealm>{
         this.state = state;
     }
 
-    public int getBtnCount() {
-        return btnCount;
+    public int getBtncount() {
+        return btncount;
     }
 
-    public void setBtnCount(int btnCount) {
-        this.btnCount = btnCount;
+    public void setBtncount(int btncount) {
+        this.btncount = btncount;
     }
 
     public boolean ismIsDeletable() {
