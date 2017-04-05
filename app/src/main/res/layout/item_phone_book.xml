@@ -7,6 +7,10 @@
         <variable
             name="phone"
             type="com.goqual.a10k.model.entity.Phone"/>
+
+        <import
+            alias="View"
+            type="android.view.View" />
     </data>
     <RelativeLayout
         android:id="@+id/item_invite_container"
@@ -36,12 +40,24 @@
 
         <TextView
             android:id="@+id/item_user_num"
-            android:layout_width="@dimen/item_invite_num"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:gravity="left"
+            android:layout_marginLeft="@dimen/padding_10"
+            android:layout_toRightOf="@+id/item_user_name"
             android:text="@{phone.number}"/>
-    </RelativeLayout>
 
+        <TextView
+            android:id="@+id/item_user_invited"
+            android:layout_width="@dimen/item_invite_num"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:textColor="@color/identitiy_02"
+            android:visibility="@{phone.isInvited ? View.VISIBLE : View.GONE}"
+            android:text="@string/invite_user_invited"/>
+    </RelativeLayout>
 </layout>

@@ -4,45 +4,52 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.databinding.DialogCustomBinding;
+import com.goqual.a10k.databinding.DialogCustomListBinding;
 import com.goqual.a10k.model.entity.DialogModel;
+import com.goqual.a10k.model.entity.User;
+import com.goqual.a10k.view.adapters.AdapterUser;
+
+import java.util.List;
 
 /**
  * Created by hanwool on 2017. 2. 22..
  */
 
-public class CustomDialog extends Dialog {
+public class CustomListDialog extends Dialog {
 
     private Context mContext = null;
-    private DialogCustomBinding mBinding = null;
+    private DialogCustomListBinding mBinding = null;
     private DialogModel mModel;
     private OnClickListener mOnPositiveClickListener;
     private OnClickListener mOnNegativeClickListener;
     private boolean mIsShowing;
+    private AdapterUser mAdapter = null;
+    private List<User> mUsers = null;
+    private int mSelectedPosition = -1;
 
-    public CustomDialog(@NonNull Context context) {
+    public CustomListDialog(@NonNull Context context) {
         super(context);
         mContext = context;
         mModel = new DialogModel();
     }
 
-    public CustomDialog(@NonNull Context context, @StyleRes int themeResId) {
+    public CustomListDialog(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
         mContext = context;
         mModel = new DialogModel();
     }
 
-    public CustomDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
+    public CustomListDialog(@NonNull Context context, List<User> items) {
+        super(context);
         mContext = context;
+        this.mUsers = items;
         mModel = new DialogModel();
     }
 
@@ -52,16 +59,30 @@ public class CustomDialog extends Dialog {
         setCancelable(false);
         setCanceledOnTouchOutside(false);
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mBinding = DialogCustomBinding.inflate(inflater);
+        mBinding = DialogCustomListBinding.inflate(inflater);
         mBinding.setDialog(this);
         mBinding.setItem(mModel);
-        setContentView(mBinding.getRoot());
 
-        if(mModel.isEditable) {
-            mBinding.dialogEdit.requestFocus();
-            InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        // recyclerview
+        mBinding.dialogListContainer.setAdapter(getAdapter());
+        mBinding.dialogListContainer.setLayoutManager(new LinearLayoutManager(mContext));
+
+        for(User each : mUsers) {
+            each.setmIsDeletable(false);
+            each.setmChecked(false);
         }
+
+        getAdapter().updateItems(mUsers);
+        getAdapter().refresh();
+
+        getAdapter().setOnRecyclerItemClickListener((id, position) -> {
+            mSelectedPosition = position;
+            getAdapter().setNonChecked();
+            getAdapter().getItem(position).setmChecked(true);
+            getAdapter().refresh();
+        });
+
+        setContentView(mBinding.getRoot());
         setOnDismissListener(dialog -> {
             mIsShowing = false;
         });
@@ -72,82 +93,31 @@ public class CustomDialog extends Dialog {
 
     @Override
     protected void onStop() {
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mBinding.dialogEdit.getWindowToken(), 0);
         super.onStop();
     }
 
-    public CustomDialog setTitleText(String title) {
+    public CustomListDialog setTitleText(String title) {
         mModel.setTitle(title);
         return this;
     }
 
-    public CustomDialog setTitleText(@StringRes int titleId) {
+    public CustomListDialog setTitleText(@StringRes int titleId) {
         mModel.setTitle(mContext.getString(titleId));
         return this;
     }
 
-    public CustomDialog setMessageText(String message) {
-        mModel.setMessage(message);
-        return this;
-    }
-
-    public CustomDialog setMessageText(@StringRes int messageId) {
-        mModel.setMessage(mContext.getString(messageId));
-        return this;
-    }
-
-    public CustomDialog setPositiveButton(String text, OnClickListener onClickListener) {
+    public CustomListDialog setPositiveButton(String text, OnClickListener onClickListener) {
         mModel.setPositiveButton(true);
         mModel.setPositiveButtonText(text);
         mOnPositiveClickListener = onClickListener;
         return this;
     }
 
-    public CustomDialog setNegativeButton(String text, OnClickListener onClickListener) {
+    public CustomListDialog setNegativeButton(String text, OnClickListener onClickListener) {
         mModel.setNegativeButton(true);
         mModel.setNegativeButtonText(text);
         mOnNegativeClickListener = onClickListener;
         return this;
-    }
-
-    public CustomDialog setPositiveButton(boolean state) {
-        mModel.setPositiveButton(state);
-        return this;
-    }
-
-    public CustomDialog setNegativeButton(boolean state) {
-        mModel.setNegativeButton(state);
-        return this;
-    }
-
-    public CustomDialog isEditable(boolean enable) {
-        mModel.setEditable(enable);
-        return this;
-    }
-
-    public CustomDialog setEditTextHint(String hint) {
-        mModel.setEditTextHint(hint);
-        return this;
-    }
-
-    public CustomDialog setEditTextHint(@StringRes int hintId) {
-        mModel.setEditTextHint(mContext.getString(hintId));
-        return this;
-    }
-
-    public CustomDialog setEditTextMessage(String message) {
-        mModel.setEditTextMessage(message);
-        return this;
-    }
-
-    public CustomDialog setEditTextMessage(@StringRes int messageId) {
-        mModel.setEditTextMessage(mContext.getString(messageId));
-        return this;
-    }
-
-    public String getEditTextMessage() {
-        return mBinding.dialogEdit.getText().toString();
     }
 
     public void onBtnClick(View view) {
@@ -183,5 +153,15 @@ public class CustomDialog extends Dialog {
     @Override
     public boolean isShowing() {
         return mIsShowing;
+    }
+
+    private AdapterUser getAdapter() {
+        if (mAdapter == null)
+            mAdapter = new AdapterUser(mContext, false);
+        return mAdapter;
+    }
+
+    public int getSelectedPosition() {
+        return this.mSelectedPosition;
     }
 }

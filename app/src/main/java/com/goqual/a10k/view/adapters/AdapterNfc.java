@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.NfcWrap;
-import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -66,6 +65,11 @@ public class AdapterNfc extends RecyclerView.Adapter<NfcViewHolder>
     @Override
     public NfcWrap getItem(int position) {
         return this.mTagList.get(position);
+    }
+
+    @Override
+    public List<NfcWrap> getItems() {
+        return this.mTagList;
     }
 
     @Override

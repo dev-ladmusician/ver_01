@@ -37,6 +37,7 @@
                 android:textColor="@color/identitiy_01"
                 android:layout_marginRight="@dimen/padding_16"
                 android:visibility="gone"
+                android:onClick="@{fragment::onBtnClick}"
                 android:text="@string/switch_setting_change_admin"/>
 
             <!-- admin -->

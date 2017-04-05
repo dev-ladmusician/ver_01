@@ -12,11 +12,13 @@ import java.util.Locale;
  */
 
 public class History {
-    private int _logid;
-    private boolean operation;
-    private int btn;
-    private String created;
-    private String label;
+    public int _logid;
+    public boolean operation;
+    public int btn;
+    public int btncount;
+    public String num;
+    public String created;
+    public String label;
 
     public int get_logid() {
         return _logid;
@@ -65,6 +67,22 @@ public class History {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public int getBtncount() {
+        return btncount;
+    }
+
+    public void setBtncount(int btncount) {
+        this.btncount = btncount;
     }
 
     @Override

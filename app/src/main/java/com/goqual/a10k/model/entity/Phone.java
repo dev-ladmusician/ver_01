@@ -2,7 +2,6 @@ package com.goqual.a10k.model.entity;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.util.LogUtil;
@@ -10,7 +9,6 @@ import com.goqual.a10k.view.viewholders.PhoneBookViewHolder;
 
 import org.parceler.Parcel;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -26,6 +24,7 @@ public class Phone {
     private String photoUriString;
     private int _userid = -1;
     private int _connectionid = -1;
+    public boolean isInvited;
 
     public Phone() {
     }
@@ -74,6 +73,14 @@ public class Phone {
 
     public void setPhotoUriString(String photoUriString) {
         this.photoUriString = photoUriString;
+    }
+
+    public boolean isInvited() {
+        return isInvited;
+    }
+
+    public void setInvited(boolean invited) {
+        isInvited = invited;
     }
 
     public Drawable getPhoto(PhoneBookViewHolder view) {

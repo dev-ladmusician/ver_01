@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.model.entity.NotiWrap;
-import com.goqual.a10k.model.realm.Noti;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
-import com.goqual.a10k.view.viewholders.AlarmViewHolder;
 import com.goqual.a10k.view.viewholders.NotiViewHolder;
 
 import java.util.ArrayList;
@@ -74,6 +71,11 @@ public class AdapterNoti extends RecyclerView.Adapter<NotiViewHolder>
     @Override
     public NotiWrap getItem(int position) {
         return mItemList.get(position);
+    }
+
+    @Override
+    public List<NotiWrap> getItems() {
+        return this.mItemList;
     }
 
     @Override

@@ -8,12 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
-import com.goqual.a10k.view.viewholders.SwitchViewHolder;
 import com.goqual.a10k.view.viewholders.WifiScanResultViewHolder;
 
 import java.util.ArrayList;
@@ -68,6 +65,11 @@ implements AdapterDataModel<ScanResult>, AdapterDataView{
     @Override
     public ScanResult getItem(int position) {
         return this.mScanResult.get(position);
+    }
+
+    @Override
+    public List<ScanResult> getItems() {
+        return this.mScanResult;
     }
 
     @Override

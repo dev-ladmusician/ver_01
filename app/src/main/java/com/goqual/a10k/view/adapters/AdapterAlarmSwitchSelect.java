@@ -12,7 +12,6 @@ import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
 import com.goqual.a10k.view.viewholders.AlarmSwitchSelectViewHolder;
-import com.goqual.a10k.view.viewholders.SwitchViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +65,11 @@ implements AdapterDataModel<Switch>, AdapterDataView{
     @Override
     public Switch getItem(int position) {
         return this.mSwitchList.get(position);
+    }
+
+    @Override
+    public List<Switch> getItems() {
+        return this.mSwitchList;
     }
 
     @Override

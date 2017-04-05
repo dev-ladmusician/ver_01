@@ -11,7 +11,7 @@
 
         <variable
             name="dialog"
-            type="com.goqual.a10k.view.dialog.CustomDialog"/>
+            type="com.goqual.a10k.view.dialog.CustomListDialog"/>
 
         <import type="android.view.View"
             alias="View"/>
@@ -28,7 +28,7 @@
             android:layout_width="@dimen/dialog_w"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:paddingTop="@dimen/padding_16"
+            android:paddingTop="@dimen/padding_24"
             android:background="@drawable/style_dialog_border_radius">
 
             <TextView
@@ -39,36 +39,18 @@
                 android:textSize="@dimen/dialog_title_size"
                 android:text="@{item.title}"/>
 
-            <TextView
-                android:id="@+id/dialog_content"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/dialog_list_container"
                 android:layout_below="@+id/dialog_title"
-                android:layout_marginTop="@dimen/padding_24"
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:visibility="@{item.message != null ? View.VISIBLE : View.GONE}"
-                android:text="@{item.message}" />
-
-            <EditText
-                android:id="@+id/dialog_edit"
-                android:layout_below="@+id/dialog_content"
                 android:layout_marginTop="@dimen/padding_16"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="@dimen/padding_16"
-                android:layout_marginRight="@dimen/padding_16"
-                android:paddingBottom="@dimen/dialog_switch_rename_edit_padding_bottom"
-                android:layout_centerHorizontal="true"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:gravity="center"
-                android:hint="@{item.editTextHint}"
-                android:text="@{item.editTextMessage}"
-                android:visibility="@{item.isEditable ? View.VISIBLE : View.GONE}"/>
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
 
+            <!-- btn -->
             <LinearLayout
                 android:id="@+id/dialog_btn_container"
-                android:layout_below="@+id/dialog_edit"
+                android:layout_below="@+id/dialog_list_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_24"
