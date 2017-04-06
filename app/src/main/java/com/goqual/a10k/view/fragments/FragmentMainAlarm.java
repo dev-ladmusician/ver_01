@@ -58,7 +58,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
 
     @Override
     public boolean hasToolbarMenus() {
-        return true;
+        return getAdapter().getItemCount() > 0;
     }
 
     @Override
