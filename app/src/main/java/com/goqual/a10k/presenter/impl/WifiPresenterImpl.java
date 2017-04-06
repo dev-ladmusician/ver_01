@@ -230,10 +230,11 @@ public class WifiPresenterImpl implements WifiPresenter, IRawSocketCommunication
                     public void onAvailable(Network network) {
                         try {
                             connectivityManager.unregisterNetworkCallback(this);
-                            mSocketClient.setNetwork(network);
-                            mSocketClient.connect();
-                            mSocketClient.start();
-                            LogUtil.e(TAG, "networkChangeReceiver :: thread start");
+                            if(!mSocketClient.isRunning()) {
+                                mSocketClient.setNetwork(network);
+                                mSocketClient.connect();
+                                mSocketClient.start();
+                            }
                         }
                         catch (NullPointerException | IllegalThreadStateException e){
                             LogUtil.e(TAG, e.getMessage(), e);
