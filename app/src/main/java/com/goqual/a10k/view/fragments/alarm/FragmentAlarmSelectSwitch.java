@@ -68,13 +68,12 @@ public class FragmentAlarmSelectSwitch extends BaseFragment<FragmentAlarmSelectS
     private AdapterAlarmSwitchSelect getSwitchAdapter() {
         if(mSwitchAdapter == null) {
             mSwitchAdapter = new AdapterAlarmSwitchSelect(getActivity());
-            mSwitchAdapter.updateItems(SwitchManager.getInstance().getList());
             mSwitchAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
                 Switch item = SwitchManager.getInstance().getItem(position);
                 DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
-                            ((IAlarmInteraction)getActivity()).goBtnPage(position);
+                            ((IAlarmInteraction)getActivity()).setSwitch(position);
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
                             break;

@@ -10,14 +10,12 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmSwitchSelectBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
-import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitch;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitchBtn;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
-import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarSaveClickListener;
 
 /**
  * Created by hanwool on 2017. 3. 13..
@@ -29,6 +27,9 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
 
     public static final String EXTRA_SWITCH = "extra_switch";
     public static final String EXTRA_BTN = "extra_btn";
+
+    private final String FRAG_TAG_SELECT_SWITCH = "SELECT_SWITCH";
+    private final String FRAG_TAG_SELECT_BTN = "SELECT_BTN";
 
     private int mSwitchPos;
 
@@ -57,12 +58,16 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
         return R.layout.activity_alarm_switch_select;
     }
 
+    /**
+     * 스위치 선택될 시 호출
+     * @param position
+     */
     @Override
-    public void goBtnPage(int itemPos) {
-        mSwitchPos = itemPos;
+    public void setSwitch(int position) {
+        mSwitchPos = position;
         getSupportFragmentManager().beginTransaction()
-                .replace(mBinding.fragmentContainer.getId(), FragmentAlarmSelectSwitchBtn.newInstance(itemPos))
-        .commit();
+                .replace(mBinding.fragmentContainer.getId(),
+                        FragmentAlarmSelectSwitchBtn.newInstance(position), FRAG_TAG_SELECT_BTN).commit();
         mBinding.timerToolbarSave.setVisibility(View.VISIBLE);
     }
 
@@ -81,7 +86,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
         mBinding.setActivity(this);
 
         getSupportFragmentManager().beginTransaction()
-                .add(mBinding.fragmentContainer.getId(), FragmentAlarmSelectSwitch.newInstance())
+                .add(mBinding.fragmentContainer.getId(), FragmentAlarmSelectSwitch.newInstance(), FRAG_TAG_SELECT_SWITCH)
                 .commit();
     }
 
@@ -92,7 +97,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
                 finish();
                 break;
             case R.id.timer_toolbar_save:
-                RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
+                ((IToolbarSaveClickListener)getSupportFragmentManager().findFragmentByTag(FRAG_TAG_SELECT_BTN)).onSaveClickEdit();
                 break;
         }
     }

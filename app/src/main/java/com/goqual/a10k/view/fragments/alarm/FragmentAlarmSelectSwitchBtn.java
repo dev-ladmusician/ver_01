@@ -14,6 +14,7 @@ import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarSaveClickListener;
 
 import rx.functions.Action1;
 
@@ -22,7 +23,8 @@ import rx.functions.Action1;
  * Created by ladmusician on 2016. 12. 27..
  */
 
-public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSelectSwitchBtnBinding> {
+public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSelectSwitchBtnBinding>
+    implements IToolbarSaveClickListener {
     public static final String TAG = FragmentAlarmSelectSwitchBtn.class.getSimpleName();
 
     private static final String SWITCH_TITLE = "switch_title";
@@ -31,13 +33,17 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
     private Switch mSwitch;
 
     public static FragmentAlarmSelectSwitchBtn newInstance(int switchPosition) {
-
         Bundle args = new Bundle();
 
         FragmentAlarmSelectSwitchBtn fragment = new FragmentAlarmSelectSwitchBtn();
         args.putInt(SWITCH_TITLE, switchPosition);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onSaveClickEdit() {
+        ((IAlarmInteraction)getActivity()).setBtns(mSwitch.isBtn1(), mSwitch.isBtn2(), mSwitch.isBtn3());
     }
 
     @Override
