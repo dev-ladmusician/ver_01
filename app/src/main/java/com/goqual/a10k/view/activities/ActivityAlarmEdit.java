@@ -66,7 +66,7 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
 
     @Override
     public void finishApp() {
-
+        finish();
     }
 
     @Override
@@ -82,14 +82,12 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.timer_toolbar_cancel:
-                setResult(RESULT_CANCELED);
-                finish();
+                finishApp();
                 break;
             case R.id.timer_toolbar_save:
                 if(mSwitch == null) {
                     Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_error_no_selected_switch), Snackbar.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     Alarm alarm = new Alarm();
                     String alarmTime;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

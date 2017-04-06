@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainAlarmBinding;
+import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityAlarmEdit;
+import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -170,7 +172,26 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.alarm_no_item_container) {
-            startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
+            if (checkExistSwitch()) startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
+        }
+    }
+
+    private boolean checkExistSwitch() {
+        if (SwitchManager.getInstance().getCount() == 0) {
+            new CustomDialog(getActivity())
+                    .setTitleText(R.string.alarm_add_error_no_switch_title)
+                    .setMessageText(R.string.alarm_add_error_no_switch_content)
+                    .setPositiveButton(getString(R.string.common_new_switch), (dialog, which) -> {
+                        startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+            return false;
+        } else {
+            return true;
         }
     }
 

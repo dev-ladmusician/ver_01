@@ -1,21 +1,16 @@
 package com.goqual.a10k.view.fragments.alarm;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentAlarmSelectSwitchBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.view.adapters.AdapterAlarmSwitchSelect;
-import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
@@ -29,7 +24,6 @@ public class FragmentAlarmSelectSwitch extends BaseFragment<FragmentAlarmSelectS
     private AdapterAlarmSwitchSelect mSwitchAdapter;
 
     public static FragmentAlarmSelectSwitch newInstance() {
-        
         Bundle args = new Bundle();
         
         FragmentAlarmSelectSwitch fragment = new FragmentAlarmSelectSwitch();
@@ -66,6 +60,9 @@ public class FragmentAlarmSelectSwitch extends BaseFragment<FragmentAlarmSelectS
     private void initRecyclerView() {
         mBinding.listContainer.setAdapter(getSwitchAdapter());
         mBinding.listContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        getSwitchAdapter().updateItems(SwitchManager.getInstance().getList());
+        getSwitchAdapter().refresh();
     }
 
     private AdapterAlarmSwitchSelect getSwitchAdapter() {

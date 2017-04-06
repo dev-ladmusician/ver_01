@@ -49,7 +49,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
 
     @Override
     public void finishApp() {
-
+        finish();
     }
 
     @Override
