@@ -33,9 +33,10 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         mPosition = position;
         binding.setItem(item);
         binding.itemAlarmActive.setChecked(item.isState());
-        binding.itemAlarmActive.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            onBtnClick(buttonView);
-        });
+
+//        binding.itemAlarmActive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            onBtnClick(buttonView);
+//        });
     }
 
     public void onBtnClick(View view) {

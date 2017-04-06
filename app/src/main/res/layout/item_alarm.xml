@@ -91,7 +91,8 @@
             android:layout_width="72dp"
             android:layout_height="36dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:onClick="@{holder::onBtnClick}"/>
 
         <!--<ImageView-->
         <!--android:id="@+id/item_alarm_active"-->
