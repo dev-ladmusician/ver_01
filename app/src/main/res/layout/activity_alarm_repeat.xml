@@ -58,9 +58,9 @@
                 android:id="@+id/toolbar_save"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true">
+                android:layout_centerVertical="true"
+                android:onClick="@{activity::onBtnClick}">
 
                 <TextView
                     android:layout_width="wrap_content"
