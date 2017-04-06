@@ -10,10 +10,7 @@ import com.goqual.a10k.model.entity.SocketData;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.interfaces.ISocketIoConnectionListener;
 
-import org.json.JSONObject;
-
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,7 +55,7 @@ public class SocketIoManager{
     }
 
     private void createSocket() {
-        LogUtil.e(TAG, "createSocket");
+        LogUtil.d(TAG, "createSocket");
         try {
             if(mSocket == null) {
                 mSocket = IO.socket(Constraint.SOCKET_SERVER_IP);
@@ -68,7 +65,7 @@ public class SocketIoManager{
                 connect();
             }
         } catch (URISyntaxException e) {
-            LogUtil.e(TAG, e.getMessage(), e);
+            LogUtil.d(TAG, e.getMessage());
         }
     }
 
@@ -124,19 +121,19 @@ public class SocketIoManager{
     }
 
     private Emitter.Listener onConnectedListener = args ->{
-        LogUtil.e(TAG, "SOCKET EVENT_CONNECT");
+        LogUtil.d(TAG, "SOCKET EVENT_CONNECT");
         mListener.onConnected();
         isConnected = true;
     };
 
     private Emitter.Listener onReconnectingListener = args -> {
-        LogUtil.e(TAG, "SOCKET EVENT_RECONNECT");
+        LogUtil.d(TAG, "SOCKET EVENT_RECONNECT");
         isConnected = false;
         mListener.onReconnect();
     };
 
     private Emitter.Listener onReconnectFailListener = args -> {
-        LogUtil.e(TAG, "SOCKET EVENT_RECONNECT_FAILED");
+        LogUtil.d(TAG, "SOCKET EVENT_RECONNECT_FAILED");
         isConnected = false;
         mListener.onReconnectionFailed();
         disconnect();
@@ -151,7 +148,7 @@ public class SocketIoManager{
     };
 
     private Emitter.Listener onDisconnectedListener = args -> {
-        LogUtil.e(TAG, "SOCKET EVENT_DISCONNECT");
+        LogUtil.d(TAG, "SOCKET EVENT_DISCONNECT");
         isConnected = false;
         mListener.onDisconnect();
         new Timer().schedule(new TimerTask() {
@@ -180,39 +177,39 @@ public class SocketIoManager{
     };
 
     private Emitter.Listener onConnectErrorListener = args -> {
-        LogUtil.e(TAG, "SOCKET EVENT_CONNECT_ERROR");
+        LogUtil.d(TAG, "SOCKET EVENT_CONNECT_ERROR");
         isConnected = false;
         mListener.onError();
         disconnect();
     };
 
     private Emitter.Listener joinReqListener = args -> {
-        LogUtil.e(TAG, "SOCKET joinReqListener");
+        LogUtil.d(TAG, "SOCKET joinReqListener");
         mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_REQ_JOIN, new Gson().fromJson(args[0].toString(), SocketData.class));
     };
 
     private Emitter.Listener leaveReqListener = args -> {
-        LogUtil.e(TAG, "SOCKET leaveReqListener");
+        LogUtil.d(TAG, "SOCKET leaveReqListener");
         mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_REQ_LEAVE, new Gson().fromJson(args[0].toString(), SocketData.class));
     };
 
     private Emitter.Listener operaionReqListener = args -> {
-        LogUtil.e(TAG, "SOCKET operaionReqListener");
+        LogUtil.d(TAG, "SOCKET operaionReqListener");
         mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_REQ_OPERATION, new Gson().fromJson(args[0].toString(), SocketData.class));
     };
 
     private Emitter.Listener joinResListener = args -> {
-        LogUtil.e(TAG, "SOCKET joinResListener");
+        LogUtil.d(TAG, "SOCKET joinResListener");
         mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_RES_JOIN, new Gson().fromJson(args[0].toString(), SocketData.class));
     };
 
     private Emitter.Listener leaveResListener = args -> {
-        LogUtil.e(TAG, "SOCKET leaveResListener");
+        LogUtil.d(TAG, "SOCKET leaveResListener");
         mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_RES_LEAVE, new Gson().fromJson(args[0].toString(), SocketData.class));
     };
 
     private Emitter.Listener operationResListener = args -> {
-        LogUtil.e(TAG, "SOCKET operationResListener");
+        LogUtil.d(TAG, "SOCKET operationResListener");
         mListener.onReceiveMessage(SocketProtocols.SOCKET_PT_RES_OPERATION, new Gson().fromJson(args[0].toString(), SocketData.class));
     };
 

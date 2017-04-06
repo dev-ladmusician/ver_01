@@ -94,7 +94,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
         loadingStop();
         getAdapter().notifyDataSetChanged();
 
-        if(mAdapter.getSize()>0) {
+        if(mAdapter.getSize() > 0) {
             mBinding.alarmNoItemContainer.setVisibility(View.GONE);
             mBinding.listContainer.setVisibility(View.VISIBLE);
         }
@@ -163,18 +163,27 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     private void initRecyclerView() {
         mBinding.setFragment(this);
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
-            if(viewId == R.id.item_alarm_delete) {
-                new CustomDialog(getActivity())
-                        .setTitleText(R.string.alarm_delete_title)
-                        .setMessageText(R.string.alarm_delete_content)
-                        .setPositiveButton(getString(R.string.common_delete), (dialog, which) -> {
-                            getPresenter().delete(position);
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
+            switch (viewId) {
+                case R.id.item_alarm_delete:
+                    new CustomDialog(getActivity())
+                            .setTitleText(R.string.alarm_delete_title)
+                            .setMessageText(R.string.alarm_delete_content)
+                            .setPositiveButton(getString(R.string.common_delete), (dialog, which) -> {
+                                getPresenter().delete(position);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                                dialog.dismiss();
+                            })
+                            .show();
+                    break;
+                case R.id.item_alarm_active:
+                    LogUtil.e(TAG, "click activate");
+//                    Alarm alarm = mAdapter.getItem(position);
+//                    alarm.setState(!alarm.isState());
+                    getPresenter().updateState(position);
+                    //getPresenter().updateState(position);
+                    break;
             }
         });
         mBinding.listContainer.setAdapter(getAdapter());
@@ -191,15 +200,6 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     private AdapterAlarm getAdapter() {
         if(mAdapter == null) {
             mAdapter = new AdapterAlarm(getActivity(), this);
-            mAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
-                switch (viewId) {
-                    case R.id.item_alarm_active:
-                        Alarm alarm = mAdapter.getItem(position);
-                        alarm.setState(!alarm.isState());
-                        getPresenter().update(alarm);
-                        break;
-                }
-            });
         }
         return mAdapter;
     }
