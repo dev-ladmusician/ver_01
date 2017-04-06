@@ -102,6 +102,8 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
             mBinding.alarmNoItemContainer.setVisibility(View.VISIBLE);
             mBinding.listContainer.setVisibility(View.GONE);
         }
+
+        setToolbarHandler();
     }
 
     @Override
@@ -235,6 +237,16 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
         ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
         getAdapter().setDeletable(state == STATE.EDIT);
     }
+
+    private void setToolbarHandler() {
+        mAdapter.setDeletable(false);
+        if (getAdapter().getItemCount() == 0) {
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
+        } else {
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.DONE);
+        }
+    }
+
 
 //    @Override
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
