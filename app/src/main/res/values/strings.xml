@@ -222,6 +222,8 @@
     <string name="timer_toolbar_cancel">Cancel</string>
     <string name="timer_toolbar_save">Save</string>
     <string name="timer_menu_switch">Switch</string>
+
+    <string name="alarm_select_switch_title_default">스위치 선택 안됨</string>
     <string name="alarm_select_switch_title">스위치 선택</string>
     <string name="alarm_select_switch_content">스위치를 선택하시겠어요?</string>
 

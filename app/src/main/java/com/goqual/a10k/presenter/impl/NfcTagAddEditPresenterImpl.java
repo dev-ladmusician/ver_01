@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.remote.service.NfcService;
-import com.goqual.a10k.presenter.NfcTagCreatePresenter;
+import com.goqual.a10k.presenter.NfcTagAddEditPresenter;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -13,14 +13,14 @@ import rx.schedulers.Schedulers;
  * Created by hanwool on 2017. 2. 28..
  */
 
-public class NfcTagCreatePresenterImpl implements NfcTagCreatePresenter {
-    public static final String TAG = NfcTagCreatePresenterImpl.class.getSimpleName();
+public class NfcTagAddEditPresenterImpl implements NfcTagAddEditPresenter {
+    public static final String TAG = NfcTagAddEditPresenterImpl.class.getSimpleName();
 
     private View<Nfc> mView;
     private Context mContext;
     private NfcService mNfcService;
 
-    public NfcTagCreatePresenterImpl(Context mContext, View mView) {
+    public NfcTagAddEditPresenterImpl(Context mContext, View mView) {
         this.mView = mView;
         this.mContext = mContext;
     }

@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,8 +23,6 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
-
-import org.parceler.Parcels;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
@@ -202,14 +199,14 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
         getAdapter().setDeletable(state == STATE.EDIT);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK && data != null) {
-            if(requestCode == REQ_NEW_ALARM) {
-                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmEdit.EXTRA_ALARM));
-                getPresenter().add(alarm);
-                getAdapter().addItem(alarm);
-            }
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(resultCode == Activity.RESULT_OK && data != null) {
+//            if(requestCode == REQ_NEW_ALARM) {
+//                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmEdit.EXTRA_ALARM));
+//                getPresenter().add(alarm);
+//                getAdapter().addItem(alarm);
+//            }
+//        }
+//    }
 }

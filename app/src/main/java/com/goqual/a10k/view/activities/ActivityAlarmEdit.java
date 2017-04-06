@@ -1,6 +1,8 @@
 package com.goqual.a10k.view.activities;
 
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.model.entity.Repeat;
 import com.goqual.a10k.model.entity.Switch;
+import com.goqual.a10k.presenter.AlarmAddEditPresenter;
+import com.goqual.a10k.presenter.impl.AlarmAddEditPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
@@ -28,7 +32,7 @@ import org.parceler.Parcels;
  */
 
 public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
-        implements IActivityInteraction{
+        implements IActivityInteraction, AlarmAddEditPresenter.View {
     public static final String TAG = ActivityAlarmEdit.class.getSimpleName();
 
     public static final String EXTRA_ALARM = "extra_alarm";
@@ -41,8 +45,69 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
 
     private Switch mSwitch;
     private Repeat mRepeat;
-    private Uri mRingtoneUri;
-    private String mRingtoneName;
+    private String mRingtoneUri;
+    private String mRingtoneTitle;
+
+    private AlarmAddEditPresenter mPresenter = null;
+
+    @Override
+    public void loadingStart() {
+        mBinding.alarmLoading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void loadingStop() {
+        mBinding.alarmLoading.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onSuccess() {
+        finish();
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        LogUtil.e(TAG, e.getStackTrace().toString());
+    }
+
+    @Override
+    public void onBtnClick(android.view.View view) {
+        switch (view.getId()) {
+            case R.id.timer_toolbar_cancel:
+                finishApp();
+                break;
+            case R.id.timer_toolbar_save:
+                if(mSwitch == null) {
+                    Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_error_no_selected_switch), Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Alarm alarm = new Alarm();
+                    String alarmTime;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarm.setHour(mBinding.addAlarmTime.getHour());
+                        alarm.setMin(mBinding.addAlarmTime.getMinute());
+                    } else {
+                        alarm.setHour(mBinding.addAlarmTime.getCurrentHour());
+                        alarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
+                    }
+                    alarm.setRepeats(mRepeat);
+                    alarm.setSwitch(mSwitch);
+                    alarm.setRingtone(mRingtoneUri);
+                    alarm.setRingtone_title(mRingtoneTitle);
+
+                    getPresenter().add(alarm);
+                }
+                break;
+            case R.id.alarm_menu_switch:
+                startActivityForResult(new Intent(this, ActivityAlarmSwitchSelect.class), REQ_GET_SWITCH);
+                break;
+            case R.id.alarm_menu_repeat:
+                startActivityForResult(new Intent(this, ActivityAlarmRepeat.class), REQ_GET_REPEAT);
+                break;
+            case R.id.alarm_menu_sound:
+                startActivityForResult(getRingtoneIntent(), REQ_GET_SOUND);
+                break;
+        }
+    }
 
     @Override
     protected int getLayoutId() {
@@ -73,49 +138,17 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding.setActivity(this);
-        mBinding.setSwitchItem(new Switch());
-        mRingtoneName = getString(R.string.alarm_sound_default);
-        mRingtoneUri = Uri.EMPTY;
+        //mBinding.setSwitchItem(new Switch());
+        mRingtoneTitle = getString(R.string.alarm_sound_default);
+        mRingtoneUri = getString(R.string.alarm_sound_default);
         mRepeat = new Repeat();
     }
 
-    public void onBtnClick(View view) {
-        switch (view.getId()) {
-            case R.id.timer_toolbar_cancel:
-                finishApp();
-                break;
-            case R.id.timer_toolbar_save:
-                if(mSwitch == null) {
-                    Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_error_no_selected_switch), Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Alarm alarm = new Alarm();
-                    String alarmTime;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarm.setHour(mBinding.addAlarmTime.getHour());
-                        alarm.setMin(mBinding.addAlarmTime.getMinute());
-                    } else {
-                        alarm.setHour(mBinding.addAlarmTime.getCurrentHour());
-                        alarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
-                    }
-                    alarm.setRepeats(mRepeat);
-                    alarm.setSwitch(mSwitch);
-                    alarm.setRingtone(mRingtoneUri == Uri.EMPTY ? getString(R.string.alarm_sound_default) : mRingtoneUri.toString());
-                    alarm.setRingtone_title(mRingtoneName);
-                    Intent result = getIntent();
-                    result.putExtra(EXTRA_ALARM, Parcels.wrap(alarm));
-                    setResult(RESULT_OK, result);
-                    finish();
-                }
-                break;
-            case R.id.alarm_menu_switch:
-                startActivityForResult(new Intent(this, ActivityAlarmSwitchSelect.class), REQ_GET_SWITCH);
-                break;
-            case R.id.alarm_menu_repeat:
-                startActivityForResult(new Intent(this, ActivityAlarmRepeat.class), REQ_GET_REPEAT);
-                break;
-            case R.id.alarm_menu_sound:
-                break;
-        }
+    public static Intent getRingtoneIntent() {
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+        return intent;
     }
 
     @Override
@@ -135,12 +168,21 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
                     mSwitch.setBtn3(switchState[2]);
                     mBinding.setSwitchItem(mSwitch);
                 }
-            }
-            else if(requestCode == REQ_GET_REPEAT) {
+            } else if(requestCode == REQ_GET_REPEAT) {
                 mRepeat = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmRepeat.EXTRA_REPEAT_DAYS));
                 String rep = mRepeat.makeString(this);
-                LogUtil.d(TAG, rep);
                 mBinding.alarmMenuRepeatLabel.setText(rep);
+            } else if (requestCode == REQ_GET_SOUND) {
+                try {
+                    Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if (uri != null) {
+                        Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
+                        mRingtoneUri = uri == Uri.EMPTY ? getString(R.string.alarm_sound_default) : mRingtoneUri.toString();
+                        mRingtoneTitle = ringtone.getTitle(this);
+                        mBinding.alarmMenuSoundLabel.setText(mRingtoneTitle);
+                    }
+                } catch (Exception e) {
+                }
             }
         }
     }
@@ -148,5 +190,11 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
     @Override
     public PreferenceHelper getPreferenceHelper() {
         return null;
+    }
+
+    private AlarmAddEditPresenter getPresenter() {
+        if (mPresenter == null)
+            mPresenter = new AlarmAddEditPresenterImpl(getApplicationContext(), this);
+        return mPresenter;
     }
 }

@@ -10,7 +10,6 @@ import com.goqual.a10k.model.entity.Alarm;
 public interface AlarmPresenter extends BasePresenter{
     void updateState(int position);
     void delete(int position);
-    void add(Alarm item);
     void update(Alarm item);
 
     interface View<T> extends BasePresenterView<T>{

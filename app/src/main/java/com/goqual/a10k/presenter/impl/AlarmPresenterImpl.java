@@ -4,15 +4,12 @@ import android.content.Context;
 
 import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.model.entity.PagenationWrapper;
-import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.AlarmService;
 import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 
 import org.apache.commons.lang3.NotImplementedException;
-
-import java.util.List;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -33,35 +30,6 @@ public class AlarmPresenterImpl implements AlarmPresenter {
         this.mContext = ctx;
         this.mView = mView;
         this.mAlarmAdapterDataModel = dataModel;
-    }
-
-    @Override
-    public void add(Alarm item) {
-        mView.loadingStart();
-        getAlarmService().getAlarmApi().add(
-                item.get_bsid(),
-                item.getRingtone(),
-                item.getRingtone_title(),
-                item.getHour(),
-                item.getMin(),
-                item.isSun(),
-                item.isMon(),
-                item.isTue(),
-                item.isWed(),
-                item.isThur(),
-                item.isFri(),
-                item.isSat(),
-                item.getBtn1(),
-                item.getBtn2(),
-                item.getBtn3())
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultDTO -> {
-                            mView.loadingStop();
-                        },
-                        mView::onError,
-                        () -> mView.refresh());
     }
 
     @Override
