@@ -170,7 +170,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.alarm_no_item_container) {
-            startActivityForResult(new Intent(getActivity(), ActivityAlarmEdit.class), REQ_NEW_ALARM);
+            startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
         }
     }
 
