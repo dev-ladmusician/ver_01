@@ -85,10 +85,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
         mBinding.viewPager.setCurrentItem(mCurrentPage);
 
-        ((IToolbarInteraction)getActivity()).setToolbarEdit(
-                SwitchManager.getInstance().getCount() == 0 ?
-                        IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE
-        );
+        handleToolbarEdit();
     }
 
     @Override
@@ -309,6 +306,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         getSocketManager().operationOnOff(item, btnNumber);
     }
 
+    /**
+     * switch list에서 switch delete event 받는 곳
+     * @param position
+     */
     @Override
     public void onSwitchDelete(int position) {
         getPresenter().deleteItem(position);
@@ -327,11 +328,16 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onSuccessDeleteSwitch(int position) {
         // 등록된 스위치가 없으면 edit hide
-//        if (SwitchManager.getInstance().getCount() == 0) {
-//            RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.HIDE));
-//        }
+        handleToolbarEdit();
+
         mPagerAdapter.deleteItem(position);
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
+    }
+
+    private void handleToolbarEdit() {
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(
+                SwitchManager.getInstance().getCount() == 0 ?
+                        IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
     }
 
     /**
