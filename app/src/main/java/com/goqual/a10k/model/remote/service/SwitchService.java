@@ -39,7 +39,7 @@ public class SwitchService {
 
     public interface SwitchApi {
         @GET("switch/{macaddr}")
-        Observable<Switch> get(
+        Observable<ResultDTO<Switch>> get(
                 @Path("macaddr") String macaddr
         );
 

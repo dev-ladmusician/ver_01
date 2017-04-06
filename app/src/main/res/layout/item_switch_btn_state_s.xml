@@ -39,7 +39,8 @@
             android:layout_height="@dimen/item_ic_size_xxs"
             android:layout_toLeftOf="@+id/item_absence_btn_3"
             android:layout_marginRight="@dimen/padding_16"
-            android:background="@{itemSwitch.btnCount &lt; 2 ? @drawable/style_circle_dash : itemSwitch.btn2 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
+            android:visibility="@{itemSwitch.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
+            android:background="@{itemSwitch.btn2 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
             android:layout_centerVertical="true" />
 
         <TextView
@@ -47,7 +48,8 @@
             android:layout_width="@dimen/item_ic_size_xxs"
             android:layout_height="@dimen/item_ic_size_xxs"
             android:layout_marginRight="@dimen/padding_16"
-            android:background="@{itemSwitch.btnCount &lt; 3 ? @drawable/style_circle_dash : itemSwitch.btn3 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
+            android:visibility="@{itemSwitch.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
+            android:background="@{itemSwitch.btn3 ? @drawable/style_circle_grey : @drawable/style_circle_white}"
             android:layout_centerVertical="true" />
     </LinearLayout>
 </layout>

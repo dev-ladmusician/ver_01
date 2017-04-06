@@ -23,6 +23,7 @@ import com.goqual.a10k.databinding.FragmentConnectSelectWifiBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.presenter.WifiPresenter;
 import com.goqual.a10k.presenter.impl.WifiPresenterImpl;
+import com.goqual.a10k.util.KeyPadUtil;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterWifiScanResult;
@@ -50,7 +51,6 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     private int mSwitchConnectCheckCount;
 
     public static FragmentConnectSelectWifi newInstance() {
-
         Bundle args = new Bundle();
 
         FragmentConnectSelectWifi fragment = new FragmentConnectSelectWifi();
@@ -86,6 +86,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                         .setEditTextHint(R.string.rename_edit_hint)
                         .setPositiveButton(getString(R.string.rename_btn_txt), (dialog, which) -> {
                             getPresenter().setName(customDialog.getEditTextMessage());
+                            KeyPadUtil.KeyPadDown(getActivity(), customDialog.getEditText());
                             dialog.dismiss();
                         })
                         .show();
@@ -146,6 +147,7 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                     PreferenceHelper.getInstance(getActivity()).put(getString(R.string.arg_wifi_pass) + ssid, customDialog.getEditTextMessage());
                     break;
             }
+            KeyPadUtil.KeyPadDown(getActivity(), customDialog.getEditText());
             dialog.dismiss();
         };
 
@@ -154,7 +156,9 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                 .setEditTextMessage(PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_wifi_pass) + ssid, ""))
                 .setMessageText(R.string.select_wifi_pass_dialog_content)
                 .setNegativeButton(getString(R.string.common_cancel), onClickListener)
-                .setPositiveButton(getString(R.string.common_ok), onClickListener);
+                .setPositiveButton(getString(R.string.common_ok), onClickListener)
+                .setEditPasswdType(true);
+
         customDialog.show();
     }
 

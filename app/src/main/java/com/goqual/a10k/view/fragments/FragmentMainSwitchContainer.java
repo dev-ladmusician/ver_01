@@ -1,9 +1,7 @@
 package com.goqual.a10k.view.fragments;
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -27,46 +25,36 @@ import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
 import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
-import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.activities.ActivityPhoneAuth;
-import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
-import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
 import retrofit2.adapter.rxjava.HttpException;
-import rx.functions.Action1;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-        implements SwitchPresenter.View<Switch>, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
-
     private AdapterSwitchContainer mPagerAdapter;
-
     private SwitchPresenterImpl mPresenter;
     private SocketManagerImpl mSocketManager;
-
     private CustomDialog connectionFailedDialog;
-
+    private STATE mCurrentToolbarState = STATE.DONE;
+    private Handler mHandler;
     private int mCurrentPage = 0;
 
-    private Handler mHandler;
-
     public static FragmentMainSwitchContainer newInstance() {
-
         Bundle args = new Bundle();
         FragmentMainSwitchContainer fragment = new FragmentMainSwitchContainer();
         fragment.setArguments(args);
@@ -97,10 +85,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
         mBinding.viewPager.setCurrentItem(mCurrentPage);
 
-        RxBus.getInstance().send(
-                SwitchManager.getInstance().getCount() == 0 ?
-                        new EventSwitchEdit(IToolbarClickListener.STATE.HIDE) :
-                        new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
+        handleToolbarEdit();
     }
 
     @Override
@@ -201,7 +186,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void onBtnClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.list_empty:
+                break;
+        }
     }
 
     @Override
@@ -258,63 +246,20 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         mBinding.viewPager.setCurrentItem(0);
     }
 
-    private SwitchPresenter getPresenter() {
-        if(mPresenter == null) {
-            mPresenter = new SwitchPresenterImpl(getActivity(), this, mPagerAdapter);
-        }
-        return mPresenter;
-    }
-
-    private SocketManager getSocketManager() {
-        if(mSocketManager == null) {
-            mSocketManager = new SocketManagerImpl(this, getActivity());
-        }
-        return mSocketManager;
-    }
-
     private void initView() {
-        mPagerAdapter = new AdapterSwitchContainer(getChildFragmentManager(), getActivity());
-        mBinding.viewPager.setAdapter(mPagerAdapter);
+        mBinding.viewPager.setAdapter(getPagerAdapter());
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
-        subEvent();
     }
 
-    private void subEvent() {
-        RxBus.getInstance().toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if(event instanceof EventToolbarClick) {
-                            LogUtil.e(TAG, "EVENT STATE :: " + ((EventToolbarClick) event).getState());
-                            if(isFragmentVisible()) {
-                                switch (((EventToolbarClick) event).getState()) {
-                                    case DONE:
-                                        passToolbarClickEvent(IToolbarClickListener.STATE.DONE);
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
-                                        break;
-                                    case EDIT:
-                                        passToolbarClickEvent(IToolbarClickListener.STATE.EDIT);
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.DONE));
-                                        break;
-                                    case ADD:
-                                        startActivity(new Intent(getActivity(), ActivitySwitchConnection.class));
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                });
-    }
+
 
     private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
     }
 
     public void setCurrentPage(int currentPage) {
-        mCurrentPage = currentPage;
         if(mPagerAdapter != null && mPagerAdapter.getCount()>0) {
-            mBinding.viewPager.setCurrentItem(mCurrentPage);
+            mBinding.viewPager.setCurrentItem(currentPage);
         }
     }
 
@@ -340,6 +285,18 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         }
     };
 
+    @Override
+    public void onClickEdit(STATE state) {
+        mCurrentToolbarState = state;
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+
+        // edit 상황일 시 switch list로 이동
+        if (mCurrentToolbarState == STATE.EDIT)
+            mBinding.viewPager.setCurrentItem(0);
+
+        ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
+    }
+
     /**
      * switch operation
      */
@@ -349,6 +306,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         getSocketManager().operationOnOff(item, btnNumber);
     }
 
+    /**
+     * switch list에서 switch delete event 받는 곳
+     * @param position
+     */
     @Override
     public void onSwitchDelete(int position) {
         getPresenter().deleteItem(position);
@@ -367,11 +328,16 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void onSuccessDeleteSwitch(int position) {
         // 등록된 스위치가 없으면 edit hide
-        if (SwitchManager.getInstance().getCount() == 0) {
-            RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.HIDE));
-        }
+        handleToolbarEdit();
+
         mPagerAdapter.deleteItem(position);
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
+    }
+
+    private void handleToolbarEdit() {
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(
+                SwitchManager.getInstance().getCount() == 0 ?
+                        IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
     }
 
     /**
@@ -406,4 +372,30 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             }
         }
     };
+
+
+
+
+
+
+
+    private SwitchPresenter getPresenter() {
+        if(mPresenter == null) {
+            mPresenter = new SwitchPresenterImpl(getActivity(), this, mPagerAdapter);
+        }
+        return mPresenter;
+    }
+
+    private SocketManager getSocketManager() {
+        if(mSocketManager == null) {
+            mSocketManager = new SocketManagerImpl(this, getActivity());
+        }
+        return mSocketManager;
+    }
+
+    private AdapterSwitchContainer getPagerAdapter() {
+        if (mPagerAdapter == null)
+            mPagerAdapter = new AdapterSwitchContainer(getChildFragmentManager(), getActivity());
+        return mPagerAdapter;
+    }
 }

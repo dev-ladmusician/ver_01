@@ -13,13 +13,7 @@ import com.goqual.a10k.util.HttpResponseCode;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.SocketIoManager;
 import com.goqual.a10k.util.SocketProtocols;
-import com.goqual.a10k.util.event.EventSocketIO;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.util.interfaces.ISocketIoConnectionListener;
-
-import java.net.Socket;
-
-import rx.functions.Action1;
 
 /**
  * Created by HanWool on 2017. 2. 21..
@@ -68,7 +62,7 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
             SocketData data = new SocketData(item.getMacaddr(),
                     PreferenceHelper.getInstance(mContext).getStringValue(
                             mContext.getString(R.string.arg_user_token), ""
-                    ), btnNumber,
+                    ), btnClickHandler(item, btnNumber),
                     btnState, 0);
             mSocketManager.emit(SocketProtocols.SOCKET_PT_REQ_OPERATION, gson.toJson(data));
         }
@@ -122,8 +116,12 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
 
     private void updateSwitchState(SocketData data) {
         Switch item = SwitchManager.getInstance().getSwitchByMacAddr(data.getMacaddr());
+
+        LogUtil.e(TAG, "received btncount :: " + item.getBtnCount());
+        LogUtil.e(TAG, "received btn :: " + btnClickHandler(item, data.getBtn()));
+
         if(item != null) {
-            switch (data.getBtn()) {
+            switch (btnClickHandler(item, data.getBtn())) {
                 case 1:
                     item.setBtn1(data.getOperation().equals("1"));
                     break;
@@ -136,6 +134,42 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
             }
         }
         mView.refreshViews();
+    }
+
+    /**
+     * 1,2,3구일때 btn 번호 바뀌는 것 처리하는 로직
+     * @param item
+     * @param clickedBtn
+     * @return
+     */
+    private int btnClickHandler(Switch item, int clickedBtn) {
+        int opBtn = -1;
+
+        switch (item.getBtnCount()) {
+            case 1:
+                if(clickedBtn == 1) {
+                    // 1구일 때 1구 스위치를 req 할 때
+                    opBtn = 2;
+                } else if (clickedBtn == 2) {
+
+                    opBtn = 1;
+                }
+                break;
+            case 2:
+                if (clickedBtn == 1) {
+                    opBtn = 1;
+                } else if (clickedBtn == 2) {
+                    opBtn = 3;
+                } else if (clickedBtn == 3) {
+                    opBtn = 2;
+                }
+                break;
+            case 3:
+                opBtn = clickedBtn;
+                break;
+        }
+
+        return opBtn;
     }
 
     @Override

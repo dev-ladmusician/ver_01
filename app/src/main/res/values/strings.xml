@@ -172,7 +172,7 @@
     <string name="switch_setting_chang_admin_dialog_btn_cancel">취소</string>
     <string name="switch_setting_chang_admin_dialog_btn_submit">확인</string>
     <string name="switch_setting_admin_add_user">버튼을 눌러 새로운 사용자를 초대하세요.</string>
-    <string name="switch_setting_admin_delete_user_title">삭제</string>
+    <string name="switch_setting_admin_delete_user_title">연결 해제</string>
     <string name="switch_setting_admin_delete_user_content"> 님을 \n삭제 하시겠습니까?</string>
     <string name="swtich_change_admin_title">관리자 변경</string>
 
@@ -188,6 +188,9 @@
     <string name="invite_dialog_content">초대를 수락 하시겠습니까?</string>
     <string name="invite_user_dialog_title">초대하기</string>
     <string name="invite_user_dialog_content">님을 초대하시겠어요?</string>
+    <string name="invite_error_dialog_title">초대 실패</string>
+    <string name="invite_error_dialog_content">님을 \n해당 스위치에 초대하는데 \n오류가 발생했습니다.</string>
+    <string name="invite_user_invited">초대</string>
 
     <!-- history -->
     <string name="history_no_item">등록된 기록이 없습니다.</string>
@@ -198,6 +201,7 @@
     <string name="history_item_control_switch">스위치</string>
     <string name="history_item_op_on">ON</string>
     <string name="history_item_op_off">OFF</string>
+    <string name="history_item_somebody">Somebody</string>
 
     <!-- setting -->
     <string name="setting_item_faq">자주묻는 질문</string>
@@ -278,6 +282,7 @@
     <string name="arg_switch_btn3">switch_btn_3</string>
     <string name="arg_alarm">arg_alarm</string>
     <string name="arg_absence">arg_absence</string>
-    <string name="arg_nfc">arg_nfc</string>
     <string name="arg_wifi_pass">arg_wifi_pass</string>
+
+    <string name="arg_nfc_is_loaded">arg_nfc_is_loaded</string>
 </resources>

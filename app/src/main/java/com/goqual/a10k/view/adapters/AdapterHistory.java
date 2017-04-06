@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.History;
+import com.goqual.a10k.presenter.HistoryPresenter;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -21,15 +22,18 @@ import java.util.List;
  */
 
 public class AdapterHistory extends RecyclerView.Adapter<HistoryViewHolder>
-implements AdapterDataModel<History>, AdapterDataView{
+implements AdapterDataModel<History>, AdapterDataView {
 
+    private static final String TAG = AdapterHistory.class.getSimpleName();
     private List<History> mHistoryList = null;
     private Context mContext = null;
     private OnRecyclerItemClickListener mItemClickListener = null;
+    private HistoryPresenter.View<History> mView;
 
-    public AdapterHistory(Context mContext) {
+    public AdapterHistory(Context mContext, HistoryPresenter.View<History> view) {
         this.mHistoryList = new ArrayList<>();
         this.mContext = mContext;
+        this.mView = view;
     }
 
     @Override
@@ -45,7 +49,6 @@ implements AdapterDataModel<History>, AdapterDataView{
     @Override
     public void addItem(History item) {
         this.mHistoryList.add(item);
-        refresh();
     }
 
     @Override
@@ -68,6 +71,11 @@ implements AdapterDataModel<History>, AdapterDataView{
     @Override
     public History getItem(int position) {
         return this.mHistoryList.get(position);
+    }
+
+    @Override
+    public List<History> getItems() {
+        return this.mHistoryList;
     }
 
     @Override
@@ -97,5 +105,9 @@ implements AdapterDataModel<History>, AdapterDataView{
     @Override
     public void onBindViewHolder(HistoryViewHolder holder, int position) {
         holder.bindView(position, mHistoryList.get(position), mItemClickListener);
+
+        if (position == getItemCount() - 1) {
+            mView.loadItems();
+        }
     }
 }

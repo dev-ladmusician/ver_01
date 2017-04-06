@@ -73,6 +73,11 @@ public class AdapterAlarm extends RecyclerView.Adapter<AlarmViewHolder>
     }
 
     @Override
+    public List<Alarm> getItems() {
+        return this.mItemList;
+    }
+
+    @Override
     public void updateItem(int position, Alarm item) {
         mItemList.set(position, item);
     }

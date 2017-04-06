@@ -6,9 +6,11 @@
         <variable
             name="activity"
             type="com.goqual.a10k.view.activities.ActivitySwitchSetting"/>
+
         <variable
             name="editSwitchState"
             type="com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE"/>
+
         <import type="android.view.View"
             alias="View"/>
     </data>

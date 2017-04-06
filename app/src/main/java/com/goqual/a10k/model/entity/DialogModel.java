@@ -1,7 +1,5 @@
 package com.goqual.a10k.model.entity;
 
-import android.view.View;
-
 /**
  * Created by hanwool on 2017. 2. 22..
  */
@@ -16,6 +14,7 @@ public class DialogModel {
     public boolean isEditable;
     public boolean isSetPositiveButton;
     public boolean isSetNegativeButton;
+    public boolean isPasswdType;
 
     public DialogModel() {
         isEditable = false;
@@ -92,5 +91,21 @@ public class DialogModel {
 
     public void setNegativeButtonText(String negativeButtonText) {
         this.negativeButtonText = negativeButtonText;
+    }
+
+    public void setSetPositiveButton(boolean setPositiveButton) {
+        isSetPositiveButton = setPositiveButton;
+    }
+
+    public void setSetNegativeButton(boolean setNegativeButton) {
+        isSetNegativeButton = setNegativeButton;
+    }
+
+    public boolean isPasswdType() {
+        return isPasswdType;
+    }
+
+    public void setPasswdType(boolean passwdType) {
+        isPasswdType = passwdType;
     }
 }

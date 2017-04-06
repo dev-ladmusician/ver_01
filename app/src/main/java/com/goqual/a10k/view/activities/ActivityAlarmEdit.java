@@ -12,13 +12,13 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmEditBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.model.entity.Repeat;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseActivity;
-import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 
 import org.parceler.Parcels;
@@ -145,5 +145,10 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
                 mBinding.alarmMenuRepeatLabel.setText(rep);
             }
         }
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
     }
 }

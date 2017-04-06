@@ -7,5 +7,7 @@ public interface HistoryPresenter {
    void get(int switchId, int year, int month, int day, int page);
 
     interface View<T> extends BasePresenterView<T>{
+        void loadItems(int year, int month, int day);
+        void loadItems();
     }
 }

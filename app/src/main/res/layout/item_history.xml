@@ -31,18 +31,9 @@
         android:id="@+id/history_item_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerInParent="true"
-        android:text="Somebody"
+        android:text="@{item.num == null ? @string/history_item_somebody : item.num}"
         android:textColor="@color/grey_03"/>
-
-    <TextView
-        android:id="@+id/history_item_method"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:text='@{item.label.equals("phone") ? @string/history_item_control_phone : @string/history_item_control_switch}'/>
 
     <TextView
         android:id="@+id/history_item_operation"
@@ -53,6 +44,14 @@
         android:layout_marginRight="10dp"
         android:textColor="@{item.operation ? @color/identitiy_01 : @color/grey_05}"
         android:text="@{item.operation ? @string/history_item_op_on : @string/history_item_op_off}"/>
+
+    <ImageView
+        android:id="@+id/history_item_method"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src='@{item.label.equals("phone") ? @drawable/ic_history_phone : @drawable/ic_history_hand}' />
 </RelativeLayout>
 
 </layout>

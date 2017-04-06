@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
@@ -25,7 +24,6 @@ import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterPhoneBook;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.dialog.CustomDialog;
-import com.goqual.a10k.view.viewholders.PhoneBookViewHolder;
 
 /**
  * Created by hanwool on 2017. 3. 21..
@@ -40,10 +38,13 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
 
     private static final int REQ_PERMISSION_READ_CONTACTS = 123;
 
-    private int _bsid;
+    private int mSwitchId;
 
     private PhoneBookPresenter mPresenter;
     private AdapterPhoneBook mAdapter;
+
+    private CustomDialog mDialog = null;
+    private CustomDialog mErrorDialog = null;
 
     @Override
     protected int getLayoutId() {
@@ -55,6 +56,30 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
         if(view.getId() == R.id.toolbar_back) {
             finish();
         }
+    }
+
+    @Override
+    public void successInvite(int position) {
+        getAdapter().getItem(position).setInvited(true);
+        refresh();
+    }
+
+    @Override
+    public void errorInvite(int position) {
+        LogUtil.e(TAG, "error invite");
+        getErrorDialog()
+                .setTitleText(R.string.invite_error_dialog_title)
+                .setMessageText(getAdapter().getItem(position).getNumber()+ getString(R.string.invite_error_dialog_content))
+                .setPositiveButton(false)
+                .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                    dialog.dismiss();
+                }).show();
+    }
+
+    @Override
+    public void refresh() {
+        getAdapter().refresh();
+        loadingStop();
     }
 
     @Override
@@ -71,16 +96,15 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding.setActivity(this);
-        _bsid = getIntent().getIntExtra(EXTRA_BSID, -1);
+        mSwitchId = getIntent().getIntExtra(EXTRA_BSID, -1);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQ_PERMISSION_READ_CONTACTS);
-            }
-            else {
+            } else {
                 initView();
             }
-        }
-        else {
+        } else {
             initView();
         }
     }
@@ -137,29 +161,26 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
         if(mAdapter == null) {
             mAdapter = new AdapterPhoneBook(this);
             mAdapter.setOnRecyclerItemClickListener(((viewId, position) -> {
-                Phone user = getAdapter().getItem(position);
-                new CustomDialog(this)
-                        .setTitleText(R.string.invite_user_dialog_title)
-                        .setMessageText(user.getDisplayName() + getString(R.string.invite_user_dialog_content))
-                        .setPositiveButton(getString(R.string.common_ok), (dialog, which) -> {
-                            if(user.get_userid() == -1){
-                                sendInviteSMS(user.getNumber());
-                            }
-                            else {
-                                if(user.get_connectionid() == -1) {
-
-                                }
-                            }
-                            dialog.dismiss();
-                            finish();
-                        })
-                        .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
+                if (!getAdapter().getItem(position).isInvited) {
+                    Phone user = getAdapter().getItem(position);
+                    getDialog()
+                            .setTitleText(R.string.invite_user_dialog_title)
+                            .setMessageText(user.getDisplayName() + getString(R.string.invite_user_dialog_content))
+                            .setPositiveButton(getString(R.string.common_ok), (dialog, which) -> {
+                                handleClickUser(position);
+                                dialog.dismiss();
+                            })
+                            .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                                dialog.dismiss();
+                            }).show();
+                }
             }));
         }
         return mAdapter;
+    }
+
+    private void handleClickUser(int position) {
+        getPresenter().checkUser(mSwitchId, position);
     }
 
     public void sendInviteSMS(String num) {
@@ -168,4 +189,13 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
         startActivity(intent);
     }
 
+    private CustomDialog getDialog() {
+        mDialog = new CustomDialog(this);
+        return mDialog;
+    }
+
+    private CustomDialog getErrorDialog() {
+        mErrorDialog = new CustomDialog(this);
+        return mErrorDialog;
+    }
 }

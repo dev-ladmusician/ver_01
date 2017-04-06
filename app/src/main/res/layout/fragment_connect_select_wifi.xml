@@ -18,11 +18,13 @@
 
             <include layout="@layout/partial_toolbar_nfc"
                 android:id="@+id/toolbar_include"/>
+
             <LinearLayout
                 android:id="@+id/list_wrap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/item_timer_height"
@@ -35,6 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             </LinearLayout>
+
+            <!-- loading -->
             <RelativeLayout
                 android:id="@+id/set_switch_loading_container"
                 android:layout_width="match_parent"

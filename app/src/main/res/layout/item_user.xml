@@ -8,6 +8,13 @@
         <variable
             name="holder"
             type="com.goqual.a10k.view.viewholders.UserViewHolder"/>
+        <variable
+            name="borderView"
+            type="Boolean"/>
+
+        <import
+            alias="View"
+            type="android.view.View" />
     </data>
     <RelativeLayout
         android:id="@+id/item_user_container"
@@ -15,23 +22,23 @@
         android:layout_height="@dimen/item_setting_admin"
         android:paddingLeft="@dimen/padding_20"
         android:paddingRight="@dimen/padding_20"
-        android:background="@drawable/style_border_bottom_grey">
+        android:background="@{borderView ? @drawable/style_border_bottom_grey : @drawable/style_border_none}">
 
         <RelativeLayout
             android:id="@+id/item_user_delete"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_width="@dimen/item_delete_ic_container_size"
-            android:visibility="gone"
+            android:visibility="@{user.mIsDeletable ? View.VISIBLE : View.GONE}"
             android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="@dimen/item_delete_ic_size"
                 android:layout_height="@dimen/item_delete_ic_size"
-                android:src="@drawable/ic_delete"
                 android:layout_centerVertical="true"
                 android:visibility="visible"
-                android:layout_alignParentLeft="true" />
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_delete"/>
         </RelativeLayout>
 
         <ImageView
@@ -40,6 +47,7 @@
             android:layout_height="@dimen/admin_user_ic_size"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            android:visibility="@{user.mIsDeletable ? View.GONE : View.VISIBLE}"
             android:src="@drawable/ic_user"/>
 
         <TextView
@@ -55,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:visibility="gone"
+            android:visibility="@{user.ismChecked ? View.VISIBLE : View.GONE}"
             android:src="@drawable/ic_check_b"/>
     </RelativeLayout>
 </layout>

@@ -67,44 +67,53 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
 
-                <TextView
+                <RelativeLayout
                     android:id="@+id/switch_btn_1"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:gravity="center"
-                    android:textSize="@dimen/switch_each_btn_txt_size"
                     android:onClick="@{fragment::onBtnClick}"
-                    android:text="@{item.btn1 ? @string/btn_on : @string/btn_off}"
-                    android:textColor="@{item.btn1 ? @color/white : @color/grey_03}"
-                    android:background="@{item.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+                    android:background="@{item.btn1 ? @drawable/selector_switch_btn_on_grey : @drawable/selector_switch_btn_off_grey}">
 
-                <TextView
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_check_w"/>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/switch_btn_2"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:gravity="center"
-                    android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_1"
                     android:layout_marginBottom="@dimen/switch_each_btn_margin"
                     android:layout_marginTop="@dimen/switch_each_btn_margin"
                     android:onClick="@{fragment::onBtnClick}"
-                    android:text="@{item.btn2 ? @string/btn_on : @string/btn_off}"
-                    android:textColor="@{item.btn2 ? @color/white : @color/grey_03}"
                     android:visibility="@{item.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
-                    android:background="@{item.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+                    android:background="@{item.btn2 ? @drawable/selector_switch_btn_on_grey : @drawable/selector_switch_btn_off_grey}">
 
-                <TextView
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_check_w"/>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/switch_btn_3"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:gravity="center"
-                    android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_2"
                     android:onClick="@{fragment::onBtnClick}"
-                    android:textColor="@{item.btn3 ? @color/white : @color/grey_03}"
                     android:visibility="@{item.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
-                    android:text="@{item.btn3 ? @string/btn_on : @string/btn_off}"
-                    android:background="@{item.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+                    android:background="@{item.btn3 ? @drawable/selector_switch_btn_on_grey : @drawable/selector_switch_btn_off_grey}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_check_w"/>
+                </RelativeLayout>
             </RelativeLayout>
 
             <!-- absence info -->

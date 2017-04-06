@@ -1,14 +1,11 @@
 package com.goqual.a10k.view.fragments.setting;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.DatePicker;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
 import com.goqual.a10k.databinding.FragmentSettingHistoryBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.History;
@@ -18,6 +15,7 @@ import com.goqual.a10k.presenter.impl.HistoryPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterHistory;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +27,7 @@ import java.util.Locale;
  */
 
 public class FragmentSettingHistory extends BaseFragment<FragmentSettingHistoryBinding>
-implements HistoryPresenter.View<History>{
+implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener {
     public static final String TAG = FragmentSettingHistory.class.getSimpleName();
 
     public static final String EXTRA_SWITCH = "EXTRA_SWITCH";
@@ -42,6 +40,7 @@ implements HistoryPresenter.View<History>{
     private HistoryPresenter mHistoryPresenter;
 
     private int mCurrentPage = 1;
+    private int mLastPage = 1;
 
     public static FragmentSettingHistory newInstance(int item) {
 
@@ -65,7 +64,18 @@ implements HistoryPresenter.View<History>{
 
     @Override
     public void refresh() {
+        loadingStop();
+        mHistoryAdapter.refresh();
 
+        LogUtil.e(TAG, "item count :: " + mHistoryAdapter.getItemCount());
+
+        if (mHistoryAdapter.getItemCount() == 0) {
+            mBinding.historyContainer.setVisibility(View.GONE);
+            mBinding.historyNoItem.setVisibility(View.VISIBLE);
+        } else {
+            mBinding.historyContainer.setVisibility(View.VISIBLE);
+            mBinding.historyNoItem.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -75,7 +85,7 @@ implements HistoryPresenter.View<History>{
 
     @Override
     public void addItem(History item) {
-        LogUtil.d(TAG, "addItem::"+item);
+        mHistoryAdapter.addItem(item);
     }
 
     @Override
@@ -113,14 +123,13 @@ implements HistoryPresenter.View<History>{
     private void initView(){
         mBinding.setFragment(this);
         mBinding.historyTxtDate.setText(mSimpleDateFormat.format(mViewCalendar.getTime()));
-        mHistoryAdapter = new AdapterHistory(getActivity());
+        mHistoryAdapter = new AdapterHistory(getActivity(), this);
         mBinding.historyContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.historyContainer.setAdapter(mHistoryAdapter);
-        getHistoryPresenter().get(mSwitch.get_bsid(),
-                mViewCalendar.get(Calendar.YEAR),
+
+        loadItems(mViewCalendar.get(Calendar.YEAR),
                 mViewCalendar.get(Calendar.MONTH)+1,
-                mViewCalendar.get(Calendar.DAY_OF_MONTH),
-                1);
+                mViewCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     private HistoryPresenter getHistoryPresenter() {
@@ -132,17 +141,59 @@ implements HistoryPresenter.View<History>{
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.history_txt_date) {
-            new DatePickerDialog(getActivity(),
-                    (view1, year, month, dayOfMonth) -> {
-                        mViewCalendar.set(year, month, dayOfMonth);
-                        getHistoryPresenter().get(mSwitch.get_bsid(), year, month+1, dayOfMonth, 1);
-                        mBinding.historyTxtDate.setText(mSimpleDateFormat.format(mViewCalendar.getTime()));
-                    },
-                    mViewCalendar.get(Calendar.YEAR),
-                    mViewCalendar.get(Calendar.MONTH),
-                    mViewCalendar.get(Calendar.DAY_OF_MONTH))
-                    .show();
+
+            com.wdullaer.materialdatetimepicker.date.DatePickerDialog datepickerDialog =
+                    com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(
+                            FragmentSettingHistory.this,
+                            mViewCalendar.get(Calendar.YEAR),
+                            mViewCalendar.get(Calendar.MONTH),
+                            mViewCalendar.get(Calendar.DAY_OF_MONTH)
+                    );
+            datepickerDialog.setMaxDate(Calendar.getInstance());
+            datepickerDialog.show(getActivity().getFragmentManager(), "datepickerDialogTag");
         }
     }
 
+    @Override
+    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        mViewCalendar.set(year, monthOfYear, dayOfMonth);
+        mBinding.historyTxtDate.setText(mSimpleDateFormat.format(mViewCalendar.getTime()));
+        loadItems(year, monthOfYear+1, dayOfMonth);
+    }
+
+    /**
+     * datepicker에서 날짜 선택 시 호출
+     * @param year
+     * @param month
+     * @param day
+     */
+    @Override
+    public void loadItems(int year, int month, int day) {
+        mHistoryAdapter.clear();
+        getHistoryPresenter().get(mSwitch.get_bsid(), year, month, day, mCurrentPage);
+    }
+
+    /**
+     * pagination 시 호출
+     */
+    @Override
+    public void loadItems() {
+        if (mCurrentPage < mLastPage) {
+            mCurrentPage = mCurrentPage + 1;
+            getHistoryPresenter().get(mSwitch.get_bsid(),
+                    mViewCalendar.get(Calendar.YEAR),
+                    mViewCalendar.get(Calendar.MONTH)+1,
+                    mViewCalendar.get(Calendar.DAY_OF_MONTH), mCurrentPage);
+        }
+    }
+
+    @Override
+    public void setPage(int page) {
+        mCurrentPage = page;
+    }
+
+    @Override
+    public void setLastPage(int lastPage) {
+        mLastPage = lastPage;
+    }
 }

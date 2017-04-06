@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.model.entity.NfcWrap;
-import com.goqual.a10k.model.realm.Nfc;
+import com.goqual.a10k.model.entity.Nfc;
+import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -22,15 +22,17 @@ import java.util.List;
  */
 
 public class AdapterNfc extends RecyclerView.Adapter<NfcViewHolder>
-        implements AdapterDataModel<NfcWrap>, AdapterDataView{
+        implements AdapterDataModel<Nfc>, AdapterDataView{
 
-    private List<NfcWrap> mTagList = null;
+    private List<Nfc> mTagList = null;
     private Context mContext = null;
     private OnRecyclerItemClickListener mItemClickListener = null;
+    private NfcTagPresenter.View<Nfc> mView;
 
-    public AdapterNfc(Context mContext) {
+    public AdapterNfc(Context mContext, NfcTagPresenter.View<Nfc> view) {
         this.mTagList = new ArrayList<>();
         this.mContext = mContext;
+        this.mView = view;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class AdapterNfc extends RecyclerView.Adapter<NfcViewHolder>
     }
 
     @Override
-    public void addItem(NfcWrap item) {
+    public void addItem(Nfc item) {
         this.mTagList.add(item);
     }
 
@@ -64,17 +66,22 @@ public class AdapterNfc extends RecyclerView.Adapter<NfcViewHolder>
     }
 
     @Override
-    public NfcWrap getItem(int position) {
+    public Nfc getItem(int position) {
         return this.mTagList.get(position);
     }
 
     @Override
-    public void updateItem(int position, NfcWrap item) {
+    public List<Nfc> getItems() {
+        return this.mTagList;
+    }
+
+    @Override
+    public void updateItem(int position, Nfc item) {
         this.mTagList.set(position, item);
     }
 
     @Override
-    public void updateItems(List<NfcWrap> items) {
+    public void updateItems(List<Nfc> items) {
         this.mTagList.addAll(items);
     }
 
@@ -92,10 +99,14 @@ public class AdapterNfc extends RecyclerView.Adapter<NfcViewHolder>
     @Override
     public void onBindViewHolder(NfcViewHolder holder, int position) {
         holder.bindView(position, mTagList.get(position), mItemClickListener);
+
+        if (position == getItemCount() - 1) {
+            mView.checkLoadMore();
+        }
     }
 
     public void setItemState(boolean state) {
-        for(NfcWrap item : mTagList) {
+        for(Nfc item : mTagList) {
             item.setEditing(state);
         }
 

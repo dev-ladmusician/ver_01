@@ -19,6 +19,7 @@ public class Switch implements Cloneable{
     public String title;
     private String macaddr;
     private boolean isavailable;
+    private boolean isadmin;
     private Integer _absenceid;
     private boolean outlet;
     public boolean mIsStateView;
@@ -194,6 +195,22 @@ public class Switch implements Cloneable{
         this.AP_SERVER_PORT = AP_SERVER_PORT;
     }
 
+    public int getBtncount() {
+        return btncount;
+    }
+
+    public void setBtncount(int btncount) {
+        this.btncount = btncount;
+    }
+
+    public boolean isadmin() {
+        return isadmin;
+    }
+
+    public void setIsadmin(boolean isadmin) {
+        this.isadmin = isadmin;
+    }
+
     @Override
     public Switch clone() throws CloneNotSupportedException {
         Switch newSwitch = (Switch) super.clone();
@@ -217,6 +234,7 @@ public class Switch implements Cloneable{
         newSwitch.setWIFI_BSSID(this.getWIFI_BSSID());
         newSwitch.setWIFI_PASSWORD(this.getWIFI_PASSWORD());
         newSwitch.setWIFI_CAPABILITY(this.getWIFI_CAPABILITY());
+        newSwitch.setIsadmin(this.isadmin());
         return newSwitch;
     }
 

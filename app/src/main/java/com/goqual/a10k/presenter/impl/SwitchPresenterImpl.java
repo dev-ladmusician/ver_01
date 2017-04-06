@@ -9,17 +9,10 @@ import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
-import com.goqual.a10k.util.HttpResponseCode;
-import com.goqual.a10k.util.LogUtil;
 
-import org.apache.commons.lang3.NotImplementedException;
-
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import static com.goqual.a10k.view.activities.ActivityMain.TAG;
 
 /**
  * Created by ladmusician on 2017. 2. 21..
@@ -79,10 +72,7 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultDTO -> {
-                            //mView.leaveSocketRoom(position);
                             SwitchManager.getInstance().delete(position);
-                            //mView.removeSwitchEach(position);
-                            //mView.initIndicator();
                             mView.onSuccessDeleteSwitch(position);
                         },
                         (e)-> {

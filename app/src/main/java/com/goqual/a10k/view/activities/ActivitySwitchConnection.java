@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivitySwitchConnectionBinding;
+import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.presenter.ConnectPresenter;
 import com.goqual.a10k.presenter.impl.ConnectPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
@@ -25,53 +26,8 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
     private ConnectPresenter mPresenter;
 
     @Override
-    public void onSuccess() {
-
-    }
-
-    @Override
-    public void keyPadUp() {
-
-    }
-
-    @Override
-    public void keyPadDown() {
-
-    }
-
-    @Override
-    public void loadingStart() {
-
-    }
-
-    @Override
-    public void loadingStop() {
-
-    }
-
-    @Override
-    public void refresh() {
-
-    }
-
-    @Override
-    public void onError(Throwable e) {
-
-    }
-
-    @Override
-    public void addItem(Object item) {
-
-    }
-
-    @Override
     protected int getLayoutId() {
         return R.layout.activity_switch_connection;
-    }
-
-    @Override
-    public void onBtnClick(View view) {
-
     }
 
     @Override
@@ -131,6 +87,56 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
 
     @Override
     public void finishApp() {
+
+    }
+
+    @Override
+    public void onBtnClick(View view) {
+
+    }
+
+    @Override
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void keyPadUp() {
+
+    }
+
+    @Override
+    public void keyPadDown() {
+
+    }
+
+    @Override
+    public void loadingStart() {
+
+    }
+
+    @Override
+    public void loadingStop() {
+
+    }
+
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public void onError(Throwable e) {
+
+    }
+
+    @Override
+    public void addItem(Object item) {
 
     }
 }

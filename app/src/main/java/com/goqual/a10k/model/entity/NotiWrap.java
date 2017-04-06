@@ -3,10 +3,7 @@ package com.goqual.a10k.model.entity;
 import android.content.Context;
 
 import com.goqual.a10k.R;
-import com.goqual.a10k.model.realm.Nfc;
 import com.goqual.a10k.model.realm.Noti;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Created by hanwool on 2017. 3. 8..

@@ -16,31 +16,28 @@ import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventSwitchEdit;
-import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.activities.ActivityAlarmEdit;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
 import org.parceler.Parcels;
-
-import rx.functions.Action1;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
 public class FragmentMainAlarm extends BaseFragment<FragmentMainAlarmBinding>
-implements AlarmPresenter.View<Alarm>{
+implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
     public static final String TAG = FragmentMainAlarm.class.getSimpleName();
 
     private static final int REQ_NEW_ALARM = 101;
 
     private AlarmPresenter mPresenter;
     private AdapterAlarm mAdapter;
+    private STATE mCurrentToolbarState = STATE.DONE;
 
     public static FragmentMainAlarm newInstance() {
         Bundle args = new Bundle();
@@ -125,7 +122,6 @@ implements AlarmPresenter.View<Alarm>{
         initRecyclerView();
         // TODO: page
         getPresenter().loadItems(1);
-        subEvent();
     }
 
     private void initRecyclerView() {
@@ -179,6 +175,13 @@ implements AlarmPresenter.View<Alarm>{
     }
 
     @Override
+    public void onClickEdit(STATE state) {
+        mCurrentToolbarState = state;
+        ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+        getAdapter().setDeletable(state == STATE.EDIT);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK && data != null) {
             if(requestCode == REQ_NEW_ALARM) {
@@ -187,33 +190,5 @@ implements AlarmPresenter.View<Alarm>{
                 getAdapter().addItem(alarm);
             }
         }
-    }
-
-    private void subEvent() {
-        RxBus.getInstance().toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if(event instanceof EventToolbarClick) {
-                            LogUtil.e(TAG, "EVENT STATE :: " + ((EventToolbarClick) event).getState());
-                            if(isFragmentVisible()) {
-                                switch (((EventToolbarClick) event).getState()) {
-                                    case DONE:
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
-                                        getAdapter().setDeletable(false);
-                                        break;
-                                    case EDIT:
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.DONE));
-                                        getAdapter().setDeletable(true);
-                                        break;
-                                    case ADD:
-                                        startActivityForResult(new Intent(getActivity(), ActivityAlarmEdit.class), REQ_NEW_ALARM);
-                                        RxBus.getInstance().send(new EventSwitchEdit(IToolbarClickListener.STATE.EDIT));
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                });
     }
 }

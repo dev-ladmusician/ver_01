@@ -8,13 +8,21 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class User {
     private int _connectionid;
+    private int _userid;
     private boolean isadmin;
     private String num;
     private String name;
     private String mAuthKey;
     private String mPubKey;
-    private boolean mIsDeletable;
-    private boolean mChecked;
+    private String photoUriString;
+    public boolean mIsDeletable;
+    public boolean mChecked;
+
+    public User(String name, String num, String photoString) {
+        this.name = name;
+        this.num = num;
+        this.photoUriString = photoString;
+    }
 
     public String getmAuthKey() {
         return mAuthKey;
@@ -78,6 +86,14 @@ public class User {
 
     public void setmChecked(boolean mChecked) {
         this.mChecked = mChecked;
+    }
+
+    public int get_userid() {
+        return _userid;
+    }
+
+    public void set_userid(int _userid) {
+        this._userid = _userid;
     }
 
     @Override

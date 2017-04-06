@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.Phone;
-import com.goqual.a10k.model.entity.Phone;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
-import com.goqual.a10k.view.viewholders.NfcViewHolder;
 import com.goqual.a10k.view.viewholders.PhoneBookViewHolder;
 
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public class AdapterPhoneBook extends RecyclerView.Adapter<PhoneBookViewHolder>
     @Override
     public void addItem(Phone item) {
         this.mTagList.add(item);
-        refresh();
+        //refresh();
     }
 
     @Override
@@ -69,6 +67,11 @@ public class AdapterPhoneBook extends RecyclerView.Adapter<PhoneBookViewHolder>
     @Override
     public Phone getItem(int position) {
         return this.mTagList.get(position);
+    }
+
+    @Override
+    public List<Phone> getItems() {
+        return this.mTagList;
     }
 
     @Override

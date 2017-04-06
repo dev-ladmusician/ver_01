@@ -27,9 +27,15 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
     private List<User> mItemList = new ArrayList<>();
     private User mAdmin = null;
     private OnRecyclerItemClickListener mItemClickListener = null;
+    private boolean mIsBorderView = true;
 
     public AdapterUser(Context mContext) {
         this.mContext = mContext;
+    }
+
+    public AdapterUser(Context mContext, boolean isBorderView) {
+        this.mContext = mContext;
+        this.mIsBorderView = isBorderView;
     }
 
     @Override
@@ -40,7 +46,7 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
-        holder.bindView(position, mItemList.get(position), mItemClickListener);
+        holder.bindView(position, mItemList.get(position), mItemClickListener, mIsBorderView);
     }
 
     @Override
@@ -52,6 +58,11 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
     public void addItem(User item) {
         if (item.isadmin()) mAdmin = item;
         else mItemList.add(item);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
 
     @Override
@@ -73,6 +84,11 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
     @Override
     public User getItem(int position) {
         return mItemList.get(position);
+    }
+
+    @Override
+    public List<User> getItems() {
+        return this.mItemList;
     }
 
     @Override
@@ -100,6 +116,10 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
         return mAdmin;
     }
 
+    public void setAdmin(User admin) {
+        this.mAdmin = admin;
+    }
+
     public List<User> getmItemList() {
         return mItemList;
     }
@@ -114,5 +134,13 @@ public class AdapterUser extends RecyclerView.Adapter<UserViewHolder>
         mAdmin = getItem(position);
         mItemList.remove(position);
         mItemList.add(admin);
+    }
+
+    public void setDeletable(boolean state) {
+        for(User item : mItemList) {
+            item.setmIsDeletable(state);
+        }
+
+        refresh();
     }
 }

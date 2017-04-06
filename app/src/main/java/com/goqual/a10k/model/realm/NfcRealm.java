@@ -1,5 +1,7 @@
 package com.goqual.a10k.model.realm;
 
+import com.goqual.a10k.model.entity.Nfc;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import io.realm.RealmObject;
@@ -10,7 +12,7 @@ import io.realm.annotations.Index;
  * Created by hanwool on 2017. 2. 27..
  */
 
-public class Nfc extends RealmObject{
+public class NfcRealm extends RealmObject{
 
     @Index
     public String tag;
@@ -28,10 +30,25 @@ public class Nfc extends RealmObject{
     @Ignore
     public boolean isEditing;
 
-    public Nfc() {
+    public NfcRealm() {
     }
 
-    public Nfc(int _nfcid, int _bsid, Boolean btn1, Boolean btn2, Boolean btn3, String title, String tag, String macaddr, int state, int btnCount, boolean mIsDeletable) {
+    public NfcRealm(Nfc nfcItem) {
+        tag = nfcItem.getTag();
+        _nfcid = nfcItem.get_nfcid();
+        _bsid = nfcItem.get_bsid();
+        btn1 = nfcItem.getBtn1();
+        btn2 = nfcItem.getBtn2();
+        btn3 = nfcItem.getBtn3();
+        title = nfcItem.getTitle();
+        macaddr = nfcItem.getMacaddr();
+        state = nfcItem.getState();
+        btnCount = nfcItem.getBtncount();
+        mIsDeletable = nfcItem.ismIsDeletable();
+        isEditing = false;
+    }
+
+    public NfcRealm(int _nfcid, int _bsid, Boolean btn1, Boolean btn2, Boolean btn3, String title, String tag, String macaddr, int state, int btnCount, boolean mIsDeletable) {
         this._nfcid = _nfcid;
         this._bsid = _bsid;
         this.btn1 = btn1;
