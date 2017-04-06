@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.activities.ActivityAlarmEdit;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
@@ -92,15 +94,16 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     @Override
     public void refresh() {
         loadingStop();
+        mBinding.refresh.setRefreshing(false);
         getAdapter().notifyDataSetChanged();
 
         if(mAdapter.getSize() > 0) {
             mBinding.alarmNoItemContainer.setVisibility(View.GONE);
-            mBinding.listContainer.setVisibility(View.VISIBLE);
+            mBinding.refresh.setVisibility(View.VISIBLE);
         }
         else {
             mBinding.alarmNoItemContainer.setVisibility(View.VISIBLE);
-            mBinding.listContainer.setVisibility(View.GONE);
+            mBinding.refresh.setVisibility(View.GONE);
         }
 
         setToolbarHandler();
@@ -164,6 +167,17 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
 
     private void initRecyclerView() {
         mBinding.setFragment(this);
+
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAdapter().clear();
+                setPage(1);
+                loadItems();
+            }
+        });
+
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
             switch (viewId) {
                 case R.id.item_alarm_delete:
@@ -208,7 +222,8 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.alarm_no_item_container) {
-            if (checkExistSwitch()) startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
+            if (checkExistSwitch())
+                startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
         }
     }
 
