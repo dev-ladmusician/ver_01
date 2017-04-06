@@ -16,5 +16,8 @@ public interface AlarmPresenter extends BasePresenter{
         void onSuccessDelete();
         void onFailDelete(int position);
         void onSuccess();
+
+        void loadItems();
+        void checkLoadMore();
     }
 }

@@ -21,6 +21,7 @@ import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
@@ -29,7 +30,7 @@ import com.goqual.a10k.view.interfaces.IToolbarInteraction;
  */
 
 public class FragmentMainAlarm extends BaseFragment<FragmentMainAlarmBinding>
-implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
+implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     public static final String TAG = FragmentMainAlarm.class.getSimpleName();
 
     private static final int REQ_NEW_ALARM = 101;
@@ -37,6 +38,9 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
     private AlarmPresenter mPresenter;
     private AdapterAlarm mAdapter;
     private STATE mCurrentToolbarState = STATE.DONE;
+
+    private int mCurrentPage = 1;
+    private int mLastPage = 1;
 
     public static FragmentMainAlarm newInstance() {
         Bundle args = new Bundle();
@@ -89,6 +93,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
     public void refresh() {
         loadingStop();
         getAdapter().notifyDataSetChanged();
+
         if(mAdapter.getSize()>0) {
             mBinding.alarmNoItemContainer.setVisibility(View.GONE);
             mBinding.listContainer.setVisibility(View.VISIBLE);
@@ -106,7 +111,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
 
     @Override
     public void addItem(Alarm item) {
-        LogUtil.d(TAG, "ITEM::" + item.toString());
+        getAdapter().addItem(item);
     }
 
     @Nullable
@@ -119,8 +124,40 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecyclerView();
-        // TODO: page
-        getPresenter().loadItems(1);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAdapter().clear();
+        loadItems();
+    }
+
+    @Override
+    public void checkLoadMore() {
+        if (mCurrentPage < mLastPage) {
+            mCurrentPage = mCurrentPage + 1;
+            loadItems();
+        }
+    }
+
+    @Override
+    public void loadItems() {
+        getPresenter().loadItems(mCurrentPage);
+
+        /**
+         * TODO realm database 활용 :: pagination
+         */
+    }
+
+    @Override
+    public void setPage(int page) {
+        mCurrentPage = page;
+    }
+
+    @Override
+    public void setLastPage(int lastPage) {
+        mLastPage = lastPage;
     }
 
     private void initRecyclerView() {
@@ -153,7 +190,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener {
 
     private AdapterAlarm getAdapter() {
         if(mAdapter == null) {
-            mAdapter = new AdapterAlarm(getActivity());
+            mAdapter = new AdapterAlarm(getActivity(), this);
             mAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
                 switch (viewId) {
                     case R.id.item_alarm_active:

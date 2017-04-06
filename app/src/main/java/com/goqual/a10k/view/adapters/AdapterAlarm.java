@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.Alarm;
+import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -26,9 +27,11 @@ public class AdapterAlarm extends RecyclerView.Adapter<AlarmViewHolder>
     private Context mContext = null;
     private List<Alarm> mItemList = new ArrayList<>();
     private OnRecyclerItemClickListener mItemClickListener = null;
+    private AlarmPresenter.View<Alarm> mView;
 
-    public AdapterAlarm(Context mContext) {
+    public AdapterAlarm(Context mContext, AlarmPresenter.View view) {
         this.mContext = mContext;
+        this.mView = view;
     }
 
     @Override
@@ -40,6 +43,10 @@ public class AdapterAlarm extends RecyclerView.Adapter<AlarmViewHolder>
     @Override
     public void onBindViewHolder(AlarmViewHolder holder, int position) {
         holder.bindView(position, mItemList.get(position), mItemClickListener);
+
+        if (position == getItemCount() - 1) {
+            mView.checkLoadMore();
+        }
     }
 
     @Override
