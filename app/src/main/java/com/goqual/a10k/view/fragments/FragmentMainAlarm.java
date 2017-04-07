@@ -27,6 +27,8 @@ import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
+import org.parceler.Parcels;
+
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
@@ -180,6 +182,14 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
 
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
             switch (viewId) {
+                case R.id.item_alarm_container:
+                    LogUtil.e(TAG, "item alarm container click");
+                    Intent intent = new Intent(getActivity(), ActivityAlarmEdit.class);
+                    intent.putExtra(
+                            getString(R.string.arg_alarm),
+                            Parcels.wrap(getAdapter().getItem(position)));
+                    startActivity(intent);
+                    break;
                 case R.id.item_alarm_delete:
                     new CustomDialog(getActivity())
                             .setTitleText(R.string.alarm_delete_title)

@@ -142,6 +142,36 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
         mRingtoneTitle = getString(R.string.alarm_sound_default);
         mRingtoneUri = getString(R.string.alarm_sound_default);
         mRepeat = new Repeat();
+
+        Intent intent = getIntent();
+        Alarm item = Parcels.unwrap(intent.getParcelableExtra(getString(R.string.arg_alarm)));
+        if (item != null) {
+            LogUtil.e(TAG, "alarm not null");
+            // switch
+            mSwitch = new Switch(
+                    item.getBtn1(),
+                    item.getBtn2(),
+                    item.getBtn3());
+
+            // repeat
+            mRepeat = new Repeat(
+                    item.sun,
+                    item.mon,
+                    item.tue,
+                    item.wed,
+                    item.thur,
+                    item.fri,
+                    item.sat);
+
+            // ringtone
+            mRingtoneUri = item.getRingtone();
+            mRingtoneTitle = item.getRingtone_title();
+
+            // set binding
+            mBinding.setSwitchItem(mSwitch);
+            mBinding.alarmMenuRepeatLabel.setText(mRepeat.makeString(this));
+            mBinding.alarmMenuSoundLabel.setText(mRingtoneTitle);
+        }
     }
 
     public static Intent getRingtoneIntent() {

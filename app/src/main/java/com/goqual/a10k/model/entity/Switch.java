@@ -32,6 +32,12 @@ public class Switch implements Cloneable{
     public Switch() {
     }
 
+    public Switch(boolean btn1, boolean btn2, boolean btn3) {
+        this.btn1 = btn1;
+        this.btn2 = btn2;
+        this.btn3 = btn3;
+    }
+
     // BS
     private int AP_SERVER_PORT = 5050;
 

@@ -238,7 +238,7 @@
     <string name="alarm_repeat_thur">목</string>
     <string name="alarm_repeat_fri">금</string>
     <string name="alarm_repeat_sat">토</string>
-    <string name="alarm_repeat_never">안함</string>
+    <string name="alarm_repeat_never">반복 안함</string>
     <string name="alarm_repeat">Repeat</string>
     <string name="alarm_sound">Sound</string>
     <string name="alarm_sound_default">default</string>

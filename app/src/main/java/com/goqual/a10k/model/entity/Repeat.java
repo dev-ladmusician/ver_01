@@ -1,13 +1,10 @@
 package com.goqual.a10k.model.entity;
 
 import android.content.Context;
-import android.os.Parcelable;
 
 import com.goqual.a10k.R;
 
 import org.parceler.Parcel;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by hanwool on 2017. 3. 14..
@@ -23,6 +20,16 @@ public class Repeat{
     public boolean sat;
 
     public Repeat() {
+    }
+
+    public Repeat(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat) {
+        this.sun = sun;
+        this.mon = mon;
+        this.tue = tue;
+        this.wed = wed;
+        this.thu = thu;
+        this.fri = fri;
+        this.sat = sat;
     }
 
     public boolean isSun() {
