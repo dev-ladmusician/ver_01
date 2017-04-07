@@ -86,9 +86,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/alarm_divider_height"
-                android:background="@color/grey_02"/>
+                android:layout_height="@dimen/alarm_divider_height" />
 
+            <!-- switch -->
             <RelativeLayout
                 android:id="@+id/alarm_menu_switch"
                 android:layout_width="match_parent"
@@ -159,6 +159,7 @@
                     android:src="@drawable/ic_arrow_r_grey"/>
             </RelativeLayout>
 
+            <!-- repeat -->
             <RelativeLayout
                 android:id="@+id/alarm_menu_repeat"
                 android:layout_width="match_parent"
@@ -193,6 +194,7 @@
                     android:src="@drawable/ic_arrow_r_grey"/>
             </RelativeLayout>
 
+            <!-- ringtone -->
             <RelativeLayout
                 android:id="@+id/alarm_menu_sound"
                 android:layout_width="match_parent"

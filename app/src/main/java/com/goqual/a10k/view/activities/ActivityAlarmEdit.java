@@ -43,10 +43,13 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
 
     private static final String TIME_FORMAT_STRING = "HH:mm";
 
+    private Alarm mAlarm;
     private Switch mSwitch;
     private Repeat mRepeat;
     private String mRingtoneUri;
     private String mRingtoneTitle;
+
+    private boolean isEdit = false;
 
     private AlarmAddEditPresenter mPresenter = null;
 
@@ -81,7 +84,6 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
                     Snackbar.make(mBinding.getRoot(), getString(R.string.alarm_error_no_selected_switch), Snackbar.LENGTH_SHORT).show();
                 } else {
                     Alarm alarm = new Alarm();
-                    String alarmTime;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         alarm.setHour(mBinding.addAlarmTime.getHour());
                         alarm.setMin(mBinding.addAlarmTime.getMinute());
@@ -94,7 +96,13 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
                     alarm.setRingtone(mRingtoneUri);
                     alarm.setRingtone_title(mRingtoneTitle);
 
-                    getPresenter().add(alarm);
+                    if (!isEdit) getPresenter().add(alarm);
+                    else {
+                        alarm.set_alarmid(mAlarm.get_alarmid());
+                        alarm.set_bsid(mAlarm.get_bsid());
+                        alarm.setState(mAlarm.isState());
+                        getPresenter().update(alarm);
+                    }
                 }
                 break;
             case R.id.alarm_menu_switch:
@@ -147,8 +155,13 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
         Alarm item = Parcels.unwrap(intent.getParcelableExtra(getString(R.string.arg_alarm)));
         if (item != null) {
             LogUtil.e(TAG, "alarm not null");
+            mAlarm = item;
+            isEdit = true;
+
             // switch
             mSwitch = new Switch(
+                    item.getTitle(),
+                    item.getBtncount(),
                     item.getBtn1(),
                     item.getBtn2(),
                     item.getBtn3());
@@ -165,9 +178,17 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
 
             // ringtone
             mRingtoneUri = item.getRingtone();
+
             mRingtoneTitle = item.getRingtone_title();
 
             // set binding
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mBinding.addAlarmTime.setHour(item.getHour());
+                mBinding.addAlarmTime.setMinute(item.getMin());
+            } else {
+                mBinding.addAlarmTime.setCurrentHour(item.getHour());
+                mBinding.addAlarmTime.setCurrentMinute(item.getMin());
+            }
             mBinding.setSwitchItem(mSwitch);
             mBinding.alarmMenuRepeatLabel.setText(mRepeat.makeString(this));
             mBinding.alarmMenuSoundLabel.setText(mRingtoneTitle);
@@ -207,7 +228,7 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
                     Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                     if (uri != null) {
                         Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
-                        mRingtoneUri = uri == Uri.EMPTY ? getString(R.string.alarm_sound_default) : mRingtoneUri.toString();
+                        mRingtoneUri = uri.equals(Uri.EMPTY) ? getString(R.string.alarm_sound_default) : uri.toString();
                         mRingtoneTitle = ringtone.getTitle(this);
                         mBinding.alarmMenuSoundLabel.setText(mRingtoneTitle);
                     }
