@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,13 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
+import com.goqual.a10k.view.interfaces.ISwitchInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
@@ -34,6 +37,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     private CustomDialog mDeleteDialog = null;
     private CustomDialog mRenameDialog = null;
     private ISwitchOperationListener operationListener = null;
+    private STATE mCurrentToolbarState = STATE.DONE;
 
     public static FragmentMainSwitchList newInstance() {
         Bundle args = new Bundle();
@@ -44,6 +48,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
 
     @Override
     public void onClickEdit(STATE state) {
+        mCurrentToolbarState = state;
         getAdapter().setItemState(state == STATE.EDIT);
     }
 
@@ -54,6 +59,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         getAdapter().refresh();
 
         mBinding.setSwitchList(SwitchManager.getInstance());
+        mBinding.refresh.setRefreshing(false);
     }
 
     @Override
@@ -134,6 +140,15 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         mBinding.switchList.setAdapter(getAdapter());
         mBinding.switchList.setLayoutManager(new LinearLayoutManager(mContext));
 
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAdapter().clear();
+                ((ISwitchInteraction)getParentFragment()).refreshSwitchList();
+            }
+        });
+
         getAdapter().setOnRecyclerItemClickListener((id, position) -> {
             switch (id) {
                 case R.id.item_switch_btn_1:
@@ -180,19 +195,13 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                             })
                             .show();
                     break;
+                case R.id.item_switch_container:
+                    if (mCurrentToolbarState != STATE.EDIT) {
+                        ((ISwitchInteraction)getParentFragment()).changeCurrentPage(position);
+                    }
+                    break;
             }
         });
-    }
-
-    private void onItemClick(int position) {
-
-    }
-
-    private CustomDialog getRenameDialog() {
-        if (mRenameDialog == null) {
-            mRenameDialog = new CustomDialog(getActivity());
-        }
-        return mRenameDialog;
     }
 
     private CustomDialog getDeleteDialog() {

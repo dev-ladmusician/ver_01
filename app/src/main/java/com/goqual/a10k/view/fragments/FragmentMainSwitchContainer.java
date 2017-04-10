@@ -31,6 +31,7 @@ import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
+import com.goqual.a10k.view.interfaces.ISwitchInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -42,7 +43,7 @@ import retrofit2.adapter.rxjava.HttpException;
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-        implements SwitchPresenter.View<Switch>, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, ISwitchInteraction, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
@@ -69,6 +70,24 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     @Override
     public void loadingStop() {
 
+    }
+
+    /**
+     * 스위치 리스트에서 이름 눌렀을 시 each 페이지로 이동 할 때 호출
+     * @param position
+     */
+    @Override
+    public void changeCurrentPage(int position) {
+        mCurrentPage = position + 1;
+        mBinding.viewPager.setCurrentItem(mCurrentPage);
+    }
+
+    /**
+     * switchList에서 pull down refresh 했을 때 호출
+     */
+    @Override
+    public void refreshSwitchList() {
+        onResume();
     }
 
     @Override
