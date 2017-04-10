@@ -254,13 +254,18 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     };
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        backPressUtil.onBackPressed();
+    public PreferenceHelper getPreferenceHelper() {
+        return null;
     }
 
     @Override
-    public PreferenceHelper getPreferenceHelper() {
-        return null;
+    public void onBackPressed() {
+        if (mEventToolbarClick.getState() == EDIT) {
+            mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
+            passToolbarClickEvent(mEventToolbarClick.getState());
+            return;
+        } else {
+            backPressUtil.onBackPressed();
+        }
     }
 }
