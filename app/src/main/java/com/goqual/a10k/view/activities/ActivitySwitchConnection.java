@@ -1,5 +1,6 @@
 package com.goqual.a10k.view.activities;
 
+import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.Toolbar;
@@ -15,15 +16,21 @@ import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.fragments.connect.FragmentConnectInfo;
 import com.goqual.a10k.view.fragments.connect.FragmentConnectSelectWifi;
-import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.fragments.connect.FragmentConnectSetSwitch;
 import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IAuthInteraction;
 
 public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnectionBinding>
-        implements ConnectPresenter.View, IActivityFragmentPageChangeListener, IActivityInteraction {
+        implements ConnectPresenter.View, IActivityFragmentPageChangeListener,
+            IActivityInteraction, IAuthInteraction {
 
     public static final String TAG = ActivitySwitchConnection.class.getSimpleName();
 
     private ConnectPresenter mPresenter;
+    private ScanResult mSelectedWifi;
+    private String mSelectedWifiPasswd;
+    private ScanResult m10KAP;
 
     @Override
     protected int getLayoutId() {
@@ -59,7 +66,7 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
             fragment = FragmentConnectSelectWifi.newInstance();
         }
         else if(page == getResources().getInteger(R.integer.frag_set_switch)) {
-
+            fragment = FragmentConnectSetSwitch.newInstance();
         }
         else if(page == getResources().getInteger(R.integer.frag_rename)) {
 
@@ -68,6 +75,32 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
                 .beginTransaction()
                 .replace(mBinding.activityMain.getId(), fragment)
                 .commit();
+    }
+
+    @Override
+    public ScanResult getSelectedWifi() {
+        return mSelectedWifi;
+    }
+
+    @Override
+    public String getSelectedWifiPasswd() {
+        return mSelectedWifiPasswd;
+    }
+
+    @Override
+    public void setSelectedWifi(android.net.wifi.ScanResult wifi, String passwd) {
+        this.mSelectedWifi = wifi;
+        this.mSelectedWifiPasswd = passwd;
+    }
+
+    @Override
+    public ScanResult get10KAP() {
+        return this.m10KAP;
+    }
+
+    @Override
+    public void set10KAP(ScanResult ap) {
+        this.m10KAP = ap;
     }
 
     @Override

@@ -70,6 +70,7 @@
     <string name="info_content_sub">또로롱 소리가 나면 아래 버튼을 불러주세요.</string>
     <string name="info_btn_start">연결 시작</string>
 
+    <string name="select_wifi_title">연결한 Wi-Fi 선택</string>
     <string name="select_wifi_info">스위치가 인터넷에 연결될 Wi-Fi를 선택해주세요 \n(5G Wi-Fi는 목록에 보이지 않아요)</string>
     <string name="select_wifi_permission_rationale">스위치와 연결하기 위해서는 권한이 필요합니다.</string>
     <string name="select_wifi_permission_denied">권한이 없으면 스위치와 연결할 수 없습니다.</string>
@@ -80,6 +81,8 @@
     <string name="select_wifi_error_dialog_content">AP모드된 스위치가 없습니다.</string>
     <string name="select_wifi_error_dialog_btn_confirm">Retry</string>
     <string name="select_wifi_error_dialog_btn_cancel">Cancel</string>
+    <string name="connect_select_wifi_not_connect_title">10K AP 연결 실패</string>
+    <string name="connect_select_wifi_not_connect_content">선택하신 10K 스위치 AP에 연결 할 수 없습니다</string>
 
     <string name="select_wifi_pass_dialog_title">Wi-Fi: </string>
     <string name="select_wifi_pass_dialog_content">Wi-Fi 비밀번호를 입력해주세요.</string>

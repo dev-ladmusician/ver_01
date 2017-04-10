@@ -44,6 +44,7 @@ public class ActivitySplash extends AppCompatActivity {
                         ActivityCompat.finishAffinity(this);
                         System.exit(0);
                     })
+                    .setPositiveButton(false)
                     .show();
         }
         else {
