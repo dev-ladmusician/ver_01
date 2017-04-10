@@ -45,7 +45,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
     private NfcTagPresenter mPresenter;
     private Switch mSwitch;
     private int mSwitchPosition;
-
+    private CustomDialog mRenameDialog = null;
     private Realm mRealm;
 
     private int mCurrentPage = 1;
@@ -186,6 +186,24 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
                             .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                             .show();
                     break;
+                case R.id.item_switch_rename:
+                    getRenameDialog().isEditable(true)
+                            .setTitleText(R.string.nfc_rename_update_title)
+                            .setEditTextHint(getAdapter().getItem(position).getTitle())
+                            .setPositiveButton(getString(R.string.common_ok), (dialog, which)-> {
+                                String title = getRenameDialog().getEditTextMessage();
+                                if (title.length() != 0) {
+                                    getAdapter().getItem(position).setTitle(title);
+                                    getPresenter().update(getAdapter().getItem(position), position);
+                                    getRenameDialog().dismiss();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
+                                getRenameDialog().setEditTextMessage("");
+                                getRenameDialog().dismiss();
+                            })
+                            .show();
+                    break;
             }
         });
 
@@ -287,5 +305,12 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             mPresenter = new NfcTagPresenterImpl(getActivity(), this, getAdapter());
         }
         return mPresenter;
+    }
+
+    private CustomDialog getRenameDialog() {
+        if (mRenameDialog == null) {
+            mRenameDialog = new CustomDialog(getActivity());
+        }
+        return mRenameDialog;
     }
 }
