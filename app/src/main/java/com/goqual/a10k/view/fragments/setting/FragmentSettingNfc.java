@@ -18,6 +18,7 @@ import com.goqual.a10k.presenter.impl.NfcTagPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.activities.ActivityNfcDetect;
+import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -160,6 +161,10 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             switch (viewId) {
                 case R.id.item_nfc_container:
                     LogUtil.e(TAG, "item click");
+                    Intent setupReq = new Intent(getContext(), ActivityNfcSetup.class);
+                    setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, getAdapter().getItem(position).getTag());
+                    setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
+                    startActivity(setupReq);
                     break;
                 case R.id.item_nfc_delete:
                     CustomDialog customDialog = new CustomDialog(getActivity());
