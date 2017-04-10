@@ -5,6 +5,6 @@ package com.goqual.a10k.view.interfaces;
  */
 
 public interface IAlarmInteraction {
-    void setBtns(boolean btn1, boolean btn2, boolean btn3);
+    void setBtns(Boolean btn1, Boolean btn2, Boolean btn3);
     void setSwitch(int item);
 }

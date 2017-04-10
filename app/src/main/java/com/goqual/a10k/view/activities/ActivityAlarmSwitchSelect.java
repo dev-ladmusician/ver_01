@@ -10,12 +10,17 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmSwitchSelectBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
+import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.Alarm;
+import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitch;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitchBtn;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarSaveClickListener;
+
+import org.parceler.Parcels;
 
 /**
  * Created by hanwool on 2017. 3. 13..
@@ -72,10 +77,11 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
     }
 
     @Override
-    public void setBtns(boolean btn1, boolean btn2, boolean btn3) {
+    public void setBtns(Boolean btn1, Boolean btn2, Boolean btn3) {
         Intent result = getIntent();
-        result.putExtra(EXTRA_SWITCH, mSwitchPos);
-        result.putExtra(EXTRA_BTN, new boolean[]{btn1, btn2, btn3});
+        Switch item = SwitchManager.getInstance().getItem(mSwitchPos);
+        Alarm param = new Alarm(btn1, btn2, btn3, item.getBtnCount(), item.get_bsid(), item.getTitle());
+        result.putExtra(getString(R.string.arg_alarm), Parcels.wrap(param));
         setResult(RESULT_OK, result);
         finish();
     }

@@ -7,8 +7,8 @@
             name="activity"
             type="com.goqual.a10k.view.activities.ActivityAlarmEdit"/>
         <variable
-            name="switchItem"
-            type="com.goqual.a10k.model.entity.Switch"/>
+            name="alarmItem"
+            type="com.goqual.a10k.model.entity.Alarm"/>
         <import
             type="android.view.View"
             alias="View"/>
@@ -118,18 +118,18 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/alarm_btn_1"
                         android:textColor="@color/grey_03"
-                        android:text="@{switchItem == null ? @string/alarm_select_switch_title_default : switchItem.title}"/>
+                        android:text="@{!alarmItem.mIsSetSwitch ? @string/alarm_select_switch_title_default : alarmItem.title}"/>
 
                     <TextView
                         android:id="@+id/alarm_btn_1"
-                        android:layout_width="@dimen/item_absence_btn_size"
+                        android:layout_width="17dp"
                         android:layout_height="@dimen/item_absence_btn_size"
                         android:layout_toLeftOf="@+id/item_alarm_btn_2"
                         android:layout_marginRight="@dimen/padding_16"
                         android:layout_marginLeft="@dimen/padding_16"
                         android:layout_centerVertical="true"
-                        android:visibility="@{switchItem == null ? View.GONE : View.VISIBLE}"
-                        android:background="@{switchItem!=null &amp;&amp; switchItem.btn1 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
+                        android:visibility="@{!alarmItem.mIsSetSwitch ? View.GONE : View.VISIBLE}"
+                        android:background="@{alarmItem.btn1 == null ?  @drawable/style_circle_dash : alarmItem.btn1 ?  @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
 
                     <TextView
                         android:id="@+id/alarm_btn_2"
@@ -138,16 +138,16 @@
                         android:layout_toLeftOf="@+id/item_alarm_btn_3"
                         android:layout_marginRight="@dimen/padding_16"
                         android:layout_centerVertical="true"
-                        android:visibility="@{switchItem == null ? View.GONE : switchItem.btnCount &lt; 2  ? View.GONE : View.VISIBLE}"
-                        android:background="@{switchItem!=null &amp;&amp; switchItem.btn2 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
+                        android:visibility="@{!alarmItem.mIsSetSwitch ? View.GONE : alarmItem.btncount &lt; 2  ? View.GONE : View.VISIBLE}"
+                        android:background="@{alarmItem.btn2 == null ?  @drawable/style_circle_dash : alarmItem.btn2 ?  @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
 
                     <TextView
                         android:id="@+id/alarm_btn_3"
                         android:layout_width="@dimen/item_absence_btn_size"
                         android:layout_height="@dimen/item_absence_btn_size"
                         android:layout_centerVertical="true"
-                        android:visibility="@{switchItem == null ? View.GONE : switchItem.btnCount &lt; 2  ? View.GONE : View.VISIBLE}"
-                        android:background="@{switchItem!=null &amp;&amp; switchItem.btn3 ? @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
+                        android:visibility="@{!alarmItem.mIsSetSwitch ? View.GONE : alarmItem.btncount &lt; 2  ? View.GONE : View.VISIBLE}"
+                        android:background="@{alarmItem.btn3 == null ?  @drawable/style_circle_dash : alarmItem.btn3 ?  @drawable/style_btn_circle_blue : @drawable/style_btn_circle_grey}" />
                 </LinearLayout>
 
                 <android.support.v7.widget.AppCompatImageView
@@ -183,7 +183,7 @@
                     android:layout_toLeftOf="@+id/alarm_menu_repeat_arrow"
                     android:layout_marginRight="@dimen/padding_16"
                     android:textColor="@color/grey_03"
-                    android:text="@string/alarm_repeat_never"/>
+                    android:text='@{alarmItem.repeatStr == "" ? @string/alarm_repeat_never : alarmItem.repeatStr}' />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/alarm_menu_repeat_arrow"
@@ -218,7 +218,7 @@
                     android:layout_toLeftOf="@+id/alarm_menu_sound_arrow"
                     android:layout_marginRight="@dimen/padding_16"
                     android:textColor="@color/grey_03"
-                    android:text="@string/alarm_sound_default"/>
+                    android:text='@{alarmItem.ringtone_title == "" ? @string/alarm_sound_default : alarmItem.ringtone_title}' />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/alarm_menu_sound_arrow"

@@ -7,27 +7,27 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 
 public class Switch implements Cloneable{
-    private int _connectionid;
-    private int _bsid;
-    private int btncount;
-    private int seq;
-    private boolean btn1;
-    private boolean btn2;
-    private boolean btn3;
-    private String hw;
-    private String fw;
+    public int _connectionid;
+    public int _bsid;
+    public int btncount;
+    public int seq;
+    public boolean btn1;
+    public boolean btn2;
+    public boolean btn3;
+    public String hw;
+    public String fw;
     public String title;
-    private String macaddr;
-    private boolean isavailable;
-    private boolean isadmin;
-    private Integer _absenceid;
-    private boolean outlet;
+    public String macaddr;
+    public boolean isavailable;
+    public boolean isadmin;
+    public Integer _absenceid;
+    public boolean outlet;
     public boolean mIsStateView;
 
-    private String WIFI_SSID = "";
-    private String WIFI_BSSID = "";
-    private String WIFI_PASSWORD = "";
-    private String WIFI_CAPABILITY = "";
+    public String WIFI_SSID = "";
+    public String WIFI_BSSID = "";
+    public String WIFI_PASSWORD = "";
+    public String WIFI_CAPABILITY = "";
 
     public Switch() {
     }

@@ -247,6 +247,8 @@
     <string name="alarm_delete_content">\n알람을 삭제 하시겠습니까?</string>
     <string name="alarm_delete_error">알람을 삭제하는데 오류가 발생했습니다.</string>
 
+    <string name="alarm_add_error_title">알람 등록 오류</string>
+    <string name="alarm_add_error_content">알람을 등록하는데 오류가 발생했습니다. \n 다시 한번 시도해주세요.</string>
     <string name="alarm_add_error_no_switch_title">등록된 스위치 없음</string>
     <string name="alarm_add_error_no_switch_content">10K 스위치를 먼저 등록하신 후\n10K 스위치를 다양한 기능을 사용해보세요.</string>
 

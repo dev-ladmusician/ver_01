@@ -7,16 +7,12 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentAlarmSelectSwitchBtnBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.Alarm;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
-import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarSaveClickListener;
-
-import rx.functions.Action1;
 
 
 /**
@@ -30,7 +26,7 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
     private static final String SWITCH_TITLE = "switch_title";
 
     private int mSwitchPosition;
-    private Switch mSwitch;
+    private Alarm mAlarm;
 
     public static FragmentAlarmSelectSwitchBtn newInstance(int switchPosition) {
         Bundle args = new Bundle();
@@ -43,7 +39,7 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
 
     @Override
     public void onSaveClickEdit() {
-        ((IAlarmInteraction)getActivity()).setBtns(mSwitch.isBtn1(), mSwitch.isBtn2(), mSwitch.isBtn3());
+        ((IAlarmInteraction)getActivity()).setBtns(mAlarm.getBtn1(), mAlarm.getBtn2(), mAlarm.getBtn3());
     }
 
     @Override
@@ -64,55 +60,65 @@ public class FragmentAlarmSelectSwitchBtn extends BaseFragment<FragmentAlarmSele
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Switch item = null;
+        mAlarm = new Alarm();
+
         if(getArguments() != null) {
             mSwitchPosition = getArguments().getInt(SWITCH_TITLE, -1);
             try {
-                mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition).clone();
+                item = SwitchManager.getInstance().getItem(mSwitchPosition).clone();
+                mAlarm.setBtncount(item.getBtncount());
             }
             catch (CloneNotSupportedException e) {
                 LogUtil.e(TAG, e.getMessage(), e);
-                mSwitch = SwitchManager.getInstance().getItem(mSwitchPosition);
+                item = SwitchManager.getInstance().getItem(mSwitchPosition);
             }
         }
-        subEvent();
-    }
 
-    private void subEvent() {
-        RxBus.getInstance().toObserverable()
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object event) {
-                        if(event instanceof EventToolbarClick) {
-                            if(((EventToolbarClick) event).getState() == IToolbarClickListener.STATE.DONE) {
-                                ((IAlarmInteraction)getActivity()).setBtns(mSwitch.isBtn1(), mSwitch.isBtn2(), mSwitch.isBtn3());
-                            }
-                        }
-                    }
-                });
+        mAlarm.setBtncount(item.getBtncount());
+        mAlarm.setBtn1(null);
+        mAlarm.setBtn2(null);
+        mAlarm.setBtn3(null);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBinding.setFragment(this);
-        mSwitch.setBtn1(false);
-        mSwitch.setBtn2(false);
-        mSwitch.setBtn3(false);
-        mBinding.setItemSwitch(mSwitch);
+
+        mAlarm.setBtn1(null);
+        mAlarm.setBtn2(null);
+        mAlarm.setBtn3(null);
+        mBinding.setItemAlarm(mAlarm);
     }
 
     public void onBtnClick(View view) {
         switch (view.getId()) {
             case R.id.switch_btn_1:
-                mSwitch.setBtn1(!mSwitch.isBtn1());
+                Boolean btn1;
+                if (mAlarm.getBtn1() != null)
+                    if (mAlarm.getBtn1()) btn1 = false;
+                    else btn1 = null;
+                else btn1 = true;
+                mAlarm.setBtn1(btn1);
                 break;
             case R.id.switch_btn_2:
-                mSwitch.setBtn2(!mSwitch.isBtn2());
+                Boolean btn2;
+                if (mAlarm.getBtn2() != null)
+                    if (mAlarm.getBtn2()) btn2 = false;
+                    else btn2 = null;
+                else btn2 = true;
+                mAlarm.setBtn2(btn2);
                 break;
             case R.id.switch_btn_3:
-                mSwitch.setBtn3(!mSwitch.isBtn3());
+                Boolean btn3;
+                if (mAlarm.getBtn3() != null)
+                    if (mAlarm.getBtn3()) btn3 = false;
+                    else btn3 = null;
+                else btn3 = true;
+                mAlarm.setBtn3(btn3);
                 break;
         }
-        mBinding.setItemSwitch(mSwitch);
+        mBinding.setItemAlarm(mAlarm);
     }
 }
