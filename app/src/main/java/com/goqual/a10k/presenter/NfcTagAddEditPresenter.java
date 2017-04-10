@@ -6,7 +6,7 @@ import com.goqual.a10k.model.entity.Nfc;
  * Created by hanwool on 2017. 2. 28..
  */
 
-public interface NfcTagCreatePresenter {
+public interface NfcTagAddEditPresenter {
     void add(Nfc item);
 
     interface View<T> extends BasePresenterView<T> {

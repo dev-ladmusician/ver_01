@@ -3,18 +3,13 @@ package com.goqual.a10k.presenter.impl;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.Alarm;
-import com.goqual.a10k.model.entity.PagenationWrapper;
-import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.AlarmService;
 import com.goqual.a10k.presenter.AlarmPresenter;
-import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.List;
-
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -33,35 +28,6 @@ public class AlarmPresenterImpl implements AlarmPresenter {
         this.mContext = ctx;
         this.mView = mView;
         this.mAlarmAdapterDataModel = dataModel;
-    }
-
-    @Override
-    public void add(Alarm item) {
-        mView.loadingStart();
-        getAlarmService().getAlarmApi().add(
-                item.get_bsid(),
-                item.getRingtone(),
-                item.getRingtone_title(),
-                item.getHour(),
-                item.getMin(),
-                item.isSun(),
-                item.isMon(),
-                item.isTue(),
-                item.isWed(),
-                item.isThur(),
-                item.isFri(),
-                item.isSat(),
-                item.getBtn1(),
-                item.getBtn2(),
-                item.getBtn3())
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultDTO -> {
-                            mView.loadingStop();
-                        },
-                        mView::onError,
-                        () -> mView.refresh());
     }
 
     @Override
@@ -106,16 +72,17 @@ public class AlarmPresenterImpl implements AlarmPresenter {
         getAlarmService().getAlarmApi().gets(page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
-                .map(PagenationWrapper::getResult)
-                .flatMap(items -> Observable.from(items))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                            LogUtil.d(TAG, result.toString());
-                            mAlarmAdapterDataModel.addItem(result);
+                            ((IPaginationPage)mView).setPage(result.getPage());
+                            ((IPaginationPage)mView).setLastPage(result.getLastPage());
+
+                            for(Alarm each : result.getResult()) {
+                                mView.addItem(each);
+                            }
                         },
                         mView::onError,
-                        mView::refresh
-                );
+                        mView::refresh);
     }
 
     @Override

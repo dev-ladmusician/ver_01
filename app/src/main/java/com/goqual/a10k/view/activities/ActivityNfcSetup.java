@@ -11,8 +11,8 @@ import com.goqual.a10k.databinding.ActivityNfcSetupBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
-import com.goqual.a10k.presenter.NfcTagCreatePresenter;
-import com.goqual.a10k.presenter.impl.NfcTagCreatePresenterImpl;
+import com.goqual.a10k.presenter.NfcTagAddEditPresenter;
+import com.goqual.a10k.presenter.impl.NfcTagAddEditPresenterImpl;
 import com.goqual.a10k.util.KeyPadUtil;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.dialog.CustomDialog;
@@ -28,7 +28,7 @@ import com.goqual.a10k.view.dialog.CustomDialog;
  */
 
 public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding>
-    implements NfcTagCreatePresenter.View {
+    implements NfcTagAddEditPresenter.View {
 
     public static final String TAG = ActivityNfcSetup.class.getSimpleName();
 
@@ -39,7 +39,7 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding>
     private Switch mSwitch;
     private int mSwitchPosition;
     private String mNfcId;
-    private NfcTagCreatePresenter mPresenter = null;
+    private NfcTagAddEditPresenter mPresenter = null;
 
     @Override
     protected int getLayoutId() {
@@ -132,9 +132,9 @@ public class ActivityNfcSetup extends BaseActivity<ActivityNfcSetupBinding>
         finish();
     }
 
-    private NfcTagCreatePresenter getPresenter() {
+    private NfcTagAddEditPresenter getPresenter() {
         if (mPresenter == null)
-            mPresenter = new NfcTagCreatePresenterImpl(getApplicationContext(), this);
+            mPresenter = new NfcTagAddEditPresenterImpl(getApplicationContext(), this);
         return mPresenter;
     }
 }

@@ -2,7 +2,6 @@ package com.goqual.a10k.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 
 import com.goqual.a10k.R;
@@ -13,8 +12,6 @@ import com.goqual.a10k.view.base.BaseActivity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.parceler.Parcels;
-
-import java.util.ArrayList;
 
 /**
  * Created by hanwool on 2017. 3. 14..
@@ -51,40 +48,48 @@ public class ActivityAlarmRepeat extends BaseActivity<ActivityAlarmRepeatBinding
     @Override
     public void onBtnClick(View view) {
         LogUtil.d(TAG, "onBtnClick::"+view.getId());
-        if(view.getId() == R.id.toolbar_back) {
-            Intent result = getIntent();
-            result.putExtra(EXTRA_REPEAT_DAYS, Parcels.wrap(repeats));
-            setResult(RESULT_OK, result);
-            finish();
+        switch (view.getId()) {
+            case R.id.toolbar_save:
+                Intent result = getIntent();
+                result.putExtra(EXTRA_REPEAT_DAYS, Parcels.wrap(repeats));
+                setResult(RESULT_OK, result);
+            case R.id.toolbar_back:
+                finish();
+                break;
+            default:
+                // 요일 선택
+                handleRepeat(view);
+                break;
         }
-        else {
-            int index = Integer.parseInt((String)view.getTag());
-            LogUtil.d(TAG, "onBtnClick::index: " + index);
-            switch (index) {
-                case SUNDAY:
-                    repeats.setSun(!repeats.isSun());
-                    break;
-                case MONDAY:
-                    repeats.setMon(!repeats.isMon());
-                    break;
-                case TUESDAY:
-                    repeats.setTue(!repeats.isTue());
-                    break;
-                case WEDNESDAY:
-                    repeats.setWed(!repeats.isWed());
-                    break;
-                case THURSDAY:
-                    repeats.setThu(!repeats.isThu());
-                    break;
-                case FRIDAY:
-                    repeats.setFri(!repeats.isFri());
-                    break;
-                case SATURDAY:
-                    repeats.setSat(!repeats.isSat());
-                    break;
-            }
-            LogUtil.d(TAG, "Repeats: " + ToStringBuilder.reflectionToString(repeats));
-            mBinding.setRepeats(repeats);
+    }
+
+    private void handleRepeat(View view) {
+        int index = Integer.parseInt((String)view.getTag());
+
+        switch (index) {
+            case SUNDAY:
+                repeats.setSun(!repeats.isSun());
+                break;
+            case MONDAY:
+                repeats.setMon(!repeats.isMon());
+                break;
+            case TUESDAY:
+                repeats.setTue(!repeats.isTue());
+                break;
+            case WEDNESDAY:
+                repeats.setWed(!repeats.isWed());
+                break;
+            case THURSDAY:
+                repeats.setThu(!repeats.isThu());
+                break;
+            case FRIDAY:
+                repeats.setFri(!repeats.isFri());
+                break;
+            case SATURDAY:
+                repeats.setSat(!repeats.isSat());
+                break;
         }
+        LogUtil.d(TAG, "Repeats: " + ToStringBuilder.reflectionToString(repeats));
+        mBinding.setRepeats(repeats);
     }
 }

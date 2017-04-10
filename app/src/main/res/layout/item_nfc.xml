@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_nfc_container">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="holder"
@@ -12,10 +11,12 @@
             alias="View"/>
     </data>
     <RelativeLayout
+        android:id="@+id/item_nfc_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_timer_height"
         android:paddingLeft="@dimen/padding_20"
         android:paddingRight="@dimen/padding_20"
+        android:onClick="@{holder::onBtnClick}"
         android:background="@drawable/style_border_bottom_grey">
 
         <RelativeLayout
@@ -47,6 +48,7 @@
                 android:id="@+id/item_nfc_ic"
                 android:layout_width="@dimen/footer_ic_size"
                 android:layout_height="@dimen/footer_ic_size"
+                android:visibility="@{itemNfc.isEditing ? View.GONE : View.VISIBLE}"
                 android:src="@drawable/ic_nfc"/>
 
             <TextView
@@ -57,6 +59,22 @@
                 android:layout_marginLeft="@dimen/padding_16"
                 android:layout_toRightOf="@+id/item_nfc_ic"
                 android:text="@{itemNfc.title}" />
+        </RelativeLayout>
+
+        <!-- rename -->
+        <RelativeLayout
+            android:id="@+id/item_switch_rename"
+            android:layout_toRightOf="@+id/item_nfc_content_container"
+            android:layout_width="@dimen/item_ic_container_size"
+            android:layout_height="match_parent"
+            android:visibility="@{itemNfc.isEditing ? View.VISIBLE : View.GONE}"
+            android:onClick="@{holder::onBtnClick}">
+
+            <ImageView
+                android:layout_width="@dimen/item_ic_size_m"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_rename"/>
         </RelativeLayout>
 
         <LinearLayout

@@ -163,20 +163,20 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     break;
                 case R.id.item_switch_rename:
                     LogUtil.e(TAG, "RENAME");
-                    getRenameDialog().isEditable(true)
+                    CustomDialog renameDialog = new CustomDialog(getActivity());
+                    renameDialog.isEditable(true)
                             .setTitleText(R.string.switch_rename_title)
                             .setEditTextHint(R.string.switch_rename_hit)
                             .setPositiveButton(getString(R.string.common_ok), (dialog, which)-> {
-                                if (getRenameDialog().getEditTextMessage().length() != 0) {
+                                if (renameDialog.getEditTextMessage().length() != 0) {
                                     ((ISwitchOperationListener) getParentFragment()).onSwitchRename(
-                                            position, getRenameDialog().getEditTextMessage());
-                                    getRenameDialog().dismiss();
+                                            position, renameDialog.getEditTextMessage());
+                                    renameDialog.dismiss();
                                 }
 
                             })
                             .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
-                                getRenameDialog().setEditTextMessage("");
-                                getRenameDialog().dismiss();
+                                renameDialog.dismiss();
                             })
                             .show();
                     break;

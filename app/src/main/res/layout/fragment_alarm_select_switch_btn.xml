@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="itemSwitch"
-            type="com.goqual.a10k.model.entity.Switch" />
+            name="itemAlarm"
+            type="com.goqual.a10k.model.entity.Alarm" />
 
         <variable
             name="fragment"
@@ -36,7 +36,7 @@
                 android:id="@+id/switch_each_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{itemSwitch.title}"
+                android:text="@{itemAlarm.title}"
                 android:textColor="@color/identitiy_02"
                 android:textStyle="bold"/>
 
@@ -53,9 +53,9 @@
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:onClick="@{fragment::onBtnClick}"
-                    android:text="@{itemSwitch.btn1 ? @string/btn_on : @string/btn_off}"
-                    android:textColor="@{itemSwitch.btn1 ? @color/white : @color/grey_03}"
-                    android:background="@{itemSwitch.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+                    android:text="@{itemAlarm.btn1 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemAlarm.btn1 == null ? @color/white : itemAlarm.btn1 ? @color/white : @color/grey_03}"
+                    android:background="@{itemAlarm.btn1 == null ? @drawable/style_btn_circle_grey : itemAlarm.btn1 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
 
                 <TextView
                     android:id="@+id/switch_btn_2"
@@ -67,10 +67,10 @@
                     android:layout_marginBottom="@dimen/switch_each_btn_margin"
                     android:layout_marginTop="@dimen/switch_each_btn_margin"
                     android:onClick="@{fragment::onBtnClick}"
-                    android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
-                    android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
-                    android:visibility="@{itemSwitch.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
-                    android:background="@{itemSwitch.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+                    android:text="@{itemAlarm.btn2 ? @string/btn_on : @string/btn_off}"
+                    android:textColor="@{itemAlarm.btn2 == null ? @color/white : itemAlarm.btn2 ? @color/white : @color/grey_03}"
+                    android:visibility="@{itemAlarm.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
+                    android:background="@{itemAlarm.btn2 == null ? @drawable/style_btn_circle_grey : itemAlarm.btn2 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
 
                 <TextView
                     android:id="@+id/switch_btn_3"
@@ -80,10 +80,10 @@
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_2"
                     android:onClick="@{fragment::onBtnClick}"
-                    android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
-                    android:visibility="@{itemSwitch.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
-                    android:text="@{itemSwitch.btn3 ? @string/btn_on : @string/btn_off}"
-                    android:background="@{itemSwitch.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
+                    android:textColor="@{itemAlarm.btn3 == null ? @color/white : itemAlarm.btn3 ? @color/white : @color/grey_03}"
+                    android:visibility="@{itemAlarm.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
+                    android:text="@{itemAlarm.btn3 ? @string/btn_on : @string/btn_off}"
+                    android:background="@{itemAlarm.btn3 == null ? @drawable/style_btn_circle_grey : itemAlarm.btn3 ? @drawable/selector_switch_btn_on : @drawable/selector_switch_btn_off}"/>
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

@@ -2,6 +2,7 @@ package com.goqual.a10k.model.entity;
 
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.goqual.a10k.R;
 
@@ -31,13 +32,33 @@ public class Alarm {
     public boolean fri;
     public boolean sat;
     public int _bsid;
-    public Boolean btn1;
-    public Boolean btn2;
-    public Boolean btn3;
+    public @Nullable Boolean btn1;
+    public @Nullable Boolean btn2;
+    public @Nullable Boolean btn3;
     public String title;
     public boolean state;
     public int btncount; // count of btn in switch
+    public String repeatStr;
     public boolean mIsDeletable;
+    public boolean mIsSetSwitch;
+
+    public Alarm() {
+    }
+
+    public Alarm(String repeatStr, String ringtone, String ringtone_title) {
+        this.ringtone = ringtone;
+        this.ringtone_title = ringtone_title;
+        this.repeatStr = repeatStr;
+    }
+
+    public Alarm(Boolean btn1, Boolean btn2, Boolean btn3, int btnCount, int bsid, String title) {
+        this.btn1 = btn1;
+        this.btn2 = btn2;
+        this.btn3 = btn3;
+        this.btncount = btnCount;
+        this._bsid = bsid;
+        this.title = title;
+    }
 
     public int get_alarmid() {
         return _alarmid;
@@ -143,27 +164,27 @@ public class Alarm {
         this._bsid = _bsid;
     }
 
-    public Boolean getBtn1() {
+    public @Nullable Boolean getBtn1() {
         return btn1;
     }
 
-    public void setBtn1(Boolean btn1) {
+    public void setBtn1(@Nullable Boolean btn1) {
         this.btn1 = btn1;
     }
 
-    public Boolean getBtn2() {
+    public @Nullable Boolean getBtn2() {
         return btn2;
     }
 
-    public void setBtn2(Boolean btn2) {
+    public void setBtn2(@Nullable Boolean btn2) {
         this.btn2 = btn2;
     }
 
-    public Boolean getBtn3() {
+    public @Nullable Boolean getBtn3() {
         return btn3;
     }
 
-    public void setBtn3(Boolean btn3) {
+    public void setBtn3(@Nullable Boolean btn3) {
         this.btn3 = btn3;
     }
 
@@ -199,6 +220,14 @@ public class Alarm {
         this.mIsDeletable = mIsDeletable;
     }
 
+    public String getRepeatStr() {
+        return repeatStr;
+    }
+
+    public void setRepeatStr(String repeatStr) {
+        this.repeatStr = repeatStr;
+    }
+
     public void setRepeats(Repeat repeats) {
         setSun(repeats.isSun());
         setMon(repeats.isMon());
@@ -209,11 +238,12 @@ public class Alarm {
         setSat(repeats.isSat());
     }
 
-    public void setSwitch(Switch item) {
-        set_bsid(item.get_bsid());
-        setBtn1(item.isBtn1());
-        setBtn2(item.isBtn2());
-        setBtn3(item.isBtn3());
+    public boolean ismIsSetSwitch() {
+        return mIsSetSwitch;
+    }
+
+    public void setmIsSetSwitch(boolean mIsSetSwitch) {
+        this.mIsSetSwitch = mIsSetSwitch;
     }
 
     @Override
