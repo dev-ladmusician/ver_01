@@ -12,6 +12,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <!-- no item ui -->
         <RelativeLayout
             android:id="@+id/alarm_no_item_container"
             android:layout_width="match_parent"

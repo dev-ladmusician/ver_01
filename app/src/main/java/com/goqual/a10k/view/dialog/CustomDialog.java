@@ -160,6 +160,11 @@ public class CustomDialog extends Dialog {
         return this;
     }
 
+    public CustomDialog setEditTextLimit(int length) {
+        mModel.setLimitLength(length);
+        return this;
+    }
+
     public EditText getEditText() {
         return mBinding.dialogEdit;
     }

@@ -22,6 +22,7 @@ import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -95,7 +96,9 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         mBinding.refresh.setRefreshing(false);
         mAdapter.refresh();
 
-        setToolbarHandler();
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_switch_setting_nfc))
+            setToolbarHandler();
     }
 
     @Override
@@ -160,11 +163,13 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
             switch (viewId) {
                 case R.id.item_nfc_container:
-                    LogUtil.e(TAG, "item click");
-                    Intent setupReq = new Intent(getContext(), ActivityNfcSetup.class);
-                    setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, getAdapter().getItem(position).getTag());
-                    setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
-                    startActivity(setupReq);
+                    if (mCurrentToolbarState == STATE.EDIT) {
+                        LogUtil.e(TAG, "item click");
+                        Intent setupReq = new Intent(getContext(), ActivityNfcSetup.class);
+                        setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, getAdapter().getItem(position).getTag());
+                        setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
+                        startActivity(setupReq);
+                    }
                     break;
                 case R.id.item_nfc_delete:
                     CustomDialog customDialog = new CustomDialog(getActivity());
@@ -181,7 +186,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
 
                     customDialog.isEditable(false)
                             .setTitleText(R.string.nfc_delete_title)
-                            .setMessageText(R.string.nfc_delete_content)
+                            .setMessageText("[" + getAdapter().getItem(position).getTitle() + "] " + getString(R.string.nfc_delete_content).toString())
                             .setPositiveButton(getString(R.string.common_delete), onClickListener)
                             .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                             .show();

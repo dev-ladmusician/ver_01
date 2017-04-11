@@ -14,19 +14,21 @@ import java.util.TimeZone;
 
 @Parcel
 public class Absence {
-    private int _absenceid;
-    private int start_hour;
-    private int start_min;
-    private int end_hour;
-    private int end_min;
-    private int _bsid;
+    public int _absenceid;
+    public int start_hour;
+    public int start_min;
+    public int end_hour;
+    public int end_min;
+    public int _bsid;
     public boolean btn1;
     public boolean btn2;
     public boolean btn3;
-    private String title;
-    private boolean state;
-    private int btncount; // count of btn in switch
-    private boolean mIsDeletable;
+    public String title;
+    public boolean state;
+    public int btncount; // count of btn in switch
+    public boolean mIsDeletable;
+    public boolean mIsSetStartTime;
+    public boolean mIsSetEndTime;
 
     public Absence() {
 
@@ -36,10 +38,6 @@ public class Absence {
 
     public Absence(Switch mSwitch) {
         this._bsid = mSwitch.get_bsid();
-        this.start_hour = 19;
-        this.start_min = 0;
-        this.end_hour = 22;
-        this.end_min = 30;
         this.btncount = mSwitch.getBtnCount();
         this.state = true;
     }
@@ -148,6 +146,22 @@ public class Absence {
         this.mIsDeletable = mIsDeletable;
     }
 
+    public boolean ismIsSetStartTime() {
+        return mIsSetStartTime;
+    }
+
+    public void setmIsSetStartTime(boolean mIsSetStartTime) {
+        this.mIsSetStartTime = mIsSetStartTime;
+    }
+
+    public boolean ismIsSetEndTime() {
+        return mIsSetEndTime;
+    }
+
+    public void setmIsSetEndTime(boolean mIsSetEndTime) {
+        this.mIsSetEndTime = mIsSetEndTime;
+    }
+
     public CharSequence getStartTimeString() {
         StringBuilder stringBuilder = new StringBuilder();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
@@ -155,8 +169,6 @@ public class Absence {
         calendar.set(Calendar.HOUR_OF_DAY, start_hour);
         calendar.set(Calendar.MINUTE, start_min);
         calendar.setTimeZone(TimeZone.getDefault());
-        LogUtil.d("Absence", calendar.getTime().toString());
-        LogUtil.d("Absence", calendar.toString());
         stringBuilder.append(simpleDateFormat.format(calendar.getTime()));
         return stringBuilder;
     }

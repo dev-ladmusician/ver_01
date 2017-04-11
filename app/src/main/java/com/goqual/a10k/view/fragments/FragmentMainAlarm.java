@@ -18,11 +18,13 @@ import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.ResourceUtil;
-import com.goqual.a10k.view.activities.ActivityAlarmEdit;
+import com.goqual.a10k.view.activities.ActivityAlarmAddEdit;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -34,7 +36,7 @@ import org.parceler.Parcels;
  */
 
 public class FragmentMainAlarm extends BaseFragment<FragmentMainAlarmBinding>
-implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
+implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage, IMainActivityInteraction {
     public static final String TAG = FragmentMainAlarm.class.getSimpleName();
 
     private static final int REQ_NEW_ALARM = 101;
@@ -51,6 +53,19 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
         FragmentMainAlarm fragment = new FragmentMainAlarm();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * switch가 삭제 됬을 때 호출
+     * @param switchId
+     */
+    @Override
+    public void deleteSwitchEvent(int switchId) {
+        getAdapter().deleteAlarmBySwitchId(switchId);
+
+        if (getAdapter().getItemCount() == 0) {
+            mBinding.alarmNoItemContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -97,18 +112,19 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     public void refresh() {
         loadingStop();
         mBinding.refresh.setRefreshing(false);
-        getAdapter().notifyDataSetChanged();
+        getAdapter().refresh();
 
         if(mAdapter.getSize() > 0) {
             mBinding.alarmNoItemContainer.setVisibility(View.GONE);
             mBinding.refresh.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mBinding.alarmNoItemContainer.setVisibility(View.VISIBLE);
             mBinding.refresh.setVisibility(View.GONE);
         }
 
-        setToolbarHandler();
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_main_alarm))
+            setToolbarHandler();
     }
 
     @Override
@@ -119,6 +135,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     @Override
     public void addItem(Alarm item) {
         getAdapter().addItem(item);
+        getAdapter().refresh();
     }
 
     @Nullable
@@ -184,7 +201,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
             switch (viewId) {
                 case R.id.item_alarm_container:
                     LogUtil.e(TAG, "item alarm container click");
-                    Intent intent = new Intent(getActivity(), ActivityAlarmEdit.class);
+                    Intent intent = new Intent(getActivity(), ActivityAlarmAddEdit.class);
                     intent.putExtra(
                             getString(R.string.arg_alarm),
                             Parcels.wrap(getAdapter().getItem(position)));
@@ -194,6 +211,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
                     new CustomDialog(getActivity())
                             .setTitleText(R.string.alarm_delete_title)
                             .setMessageText(R.string.alarm_delete_content)
+                            .isEditable(false)
                             .setPositiveButton(getString(R.string.common_delete), (dialog, which) -> {
                                 getPresenter().delete(position);
                                 dialog.dismiss();
@@ -233,7 +251,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     public void onBtnClick(View view) {
         if(view.getId() == R.id.alarm_no_item_container) {
             if (checkExistSwitch())
-                startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
+                startActivity(new Intent(getActivity(), ActivityAlarmAddEdit.class));
         }
     }
 
@@ -277,7 +295,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        if(resultCode == Activity.RESULT_OK && data != null) {
 //            if(requestCode == REQ_NEW_ALARM) {
-//                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmEdit.EXTRA_ALARM));
+//                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmAddEdit.EXTRA_ALARM));
 //                getPresenter().add(alarm);
 //                getAdapter().addItem(alarm);
 //            }

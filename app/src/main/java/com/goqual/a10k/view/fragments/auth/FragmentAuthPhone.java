@@ -2,19 +2,16 @@ package com.goqual.a10k.view.fragments.auth;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentAuthPhoneBinding;
-import com.goqual.a10k.presenter.impl.PhoneAuthPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
-
-import java.util.regex.Pattern;
 
 /**
  * Created by hanwool on 2017. 2. 24..
@@ -24,23 +21,11 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
     public static final String TAG = FragmentAuthPhone.class.getSimpleName();
 
     public static final String PHONE_NUMBER = "phone_number";
-
-    private static String phoneNumber;
-    private static String phoneCountryCode;
-
     private IAuthActivityInteraction mInteraction;
 
-    public static FragmentAuthPhone newInstance(String phoneNumber, String countryCode) {
-
+    public static FragmentAuthPhone newInstance() {
         Bundle args = new Bundle();
-
         FragmentAuthPhone fragment = new FragmentAuthPhone();
-        args.putString(PHONE_NUMBER, phoneNumber);
-        fragment.setArguments(args);
-
-        phoneNumber = phoneNumber;
-        phoneCountryCode = countryCode;
-
         return fragment;
     }
 
@@ -84,14 +69,31 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
 
         // set init country code
         mBinding.authPhoneEdit.setHint(R.string.auth_phone_edit_hint);
-        mBinding.authPhoneEdit.setDefaultCountry(phoneCountryCode.toUpperCase());
+        mBinding.authPhoneEdit.setDefaultCountry("kr");
     }
 
     public void onBtnClick(View view) {
         if (mBinding.authPhoneEdit.isValid()) {
             mInteraction.requestSmsToken(mBinding.authPhoneEdit.getPhoneNumber().toString());
         } else {
-            Snackbar.make(mBinding.getRoot(), R.string.auth_phone_eror_invalid_number, Snackbar.LENGTH_LONG).show();
+            CustomDialog dialog = new CustomDialog(getActivity());
+            dialog.isEditable(true)
+                    .isEditable(false)
+                    .setTitleText(R.string.auth_phone_eror_invalid_number_title)
+                    .setMessageText(R.string.auth_phone_eror_invalid_number_content)
+                    .setPositiveButton(false)
+                    .setNegativeButton(getString(R.string.common_cancel), (dia, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         }
+    }
+
+    public void setCountryCode(String code) {
+        mBinding.authPhoneEdit.setDefaultCountry("kr");
+    }
+
+    public void setPhoneNumber(String number) {
+        mBinding.authPhoneEdit.setPhoneNumber(number.replace("-", ""));
     }
 }

@@ -29,7 +29,10 @@ import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
+import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
+import com.goqual.a10k.view.interfaces.ISwitchInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
@@ -42,7 +45,7 @@ import retrofit2.adapter.rxjava.HttpException;
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-        implements SwitchPresenter.View<Switch>, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, ISwitchInteraction, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
@@ -71,6 +74,24 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     }
 
+    /**
+     * 스위치 리스트에서 이름 눌렀을 시 each 페이지로 이동 할 때 호출
+     * @param position
+     */
+    @Override
+    public void changeCurrentPage(int position) {
+        mCurrentPage = position + 1;
+        mBinding.viewPager.setCurrentItem(mCurrentPage);
+    }
+
+    /**
+     * switchList에서 pull down refresh 했을 때 호출
+     */
+    @Override
+    public void refreshSwitchList() {
+        onResume();
+    }
+
     @Override
     public void refresh() {
         /**
@@ -83,7 +104,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
 
         LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
-        mBinding.viewPager.setCurrentItem(mCurrentPage);
+
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_main_switch))
+            mBinding.viewPager.setCurrentItem(mCurrentPage);
 
         handleToolbarEdit();
     }
@@ -291,8 +315,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
 
         // edit 상황일 시 switch list로 이동
-        if (mCurrentToolbarState == STATE.EDIT)
+        if (mCurrentToolbarState == STATE.EDIT) {
             mBinding.viewPager.setCurrentItem(0);
+            mCurrentPage = 0;
+        }
 
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
     }
@@ -334,10 +360,18 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
     }
 
+    @Override
+    public void passDeleteEvent(int switchId) {
+        // delete switch event를 alarm쪽으로 넘기기
+        ((IMainActivityInteraction)getActivity()).deleteSwitchEvent(switchId);
+    }
+
     private void handleToolbarEdit() {
-        ((IToolbarInteraction)getActivity()).setToolbarEdit(
-                SwitchManager.getInstance().getCount() == 0 ?
-                        IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_main_switch))
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(
+                    SwitchManager.getInstance().getCount() == 0 ?
+                            IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
     }
 
     /**

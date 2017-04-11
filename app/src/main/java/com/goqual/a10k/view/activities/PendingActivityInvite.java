@@ -10,7 +10,6 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.SwitchPresenter;
 import com.goqual.a10k.presenter.impl.SwitchPresenterImpl;
-import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.dialog.CustomDialog;
 
 /**
@@ -91,5 +90,10 @@ public class PendingActivityInvite extends AppCompatActivity
             mPresenter = new SwitchPresenterImpl(this, this, null);
         }
         return mPresenter;
+    }
+
+    @Override
+    public void passDeleteEvent(int position) {
+
     }
 }

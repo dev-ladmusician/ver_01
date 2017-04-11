@@ -30,9 +30,9 @@ import org.parceler.Parcels;
  * Created by hanwool on 2017. 3. 13..
  */
 
-public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
+public class ActivityAlarmAddEdit extends BaseActivity<ActivityAlarmEditBinding>
         implements IActivityInteraction, AlarmAddEditPresenter.View {
-    public static final String TAG = ActivityAlarmEdit.class.getSimpleName();
+    public static final String TAG = ActivityAlarmAddEdit.class.getSimpleName();
 
     public static final String EXTRA_ALARM = "extra_alarm";
 
@@ -96,17 +96,7 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
                 finishApp();
                 break;
             case R.id.timer_toolbar_save:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    mAlarm.setHour(mBinding.addAlarmTime.getHour());
-                    mAlarm.setMin(mBinding.addAlarmTime.getMinute());
-                } else {
-                    mAlarm.setHour(mBinding.addAlarmTime.getCurrentHour());
-                    mAlarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
-                }
-
-                if (!isEdit) getPresenter().add(mAlarm);
-                else getPresenter().update(mAlarm);
-
+                if (checkValidItem()) configDialog();
                 break;
             case R.id.alarm_menu_switch:
                 startActivityForResult(new Intent(this, ActivityAlarmSwitchSelect.class), REQ_GET_SWITCH);
@@ -137,7 +127,6 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
 
     @Override
     public void setTitle(String title) {
-
     }
 
     @Override
@@ -189,6 +178,66 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
         return intent;
     }
 
+    /**
+     * save전 스위치 선택 유무 checking
+     */
+    private boolean checkValidItem() {
+        if (mAlarm.get_bsid() > 0) return true;
+        else {
+            CustomDialog customDialog = new CustomDialog(this);
+            DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        startActivityForResult(new Intent(this, ActivityAlarmSwitchSelect.class), REQ_GET_SWITCH);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+                dialog.dismiss();
+            };
+            customDialog.isEditable(false)
+                    .setTitleText(R.string.alarm_add_error_no_selected_switch_title)
+                    .setMessageText(R.string.alarm_add_error_no_selected_switch_content)
+                    .setPositiveButton(getString(R.string.common_select_switch), onClickListener)
+                    .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                    .show();
+
+            return false;
+        }
+    }
+
+    /**
+     * save전 confirm dialog
+     */
+    private void configDialog() {
+        CustomDialog customDialog = new CustomDialog(this);
+        DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        mAlarm.setHour(mBinding.addAlarmTime.getHour());
+                        mAlarm.setMin(mBinding.addAlarmTime.getMinute());
+                    } else {
+                        mAlarm.setHour(mBinding.addAlarmTime.getCurrentHour());
+                        mAlarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
+                    }
+
+                    if (!isEdit) getPresenter().add(mAlarm);
+                    else getPresenter().update(mAlarm);
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+            dialog.dismiss();
+        };
+        customDialog.isEditable(false)
+                .setTitleText(isEdit ? R.string.alarm_confirm_update_title : R.string.alarm_confirm_add_title)
+                .setMessageText(R.string.alarm_confirm_add_content)
+                .setPositiveButton(getString(R.string.common_save), onClickListener)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK && data.getExtras() != null) {
@@ -231,5 +280,10 @@ public class ActivityAlarmEdit extends BaseActivity<ActivityAlarmEditBinding>
         if (mPresenter == null)
             mPresenter = new AlarmAddEditPresenterImpl(getApplicationContext(), this);
         return mPresenter;
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return 0;
     }
 }

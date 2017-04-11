@@ -87,9 +87,38 @@
                 android:text="@{item.makeDayString(ctx)}"/>
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/switch_btn_1"
+            android:layout_width="@dimen/item_ic_size_xxs"
+            android:layout_height="@dimen/item_ic_size_xxs"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_toLeftOf="@+id/switch_btn_2"
+            android:layout_centerVertical="true"
+            android:background="@{item.btn1 == null ? @drawable/style_btn_circle_grey : item.btn1 ? @drawable/style_btn_circle_blue : @drawable/style_circle_white}"/>
+
+        <TextView
+            android:id="@+id/switch_btn_2"
+            android:layout_width="@dimen/item_ic_size_xxs"
+            android:layout_height="@dimen/item_ic_size_xxs"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_toLeftOf="@+id/switch_btn_3"
+            android:layout_centerVertical="true"
+            android:visibility="@{item.btncount &lt; 2 ? View.GONE : View.VISIBLE}"
+            android:background="@{item.btn2 == null ? @drawable/style_btn_circle_grey : item.btn2 ? @drawable/style_btn_circle_blue : @drawable/style_circle_white}"/>
+
+        <TextView
+            android:id="@+id/switch_btn_3"
+            android:layout_width="@dimen/item_ic_size_xxs"
+            android:layout_height="@dimen/item_ic_size_xxs"
+            android:layout_marginRight="@dimen/padding_10"
+            android:layout_toLeftOf="@+id/item_alarm_active"
+            android:layout_centerVertical="true"
+            android:visibility="@{item.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
+            android:background="@{item.btn3 == null ? @drawable/style_btn_circle_grey : item.btn3 ? @drawable/style_btn_circle_blue : @drawable/style_circle_white}"/>
+
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/item_alarm_active"
-            android:layout_width="72dp"
+            android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

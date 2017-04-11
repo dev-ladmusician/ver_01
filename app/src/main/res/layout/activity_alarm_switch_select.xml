@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/title_switch_list"
+                android:text="@string/alarm_select_switch_title"
                 android:textColor="@color/white"
                 android:textSize="@dimen/toolbar_plus_icon_size"
                 android:textStyle="bold"/>

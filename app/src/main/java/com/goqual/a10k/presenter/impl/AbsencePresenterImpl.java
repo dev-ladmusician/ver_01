@@ -30,6 +30,18 @@ public class AbsencePresenterImpl implements AbsencePresenter {
     }
 
     @Override
+    public void getItem(int switchId) {
+        getAbsenceService().getAbsenceApi().get(switchId)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .map(ResultDTO::getResult)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mView::onSuccessGetItem,
+                        mView::onError,
+                        mView::refresh);
+    }
+
+    @Override
     public void add(Absence item) {
         getAbsenceService().getAbsenceApi().add(
                 item.get_bsid(),
@@ -57,11 +69,10 @@ public class AbsencePresenterImpl implements AbsencePresenter {
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultDTO -> {
-                            mView.loadingStop();
-                        },
+                .map(ResultDTO::getResult)
+                .subscribe(mView::onSuccessUpdate,
                         mView::onError,
-                        () -> mView.refresh());
+                        mView::refresh);
     }
 
     @Override
@@ -73,53 +84,7 @@ public class AbsencePresenterImpl implements AbsencePresenter {
     @Override
     public void loadItems(int page) {
         int switchId = page;
-        getAbsenceService().getAbsenceApi().get(switchId)
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .map(ResultDTO::getResult)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                            Absence item = result;
-                            mAbsence = item;
-                            mView.addItem(item);
-                            mView.loadingStop();
-                        },
-                        mView::onError,
-                        mView::refresh);
     }
-
-    @Override
-    public void delete(int position) {
-        getAbsenceService().getAbsenceApi().delete(mAbsence.get_absenceid())
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultDTO -> {
-                            mView.onSuccessDelete();
-                        },
-                        (e) -> mView.onFailDelete(position),
-                        () -> mView.refresh());
-    }
-
-    @Override
-    public void updateState(int position) {
-        getAbsenceService().getAbsenceApi().put(
-                mAbsence.get_absenceid(),
-                mAbsence.get_bsid(),
-                mAbsence.getStart_hour(), mAbsence.getStart_min(),
-                mAbsence.getEnd_hour(), mAbsence.getEnd_min(),
-                mAbsence.isBtn1(), mAbsence.isBtn2(), mAbsence.isBtn3(),
-                !mAbsence.isState())
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultDTO -> {
-                            mAbsence.setState(!mAbsence.isState());
-                        },
-                        mView::onError,
-                        () -> mView.refresh());
-    }
-
 
     public AbsenceService getAbsenceService() {
         if (mAbsenceService == null) {

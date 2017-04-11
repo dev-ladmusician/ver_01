@@ -112,4 +112,16 @@ public class AdapterAlarm extends RecyclerView.Adapter<AlarmViewHolder>
         }
         refresh();
     }
+
+    public void deleteAlarmBySwitchId(int switchId) {
+        List<Alarm> list = new ArrayList<>(mItemList);
+        //list = mItemList;
+
+        for (Alarm each : list) {
+            if (each.get_bsid() == switchId)
+                mItemList.remove(each);
+        }
+
+        refresh();
+    }
 }

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,25 +29,23 @@ import com.goqual.a10k.view.adapters.AdapterWifiScanResult;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.goqual.a10k.view.interfaces.IAuthInteraction;
 
 /**
  * Created by hanwool on 2017. 2. 23..
  */
 
 public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelectWifiBinding>
-        implements WifiPresenter.View{
+        implements WifiPresenter.View {
 
     public static final String TAG = FragmentConnectSelectWifi.class.getSimpleName();
 
     private WifiPresenter mPresenter;
     private AdapterWifiScanResult mAdapter;
-    private Handler mHandler;
-
     private static final int REQ_LOCATION_PERMMISION = 111;
-    private int mSwitchConnectCheckCount;
+
+    private ScanResult mSelectedWifi;
+    private String mSelectedWifiPasswd;
 
     public static FragmentConnectSelectWifi newInstance() {
         Bundle args = new Bundle();
@@ -62,131 +59,103 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     }
 
     @Override
-    public void onConnectError() {
-
-    }
-
-    @Override
     public boolean hasToolbarMenus() {
         return false;
     }
 
     @Override
-    public void onSwitchConnected() {
-        LogUtil.d("SWITCH_CONNECT", "onSwitchConnected");
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                LogUtil.d(TAG, "onConnectSuccess");
-                CustomDialog customDialog = new CustomDialog(getActivity());
-                customDialog
-                        .isEditable(true)
-                        .setTitleText(R.string.rename_title)
-                        .setMessageText(R.string.rename_content)
-                        .setEditTextHint(R.string.rename_edit_hint)
-                        .setPositiveButton(getString(R.string.rename_btn_txt), (dialog, which) -> {
-                            getPresenter().setName(customDialog.getEditTextMessage());
-                            KeyPadUtil.KeyPadDown(getActivity(), customDialog.getEditText());
-                            dialog.dismiss();
-                        })
-                        .show();
-            }
-        });
-    }
-
-    @Override
-    public void switchNotConnected() {
-        LogUtil.d("SWITCH_CONNECT", "switchNotConnected");
-        if(mSwitchConnectCheckCount <= 3) {
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    getPresenter().checkSwitchConnected();
-                }
-            }, 3000);
-            mSwitchConnectCheckCount += 1;
-        }
-        else {
-            ((ActivitySwitchConnection)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
-        }
-    }
-
-    @Override
-    public void onConnectSuccess() {
-        LogUtil.d("SWITCH_CONNECT", "onConnectSuccess");
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                getPresenter().checkSwitchConnected();
-            }
-        }, 5000);
-    }
-
-    @Override
-    public void onRegisterSuccess() {
-        getActivity().finish();
-    }
-
-    @Override
     public void addAP(ScanResult bs) {
         getAdapter().addItem(bs);
-        getAdapter().notifyDataSetChanged();
     }
 
     @Override
-    public void openPassDialog(String ssid) {
-        CustomDialog customDialog = new CustomDialog(getActivity());
-
-        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    getPresenter().connectToWifi(customDialog.getEditTextMessage());
-                    getPresenter().connect10K();
-                    mBinding.listWrap.setVisibility(View.GONE);
-                    mBinding.setSwitchLoadingContainer.setVisibility(View.VISIBLE);
-                    PreferenceHelper.getInstance(getActivity()).put(getString(R.string.arg_wifi_pass) + ssid, customDialog.getEditTextMessage());
-                    break;
-            }
-            KeyPadUtil.KeyPadDown(getActivity(), customDialog.getEditText());
-            dialog.dismiss();
-        };
-
-        customDialog.isEditable(true)
-                .setTitleText(String.format("%s%s", getString(R.string.select_wifi_pass_dialog_title), ssid))
-                .setEditTextMessage(PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_wifi_pass) + ssid, ""))
-                .setMessageText(R.string.select_wifi_pass_dialog_content)
-                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
-                .setPositiveButton(getString(R.string.common_ok), onClickListener)
-                .setEditPasswdType(true);
-
-        customDialog.show();
+    public void set10KAP(ScanResult ap) {
+        ((IAuthInteraction)getActivity()).set10KAP(ap);
     }
 
     @Override
-    public void onScanStart() {
-        LogUtil.d(TAG, "onScanStart");
+    public void refresh() {
+        getAdapter().refresh();
+    }
+
+    @Override
+    public void loadingStart() {
         if(mBinding!=null) {
             mBinding.loading.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mHandler = new Handler();
-        LogUtil.d(TAG, "onResume");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getPresenter().destroy();
-    }
-
-    @Override
-    public void onScanEnd() {
-        LogUtil.d(TAG, "onScanEnd");
+    public void loadingStop() {
         mBinding.loading.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_connect_select_wifi;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION_PERMMISION);
+            } else {
+                scanWifi();
+            }
+        } else {
+            scanWifi();
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView();
+    }
+
+    private void initView() {
+        LogUtil.d(TAG, "initView");
+        mBinding.setFragment(this);
+        mBinding.toolbarInclude.toolbarTitle.setText(getString(R.string.select_wifi_title));
+        mBinding.listContainer.setAdapter(getAdapter());
+        mBinding.listContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
+            if(viewId == R.id.item_wifi_container) {
+                getPresenter().onClick(position);
+                mSelectedWifi = getAdapter().getItem(position);
+            }
+        });
+        mBinding.toolbarInclude.toolbarBack.setOnClickListener(v -> {
+            ((ActivitySwitchConnection)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
+        });
+    }
+
+    private void scanWifi() {
+        getAdapter().clear();
+        getAdapter().notifyDataSetChanged();
+        getPresenter().startScan();
+    }
+
+    private WifiPresenter getPresenter() {
+        if(mPresenter == null) {
+            mPresenter = new WifiPresenterImpl(this, getActivity());
+        }
+        return mPresenter;
+    }
+
+    private AdapterWifiScanResult getAdapter() {
+        if(mAdapter == null) {
+            mAdapter = new AdapterWifiScanResult(getActivity());
+        }
+        return mAdapter;
     }
 
     @Override
@@ -205,18 +174,17 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                     break;
             }
         };
-        CustomDialog dialog = new CustomDialog(getActivity())
-                .isEditable(false)
-                .setTitleText(R.string.select_wifi_error_dialog_title)
-                .setMessageText(R.string.select_wifi_error_dialog_content)
-                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
-                .setPositiveButton(getString(R.string.common_retry), onClickListener);
-        dialog.show();
-    }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_connect_select_wifi;
+        try {
+            CustomDialog dialog = new CustomDialog(getActivity())
+                    .isEditable(false)
+                    .setTitleText(R.string.select_wifi_error_dialog_title)
+                    .setMessageText(R.string.select_wifi_error_dialog_content)
+                    .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                    .setPositiveButton(getString(R.string.common_retry), onClickListener);
+            dialog.show();
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -230,20 +198,30 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION_PERMMISION);
+    public void openPassDialog(String ssid) {
+        CustomDialog customDialog = new CustomDialog(getActivity());
+
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    mSelectedWifiPasswd = customDialog.getEditTextMessage();
+                    getPresenter().connect10K();
+                    PreferenceHelper.getInstance(getActivity()).put(getString(R.string.arg_wifi_pass) + ssid, customDialog.getEditTextMessage());
+                    break;
             }
-            else {
-                scanWifi();
-            }
-        }
-        else {
-            scanWifi();
-        }
-        mSwitchConnectCheckCount = 0;
+            KeyPadUtil.KeyPadDown(getActivity(), customDialog.getEditText());
+            dialog.dismiss();
+        };
+
+        customDialog.isEditable(true)
+                .setTitleText(String.format("%s%s", getString(R.string.select_wifi_pass_dialog_title), ssid))
+                .setEditTextMessage(PreferenceHelper.getInstance(getActivity()).getStringValue(getString(R.string.arg_wifi_pass) + ssid, ""))
+                .setMessageText(R.string.select_wifi_pass_dialog_content)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_ok), onClickListener)
+                .setEditPasswdType(true);
+
+        customDialog.show();
     }
 
     @Override
@@ -283,50 +261,33 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public void changeFragSetSwitch() {
+        ((IAuthInteraction)getActivity()).setSelectedWifi(mSelectedWifi, mSelectedWifiPasswd);
+        ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_set_switch));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView();
-    }
-
-    private void initView() {
-        LogUtil.d(TAG, "initView");
-        mBinding.setFragment(this);
-        mBinding.listContainer.setAdapter(getAdapter());
-        mBinding.listContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
-            if(viewId == R.id.item_wifi_container) {
-                getPresenter().onClick(position);
+    public void onErrorConnectAP() {
+        DialogInterface.OnClickListener onClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    getPresenter().connect10K();
+                    dialog.dismiss();
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
+                    break;
             }
-        });
-        mBinding.toolbarInclude.toolbarBack.setOnClickListener(v -> {
-            ((ActivitySwitchConnection)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
-        });
-    }
+        };
 
-    private void scanWifi() {
-        getAdapter().clear();
-        getAdapter().notifyDataSetChanged();
-        getPresenter().startScan();
-    }
-
-    private WifiPresenter getPresenter() {
-        if(mPresenter == null) {
-            mPresenter = new WifiPresenterImpl(this, getActivity());
-        }
-        return mPresenter;
-    }
-
-    private AdapterWifiScanResult getAdapter() {
-        if(mAdapter == null) {
-            mAdapter = new AdapterWifiScanResult(getActivity());
-        }
-        return mAdapter;
+        CustomDialog dialog = new CustomDialog(getActivity())
+                .isEditable(false)
+                .setTitleText(R.string.connect_select_wifi_not_connect_title)
+                .setMessageText(R.string.connect_select_wifi_not_connect_content)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(getString(R.string.common_retry), onClickListener);
+        dialog.show();
     }
 }

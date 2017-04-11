@@ -8,27 +8,27 @@ import android.net.wifi.ScanResult;
 
 public interface WifiPresenter {
     void startScan();
+    void stopScan();
+    void stopNetworkReceiver();
     void onClick(int position);
-    void connectToWifi(String pass);
     void connect10K();
-    void setName(String name);
-    void destroy();
-    void checkSwitchConnected();
+    //void setName(String name);
+    //void destroy();
+    //void checkSwitchConnected();
+    //void setWifiPasswd(String pass);
 
     interface View<T>{
-        void onConnectError();
-        void onConnectSuccess();
-
-        void onRegisterSuccess();
-
-        void addAP(ScanResult bs);
-        void noSwitchFound();
-        void onScanEnd();
-        void onScanStart();
+        void set10KAP(ScanResult ap);
 
         void openPassDialog(String ssid);
+        void addAP(ScanResult bs);
+        void refresh();
 
-        void onSwitchConnected();
-        void switchNotConnected();
+        void noSwitchFound();
+        void changeFragSetSwitch();
+        void onErrorConnectAP();
+
+        void loadingStart();
+        void loadingStop();
     }
 }

@@ -9,5 +9,6 @@ public interface HistoryPresenter {
     interface View<T> extends BasePresenterView<T>{
         void loadItems(int year, int month, int day);
         void loadItems();
+        void checkLoadMore();
     }
 }

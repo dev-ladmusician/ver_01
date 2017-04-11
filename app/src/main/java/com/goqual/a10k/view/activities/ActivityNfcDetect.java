@@ -10,14 +10,18 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityNfcDetectBinding;
 import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.Nfc;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.realm.NfcRealm;
+import com.goqual.a10k.presenter.NfcDetectPresenter;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.presenter.SocketManager;
+import com.goqual.a10k.presenter.impl.NfcDetectPresenterImpl;
 import com.goqual.a10k.presenter.impl.SocketManagerImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.NfcUtil;
 import com.goqual.a10k.view.base.BaseActivity;
+import com.goqual.a10k.view.dialog.CustomDialog;
 
 import io.realm.Realm;
 
@@ -30,19 +34,19 @@ import io.realm.Realm;
  * @date 2017. 2. 27.
  */
 
-public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
+public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>
+    implements NfcDetectPresenter.View<Nfc> {
     public static final String TAG = ActivityNfcDetect.class.getSimpleName();
 
     public static final String ACTION_REGISTER_TAG = "action_register_tag";
     public static final String EXTRA_NFC_TAG_ID = "extra_nfc_tag_id";
     public static final String EXTRA_SWITCH = "extra_switch";
-
     private static final int REQ_SETUP_TAG = 134;
 
     // list of NFC technologies detected:
 
     private SocketManager mSocketManager;
-
+    private NfcDetectPresenter mPresenter;
     private boolean isRegisterMode;
 
     private String mReadedTagId;
@@ -51,6 +55,28 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
     private int mSwitchPosition;
     private NfcTagPresenter mNfcTagPresenter;
     private boolean isSocketConnected;
+
+    @Override
+    public void refresh(Nfc item) {
+        if (item.get_nfcid() == 0) {
+            Intent setupReq = new Intent(this, ActivityNfcSetup.class);
+            setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, mReadedTagId);
+            setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
+            startActivity(setupReq);
+            finish();
+        } else {
+            CustomDialog dialog = new CustomDialog(this);
+            dialog.isEditable(false)
+                    .setTitleText(R.string.nfc_add_error_exist_tag_title)
+                    .setMessageText(R.string.nfc_add_error_exist_tag_content)
+                    .setPositiveButton(getString(R.string.common_ok), (dia, which)-> {
+                        dialog.dismiss();
+                        finishActivity();
+                    })
+                    .setNegativeButton(false)
+                    .show();
+        }
+    }
 
     @Override
     protected int getLayoutId() {
@@ -115,11 +141,8 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             LogUtil.d(TAG, "onNewIntent " + action + "::" + mReadedTagId);
 
             if(isRegisterMode) {
-                Intent setupReq = new Intent(this, ActivityNfcSetup.class);
-                setupReq.putExtra(ActivityNfcSetup.EXTRA_NFC_TAG_ID, mReadedTagId);
-                setupReq.putExtra(ActivityNfcSetup.EXTRA_SWITCH, mSwitchPosition);
-                startActivity(setupReq);
-                finish();
+                getPresenter().checkExist(
+                        SwitchManager.getInstance().getItem(mSwitchPosition).get_bsid(), mReadedTagId);
             }
             else {
                 Realm realm = Realm.getDefaultInstance();
@@ -192,5 +215,16 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>{
             }, this);
         }
         return mSocketManager;
+    }
+
+    private NfcDetectPresenter getPresenter() {
+        if (mPresenter == null)
+            mPresenter = new NfcDetectPresenterImpl(getApplicationContext(), this);
+        return mPresenter;
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
     }
 }
