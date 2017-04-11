@@ -14,6 +14,7 @@ import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.HistoryPresenter;
 import com.goqual.a10k.presenter.impl.HistoryPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.adapters.AdapterHistory;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
@@ -128,6 +129,7 @@ implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materia
         mBinding.historyContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.historyContainer.setAdapter(mHistoryAdapter);
 
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
