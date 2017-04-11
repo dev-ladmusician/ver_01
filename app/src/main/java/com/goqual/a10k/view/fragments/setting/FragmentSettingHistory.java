@@ -2,6 +2,7 @@ package com.goqual.a10k.view.fragments.setting;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -36,7 +37,6 @@ implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materia
 
     private Calendar mViewCalendar;
     private SimpleDateFormat mSimpleDateFormat;
-
     private HistoryPresenter mHistoryPresenter;
 
     private int mCurrentPage = 1;
@@ -66,6 +66,7 @@ implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materia
     public void refresh() {
         loadingStop();
         mHistoryAdapter.refresh();
+        mBinding.refresh.setRefreshing(false);
 
         LogUtil.e(TAG, "item count :: " + mHistoryAdapter.getItemCount());
 
@@ -127,6 +128,15 @@ implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materia
         mBinding.historyContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.historyContainer.setAdapter(mHistoryAdapter);
 
+        mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHistoryAdapter.clear();
+                setPage(1);
+                loadItems();
+            }
+        });
+
         loadItems(mViewCalendar.get(Calendar.YEAR),
                 mViewCalendar.get(Calendar.MONTH)+1,
                 mViewCalendar.get(Calendar.DAY_OF_MONTH));
@@ -178,12 +188,17 @@ implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materia
      */
     @Override
     public void loadItems() {
+        getHistoryPresenter().get(mSwitch.get_bsid(),
+                mViewCalendar.get(Calendar.YEAR),
+                mViewCalendar.get(Calendar.MONTH)+1,
+                mViewCalendar.get(Calendar.DAY_OF_MONTH), mCurrentPage);
+    }
+
+    @Override
+    public void checkLoadMore() {
         if (mCurrentPage < mLastPage) {
             mCurrentPage = mCurrentPage + 1;
-            getHistoryPresenter().get(mSwitch.get_bsid(),
-                    mViewCalendar.get(Calendar.YEAR),
-                    mViewCalendar.get(Calendar.MONTH)+1,
-                    mViewCalendar.get(Calendar.DAY_OF_MONTH), mCurrentPage);
+            loadItems();
         }
     }
 

@@ -107,7 +107,7 @@ implements AdapterDataModel<History>, AdapterDataView {
         holder.bindView(position, mHistoryList.get(position), mItemClickListener);
 
         if (position == getItemCount() - 1) {
-            mView.loadItems();
+            mView.checkLoadMore();
         }
     }
 }
