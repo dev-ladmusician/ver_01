@@ -36,10 +36,6 @@ public class Absence {
 
     public Absence(Switch mSwitch) {
         this._bsid = mSwitch.get_bsid();
-        this.start_hour = 19;
-        this.start_min = 0;
-        this.end_hour = 22;
-        this.end_min = 30;
         this.btncount = mSwitch.getBtnCount();
         this.state = true;
     }
@@ -155,8 +151,6 @@ public class Absence {
         calendar.set(Calendar.HOUR_OF_DAY, start_hour);
         calendar.set(Calendar.MINUTE, start_min);
         calendar.setTimeZone(TimeZone.getDefault());
-        LogUtil.d("Absence", calendar.getTime().toString());
-        LogUtil.d("Absence", calendar.toString());
         stringBuilder.append(simpleDateFormat.format(calendar.getTime()));
         return stringBuilder;
     }

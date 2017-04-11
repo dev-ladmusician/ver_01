@@ -1,6 +1,5 @@
 package com.goqual.a10k.view.base;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
@@ -59,6 +58,7 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
                 .setNegativeButton(getString(R.string.common_quit), (dialog, which) -> {
                     finish();
                 })
+                .setPositiveButton(false)
                 .show();
     }
 

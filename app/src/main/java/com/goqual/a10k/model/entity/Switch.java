@@ -11,6 +11,7 @@ public class Switch implements Cloneable{
     public int _bsid;
     public int btncount;
     public int seq;
+    public Integer _absenceid;
     public boolean btn1;
     public boolean btn2;
     public boolean btn3;
@@ -20,8 +21,6 @@ public class Switch implements Cloneable{
     public String macaddr;
     public boolean isavailable;
     public boolean isadmin;
-    public Integer _absenceid;
-    public boolean outlet;
     public boolean mIsStateView;
 
     public String WIFI_SSID = "";
@@ -147,14 +146,6 @@ public class Switch implements Cloneable{
         this._absenceid = _absenceid;
     }
 
-    public boolean isOutlet() {
-        return outlet;
-    }
-
-    public void setOutlet(boolean outlet) {
-        this.outlet = outlet;
-    }
-
     public boolean ismIsStateView() {
         return mIsStateView;
     }
@@ -236,7 +227,6 @@ public class Switch implements Cloneable{
         newSwitch.setTitle(this.getTitle());
         newSwitch.setMacaddr(this.getMacaddr());
         newSwitch.setIsavailable(this.isavailable());
-        newSwitch.setOutlet(this.isOutlet());
         newSwitch.setmIsStateView(this.ismIsStateView());
         newSwitch.setWIFI_SSID(this.getWIFI_SSID());
         newSwitch.setWIFI_BSSID(this.getWIFI_BSSID());

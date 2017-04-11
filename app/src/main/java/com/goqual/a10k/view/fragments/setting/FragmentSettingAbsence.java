@@ -56,26 +56,6 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     }
 
     @Override
-    public void onSuccessDelete() {
-
-    }
-
-    @Override
-    public void onFailDelete(int position) {
-
-    }
-
-    @Override
-    public void loadingStart() {
-
-    }
-
-    @Override
-    public void loadingStop() {
-
-    }
-
-    @Override
     public void refresh() {
         mIsChange = false;
     }
@@ -86,14 +66,29 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     }
 
     @Override
-    public void addItem(Absence item) {
-        LogUtil.d(TAG, ToStringBuilder.reflectionToString(item));
-        if(item.get_bsid() == mSwitch.get_bsid()) {
+    public void onSuccessGetItem(Absence item) {
+        if (item.get_absenceid() > 0) {
+            if (mSwitch.isadmin()) setStateSwitchAvailable(true);
             mAbsenceItem = item;
             mBinding.setItem(mAbsenceItem);
+        } else {
+            setStateSwitchAvailable(false);
         }
     }
 
+    /**
+     * absence state change handle
+     * @param state
+     */
+    @Override
+    public void setStateSwitchAvailable(boolean state) {
+        mBinding.switchEnable.setEnabled(state);
+    }
+
+    /**
+     * toolbar에서 edit 클릭 됬을 때 호출
+     * @param state
+     */
     @Override
     public void onClickEdit(STATE state) {
         mCurrentToolbarState = state;
@@ -183,12 +178,12 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBinding.setFragment(this);
-        getPresenter().loadItems(mSwitch.get_bsid());
-
         mAbsenceItem = new Absence(mSwitch);
-        mBinding.setItem(mAbsenceItem);
 
-        mBinding.switchEnable.setEnabled(mSwitch.isadmin());
+        getPresenter().getItem(mSwitch.get_bsid());
+
+        setStateSwitchAvailable(false);
+        mBinding.setItem(mAbsenceItem);
 
         mBinding.switchEnable.setOnCheckedChangeListener((buttonView, isChecked) -> {
             mAbsenceItem.setState(isChecked);
@@ -205,5 +200,34 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mPresenter = new AbsencePresenterImpl(getActivity(), this, mAbsenceItem);
         }
         return mPresenter;
+    }
+
+    @Override
+    public void onSuccessDelete() {
+
+    }
+
+    @Override
+    public void onFailDelete(int position) {
+
+    }
+
+    @Override
+    public void loadingStart() {
+
+    }
+
+    @Override
+    public void loadingStop() {
+
+    }
+
+    @Override
+    public void addItem(Absence item) {
+        LogUtil.d(TAG, ToStringBuilder.reflectionToString(item));
+        if(item.get_bsid() == mSwitch.get_bsid()) {
+            mAbsenceItem = item;
+            mBinding.setItem(mAbsenceItem);
+        }
     }
 }

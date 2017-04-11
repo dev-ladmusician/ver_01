@@ -30,6 +30,18 @@ public class AbsencePresenterImpl implements AbsencePresenter {
     }
 
     @Override
+    public void getItem(int switchId) {
+        getAbsenceService().getAbsenceApi().get(switchId)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .map(ResultDTO::getResult)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mView::onSuccessGetItem,
+                        mView::onError,
+                        mView::refresh);
+    }
+
+    @Override
     public void add(Absence item) {
         getAbsenceService().getAbsenceApi().add(
                 item.get_bsid(),
@@ -73,19 +85,6 @@ public class AbsencePresenterImpl implements AbsencePresenter {
     @Override
     public void loadItems(int page) {
         int switchId = page;
-        getAbsenceService().getAbsenceApi().get(switchId)
-                .subscribeOn(Schedulers.newThread())
-                .filter(result -> result.getResult() != null)
-                .map(ResultDTO::getResult)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                            Absence item = result;
-                            mAbsence = item;
-                            mView.addItem(item);
-                            mView.loadingStop();
-                        },
-                        mView::onError,
-                        mView::refresh);
     }
 
     @Override

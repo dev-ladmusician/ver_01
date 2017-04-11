@@ -198,7 +198,7 @@
     <string name="invite_user_invited">초대</string>
 
     <!-- history -->
-    <string name="history_no_item">등록된 기록이 없습니다.</string>
+    <string name="history_no_item">기록이 없습니다.</string>
     <string name="history_info">날짜를 변경해서 그날의 기록을 확인하세요.</string>
     <string name="history_error">기록을 가져오는데 오류가 발생했습니다.</string>
     <string name="history_date_format">yyyy년 MM월 dd일</string>
@@ -271,6 +271,7 @@
     <string name="absence_error_time">올바른 시간 정보를 입력해주세요.</string>
 
     <!-- Absence -->
+    <string name="absence_default_time">설정안됨</string>
     <string name="absence_start_text">시작</string>
     <string name="absence_end_text">종료</string>
     <string name="switch_absence_mode">부재모드가 설정된 스위치입니다.</string>
