@@ -15,6 +15,7 @@ import com.goqual.a10k.presenter.impl.AbsencePresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.ToastUtil;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
@@ -64,6 +65,15 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
+        CustomDialog customDialog = new CustomDialog(getActivity());
+        customDialog.isEditable(false)
+                .setTitleText(R.string.absence_register_error_title)
+                .setMessageText(R.string.absence_register_error_content)
+                .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
+                    customDialog.dismiss();
+                })
+                .setNegativeButton(false)
+                .show();
     }
 
     @Override
@@ -242,16 +252,6 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mPresenter = new AbsencePresenterImpl(getActivity(), this, mAbsenceItem);
         }
         return mPresenter;
-    }
-
-    @Override
-    public void onSuccessDelete() {
-
-    }
-
-    @Override
-    public void onFailDelete(int position) {
-
     }
 
     @Override
