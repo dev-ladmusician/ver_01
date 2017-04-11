@@ -38,7 +38,7 @@
 
     <!-- Internet Error -->
     <string name="internet_error_title">인터넷 연결에러</string>
-    <string name="internet_error_content">인터넷 상태를 확인해 주세요.</string>
+    <string name="internet_error_content">인터넷 상태를 확인해 주세요</string>
 
     <!-- Switch -->
     <string name="switch_delete_title">삭제</string>

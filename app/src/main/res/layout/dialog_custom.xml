@@ -84,8 +84,7 @@
                     android:textColor="@color/identitiy_01"
                     android:text="@{item.negativeButtonText}"
                     android:onClick="@{dialog::onBtnClick}"
-                    android:visibility="@{item.isSetNegativeButton ? View.VISIBLE : View.GONE}"
-                    />
+                    android:visibility="@{item.isSetNegativeButton ? View.VISIBLE : View.GONE}" />
 
                 <TextView
                     android:id="@+id/dialog_btn_ok"
@@ -96,8 +95,7 @@
                     android:textColor="@color/identitiy_01"
                     android:text="@{item.positiveButtonText}"
                     android:onClick="@{dialog::onBtnClick}"
-                    android:visibility="@{item.isSetPositiveButton ? View.VISIBLE : View.GONE}"
-                    />
+                    android:visibility="@{item.isSetPositiveButton ? View.VISIBLE : View.GONE}" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
