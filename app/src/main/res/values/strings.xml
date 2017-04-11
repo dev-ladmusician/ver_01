@@ -248,6 +248,7 @@
 
     <string name="alarm_error_no_selected_switch">선택된 스위치가 없습니다.</string>
 
+    <string name="nfc_toolbar_title_select_repeat">반복 설정</string>
     <string name="alarm_no_item">아침과 저녁을 10K와 함께 해보세요!</string>
     <string name="alarm_repeat_everyday">매일</string>
     <string name="alarm_repeat_sun">일</string>

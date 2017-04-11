@@ -24,6 +24,7 @@ import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -35,7 +36,7 @@ import org.parceler.Parcels;
  */
 
 public class FragmentMainAlarm extends BaseFragment<FragmentMainAlarmBinding>
-implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
+implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage, IMainActivityInteraction {
     public static final String TAG = FragmentMainAlarm.class.getSimpleName();
 
     private static final int REQ_NEW_ALARM = 101;
@@ -52,6 +53,19 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
         FragmentMainAlarm fragment = new FragmentMainAlarm();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * switch가 삭제 됬을 때 호출
+     * @param switchId
+     */
+    @Override
+    public void deleteSwitchEvent(int switchId) {
+        getAdapter().deleteAlarmBySwitchId(switchId);
+
+        if (getAdapter().getItemCount() == 0) {
+            mBinding.alarmNoItemContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -98,13 +112,12 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     public void refresh() {
         loadingStop();
         mBinding.refresh.setRefreshing(false);
-        getAdapter().notifyDataSetChanged();
+        getAdapter().refresh();
 
         if(mAdapter.getSize() > 0) {
             mBinding.alarmNoItemContainer.setVisibility(View.GONE);
             mBinding.refresh.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mBinding.alarmNoItemContainer.setVisibility(View.VISIBLE);
             mBinding.refresh.setVisibility(View.GONE);
         }
@@ -122,6 +135,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     @Override
     public void addItem(Alarm item) {
         getAdapter().addItem(item);
+        getAdapter().refresh();
     }
 
     @Nullable

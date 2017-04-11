@@ -25,6 +25,7 @@ import com.goqual.a10k.view.fragments.FragmentMainNoti;
 import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
+import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
@@ -33,7 +34,7 @@ import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.EDIT;
 
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
-        implements IActivityInteraction, IToolbarInteraction {
+        implements IActivityInteraction, IToolbarInteraction, IMainActivityInteraction {
     public static final String TAG = ActivityMain.class.getSimpleName();
 
     private EventToolbarClick mEventToolbarClick;
@@ -55,7 +56,6 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         initView();
         backPressUtil = new BackPressUtil(this);
     }
-
 
     private void initView() {
         initToolbar();
@@ -158,6 +158,18 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
                 mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_alarm)) {
             ((IToolbarClickListener)fragmentPagerAdapter.getItem(mBinding.mainPager.getCurrentItem())).onClickEdit(state);
         }
+    }
+
+    /**
+     * 스위치 삭제 됬을 때 호출
+     * alarm 으로 event를 보내서 연관된 스위치를 삭제한다.
+     * @param switchId
+     */
+    @Override
+    public void deleteSwitchEvent(int switchId) {
+        LogUtil.e(TAG, "delete event pass");
+        ((IMainActivityInteraction)fragmentPagerAdapter.getItem(
+                getResources().getInteger(R.integer.frag_main_alarm))).deleteSwitchEvent(switchId);
     }
 
     /**

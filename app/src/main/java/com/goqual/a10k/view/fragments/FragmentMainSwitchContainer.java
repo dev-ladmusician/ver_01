@@ -29,9 +29,11 @@ import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 import com.goqual.a10k.view.adapters.AdapterSwitchContainer;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IFragmentInteraction;
-import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
+import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchInteraction;
+import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -102,7 +104,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
 
         LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
-        mBinding.viewPager.setCurrentItem(mCurrentPage);
+
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_main_switch))
+            mBinding.viewPager.setCurrentItem(mCurrentPage);
 
         handleToolbarEdit();
     }
@@ -355,10 +360,18 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
     }
 
+    @Override
+    public void passDeleteEvent(int switchId) {
+        // delete switch event를 alarm쪽으로 넘기기
+        ((IMainActivityInteraction)getActivity()).deleteSwitchEvent(switchId);
+    }
+
     private void handleToolbarEdit() {
-        ((IToolbarInteraction)getActivity()).setToolbarEdit(
-                SwitchManager.getInstance().getCount() == 0 ?
-                        IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_main_switch))
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(
+                    SwitchManager.getInstance().getCount() == 0 ?
+                            IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
     }
 
     /**
