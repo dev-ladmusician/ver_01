@@ -5,7 +5,7 @@
     <data>
         <variable
             name="activity"
-            type="com.goqual.a10k.view.activities.ActivityAlarmEdit"/>
+            type="com.goqual.a10k.view.activities.ActivityAlarmAddEdit"/>
         <variable
             name="alarmItem"
             type="com.goqual.a10k.model.entity.Alarm"/>

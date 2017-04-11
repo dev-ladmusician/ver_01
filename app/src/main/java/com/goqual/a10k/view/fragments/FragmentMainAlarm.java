@@ -18,7 +18,7 @@ import com.goqual.a10k.presenter.AlarmPresenter;
 import com.goqual.a10k.presenter.impl.AlarmPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.ResourceUtil;
-import com.goqual.a10k.view.activities.ActivityAlarmEdit;
+import com.goqual.a10k.view.activities.ActivityAlarmAddEdit;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -184,7 +184,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
             switch (viewId) {
                 case R.id.item_alarm_container:
                     LogUtil.e(TAG, "item alarm container click");
-                    Intent intent = new Intent(getActivity(), ActivityAlarmEdit.class);
+                    Intent intent = new Intent(getActivity(), ActivityAlarmAddEdit.class);
                     intent.putExtra(
                             getString(R.string.arg_alarm),
                             Parcels.wrap(getAdapter().getItem(position)));
@@ -233,7 +233,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
     public void onBtnClick(View view) {
         if(view.getId() == R.id.alarm_no_item_container) {
             if (checkExistSwitch())
-                startActivity(new Intent(getActivity(), ActivityAlarmEdit.class));
+                startActivity(new Intent(getActivity(), ActivityAlarmAddEdit.class));
         }
     }
 
@@ -277,7 +277,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        if(resultCode == Activity.RESULT_OK && data != null) {
 //            if(requestCode == REQ_NEW_ALARM) {
-//                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmEdit.EXTRA_ALARM));
+//                Alarm alarm = Parcels.unwrap(data.getParcelableExtra(ActivityAlarmAddEdit.EXTRA_ALARM));
 //                getPresenter().add(alarm);
 //                getAdapter().addItem(alarm);
 //            }

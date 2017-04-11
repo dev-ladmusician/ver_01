@@ -12,6 +12,7 @@
     <string name="common_quit">종료</string>
     <string name="common_quit_toast">한번 더 누르시면 종료됩니다.</string>
     <string name="common_new_switch">스위치 등록</string>
+    <string name="common_select_switch">스위치 선택</string>
 
     <!-- title -->
     <string name="title_switch_list">All Switches</string>
@@ -253,6 +254,8 @@
 
     <string name="alarm_add_error_title">알람 등록 오류</string>
     <string name="alarm_add_error_content">알람을 등록하는데 오류가 발생했습니다. \n 다시 한번 시도해주세요.</string>
+    <string name="alarm_add_error_no_selected_switch_title">알람 등록 오류</string>
+    <string name="alarm_add_error_no_selected_switch_content">알람을 등록하시기 전 \n스위치를 먼저 선택해주세요</string>
     <string name="alarm_add_error_no_switch_title">등록된 스위치 없음</string>
     <string name="alarm_add_error_no_switch_content">10K 스위치를 먼저 등록하신 후\n10K 스위치를 다양한 기능을 사용해보세요.</string>
 

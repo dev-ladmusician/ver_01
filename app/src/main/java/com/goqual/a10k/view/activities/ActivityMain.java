@@ -150,7 +150,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         if (mBinding.mainPager.getCurrentItem() == getResources().getInteger(R.integer.frag_main_switch)) {
             startActivity(new Intent(this, ActivitySwitchConnection.class));
         } else {
-            startActivity(new Intent(this, ActivityAlarmEdit.class));
+            startActivity(new Intent(this, ActivityAlarmAddEdit.class));
         }
     }
 
