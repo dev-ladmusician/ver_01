@@ -104,6 +104,15 @@
     <string name="rename_btn_txt">스위치 등록 완료</string>
     <string name="rename_edit_hint">10k switch</string>
 
+    <string name="rename_error_title">스위치 등록 실패</string>
+    <string name="rename_error_content">스위치 등록에 오류가 발생했습니다</string>
+
+    <string name="check_connection_error_title">스위치 등록 오류</string>
+    <string name="check_connection_error_content">스위치가 AP에 연결되지 않았습니다 \nWi-Fi상태와 비밀번호를 다시 한번 체크해주세요</string>
+
+    <string name="socket_error_title">스위치 등록 오류</string>
+    <string name="socket_error_content">스위치와 통신하는데 오류가 발생했습니다\n스위치 전원을 내렸다 올려 다시 시도해주세요</string>
+
     <string name="add_connection_error_title">스위치 등록 오류</string>
     <string name="add_connection_error_content">스위치를 등록하는데 오류가 발생했습니다.</string>
     <string name="add_connection_btn_ok">재시도</string>

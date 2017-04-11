@@ -174,13 +174,17 @@ public class FragmentConnectSelectWifi extends BaseFragment<FragmentConnectSelec
                     break;
             }
         };
-        CustomDialog dialog = new CustomDialog(getActivity())
-                .isEditable(false)
-                .setTitleText(R.string.select_wifi_error_dialog_title)
-                .setMessageText(R.string.select_wifi_error_dialog_content)
-                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
-                .setPositiveButton(getString(R.string.common_retry), onClickListener);
-        dialog.show();
+
+        try {
+            CustomDialog dialog = new CustomDialog(getActivity())
+                    .isEditable(false)
+                    .setTitleText(R.string.select_wifi_error_dialog_title)
+                    .setMessageText(R.string.select_wifi_error_dialog_content)
+                    .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                    .setPositiveButton(getString(R.string.common_retry), onClickListener);
+            dialog.show();
+        } catch (Exception e) {
+        }
     }
 
     @Override

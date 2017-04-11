@@ -23,10 +23,11 @@ import com.goqual.a10k.presenter.SetSwitchPresenter;
 import com.goqual.a10k.presenter.impl.SetSwitchPresenterImpl;
 import com.goqual.a10k.util.KeyPadUtil;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityFragmentPageChangeListener;
 import com.goqual.a10k.view.interfaces.IAuthInteraction;
+import com.goqual.a10k.view.interfaces.IConnectionActivityInteraction;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,11 +44,9 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
     private SetSwitchPresenter mPresenter;
     private Handler mHandler;
 
+    private final int INTERVAL_CHECKING_CONNECTION = 4000;
     private static final int REQ_LOCATION_PERMMISION = 111;
     private int mSwitchConnectCheckCount;
-
-//    private ScanResult mSelectedWifi;
-//    private String mSelectedWifiPasswd;
 
     public static FragmentConnectSetSwitch newInstance() {
         Bundle args = new Bundle();
@@ -62,7 +61,8 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
 
     @Override
     public void onConnectError() {
-
+        ((IConnectionActivityInteraction)getActivity()).onErrorSocketConnection();
+        ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
     }
 
     @Override
@@ -102,11 +102,12 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
                 public void run() {
                     getPresenter().checkSwitchConnected();
                 }
-            }, 3000);
+            }, INTERVAL_CHECKING_CONNECTION);
             mSwitchConnectCheckCount += 1;
         }
         else {
-            ((ActivitySwitchConnection)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
+            ((IConnectionActivityInteraction)getActivity()).onErrorCheckConnection();
+            ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
         }
     }
 
@@ -118,12 +119,18 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
             public void run() {
                 getPresenter().checkSwitchConnected();
             }
-        }, 5000);
+        }, INTERVAL_CHECKING_CONNECTION);
     }
 
     @Override
     public void onRegisterSuccess() {
         getActivity().finish();
+    }
+
+    @Override
+    public void onRegisterError() {
+        ((IConnectionActivityInteraction)getActivity()).onErrorRename();
+        ((IActivityFragmentPageChangeListener)getActivity()).changePage(getResources().getInteger(R.integer.frag_info));
     }
 
     @Override
@@ -142,11 +149,6 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_connect_set_switch;
-    }
-
-    @Override
-    public void onBtnClick(View view) {
-
     }
 
     @Override
@@ -206,6 +208,7 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
                                 .setTitleText(R.string.permission_dialog_title)
                                 .setMessageText(R.string.permission_dialog_message)
                                 .setPositiveButton(getString(R.string.common_allow), onClickListener)
+                                .setNegativeButton(false)
                                 .show();
                     }
                 }
@@ -238,5 +241,10 @@ public class FragmentConnectSetSwitch extends BaseFragment<FragmentConnectSetSwi
             mPresenter = new SetSwitchPresenterImpl(this, getActivity());
         }
         return mPresenter;
+    }
+
+    @Override
+    public void onBtnClick(View view) {
+
     }
 }

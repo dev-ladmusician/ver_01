@@ -21,6 +21,7 @@ public interface SetSwitchPresenter {
         void onConnectSuccess();
 
         void onRegisterSuccess();
+        void onRegisterError();
 
         void onSwitchConnected();
         void switchNotConnected();

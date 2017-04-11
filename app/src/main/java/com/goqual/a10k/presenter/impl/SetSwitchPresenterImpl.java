@@ -108,6 +108,7 @@ public class SetSwitchPresenterImpl
                         },
                         (e)-> {
                             LogUtil.e(TAG, e.getMessage(), e);
+                            mView.onRegisterError();
                         },
                         () -> {
                             LogUtil.d(TAG, "onCompleted::");

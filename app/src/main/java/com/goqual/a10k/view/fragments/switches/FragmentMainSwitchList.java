@@ -157,7 +157,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                 case R.id.item_switch_delete:
                     LogUtil.e(TAG, "DELETE");
                     getDeleteDialog().isEditable(false)
-                            .setTitleText(R.string.switch_delete_title)
+                            .setTitleText("[" + getAdapter().getItem(position).getTitle() + "] " + R.string.switch_delete_title)
                             .setMessageText(R.string.switch_delete_content)
                             .setPositiveButton(getString(R.string.common_delete), ((dialog, i) -> {
                                 ((ISwitchOperationListener) getParentFragment()).onSwitchDelete(
