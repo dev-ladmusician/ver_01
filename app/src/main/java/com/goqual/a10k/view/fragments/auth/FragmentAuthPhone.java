@@ -88,4 +88,12 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
                     .show();
         }
     }
+
+    public void setCountryCode(String code) {
+        mBinding.authPhoneEdit.setDefaultCountry("kr");
+    }
+
+    public void setPhoneNumber(String number) {
+        mBinding.authPhoneEdit.setPhoneNumber(number.replace("-", ""));
+    }
 }

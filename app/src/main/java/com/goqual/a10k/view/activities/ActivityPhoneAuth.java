@@ -35,6 +35,8 @@ import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
 public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         implements IActivityInteraction, PhoneAuthPresenter.View, IAuthActivityInteraction{
 
+    private final String fragPhoneTag = "frag_phone_tag";
+
     public enum ERROR_REASON{
         CONNECTION_ERROR,
         TIMEOUT,
@@ -52,11 +54,6 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
-    public void onBtnClick(View view) {
-
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -69,13 +66,20 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     public void initFirstFragment() {
         BaseFragment baseFragment = FragmentAuthPhone.newInstance();
         getSupportFragmentManager().beginTransaction()
-                .add(mBinding.fragmentContainer.getId(), baseFragment)
+                .add(mBinding.fragmentContainer.getId(), baseFragment, fragPhoneTag)
                 .commit();
     }
 
     @Override
     public void setInitPage() {
         changeCurrentPage(FragmentAuthPhone.newInstance());
+    }
+
+    @Override
+    public void changeCurrentPage(Fragment frag) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(mBinding.fragmentContainer.getId(), frag)
+                .commit();
     }
 
     @Override
@@ -86,15 +90,6 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     @Override
     public Toolbar getToolbar() {
         return null;
-    }
-
-    @Override
-    public void setTitle(String title) {
-    }
-
-    @Override
-    public void finishApp() {
-
     }
 
     @Override
@@ -130,11 +125,6 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
-    public void refresh() {
-
-    }
-
-    @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
 
@@ -149,18 +139,6 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
                 .setPositiveButton(getString(R.string.common_retry), onClickListener)
                 .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                 .show();
-    }
-
-    @Override
-    public void changeCurrentPage(Fragment frag) {
-        getSupportFragmentManager().beginTransaction()
-            .replace(mBinding.fragmentContainer.getId(), frag)
-            .commit();
-    }
-
-    @Override
-    public void addItem(Object item) {
-
     }
 
     @Override
@@ -179,21 +157,13 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
-    public void requestStartAppAuth() {
-    }
-
-    @Override
-    public void onEndAuthProcess() {
-
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == PHONE_NUMBER_PERMISSION_REQ) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 LogUtil.d(TAG, "onRequestPermissionsResult");
-
-
+                FragmentAuthPhone frag = (FragmentAuthPhone)getSupportFragmentManager().findFragmentByTag(fragPhoneTag);
+                frag.setCountryCode(getPresenter().getPhoneNumberCountryCode());
+                frag.setPhoneNumber(getPresenter().getPhoneNumber());
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -214,5 +184,33 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     @Override
     public int getCurrentPage() {
         return 0;
+    }
+
+    @Override
+    public void requestStartAppAuth() {
+    }
+
+    @Override
+    public void onEndAuthProcess() {
+    }
+
+    @Override
+    public void addItem(Object item) {
+    }
+
+    @Override
+    public void refresh() {
+    }
+
+    @Override
+    public void setTitle(String title) {
+    }
+
+    @Override
+    public void finishApp() {
+    }
+
+    @Override
+    public void onBtnClick(View view) {
     }
 }
