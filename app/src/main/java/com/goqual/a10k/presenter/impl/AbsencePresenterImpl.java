@@ -69,11 +69,10 @@ public class AbsencePresenterImpl implements AbsencePresenter {
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(resultDTO -> {
-                            mView.loadingStop();
-                        },
+                .map(ResultDTO::getResult)
+                .subscribe(mView::onSuccessUpdate,
                         mView::onError,
-                        () -> mView.refresh());
+                        mView::refresh);
     }
 
     @Override

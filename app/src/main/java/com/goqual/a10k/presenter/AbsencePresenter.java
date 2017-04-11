@@ -17,7 +17,9 @@ public interface AbsencePresenter extends BasePresenter{
     interface View<T> extends BasePresenterView<T>{
         void onSuccessDelete();
         void onFailDelete(int position);
+
         void onSuccessGetItem(Absence item);
+        void onSuccessUpdate(Absence item);
 
         void setStateSwitchAvailable(boolean state);
     }

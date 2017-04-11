@@ -14,19 +14,21 @@ import java.util.TimeZone;
 
 @Parcel
 public class Absence {
-    private int _absenceid;
-    private int start_hour;
-    private int start_min;
-    private int end_hour;
-    private int end_min;
-    private int _bsid;
+    public int _absenceid;
+    public int start_hour;
+    public int start_min;
+    public int end_hour;
+    public int end_min;
+    public int _bsid;
     public boolean btn1;
     public boolean btn2;
     public boolean btn3;
-    private String title;
-    private boolean state;
-    private int btncount; // count of btn in switch
-    private boolean mIsDeletable;
+    public String title;
+    public boolean state;
+    public int btncount; // count of btn in switch
+    public boolean mIsDeletable;
+    public boolean mIsSetStartTime;
+    public boolean mIsSetEndTime;
 
     public Absence() {
 
@@ -142,6 +144,22 @@ public class Absence {
 
     public void setmIsDeletable(boolean mIsDeletable) {
         this.mIsDeletable = mIsDeletable;
+    }
+
+    public boolean ismIsSetStartTime() {
+        return mIsSetStartTime;
+    }
+
+    public void setmIsSetStartTime(boolean mIsSetStartTime) {
+        this.mIsSetStartTime = mIsSetStartTime;
+    }
+
+    public boolean ismIsSetEndTime() {
+        return mIsSetEndTime;
+    }
+
+    public void setmIsSetEndTime(boolean mIsSetEndTime) {
+        this.mIsSetEndTime = mIsSetEndTime;
     }
 
     public CharSequence getStartTimeString() {

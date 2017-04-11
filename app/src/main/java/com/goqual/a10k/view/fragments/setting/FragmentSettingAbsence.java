@@ -13,6 +13,7 @@ import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.presenter.AbsencePresenter;
 import com.goqual.a10k.presenter.impl.AbsencePresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ToastUtil;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -70,10 +71,22 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         if (item.get_absenceid() > 0) {
             if (mSwitch.isadmin()) setStateSwitchAvailable(true);
             mAbsenceItem = item;
+            mAbsenceItem.setmIsSetStartTime(true);
+            mAbsenceItem.setmIsSetEndTime(true);
             mBinding.setItem(mAbsenceItem);
         } else {
             setStateSwitchAvailable(false);
         }
+    }
+
+    /**
+     * update 성공 후 absenceid 받아오면 state change available
+     * @param item
+     */
+    @Override
+    public void onSuccessUpdate(Absence item) {
+        mAbsenceItem.set_absenceid(item.get_absenceid());
+        setStateSwitchAvailable(true);
     }
 
     /**
@@ -93,16 +106,36 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     public void onClickEdit(STATE state) {
         mCurrentToolbarState = state;
         if(mCurrentToolbarState == STATE.DONE) {
-            if (mIsChange) getPresenter().update(mAbsenceItem);
-            mBinding.switchBtn1.setEnabled(false);
-            mBinding.switchBtn2.setEnabled(false);
-            mBinding.switchBtn3.setEnabled(false);
+            if (mIsChange) {
+                // 시작 시간 체크
+                if (!mAbsenceItem.ismIsSetStartTime())
+                    ToastUtil.show(getActivity(), getString(R.string.absence_save_error_not_select_start_time));
+
+                // 종료 시간 체크
+                if (!mAbsenceItem.ismIsSetEndTime())
+                    ToastUtil.show(getActivity(), getString(R.string.absence_save_error_not_select_end_time));
+
+                if (mAbsenceItem.ismIsSetStartTime() && mAbsenceItem.ismIsSetEndTime()) {
+                    getPresenter().update(mAbsenceItem);
+                    mBinding.switchBtn1.setEnabled(false);
+                    mBinding.switchBtn2.setEnabled(false);
+                    mBinding.switchBtn3.setEnabled(false);
+                    //((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+                }
+
+                if (mAbsenceItem.get_absenceid() == 0) {
+                    mAbsenceItem.setmIsSetStartTime(false);
+                    mAbsenceItem.setmIsSetEndTime(false);
+                    mBinding.setItem(mAbsenceItem);
+                }
+            }
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
         } else {
             mBinding.switchBtn1.setEnabled(true);
             mBinding.switchBtn2.setEnabled(true);
             mBinding.switchBtn3.setEnabled(true);
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
         }
-        ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
     }
 
     @Override
@@ -115,7 +148,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             switch (view.getId()) {
                 case R.id.start_time:
                     new TimePickerDialog(getActivity(), (view1, hourOfDay, minute) -> {
-                        LogUtil.d(TAG, String.format("start_time::hourOfDay:%d, minute:%d", hourOfDay, minute));
+                        mAbsenceItem.setmIsSetStartTime(true);
                         mAbsenceItem.setStart_hour(hourOfDay);
                         mAbsenceItem.setStart_min(minute);
                         mBinding.setItem(mAbsenceItem);
@@ -124,7 +157,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
                     break;
                 case R.id.end_time:
                     new TimePickerDialog(getActivity(), (view1, hourOfDay, minute) -> {
-                        LogUtil.d(TAG, String.format("start_time::hourOfDay:%d, minute:%d", hourOfDay, minute));
+                        mAbsenceItem.setmIsSetEndTime(true);
                         mAbsenceItem.setEnd_hour(hourOfDay);
                         mAbsenceItem.setEnd_min(minute);
                         mBinding.setItem(mAbsenceItem);
@@ -195,6 +228,15 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         mBinding.switchBtn3.setEnabled(false);
     }
 
+    @Override
+    public void addItem(Absence item) {
+        LogUtil.d(TAG, ToStringBuilder.reflectionToString(item));
+        if(item.get_bsid() == mSwitch.get_bsid()) {
+            mAbsenceItem = item;
+            mBinding.setItem(mAbsenceItem);
+        }
+    }
+
     private AbsencePresenter getPresenter() {
         if(mPresenter == null) {
             mPresenter = new AbsencePresenterImpl(getActivity(), this, mAbsenceItem);
@@ -220,14 +262,5 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     @Override
     public void loadingStop() {
 
-    }
-
-    @Override
-    public void addItem(Absence item) {
-        LogUtil.d(TAG, ToStringBuilder.reflectionToString(item));
-        if(item.get_bsid() == mSwitch.get_bsid()) {
-            mAbsenceItem = item;
-            mBinding.setItem(mAbsenceItem);
-        }
     }
 }
