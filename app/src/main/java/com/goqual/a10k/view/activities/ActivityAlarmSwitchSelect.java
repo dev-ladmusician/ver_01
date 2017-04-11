@@ -70,6 +70,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
     @Override
     public void setSwitch(int position) {
         mSwitchPos = position;
+        mBinding.timerToolbarTitle.setText(getString(R.string.nfc_toolbar_title_select_btn));
         getSupportFragmentManager().beginTransaction()
                 .replace(mBinding.fragmentContainer.getId(),
                         FragmentAlarmSelectSwitchBtn.newInstance(position), FRAG_TAG_SELECT_BTN).commit();

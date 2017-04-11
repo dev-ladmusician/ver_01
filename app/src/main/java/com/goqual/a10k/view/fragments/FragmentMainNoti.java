@@ -7,32 +7,31 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainNotiBinding;
-import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.entity.NotiWrap;
-import com.goqual.a10k.model.realm.Noti;
 import com.goqual.a10k.presenter.NotiPresenter;
 import com.goqual.a10k.presenter.impl.NotiPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
-import com.goqual.a10k.view.adapters.AdapterAlarm;
+import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.adapters.AdapterNoti;
 import com.goqual.a10k.view.base.BaseFragment;
-
-import io.realm.Realm;
-import io.realm.exceptions.RealmException;
+import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
 
 public class FragmentMainNoti extends BaseFragment<FragmentMainNotiBinding>
-implements NotiPresenter.View<NotiWrap>{
+    implements NotiPresenter.View<NotiWrap>, IPaginationPage {
+
     public static final String TAG = FragmentMainNoti.class.getSimpleName();
     private NotiPresenter mPresenter;
     private AdapterNoti mAdapter;
+
+    private int mCurrentPage = 1;
+    private int mLastPage = 1;
 
     public static FragmentMainNoti newInstance() {
         Bundle args = new Bundle();
@@ -59,8 +58,8 @@ implements NotiPresenter.View<NotiWrap>{
 
     @Override
     public void refresh() {
-        getAdapter().clear();
-        getNotiPresenter().loadItems(1);
+        loadingStop();
+        getAdapter().refresh();
     }
 
     @Override
@@ -70,19 +69,7 @@ implements NotiPresenter.View<NotiWrap>{
 
     @Override
     public void addItem(NotiWrap item) {
-        LogUtil.d(TAG, item.toString());
-        Realm realm = Realm.getDefaultInstance();
-        try {
-            realm.executeTransaction(realm1 -> {
-                realm1.copyToRealm(item.getRealmObject());
-            });
-        }
-        catch (Exception e) {
-            LogUtil.e(TAG, e.getMessage(), e);
-        }
-        finally {
-            realm.close();
-        }
+        getAdapter().addItem(item);
     }
 
     @Override
@@ -116,14 +103,21 @@ implements NotiPresenter.View<NotiWrap>{
         mBinding.setFragment(this);
         mBinding.notiContainer.setAdapter(getAdapter());
         mBinding.notiContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // TODO: page
-        getNotiPresenter().loadItems(1);
+
+        loadItems();
+
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refresh();
             }
         });
+    }
+
+    public void loadItems() {
+        loadingStart();
+        getNotiPresenter().loadItems(mCurrentPage);
     }
 
     private NotiPresenter getNotiPresenter() {
@@ -135,12 +129,30 @@ implements NotiPresenter.View<NotiWrap>{
 
     private AdapterNoti getAdapter() {
         if(mAdapter == null) {
-            mAdapter = new AdapterNoti(getActivity());
+            mAdapter = new AdapterNoti(getActivity(), this);
             mAdapter.setOnRecyclerItemClickListener((viewId, position) -> {
                 NotiWrap noti = getAdapter().getItem(position);
                 noti.get_typeid();
             });
         }
         return mAdapter;
+    }
+
+    @Override
+    public void setPage(int page) {
+        mCurrentPage = page;
+    }
+
+    @Override
+    public void setLastPage(int lastPage) {
+        mLastPage = lastPage;
+    }
+
+    @Override
+    public void checkLoadMore() {
+        if (mCurrentPage < mLastPage) {
+            mCurrentPage = mCurrentPage + 1;
+            loadItems();
+        }
     }
 }
