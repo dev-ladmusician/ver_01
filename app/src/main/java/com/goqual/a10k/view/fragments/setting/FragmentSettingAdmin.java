@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.Toast;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentSettingAdminBinding;
@@ -107,16 +108,23 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public void handleChangeAdmin(int position) {
-        User admin = getUserAdapter().getAdmin();
-        getUserAdapter().setAdmin(getUserAdapter().getItem(position));
-        getUserAdapter().addItem(admin);
-        getUserAdapter().refresh();
+        try {
+            User admin = getUserAdapter().getAdmin().clone();
+            admin.setIsadmin(false);
 
-        mBinding.setAdminUser(getUserAdapter().getAdmin());
+            getUserAdapter().getItem(position).setIsadmin(true);
+            getUserAdapter().setAdmin(getUserAdapter().getItem(position));
+            getUserAdapter().deleteItem(position);
+            getUserAdapter().addItem(admin);
+            getUserAdapter().refresh();
+            mBinding.setAdminUser(getUserAdapter().getAdmin());
+            mSwitch.setIsadmin(false);
+        } catch (Exception e) {
 
-        ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
+        }
+
+        //((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
         onClickEdit(STATE.DONE);
-
         getListDialog().dismiss();
     }
 
@@ -189,7 +197,12 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
                     LogUtil.e(TAG, "SELECTED POSITION :: " + getListDialog().getSelectedPosition());
-                    getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
+                    if (getListDialog().getSelectedPosition() != -1)
+                        getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
+                    else
+                        Toast.makeText(getContext(),
+                                R.string.switch_setting_admin_change_admin_not_selected, Toast.LENGTH_SHORT).show();
+
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     getListDialog().dismiss();

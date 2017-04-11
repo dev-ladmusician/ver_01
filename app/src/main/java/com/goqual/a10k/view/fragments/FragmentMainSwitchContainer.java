@@ -310,8 +310,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
 
         // edit 상황일 시 switch list로 이동
-        if (mCurrentToolbarState == STATE.EDIT)
+        if (mCurrentToolbarState == STATE.EDIT) {
             mBinding.viewPager.setCurrentItem(0);
+            mCurrentPage = 0;
+        }
 
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
     }

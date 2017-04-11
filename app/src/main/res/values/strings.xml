@@ -182,6 +182,7 @@
     <string name="switch_setting_admin_delete_user_title">연결 해제</string>
     <string name="switch_setting_admin_delete_user_content"> 님을 \n삭제 하시겠습니까?</string>
     <string name="swtich_change_admin_title">관리자 변경</string>
+    <string name="switch_setting_admin_change_admin_not_selected">관리자로 임명할 유저를 선택해주세요</string>
 
     <!-- invite -->
     <string name="invite_edit_hit">Name, Phone number</string>

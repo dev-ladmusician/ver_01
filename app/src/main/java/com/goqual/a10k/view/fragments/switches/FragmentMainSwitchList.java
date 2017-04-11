@@ -60,6 +60,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
 
         mBinding.setSwitchList(SwitchManager.getInstance());
         mBinding.refresh.setRefreshing(false);
+        mCurrentToolbarState = STATE.DONE;
     }
 
     @Override
@@ -115,13 +116,6 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         super.onAttach(context);
     }
 
-    private AdapterSwitch getAdapter() {
-        if (mAdapter == null) {
-            mAdapter = new AdapterSwitch(mContext);
-        }
-        return mAdapter;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -152,13 +146,13 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         getAdapter().setOnRecyclerItemClickListener((id, position) -> {
             switch (id) {
                 case R.id.item_switch_btn_1:
-                    operationListener.onSwitchClicked(position, 1);
+                    if (getAdapter().getItem(position).get_absenceid() == null) operationListener.onSwitchClicked(position, 1);
                     break;
                 case R.id.item_switch_btn_2:
-                    operationListener.onSwitchClicked(position, 2);
+                    if (getAdapter().getItem(position).get_absenceid() == null) operationListener.onSwitchClicked(position, 2);
                     break;
                 case R.id.item_switch_btn_3:
-                    operationListener.onSwitchClicked(position, 3);
+                    if (getAdapter().getItem(position).get_absenceid() == null) operationListener.onSwitchClicked(position, 3);
                     break;
                 case R.id.item_switch_delete:
                     LogUtil.e(TAG, "DELETE");
@@ -181,7 +175,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     CustomDialog renameDialog = new CustomDialog(getActivity());
                     renameDialog.isEditable(true)
                             .setTitleText(R.string.switch_rename_title)
-                            .setEditTextHint(R.string.switch_rename_hit)
+                            .setEditTextHint(getAdapter().getItem(position).getTitle())
                             .setEditTextLimit(7)
                             .setPositiveButton(getString(R.string.common_ok), (dialog, which)-> {
                                 if (renameDialog.getEditTextMessage().length() != 0) {
@@ -210,5 +204,12 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
             mDeleteDialog = new CustomDialog(getActivity());
         }
         return mDeleteDialog;
+    }
+
+    private AdapterSwitch getAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new AdapterSwitch(mContext);
+        }
+        return mAdapter;
     }
 }
