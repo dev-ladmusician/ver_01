@@ -197,12 +197,25 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
                     LogUtil.e(TAG, "SELECTED POSITION :: " + getListDialog().getSelectedPosition());
-                    if (getListDialog().getSelectedPosition() != -1)
-                        getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
-                    else
+                    if (getListDialog().getSelectedPosition() != -1) {
+
+                        CustomDialog dialog = new CustomDialog(getContext());
+                        dialog.setTitleText(R.string.swtich_change_admin_title)
+                                .setMessageText("[" + getUserAdapter().getItem(getListDialog().getSelectedPosition()).getNum() + "] 님으로 \n관리자를 변경하시겠습니까?")
+                                .isEditable(false)
+                                .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
+                                    getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
+                                    dialog.dismiss();
+                                })
+                                .setNegativeButton(getString(R.string.common_cancel), (dia, id) -> {
+                                    dialog.dismiss();
+                                })
+                                .show();
+                        //getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
+                    } else {
                         Toast.makeText(getContext(),
                                 R.string.switch_setting_admin_change_admin_not_selected, Toast.LENGTH_SHORT).show();
-
+                    }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     getListDialog().dismiss();
@@ -243,15 +256,17 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     @Override
     public void onClickEdit(STATE state) {
-        mCurrentToolbarState = state;
-        getUserAdapter().setDeletable(state == STATE.EDIT);
+        if (mSwitch.isadmin) {
+            mCurrentToolbarState = state;
+            getUserAdapter().setDeletable(state == STATE.EDIT);
 
-        if(mCurrentToolbarState == STATE.DONE) {
-            mBinding.adminChangeAdmin.setVisibility(View.GONE);
-        } else {
-            mBinding.adminChangeAdmin.setVisibility(View.VISIBLE);
+            if(mCurrentToolbarState == STATE.DONE) {
+                mBinding.adminChangeAdmin.setVisibility(View.GONE);
+            } else {
+                mBinding.adminChangeAdmin.setVisibility(View.VISIBLE);
+            }
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
         }
-        ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
     }
 
     private CustomListDialog getListDialog() {
@@ -269,5 +284,9 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             if (mSwitch.isadmin) ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.DONE);
             else ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
         }
+    }
+
+    public Switch getSwitch() {
+        return mSwitch;
     }
 }

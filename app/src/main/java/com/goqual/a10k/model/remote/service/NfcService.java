@@ -36,9 +36,15 @@ public class NfcService {
                 @Path("page") int page
         );
 
-        @GET("nfc/detected/{tag}")
+        @GET("nfcDetected/{tag}")
         Observable<ResultDTO<Nfc>> get(
                 @Path("tag") String tag
+        );
+
+        @GET("nfcCheck/{tag}/{switchId}")
+        Observable<ResultDTO<Nfc>> check(
+                @Path("tag") String tag,
+                @Path("switchId") int switchId
         );
 
         @FormUrlEncoded

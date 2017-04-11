@@ -121,7 +121,7 @@
     <string name="nfc_info">NFC 태그를 등록하여 더욱 간편하게 사용하세요!</string>
     <string name="nfc_no_item">아직 등록된  NFC 태그가 없어요! \n핸드폰 가까이 다가가는 것만으로 손쉽게 \n스위치를 제어해보세요!</string>
     <string name="nfc_delete_title">NFC 삭제</string>
-    <string name="nfc_delete_content">해당 NFC를 정말 삭제하시겠습니까?</string>
+    <string name="nfc_delete_content">해당 NFC를 \n정말 삭제하시겠습니까?</string>
     <string name="nfc_add_info">스마트폰을 \nNFC 태그에 올려주세요.</string>
     <string name="nfc_add_error">NFC 태그를 등록하는데 오류가 발생했습니다. 이미 중복된 데이터가 있는지 확인해주세요.</string>
     <string name="nfc_not_available_title">NFC not available</string>
@@ -135,6 +135,9 @@
     <string name="nfc_rename_hint">내방 NFC</string>
     <string name="nfc_no_title_err_title">이름 설정 오류</string>
     <string name="nfc_no_title_err_content">NFC 태그에 이름을 설정해주세요.</string>
+
+    <string name="nfc_add_error_exist_tag_title">NFC 등록 오류</string>
+    <string name="nfc_add_error_exist_tag_content">이미 등록된 태그 입니다</string>
 
     <!-- permission -->
     <string name="permission_dialog_title">Request permission</string>

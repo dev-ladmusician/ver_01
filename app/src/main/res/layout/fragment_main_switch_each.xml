@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/switch_each_container_margin"
-            android:padding="@dimen/switch_each_container_padding"
             android:elevation="@dimen/switch_each_container_eleavation"
+            android:padding="@dimen/switch_each_container_padding"
             android:background="@drawable/style_switch_container">
 
             <!-- title -->
@@ -64,8 +64,8 @@
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_1"
-                    android:layout_marginBottom="@dimen/switch_each_btn_margin"
                     android:layout_marginTop="@dimen/switch_each_btn_margin"
+                    android:layout_centerInParent="true"
                     android:onClick="@{fragment::onBtnClick}"
                     android:text="@{itemSwitch.btn2 ? @string/btn_on : @string/btn_off}"
                     android:textColor="@{itemSwitch.btn2 ? @color/white : @color/grey_03}"
@@ -79,6 +79,7 @@
                     android:gravity="center"
                     android:textSize="@dimen/switch_each_btn_txt_size"
                     android:layout_below="@id/switch_btn_2"
+                    android:layout_marginTop="@dimen/switch_each_btn_margin"
                     android:onClick="@{fragment::onBtnClick}"
                     android:textColor="@{itemSwitch.btn3 ? @color/white : @color/grey_03}"
                     android:visibility="@{itemSwitch.btncount &lt; 3 ? View.GONE : View.VISIBLE}"
@@ -97,26 +98,6 @@
                 android:textSize="@dimen/switch_each_version_txt_size"
                 android:textColor="@color/grey_03"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/transparant_white"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="-16dp"
-                android:visibility="@{itemSwitch._absenceid != null ? View.VISIBLE : View.GONE}">
-                <ImageView
-                    android:layout_width="@dimen/item_height_30"
-                    android:layout_height="@dimen/item_height_30"
-                    android:layout_margin="@dimen/padding_15"
-                    android:src="@drawable/ic_lock_big"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/txt_title"
-                    android:text="@string/switch_absence_mode" />
-            </LinearLayout>
             <!-- setting -->
             <RelativeLayout
                 android:id="@+id/switch_setting"
@@ -133,6 +114,34 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ic_switch_setting"/>
+            </RelativeLayout>
+
+            <!-- absence -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparant_white"
+                android:visibility="@{itemSwitch._absenceid != null ? View.VISIBLE : View.GONE}">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/item_height_30"
+                        android:layout_height="@dimen/item_height_30"
+                        android:layout_marginBottom="@dimen/padding_10"
+                        android:src="@drawable/ic_lock_big"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/txt_title"
+                        android:text="@string/switch_absence_mode" />
+                </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

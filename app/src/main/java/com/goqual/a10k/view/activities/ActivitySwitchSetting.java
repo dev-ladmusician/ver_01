@@ -216,6 +216,9 @@ implements IActivityInteraction, IToolbarInteraction {
 
     @Override
     public void onBackPressed() {
+        if(!((FragmentSettingAdmin)mAdapterPage.getItem(0)).getSwitch().isadmin())
+            super.onBackPressed();
+
         if (mEventToolbarClick.getState() == EDIT) {
             mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
             passToolbarClickEvent(mEventToolbarClick.getState());

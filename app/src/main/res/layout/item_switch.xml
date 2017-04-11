@@ -191,7 +191,7 @@
             <ImageView
                 android:layout_width="@dimen/txt_title"
                 android:layout_height="@dimen/txt_title"
-                android:layout_margin="@dimen/padding_15"
+                android:layout_marginRight="@dimen/padding_15"
                 android:src="@drawable/ic_lock_small"/>
 
             <TextView
