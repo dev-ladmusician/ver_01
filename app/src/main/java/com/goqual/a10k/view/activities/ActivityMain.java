@@ -85,7 +85,6 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
 
     private void initMainTab() {
         mBinding.mainTaps.addOnTabSelectedListener(mainTapSelectedListener);
-
         mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_switch));
         mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_timer));
         mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_noti));
@@ -187,15 +186,17 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
             mBinding.mainPager.setCurrentItem(tab.getPosition(), true);
-            if(tab.getPosition() == 0 && !isScrollUserInteraction) {
-                ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
-            }
         }
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
+            LogUtil.e(TAG, "tab un selected");
         }
         @Override
         public void onTabReselected(TabLayout.Tab tab) {
+            LogUtil.e(TAG, "tab un reselected");
+            if(tab.getPosition() == 0 && !isScrollUserInteraction) {
+                ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
+            }
         }
     };
 

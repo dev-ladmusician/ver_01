@@ -23,6 +23,7 @@ import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterAlarm;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -108,7 +109,9 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
             mBinding.refresh.setVisibility(View.GONE);
         }
 
-        setToolbarHandler();
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_main_alarm))
+            setToolbarHandler();
     }
 
     @Override
