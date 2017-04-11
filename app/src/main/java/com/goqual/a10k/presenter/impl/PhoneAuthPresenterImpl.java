@@ -72,7 +72,14 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     @Override
     public void requestAppToken(String phoneNumber, String smsToken) {
         mView.loadingStart();
-        getUserService().getUserApi().join(phoneNumber, getFcmToken(), mContext.getString(R.string.push_type))
+
+        String fcmToken = getFcmToken();
+        LogUtil.e(TAG, "push token :: " + fcmToken);
+
+        getUserService().getUserApi().join(
+                    phoneNumber,
+                    fcmToken,
+                    mContext.getString(R.string.push_type))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((x) -> {

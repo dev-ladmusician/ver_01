@@ -1,10 +1,11 @@
-package com.goqual.a10k.util;
+package com.goqual.a10k.push;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.goqual.a10k.R;
 import com.goqual.a10k.helper.PreferenceHelper;
 import com.goqual.a10k.model.remote.service.UserService;
+import com.goqual.a10k.util.LogUtil;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -22,23 +23,27 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         super.onTokenRefresh();
         LogUtil.d(TAG, "onTokenRefresh");
-        String refreshToken = FirebaseInstanceId.getInstance().getToken();
 
-        String originToken = PreferenceHelper.getInstance(getApplicationContext())
+        String newFcmToken = FirebaseInstanceId.getInstance().getToken();
+        String originFcmToken = PreferenceHelper.getInstance(getApplicationContext())
                 .getStringValue(getString(R.string.arg_user_fcm_token), "");
+
         String phoneNumber = PreferenceHelper.getInstance(getApplicationContext())
                 .getStringValue(getString(R.string.arg_user_num), "");
         String userAppToken = PreferenceHelper.getInstance(getApplicationContext())
                 .getStringValue(getString(R.string.arg_user_token), "");
 
-        boolean isRefreshed = !originToken.equals(refreshToken);
-        LogUtil.d(TAG, "TOKEN::" + refreshToken +"\nIS_REFRESHED? " + isRefreshed);
+        boolean isRefreshed = !originFcmToken.equals(newFcmToken);
+        LogUtil.d(TAG, "TOKEN::" + newFcmToken +"\nIS_REFRESHED? " + isRefreshed);
 
         if(isRefreshed) {
+            LogUtil.d(TAG, "save new fcm token");
             PreferenceHelper.getInstance(getApplicationContext())
-                    .put(getString(R.string.arg_user_fcm_token), refreshToken);
+                    .put(getString(R.string.arg_user_fcm_token), newFcmToken);
+
             if(!phoneNumber.isEmpty() && !userAppToken.isEmpty()) {
-                getUserService().getUserApi().join(phoneNumber, refreshToken, getString(R.string.push_type))
+                LogUtil.d(TAG, "set new fcm token in server");
+                getUserService().getUserApi().join(phoneNumber, newFcmToken, getString(R.string.push_type))
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe((x) -> {
@@ -57,7 +62,6 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
             }
         }
     }
-
 
     public UserService getUserService() {
         if(mService == null) {

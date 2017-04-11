@@ -37,11 +37,8 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
     private Handler mHandler;
 
     public static FragmentAuthCertification newInstance(String phoneNumber, String authKey) {
-        
         Bundle args = new Bundle();
-        
         FragmentAuthCertification fragment = new FragmentAuthCertification();
-
         args.putString(AUTH_KEY, authKey);
         args.putString(PHONE_NUMBER, phoneNumber);
 
@@ -118,6 +115,10 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
     public void onBtnClick(View view) {
         if(view.getId() == R.id.auth_certi_btn_next) {
             if(authKey.equals(mBinding.authCertiEdit.getText().toString())){
+                /**
+                 * 새로운 fcm token이 생기면 preference update
+                 */
+
                 ((IAuthActivityInteraction)getActivity()).requestAppAuthToken(phoneNumber, authKey);
             } else {
                 CustomDialog dialog = new CustomDialog(getActivity());

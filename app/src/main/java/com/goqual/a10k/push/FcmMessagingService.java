@@ -1,7 +1,8 @@
-package com.goqual.a10k.util;
+package com.goqual.a10k.push;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.goqual.a10k.util.LogUtil;
 
 /**
  * Created by hanwool on 2017. 3. 13..
