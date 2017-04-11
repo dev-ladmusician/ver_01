@@ -26,6 +26,8 @@ import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
+import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.EDIT;
+
 /**
  * Created by hanwool on 2017. 2. 28..
  */
@@ -153,10 +155,10 @@ implements IActivityInteraction, IToolbarInteraction {
                 finish();
                 break;
             case R.id.toolbar_edit_container:
-                if (mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT)
+                if (mEventToolbarClick.getState() == EDIT)
                     mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
                 else
-                    mEventToolbarClick.setState(IToolbarClickListener.STATE.EDIT);
+                    mEventToolbarClick.setState(EDIT);
                 passToolbarClickEvent(mEventToolbarClick.getState());
                 break;
         }
@@ -178,7 +180,7 @@ implements IActivityInteraction, IToolbarInteraction {
     public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
         if (STATE == IToolbarClickListener.STATE.DONE)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
-        else if (STATE == IToolbarClickListener.STATE.EDIT)
+        else if (STATE == EDIT)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
 
         mBinding.setEditSwitchState(STATE);
@@ -210,5 +212,16 @@ implements IActivityInteraction, IToolbarInteraction {
     @Override
     public PreferenceHelper getPreferenceHelper() {
         return new PreferenceHelper(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mEventToolbarClick.getState() == EDIT) {
+            mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
+            passToolbarClickEvent(mEventToolbarClick.getState());
+            return;
+        } else {
+            super.onBackPressed();
+        }
     }
 }
