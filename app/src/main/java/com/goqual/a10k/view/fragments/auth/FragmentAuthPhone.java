@@ -21,22 +21,11 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
     public static final String TAG = FragmentAuthPhone.class.getSimpleName();
 
     public static final String PHONE_NUMBER = "phone_number";
-
-    private static String phoneNumber;
-    private static String phoneCountryCode;
-
     private IAuthActivityInteraction mInteraction;
 
-    public static FragmentAuthPhone newInstance(String phoneNumber, String countryCode) {
-
+    public static FragmentAuthPhone newInstance() {
         Bundle args = new Bundle();
-
         FragmentAuthPhone fragment = new FragmentAuthPhone();
-        args.putString(PHONE_NUMBER, phoneNumber);
-        fragment.setArguments(args);
-
-        phoneCountryCode = countryCode;
-
         return fragment;
     }
 
@@ -80,7 +69,7 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
 
         // set init country code
         mBinding.authPhoneEdit.setHint(R.string.auth_phone_edit_hint);
-        mBinding.authPhoneEdit.setDefaultCountry(phoneCountryCode.toUpperCase());
+        mBinding.authPhoneEdit.setDefaultCountry("kr");
     }
 
     public void onBtnClick(View view) {

@@ -62,14 +62,12 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_NUMBER_PERMISSION_REQ);
         }
-        else {
-            initFirstFragment();
-        }
+
+        initFirstFragment();
     }
 
     public void initFirstFragment() {
-        BaseFragment baseFragment = FragmentAuthPhone.newInstance(
-                getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode());
+        BaseFragment baseFragment = FragmentAuthPhone.newInstance();
         getSupportFragmentManager().beginTransaction()
                 .add(mBinding.fragmentContainer.getId(), baseFragment)
                 .commit();
@@ -77,8 +75,7 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
 
     @Override
     public void setInitPage() {
-        changeCurrentPage(FragmentAuthPhone.newInstance(
-                getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()));
+        changeCurrentPage(FragmentAuthPhone.newInstance());
     }
 
     @Override
@@ -111,8 +108,7 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         CustomDialog customDialog = new CustomDialog(this);
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
-            changeCurrentPage(FragmentAuthPhone.newInstance(
-                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()));
+            changeCurrentPage(FragmentAuthPhone.newInstance());
         };
         customDialog.isEditable(false)
                 .setTitleText(R.string.auth_certi_title)
@@ -196,7 +192,8 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         if(requestCode == PHONE_NUMBER_PERMISSION_REQ) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 LogUtil.d(TAG, "onRequestPermissionsResult");
-                initFirstFragment();
+
+
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
