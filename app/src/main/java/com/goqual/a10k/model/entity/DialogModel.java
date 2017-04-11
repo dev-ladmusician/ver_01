@@ -5,6 +5,7 @@ package com.goqual.a10k.model.entity;
  */
 
 public class DialogModel {
+    public int limitLength = 20;
     public String title;
     public String message;
     public String editTextHint;
@@ -107,5 +108,13 @@ public class DialogModel {
 
     public void setPasswdType(boolean passwdType) {
         isPasswdType = passwdType;
+    }
+
+    public int getLimitLength() {
+        return limitLength;
+    }
+
+    public void setLimitLength(int limitLength) {
+        this.limitLength = limitLength;
     }
 }

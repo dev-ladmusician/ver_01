@@ -182,6 +182,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     renameDialog.isEditable(true)
                             .setTitleText(R.string.switch_rename_title)
                             .setEditTextHint(R.string.switch_rename_hit)
+                            .setEditTextLimit(7)
                             .setPositiveButton(getString(R.string.common_ok), (dialog, which)-> {
                                 if (renameDialog.getEditTextMessage().length() != 0) {
                                     ((ISwitchOperationListener) getParentFragment()).onSwitchRename(

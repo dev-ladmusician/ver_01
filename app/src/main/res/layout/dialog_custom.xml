@@ -62,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15dp"
                 android:gravity="center"
+                android:maxLength="@{item.limitLength}"
                 android:hint="@{item.editTextHint}"
                 android:text="@{item.editTextMessage}"
                 android:visibility="@{item.isEditable ? View.VISIBLE : View.GONE}"/>
