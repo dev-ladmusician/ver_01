@@ -42,7 +42,7 @@
             <TextView
                 android:id="@+id/dialog_content"
                 android:layout_below="@+id/dialog_title"
-                android:layout_marginTop="@dimen/padding_24"
+                android:layout_marginTop="@dimen/padding_16"
                 android:layout_width="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_height="wrap_content"

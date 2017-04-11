@@ -249,8 +249,12 @@
     <string name="alarm_sound_default">default</string>
 
     <string name="alarm_delete_title">삭제</string>
-    <string name="alarm_delete_content">\n알람을 삭제 하시겠습니까?</string>
+    <string name="alarm_delete_content">알람을 삭제 하시겠습니까?</string>
     <string name="alarm_delete_error">알람을 삭제하는데 오류가 발생했습니다.</string>
+
+    <string name="alarm_confirm_update_title">알람 수정</string>
+    <string name="alarm_confirm_add_title">알람 저장</string>
+    <string name="alarm_confirm_add_content">입력하신 알람을 저장하시겠습니까?</string>
 
     <string name="alarm_add_error_title">알람 등록 오류</string>
     <string name="alarm_add_error_content">알람을 등록하는데 오류가 발생했습니다. \n 다시 한번 시도해주세요.</string>

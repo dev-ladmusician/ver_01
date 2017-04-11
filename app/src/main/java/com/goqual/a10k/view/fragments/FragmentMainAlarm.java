@@ -194,6 +194,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage {
                     new CustomDialog(getActivity())
                             .setTitleText(R.string.alarm_delete_title)
                             .setMessageText(R.string.alarm_delete_content)
+                            .isEditable(false)
                             .setPositiveButton(getString(R.string.common_delete), (dialog, which) -> {
                                 getPresenter().delete(position);
                                 dialog.dismiss();

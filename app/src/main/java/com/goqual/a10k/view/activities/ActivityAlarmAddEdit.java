@@ -96,18 +96,7 @@ public class ActivityAlarmAddEdit extends BaseActivity<ActivityAlarmEditBinding>
                 finishApp();
                 break;
             case R.id.timer_toolbar_save:
-                if (checkValidItem()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        mAlarm.setHour(mBinding.addAlarmTime.getHour());
-                        mAlarm.setMin(mBinding.addAlarmTime.getMinute());
-                    } else {
-                        mAlarm.setHour(mBinding.addAlarmTime.getCurrentHour());
-                        mAlarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
-                    }
-
-                    if (!isEdit) getPresenter().add(mAlarm);
-                    else getPresenter().update(mAlarm);
-                }
+                if (checkValidItem()) configDialog();
                 break;
             case R.id.alarm_menu_switch:
                 startActivityForResult(new Intent(this, ActivityAlarmSwitchSelect.class), REQ_GET_SWITCH);
@@ -215,6 +204,38 @@ public class ActivityAlarmAddEdit extends BaseActivity<ActivityAlarmEditBinding>
 
             return false;
         }
+    }
+
+    /**
+     * save전 confirm dialog
+     */
+    private void configDialog() {
+        CustomDialog customDialog = new CustomDialog(this);
+        DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        mAlarm.setHour(mBinding.addAlarmTime.getHour());
+                        mAlarm.setMin(mBinding.addAlarmTime.getMinute());
+                    } else {
+                        mAlarm.setHour(mBinding.addAlarmTime.getCurrentHour());
+                        mAlarm.setMin(mBinding.addAlarmTime.getCurrentMinute());
+                    }
+
+                    if (!isEdit) getPresenter().add(mAlarm);
+                    else getPresenter().update(mAlarm);
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+            dialog.dismiss();
+        };
+        customDialog.isEditable(false)
+                .setTitleText(isEdit ? R.string.alarm_confirm_update_title : R.string.alarm_confirm_add_title)
+                .setMessageText(R.string.alarm_confirm_add_content)
+                .setPositiveButton(getString(R.string.common_save), onClickListener)
+                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .show();
     }
 
     @Override
