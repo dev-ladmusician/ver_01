@@ -172,4 +172,9 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
     public void addItem(Object item) {
 
     }
+
+    @Override
+    public int getCurrentPage() {
+        return 0;
+    }
 }

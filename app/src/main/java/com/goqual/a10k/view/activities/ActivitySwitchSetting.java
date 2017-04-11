@@ -162,8 +162,31 @@ implements IActivityInteraction, IToolbarInteraction {
         }
     }
 
+    /**
+     * toolbar 버튼 클릭 이벤트 frag한테 보내기
+     * @param state
+     */
     private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
         ((IToolbarClickListener)mAdapterPage.getItem(mBinding.settingContainer.getCurrentItem())).onClickEdit(state);
+    }
+
+    /**
+     * toolbar 상태 변경
+     * @param STATE
+     */
+    @Override
+    public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
+        if (STATE == IToolbarClickListener.STATE.DONE)
+            mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
+        else if (STATE == IToolbarClickListener.STATE.EDIT)
+            mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
+
+        mBinding.setEditSwitchState(STATE);
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return mBinding.settingContainer.getCurrentItem();
     }
 
     @Override
@@ -178,22 +201,10 @@ implements IActivityInteraction, IToolbarInteraction {
 
     @Override
     public void setTitle(String title) {
-//        mBinding.toolbarTitle.setText(title);
-    }
-
-    @Override
-    public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
-        if (STATE == IToolbarClickListener.STATE.DONE)
-            mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
-        else if (STATE == IToolbarClickListener.STATE.EDIT)
-            mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
-
-        mBinding.setEditSwitchState(STATE);
     }
 
     @Override
     public void finishApp() {
-
     }
 
     @Override

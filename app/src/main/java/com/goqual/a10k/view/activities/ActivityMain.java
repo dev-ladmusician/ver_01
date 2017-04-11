@@ -254,6 +254,11 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     };
 
     @Override
+    public int getCurrentPage() {
+        return mBinding.mainPager.getCurrentItem();
+    }
+
+    @Override
     public PreferenceHelper getPreferenceHelper() {
         return null;
     }

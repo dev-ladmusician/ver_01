@@ -281,4 +281,9 @@ public class ActivityAlarmAddEdit extends BaseActivity<ActivityAlarmEditBinding>
             mPresenter = new AlarmAddEditPresenterImpl(getApplicationContext(), this);
         return mPresenter;
     }
+
+    @Override
+    public int getCurrentPage() {
+        return 0;
+    }
 }

@@ -112,4 +112,9 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
     public PreferenceHelper getPreferenceHelper() {
         return null;
     }
+
+    @Override
+    public int getCurrentPage() {
+        return 0;
+    }
 }

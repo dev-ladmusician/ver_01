@@ -66,7 +66,8 @@ implements UserPresenter.View<User>, IToolbarClickListener {
      */
     @Override
     public boolean hasToolbarMenus() {
-        return mSwitch.isadmin();
+        if (getUserAdapter().getItemCount() == 0) return false;
+        else return mSwitch.isadmin();
     }
 
     @Override
@@ -90,14 +91,6 @@ implements UserPresenter.View<User>, IToolbarClickListener {
     @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
-    }
-
-    @Override
-    public void onLoadComplete() {
-        loadingStop();
-        getUserAdapter().notifyDataSetChanged();
-
-        setToolbarHideNoneConnectedUser();
     }
 
     @Override
@@ -162,7 +155,9 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         mBinding.setFragment(this);
         mBinding.adminUserContainer.setAdapter(getUserAdapter());
         mBinding.adminUserContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //refresh();
+
+//        if (mSwitch.isadmin) ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.DONE);
+//        else ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
     }
 
     private void onClickDeleteItem(int position) {
@@ -257,6 +252,9 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         if (getUserAdapter().getItemCount() == 0) {
             ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
             mBinding.adminChangeAdmin.setVisibility(View.GONE);
+        } else {
+            if (mSwitch.isadmin) ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.DONE);
+            else ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
         }
     }
 }

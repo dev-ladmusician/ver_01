@@ -59,7 +59,7 @@ public class UserPresenterImpl implements UserPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::addItem,
                         mView::onError,
-                        mView::onLoadComplete);
+                        mView::refresh);
     }
 
     @Override

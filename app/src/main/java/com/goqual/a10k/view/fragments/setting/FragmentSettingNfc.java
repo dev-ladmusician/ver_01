@@ -22,6 +22,7 @@ import com.goqual.a10k.view.activities.ActivityNfcSetup;
 import com.goqual.a10k.view.adapters.AdapterNfc;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
+import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
@@ -95,7 +96,9 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
         mBinding.refresh.setRefreshing(false);
         mAdapter.refresh();
 
-        setToolbarHandler();
+        if (((IActivityInteraction)getActivity()).getCurrentPage() ==
+                getResources().getInteger(R.integer.frag_switch_setting_nfc))
+            setToolbarHandler();
     }
 
     @Override
