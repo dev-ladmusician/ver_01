@@ -2,15 +2,17 @@
     <string name="app_name">A10K</string>
 
     <!-- common -->
-    <string name="common_ok">OK</string>
-    <string name="common_allow">Allow</string>
-    <string name="common_save">Save</string>
-    <string name="common_retry">Retry</string>
-    <string name="common_delete">Delete</string>
-    <string name="common_cancel">Cancel</string>
-    <string name="common_deny">Deny</string>
-    <string name="common_quit">Quit</string>
+    <string name="common_ok">확인</string>
+    <string name="common_allow">수락</string>
+    <string name="common_save">저장</string>
+    <string name="common_retry">재시도</string>
+    <string name="common_delete">삭제</string>
+    <string name="common_cancel">취소</string>
+    <string name="common_deny">거절</string>
+    <string name="common_quit">종료</string>
     <string name="common_quit_toast">한번 더 누르시면 종료됩니다.</string>
+    <string name="common_new_switch">스위치 등록</string>
+    <string name="common_select_switch">스위치 선택</string>
 
     <!-- title -->
     <string name="title_switch_list">All Switches</string>
@@ -36,7 +38,7 @@
 
     <!-- Internet Error -->
     <string name="internet_error_title">인터넷 연결에러</string>
-    <string name="internet_error_content">인터넷 상태를 확인해 주세요.</string>
+    <string name="internet_error_content">인터넷 상태를 확인해 주세요</string>
 
     <!-- Switch -->
     <string name="switch_delete_title">삭제</string>
@@ -69,6 +71,7 @@
     <string name="info_content_sub">또로롱 소리가 나면 아래 버튼을 불러주세요.</string>
     <string name="info_btn_start">연결 시작</string>
 
+    <string name="select_wifi_title">연결한 Wi-Fi 선택</string>
     <string name="select_wifi_info">스위치가 인터넷에 연결될 Wi-Fi를 선택해주세요 \n(5G Wi-Fi는 목록에 보이지 않아요)</string>
     <string name="select_wifi_permission_rationale">스위치와 연결하기 위해서는 권한이 필요합니다.</string>
     <string name="select_wifi_permission_denied">권한이 없으면 스위치와 연결할 수 없습니다.</string>
@@ -79,6 +82,8 @@
     <string name="select_wifi_error_dialog_content">AP모드된 스위치가 없습니다.</string>
     <string name="select_wifi_error_dialog_btn_confirm">Retry</string>
     <string name="select_wifi_error_dialog_btn_cancel">Cancel</string>
+    <string name="connect_select_wifi_not_connect_title">10K AP 연결 실패</string>
+    <string name="connect_select_wifi_not_connect_content">선택하신 10K 스위치 AP에 연결 할 수 없습니다</string>
 
     <string name="select_wifi_pass_dialog_title">Wi-Fi: </string>
     <string name="select_wifi_pass_dialog_content">Wi-Fi 비밀번호를 입력해주세요.</string>
@@ -99,6 +104,15 @@
     <string name="rename_btn_txt">스위치 등록 완료</string>
     <string name="rename_edit_hint">10k switch</string>
 
+    <string name="rename_error_title">스위치 등록 실패</string>
+    <string name="rename_error_content">스위치 등록에 오류가 발생했습니다</string>
+
+    <string name="check_connection_error_title">스위치 등록 오류</string>
+    <string name="check_connection_error_content">스위치가 AP에 연결되지 않았습니다 \nWi-Fi상태와 비밀번호를 다시 한번 체크해주세요</string>
+
+    <string name="socket_error_title">스위치 등록 오류</string>
+    <string name="socket_error_content">스위치와 통신하는데 오류가 발생했습니다\n스위치 전원을 내렸다 올려 다시 시도해주세요</string>
+
     <string name="add_connection_error_title">스위치 등록 오류</string>
     <string name="add_connection_error_content">스위치를 등록하는데 오류가 발생했습니다.</string>
     <string name="add_connection_btn_ok">재시도</string>
@@ -107,7 +121,7 @@
     <string name="nfc_info">NFC 태그를 등록하여 더욱 간편하게 사용하세요!</string>
     <string name="nfc_no_item">아직 등록된  NFC 태그가 없어요! \n핸드폰 가까이 다가가는 것만으로 손쉽게 \n스위치를 제어해보세요!</string>
     <string name="nfc_delete_title">NFC 삭제</string>
-    <string name="nfc_delete_content">해당 NFC를 정말 삭제하시겠습니까?</string>
+    <string name="nfc_delete_content">해당 NFC를 \n정말 삭제하시겠습니까?</string>
     <string name="nfc_add_info">스마트폰을 \nNFC 태그에 올려주세요.</string>
     <string name="nfc_add_error">NFC 태그를 등록하는데 오류가 발생했습니다. 이미 중복된 데이터가 있는지 확인해주세요.</string>
     <string name="nfc_not_available_title">NFC not available</string>
@@ -116,10 +130,14 @@
     <string name="nfc_toolbar_title_select_btn">버튼 설정</string>
     <string name="nfc_toolbar_title_select_rename">10K</string>
     <string name="nfc_rename_info_title">자! 이제 마지막이에요!</string>
+    <string name="nfc_rename_update_title">NFC 태그 이름 변경</string>
     <string name="nfc_rename_info_content">NFC 태그에 이름을 설정해서 관리하세요!</string>
     <string name="nfc_rename_hint">내방 NFC</string>
     <string name="nfc_no_title_err_title">이름 설정 오류</string>
     <string name="nfc_no_title_err_content">NFC 태그에 이름을 설정해주세요.</string>
+
+    <string name="nfc_add_error_exist_tag_title">NFC 등록 오류</string>
+    <string name="nfc_add_error_exist_tag_content">이미 등록된 태그 입니다</string>
 
     <!-- permission -->
     <string name="permission_dialog_title">Request permission</string>
@@ -131,7 +149,8 @@
     <string name="auth_phone_title">10K 시작하기</string>
     <string name="auth_phone_edit_hint">이곳에 휴대폰번호를 입력해 주세요.</string>
     <string name="auth_phone_txt">휴대폰 번호를 입력하고 화살표 버튼을 눌러주세요\n입력된 전화번호로 10K의 회원가입이 됩니다.</string>
-    <string name="auth_phone_eror_invalid_number">올바른 휴대폰 번호를 입력하세요.</string>
+    <string name="auth_phone_eror_invalid_number_title">입력 오류</string>
+    <string name="auth_phone_eror_invalid_number_content">올바른 휴대폰 번호를 입력하세요.</string>
     <string name="auth_phone_error_request_certification">인증번호 요청하는데 오류가 발생했습니다.</string>
     <string name="auth_phone_error_register_user">회원등록하는데 오류가 발생했습니다.</string>
 
@@ -171,10 +190,12 @@
     <string name="switch_setting_chang_admin_dialog_title">ADMIN 변경</string>
     <string name="switch_setting_chang_admin_dialog_btn_cancel">취소</string>
     <string name="switch_setting_chang_admin_dialog_btn_submit">확인</string>
+    <string name="switch_setting_chang_admin_error">관리자를 변경하는데 오류가 발생했습니다</string>
     <string name="switch_setting_admin_add_user">버튼을 눌러 새로운 사용자를 초대하세요.</string>
     <string name="switch_setting_admin_delete_user_title">연결 해제</string>
     <string name="switch_setting_admin_delete_user_content"> 님을 \n삭제 하시겠습니까?</string>
     <string name="swtich_change_admin_title">관리자 변경</string>
+    <string name="switch_setting_admin_change_admin_not_selected">관리자로 임명할 유저를 선택해주세요</string>
 
     <!-- invite -->
     <string name="invite_edit_hit">Name, Phone number</string>
@@ -193,7 +214,7 @@
     <string name="invite_user_invited">초대</string>
 
     <!-- history -->
-    <string name="history_no_item">등록된 기록이 없습니다.</string>
+    <string name="history_no_item">기록이 없습니다.</string>
     <string name="history_info">날짜를 변경해서 그날의 기록을 확인하세요.</string>
     <string name="history_error">기록을 가져오는데 오류가 발생했습니다.</string>
     <string name="history_date_format">yyyy년 MM월 dd일</string>
@@ -221,11 +242,14 @@
     <string name="timer_toolbar_cancel">Cancel</string>
     <string name="timer_toolbar_save">Save</string>
     <string name="timer_menu_switch">Switch</string>
+
+    <string name="alarm_select_switch_title_default">스위치 선택 안됨</string>
     <string name="alarm_select_switch_title">스위치 선택</string>
     <string name="alarm_select_switch_content">스위치를 선택하시겠어요?</string>
 
     <string name="alarm_error_no_selected_switch">선택된 스위치가 없습니다.</string>
 
+    <string name="nfc_toolbar_title_select_repeat">반복 설정</string>
     <string name="alarm_no_item">아침과 저녁을 10K와 함께 해보세요!</string>
     <string name="alarm_repeat_everyday">매일</string>
     <string name="alarm_repeat_sun">일</string>
@@ -235,14 +259,25 @@
     <string name="alarm_repeat_thur">목</string>
     <string name="alarm_repeat_fri">금</string>
     <string name="alarm_repeat_sat">토</string>
-    <string name="alarm_repeat_never">안함</string>
+    <string name="alarm_repeat_never">반복 안함</string>
     <string name="alarm_repeat">Repeat</string>
     <string name="alarm_sound">Sound</string>
     <string name="alarm_sound_default">default</string>
 
     <string name="alarm_delete_title">삭제</string>
-    <string name="alarm_delete_content">\n알람을 삭제 하시겠습니까?</string>
+    <string name="alarm_delete_content">알람을 삭제 하시겠습니까?</string>
     <string name="alarm_delete_error">알람을 삭제하는데 오류가 발생했습니다.</string>
+
+    <string name="alarm_confirm_update_title">알람 수정</string>
+    <string name="alarm_confirm_add_title">알람 저장</string>
+    <string name="alarm_confirm_add_content">입력하신 알람을 저장하시겠습니까?</string>
+
+    <string name="alarm_add_error_title">알람 등록 오류</string>
+    <string name="alarm_add_error_content">알람을 등록하는데 오류가 발생했습니다. \n 다시 한번 시도해주세요.</string>
+    <string name="alarm_add_error_no_selected_switch_title">알람 등록 오류</string>
+    <string name="alarm_add_error_no_selected_switch_content">알람을 등록하시기 전 \n스위치를 먼저 선택해주세요</string>
+    <string name="alarm_add_error_no_switch_title">등록된 스위치 없음</string>
+    <string name="alarm_add_error_no_switch_content">10K 스위치를 먼저 등록하신 후\n10K 스위치를 다양한 기능을 사용해보세요.</string>
 
     <string name="select_switch_no_item">등록된 스위치가 없습니다.</string>
     <string name="select_switch_title">Switch</string>
@@ -259,11 +294,18 @@
     <string name="absence_error_time">올바른 시간 정보를 입력해주세요.</string>
 
     <!-- Absence -->
+    <string name="absence_default_time">설정안됨</string>
     <string name="absence_start_text">시작</string>
     <string name="absence_end_text">종료</string>
     <string name="switch_absence_mode">부재모드가 설정된 스위치입니다.</string>
     <string name="absence_info_client">Admin 권한이 있어야\n수정할 수 있습니다</string>
     <string name="absence_info_admin">부재모드 활성 시 회원들도\n 제어할 수 없습니다</string>
+
+    <string name="absence_register_error_title">부재모드 등록 오류</string>
+    <string name="absence_register_error_content">부재모드를 등록하는데 오류가 발생했습니다.</string>
+
+    <string name="absence_save_error_not_select_start_time">부재모드 시작 시간을 입력해주세요</string>
+    <string name="absence_save_error_not_select_end_time">부재모드 종료 시간을 입력해주세요</string>
 
 
 

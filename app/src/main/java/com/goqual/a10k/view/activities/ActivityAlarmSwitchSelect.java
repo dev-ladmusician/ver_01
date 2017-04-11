@@ -10,14 +10,17 @@ import android.view.View;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityAlarmSwitchSelectBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
-import com.goqual.a10k.util.event.EventToolbarClick;
-import com.goqual.a10k.util.event.RxBus;
+import com.goqual.a10k.model.SwitchManager;
+import com.goqual.a10k.model.entity.Alarm;
+import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitch;
 import com.goqual.a10k.view.fragments.alarm.FragmentAlarmSelectSwitchBtn;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IAlarmInteraction;
-import com.goqual.a10k.view.interfaces.IToolbarClickListener;
+import com.goqual.a10k.view.interfaces.IToolbarSaveClickListener;
+
+import org.parceler.Parcels;
 
 /**
  * Created by hanwool on 2017. 3. 13..
@@ -29,6 +32,9 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
 
     public static final String EXTRA_SWITCH = "extra_switch";
     public static final String EXTRA_BTN = "extra_btn";
+
+    private final String FRAG_TAG_SELECT_SWITCH = "SELECT_SWITCH";
+    private final String FRAG_TAG_SELECT_BTN = "SELECT_BTN";
 
     private int mSwitchPos;
 
@@ -49,7 +55,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
 
     @Override
     public void finishApp() {
-
+        finish();
     }
 
     @Override
@@ -57,20 +63,26 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
         return R.layout.activity_alarm_switch_select;
     }
 
+    /**
+     * 스위치 선택될 시 호출
+     * @param position
+     */
     @Override
-    public void goBtnPage(int itemPos) {
-        mSwitchPos = itemPos;
+    public void setSwitch(int position) {
+        mSwitchPos = position;
+        mBinding.timerToolbarTitle.setText(getString(R.string.nfc_toolbar_title_select_btn));
         getSupportFragmentManager().beginTransaction()
-                .replace(mBinding.fragmentContainer.getId(), FragmentAlarmSelectSwitchBtn.newInstance(itemPos))
-        .commit();
+                .replace(mBinding.fragmentContainer.getId(),
+                        FragmentAlarmSelectSwitchBtn.newInstance(position), FRAG_TAG_SELECT_BTN).commit();
         mBinding.timerToolbarSave.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void setBtns(boolean btn1, boolean btn2, boolean btn3) {
+    public void setBtns(Boolean btn1, Boolean btn2, Boolean btn3) {
         Intent result = getIntent();
-        result.putExtra(EXTRA_SWITCH, mSwitchPos);
-        result.putExtra(EXTRA_BTN, new boolean[]{btn1, btn2, btn3});
+        Switch item = SwitchManager.getInstance().getItem(mSwitchPos);
+        Alarm param = new Alarm(btn1, btn2, btn3, item.getBtnCount(), item.get_bsid(), item.getTitle());
+        result.putExtra(getString(R.string.arg_alarm), Parcels.wrap(param));
         setResult(RESULT_OK, result);
         finish();
     }
@@ -81,7 +93,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
         mBinding.setActivity(this);
 
         getSupportFragmentManager().beginTransaction()
-                .add(mBinding.fragmentContainer.getId(), FragmentAlarmSelectSwitch.newInstance())
+                .add(mBinding.fragmentContainer.getId(), FragmentAlarmSelectSwitch.newInstance(), FRAG_TAG_SELECT_SWITCH)
                 .commit();
     }
 
@@ -92,7 +104,7 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
                 finish();
                 break;
             case R.id.timer_toolbar_save:
-                RxBus.getInstance().send(new EventToolbarClick(IToolbarClickListener.STATE.DONE));
+                ((IToolbarSaveClickListener)getSupportFragmentManager().findFragmentByTag(FRAG_TAG_SELECT_BTN)).onSaveClickEdit();
                 break;
         }
     }
@@ -100,5 +112,10 @@ public class ActivityAlarmSwitchSelect extends BaseActivity<ActivityAlarmSwitchS
     @Override
     public PreferenceHelper getPreferenceHelper() {
         return null;
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return 0;
     }
 }

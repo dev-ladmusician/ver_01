@@ -7,5 +7,6 @@ package com.goqual.a10k.presenter;
 public interface NotiPresenter extends BasePresenter{
 
     interface View<T> extends BasePresenterView<T>{
+        void checkLoadMore();
     }
 }

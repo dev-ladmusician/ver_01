@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * Created by ladmusician on 2016. 12. 26..
  */
 
-public class User {
+public class User implements Cloneable{
     private int _connectionid;
     private int _userid;
     private boolean isadmin;
@@ -17,6 +17,21 @@ public class User {
     private String photoUriString;
     public boolean mIsDeletable;
     public boolean mChecked;
+
+    @Override
+    public User clone() throws CloneNotSupportedException {
+        User item = (User)super.clone();
+        item.set_connectionid(this.get_connectionid());
+        item.set_userid(this.get_userid());
+        item.setIsadmin(this.isadmin());
+        item.setNum(this.getNum());
+        item.setName(this.getName());
+        item.setmAuthKey(this.getmAuthKey());
+        item.setmPubKey(this.getmPubKey());
+        item.setmIsDeletable(this.ismIsDeletable());
+        item.setmChecked(this.ismChecked());
+        return item;
+    }
 
     public User(String name, String num, String photoString) {
         this.name = name;

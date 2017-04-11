@@ -4,7 +4,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CompoundButton;
 
 import com.goqual.a10k.databinding.ItemAlarmBinding;
 import com.goqual.a10k.model.entity.Alarm;
@@ -33,9 +32,11 @@ public class AlarmViewHolder extends RecyclerView.ViewHolder {
         mListener = listener;
         mPosition = position;
         binding.setItem(item);
-        binding.itemAlarmActive.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            onBtnClick(buttonView);
-        });
+        binding.itemAlarmActive.setChecked(item.isState());
+
+//        binding.itemAlarmActive.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            onBtnClick(buttonView);
+//        });
     }
 
     public void onBtnClick(View view) {

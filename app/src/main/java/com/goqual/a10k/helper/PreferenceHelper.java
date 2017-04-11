@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.goqual.a10k.R;
+
 import java.util.Map;
 
 /**
@@ -42,12 +44,16 @@ public class PreferenceHelper {
         editor.commit();
     }
 
+    /**
+     * fcm에 관련된 token을 재외한 preference 값 삭제
+     */
     public void deleteAllValues() {
         SharedPreferences pref = mContext.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         Map<String, ?> values = pref.getAll();
         for(String key : values.keySet()) {
-            editor.remove(key);
+            if (!key.equals(mContext.getString(R.string.arg_user_fcm_token)))
+                editor.remove(key);
         }
         editor.apply();
     }

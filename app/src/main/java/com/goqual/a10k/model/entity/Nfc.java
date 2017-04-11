@@ -22,6 +22,10 @@ public class Nfc implements BaseRealmWraper<NfcRealm>{
     public boolean mIsDeletable;
     public boolean isEditing;
 
+    public Nfc() {
+        this._nfcid = 0;
+    }
+
     public Nfc(int _bsid, boolean btn1, boolean btn2, boolean btn3, String tag, String title) {
         this._bsid = _bsid;
         this.btn1 = btn1;

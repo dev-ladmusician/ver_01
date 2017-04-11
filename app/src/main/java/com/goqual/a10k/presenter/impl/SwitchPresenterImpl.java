@@ -67,7 +67,8 @@ public class SwitchPresenterImpl implements SwitchPresenter {
 
     @Override
     public void deleteItem(int position) {
-        getSwitchService().getSwitchApi().delete(SwitchManager.getInstance().getItem(position).get_connectionid())
+        Switch item = SwitchManager.getInstance().getItem(position);
+        getSwitchService().getSwitchApi().delete(item.get_connectionid())
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -79,7 +80,10 @@ public class SwitchPresenterImpl implements SwitchPresenter {
                             e.printStackTrace();
                             //mView.onFailDelete(position);
                         },
-                        () -> mAdapter.notifyDataSetChanged());
+                        () -> {
+                            mAdapter.notifyDataSetChanged();
+                            mView.passDeleteEvent(item.get_bsid());
+                        });
     }
 
     @Override

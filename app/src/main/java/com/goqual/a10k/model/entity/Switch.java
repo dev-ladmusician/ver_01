@@ -7,29 +7,36 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 
 public class Switch implements Cloneable{
-    private int _connectionid;
-    private int _bsid;
-    private int btncount;
-    private int seq;
-    private boolean btn1;
-    private boolean btn2;
-    private boolean btn3;
-    private String hw;
-    private String fw;
+    public int _connectionid;
+    public int _bsid;
+    public int btncount;
+    public int seq;
+    public Integer _absenceid;
+    public boolean btn1;
+    public boolean btn2;
+    public boolean btn3;
+    public String hw;
+    public String fw;
     public String title;
-    private String macaddr;
-    private boolean isavailable;
-    private boolean isadmin;
-    private Integer _absenceid;
-    private boolean outlet;
+    public String macaddr;
+    public boolean isavailable;
+    public boolean isadmin;
     public boolean mIsStateView;
 
-    private String WIFI_SSID = "";
-    private String WIFI_BSSID = "";
-    private String WIFI_PASSWORD = "";
-    private String WIFI_CAPABILITY = "";
+    public String WIFI_SSID = "";
+    public String WIFI_BSSID = "";
+    public String WIFI_PASSWORD = "";
+    public String WIFI_CAPABILITY = "";
 
     public Switch() {
+    }
+
+    public Switch(String title, int btncount, boolean btn1, boolean btn2, boolean btn3) {
+        this.title = title;
+        this.btncount = btncount;
+        this.btn1 = btn1;
+        this.btn2 = btn2;
+        this.btn3 = btn3;
     }
 
     // BS
@@ -139,14 +146,6 @@ public class Switch implements Cloneable{
         this._absenceid = _absenceid;
     }
 
-    public boolean isOutlet() {
-        return outlet;
-    }
-
-    public void setOutlet(boolean outlet) {
-        this.outlet = outlet;
-    }
-
     public boolean ismIsStateView() {
         return mIsStateView;
     }
@@ -228,7 +227,6 @@ public class Switch implements Cloneable{
         newSwitch.setTitle(this.getTitle());
         newSwitch.setMacaddr(this.getMacaddr());
         newSwitch.setIsavailable(this.isavailable());
-        newSwitch.setOutlet(this.isOutlet());
         newSwitch.setmIsStateView(this.ismIsStateView());
         newSwitch.setWIFI_SSID(this.getWIFI_SSID());
         newSwitch.setWIFI_BSSID(this.getWIFI_BSSID());

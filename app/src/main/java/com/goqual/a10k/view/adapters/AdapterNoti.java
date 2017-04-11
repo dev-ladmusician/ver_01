@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.model.entity.NotiWrap;
+import com.goqual.a10k.presenter.NotiPresenter;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
@@ -25,10 +26,12 @@ public class AdapterNoti extends RecyclerView.Adapter<NotiViewHolder>
 
     private Context mContext = null;
     private List<NotiWrap> mItemList = new ArrayList<>();
+    private NotiPresenter.View<NotiWrap> mView;
     private OnRecyclerItemClickListener mItemClickListener = null;
 
-    public AdapterNoti(Context mContext) {
+    public AdapterNoti(Context mContext, NotiPresenter.View<NotiWrap> view) {
         this.mContext = mContext;
+        this.mView = view;
     }
 
     @Override
@@ -40,6 +43,10 @@ public class AdapterNoti extends RecyclerView.Adapter<NotiViewHolder>
     @Override
     public void onBindViewHolder(NotiViewHolder holder, int position) {
         holder.bindView(position, mItemList.get(position), mItemClickListener);
+
+        if (position == getItemCount() - 1) {
+            mView.checkLoadMore();
+        }
     }
 
     @Override

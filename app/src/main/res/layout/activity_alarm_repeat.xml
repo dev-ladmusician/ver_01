@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/nfc_toolbar_title_select_btn"
+                android:text="@string/nfc_toolbar_title_select_repeat"
                 android:textColor="@color/white"
                 android:textSize="@dimen/item_ic_size_xxs"
                 android:textStyle="bold" />
@@ -58,9 +58,9 @@
                 android:id="@+id/toolbar_save"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:visibility="gone"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true">
+                android:layout_centerVertical="true"
+                android:onClick="@{activity::onBtnClick}">
 
                 <TextView
                     android:layout_width="wrap_content"

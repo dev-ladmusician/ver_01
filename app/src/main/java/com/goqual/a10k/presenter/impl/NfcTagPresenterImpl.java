@@ -3,14 +3,12 @@ package com.goqual.a10k.presenter.impl;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.Nfc;
-import com.goqual.a10k.model.realm.NfcRealm;
 import com.goqual.a10k.model.remote.service.NfcService;
 import com.goqual.a10k.presenter.NfcTagPresenter;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.interfaces.IPaginationPage;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -63,16 +61,6 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     }
 
     @Override
-    public void loadItemsInRealm(int page) {
-        RealmResults<NfcRealm> realmResults = mRealm.where(NfcRealm.class).findAll();
-        for(NfcRealm nfcRealm : realmResults) {
-            mView.addItem(new Nfc(nfcRealm));
-        }
-        mView.loadingStop();
-        mView.refresh();
-    }
-
-    @Override
     public void getItem(String tadId) {
 //        getNfcService().getrNfcApi().get(tadId)
 //                .subscribeOn(Schedulers.newThread())
@@ -103,21 +91,7 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
     }
 
     @Override
-    public void detectedNfc(String tag) {
-//        getNfcService().getrNfcApi().get(tag)
-//                .subscribeOn(Schedulers.newThread())
-//                .filter(result -> result.getResult() != null)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(rtv -> {
-//                            mView.loadingStop();
-////                            ((ActivityNfcDetected)mView).setNfc(rtv.getResult());
-//                        },
-//                        mView::onError,
-//                        mView::onSuccess);
-    }
-
-    @Override
-    public void update(Nfc item) {
+    public void update(Nfc item, int position) {
         getNfcService().getrNfcApi().put(
                 item.get_nfcid(),
                 item.get_bsid(),
@@ -132,6 +106,8 @@ public class NfcTagPresenterImpl implements NfcTagPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultDTO -> {
                             mView.loadingStop();
+                            mAdapter.updateItem(position, item);
+                            mAdapter.refresh();
                         },
                         mView::onError,
                         mView::onSuccess);

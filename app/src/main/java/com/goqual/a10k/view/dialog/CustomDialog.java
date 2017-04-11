@@ -10,13 +10,13 @@ import android.support.annotation.StyleRes;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.DialogCustomBinding;
 import com.goqual.a10k.model.entity.DialogModel;
 import com.goqual.a10k.util.KeyPadUtil;
+import com.goqual.a10k.util.LogUtil;
 
 /**
  * Created by hanwool on 2017. 2. 22..
@@ -60,29 +60,29 @@ public class CustomDialog extends Dialog {
         mBinding.setItem(mModel);
         setContentView(mBinding.getRoot());
 
-        if(mModel.isEditable) {
-            mBinding.dialogEdit.requestFocus();
-            InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        }
-        setOnDismissListener(dialog -> {
-            KeyPadUtil.KeyPadDown(mContext, mBinding.dialogEdit);
-            mIsShowing = false;
-        });
-        setOnCancelListener(dialog -> {
-            KeyPadUtil.KeyPadDown(mContext, mBinding.dialogEdit);
-            mIsShowing = false;
-        });
-
         if (mModel.isPasswdType) {
             mBinding.dialogEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
     }
 
     @Override
+    protected void onStart() {
+        if (mModel.isEditable) {
+            LogUtil.e("CUSTOM DIALOG", "dialog on start");
+            KeyPadUtil.KeyPadUp(mContext, mBinding.dialogEdit);
+            mBinding.dialogEdit.setFocusable(true);
+            mBinding.dialogEdit.requestFocus();
+            mBinding.dialogEdit.setEnabled(true);
+            mBinding.dialogEdit.setClickable(true);
+            mBinding.dialogEdit.setEnabled(true);
+            mBinding.setItem(mModel);
+        }
+
+        super.onStart();
+    }
+
+    @Override
     protected void onStop() {
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mBinding.dialogEdit.getWindowToken(), 0);
         super.onStop();
     }
 
@@ -160,6 +160,11 @@ public class CustomDialog extends Dialog {
         return this;
     }
 
+    public CustomDialog setEditTextLimit(int length) {
+        mModel.setLimitLength(length);
+        return this;
+    }
+
     public EditText getEditText() {
         return mBinding.dialogEdit;
     }
@@ -189,6 +194,7 @@ public class CustomDialog extends Dialog {
     @Override
     public void dismiss() {
         mIsShowing = false;
+        KeyPadUtil.KeyPadDown(mContext, mBinding.dialogEdit);
         super.dismiss();
     }
 

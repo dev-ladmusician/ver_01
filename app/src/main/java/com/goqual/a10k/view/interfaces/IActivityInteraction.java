@@ -12,7 +12,11 @@ import com.goqual.a10k.helper.PreferenceHelper;
 public interface IActivityInteraction {
     AppBarLayout getAppbar();
     Toolbar getToolbar();
+
+    int getCurrentPage();
+
     void setTitle(String title);
     void finishApp();
+
     PreferenceHelper getPreferenceHelper();
 }

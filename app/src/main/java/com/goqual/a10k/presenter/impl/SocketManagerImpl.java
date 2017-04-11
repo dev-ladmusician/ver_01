@@ -96,7 +96,7 @@ public class SocketManagerImpl implements SocketManager, ISocketIoConnectionList
 
     @Override
     public void onReceiveMessage(String type, SocketData data) {
-        LogUtil.e(TAG, "SOCKET onReceiveMessage");
+        LogUtil.d(TAG, "SOCKET onReceiveMessage");
         switch (data.getCode()) {
             case HttpResponseCode.OK:
                 switch (type) {

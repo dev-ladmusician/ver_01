@@ -26,6 +26,8 @@ import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
+import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.EDIT;
+
 /**
  * Created by hanwool on 2017. 2. 28..
  */
@@ -153,17 +155,40 @@ implements IActivityInteraction, IToolbarInteraction {
                 finish();
                 break;
             case R.id.toolbar_edit_container:
-                if (mEventToolbarClick.getState() == IToolbarClickListener.STATE.EDIT)
+                if (mEventToolbarClick.getState() == EDIT)
                     mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
                 else
-                    mEventToolbarClick.setState(IToolbarClickListener.STATE.EDIT);
+                    mEventToolbarClick.setState(EDIT);
                 passToolbarClickEvent(mEventToolbarClick.getState());
                 break;
         }
     }
 
+    /**
+     * toolbar 버튼 클릭 이벤트 frag한테 보내기
+     * @param state
+     */
     private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
         ((IToolbarClickListener)mAdapterPage.getItem(mBinding.settingContainer.getCurrentItem())).onClickEdit(state);
+    }
+
+    /**
+     * toolbar 상태 변경
+     * @param STATE
+     */
+    @Override
+    public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
+        if (STATE == IToolbarClickListener.STATE.DONE)
+            mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
+        else if (STATE == EDIT)
+            mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
+
+        mBinding.setEditSwitchState(STATE);
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return mBinding.settingContainer.getCurrentItem();
     }
 
     @Override
@@ -178,26 +203,28 @@ implements IActivityInteraction, IToolbarInteraction {
 
     @Override
     public void setTitle(String title) {
-//        mBinding.toolbarTitle.setText(title);
-    }
-
-    @Override
-    public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
-        if (STATE == IToolbarClickListener.STATE.DONE)
-            mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
-        else if (STATE == IToolbarClickListener.STATE.EDIT)
-            mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
-
-        mBinding.setEditSwitchState(STATE);
     }
 
     @Override
     public void finishApp() {
-
     }
 
     @Override
     public PreferenceHelper getPreferenceHelper() {
         return new PreferenceHelper(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!((FragmentSettingAdmin)mAdapterPage.getItem(0)).getSwitch().isadmin())
+            super.onBackPressed();
+
+        if (mEventToolbarClick.getState() == EDIT) {
+            mEventToolbarClick.setState(IToolbarClickListener.STATE.DONE);
+            passToolbarClickEvent(mEventToolbarClick.getState());
+            return;
+        } else {
+            super.onBackPressed();
+        }
     }
 }

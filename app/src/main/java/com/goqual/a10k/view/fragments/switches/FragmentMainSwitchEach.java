@@ -46,7 +46,7 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchEachB
 
     @Override
     public String getTitle() {
-        return String.format("%s: %s", getString(R.string.app_name), mSwitch.getTitle());
+        return mSwitch.getTitle();
     }
 
     @Override

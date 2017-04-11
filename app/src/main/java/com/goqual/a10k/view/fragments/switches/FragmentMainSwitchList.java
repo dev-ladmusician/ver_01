@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,13 @@ import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.model.SwitchManager;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.activities.ActivitySwitchConnection;
 import com.goqual.a10k.view.adapters.AdapterSwitch;
 import com.goqual.a10k.view.base.BaseFragment;
 import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.ISwitchOperationListener;
+import com.goqual.a10k.view.interfaces.ISwitchInteraction;
 import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 
@@ -34,6 +37,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
     private CustomDialog mDeleteDialog = null;
     private CustomDialog mRenameDialog = null;
     private ISwitchOperationListener operationListener = null;
+    private STATE mCurrentToolbarState = STATE.DONE;
 
     public static FragmentMainSwitchList newInstance() {
         Bundle args = new Bundle();
@@ -44,6 +48,7 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
 
     @Override
     public void onClickEdit(STATE state) {
+        mCurrentToolbarState = state;
         getAdapter().setItemState(state == STATE.EDIT);
     }
 
@@ -54,6 +59,8 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         getAdapter().refresh();
 
         mBinding.setSwitchList(SwitchManager.getInstance());
+        mBinding.refresh.setRefreshing(false);
+        mCurrentToolbarState = STATE.DONE;
     }
 
     @Override
@@ -109,13 +116,6 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         super.onAttach(context);
     }
 
-    private AdapterSwitch getAdapter() {
-        if (mAdapter == null) {
-            mAdapter = new AdapterSwitch(mContext);
-        }
-        return mAdapter;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -134,25 +134,33 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         mBinding.switchList.setAdapter(getAdapter());
         mBinding.switchList.setLayoutManager(new LinearLayoutManager(mContext));
 
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getAdapter().clear();
+                ((ISwitchInteraction)getParentFragment()).refreshSwitchList();
+            }
+        });
+
         getAdapter().setOnRecyclerItemClickListener((id, position) -> {
             switch (id) {
                 case R.id.item_switch_btn_1:
-                    operationListener.onSwitchClicked(position, 1);
+                    if (getAdapter().getItem(position).get_absenceid() == null) operationListener.onSwitchClicked(position, 1);
                     break;
                 case R.id.item_switch_btn_2:
-                    operationListener.onSwitchClicked(position, 2);
+                    if (getAdapter().getItem(position).get_absenceid() == null) operationListener.onSwitchClicked(position, 2);
                     break;
                 case R.id.item_switch_btn_3:
-                    operationListener.onSwitchClicked(position, 3);
+                    if (getAdapter().getItem(position).get_absenceid() == null) operationListener.onSwitchClicked(position, 3);
                     break;
                 case R.id.item_switch_delete:
                     LogUtil.e(TAG, "DELETE");
                     getDeleteDialog().isEditable(false)
                             .setTitleText(R.string.switch_delete_title)
-                            .setMessageText(R.string.switch_delete_content)
+                            .setMessageText("[" + getAdapter().getItem(position).getTitle() + "] " + getString(R.string.switch_delete_content))
                             .setPositiveButton(getString(R.string.common_delete), ((dialog, i) -> {
-                                ((ISwitchOperationListener) getParentFragment()).onSwitchDelete(
-                                        position);
+                                ((ISwitchOperationListener) getParentFragment()).onSwitchDelete(position);
                                 getDeleteDialog().dismiss();
                             }))
                             .setNegativeButton(getString(R.string.common_cancel), ((dialog, i) -> {
@@ -163,36 +171,31 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
                     break;
                 case R.id.item_switch_rename:
                     LogUtil.e(TAG, "RENAME");
-                    getRenameDialog().isEditable(true)
+                    CustomDialog renameDialog = new CustomDialog(getActivity());
+                    renameDialog.isEditable(true)
                             .setTitleText(R.string.switch_rename_title)
-                            .setEditTextHint(R.string.switch_rename_hit)
+                            .setEditTextHint(getAdapter().getItem(position).getTitle())
+                            .setEditTextLimit(7)
                             .setPositiveButton(getString(R.string.common_ok), (dialog, which)-> {
-                                if (getRenameDialog().getEditTextMessage().length() != 0) {
+                                if (renameDialog.getEditTextMessage().length() != 0) {
                                     ((ISwitchOperationListener) getParentFragment()).onSwitchRename(
-                                            position, getRenameDialog().getEditTextMessage());
-                                    getRenameDialog().dismiss();
+                                            position, renameDialog.getEditTextMessage());
+                                    renameDialog.dismiss();
                                 }
 
                             })
                             .setNegativeButton(getString(R.string.common_cancel), (dialog, which) -> {
-                                getRenameDialog().setEditTextMessage("");
-                                getRenameDialog().dismiss();
+                                renameDialog.dismiss();
                             })
                             .show();
                     break;
+                case R.id.item_switch_container:
+                    if (mCurrentToolbarState != STATE.EDIT) {
+                        ((ISwitchInteraction)getParentFragment()).changeCurrentPage(position);
+                    }
+                    break;
             }
         });
-    }
-
-    private void onItemClick(int position) {
-
-    }
-
-    private CustomDialog getRenameDialog() {
-        if (mRenameDialog == null) {
-            mRenameDialog = new CustomDialog(getActivity());
-        }
-        return mRenameDialog;
     }
 
     private CustomDialog getDeleteDialog() {
@@ -200,5 +203,12 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
             mDeleteDialog = new CustomDialog(getActivity());
         }
         return mDeleteDialog;
+    }
+
+    private AdapterSwitch getAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new AdapterSwitch(mContext);
+        }
+        return mAdapter;
     }
 }

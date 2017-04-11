@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -34,6 +35,8 @@ import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
 public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         implements IActivityInteraction, PhoneAuthPresenter.View, IAuthActivityInteraction{
 
+    private final String fragPhoneTag = "frag_phone_tag";
+
     public enum ERROR_REASON{
         CONNECTION_ERROR,
         TIMEOUT,
@@ -51,26 +54,31 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
-    public void onBtnClick(View view) {
-
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_NUMBER_PERMISSION_REQ);
         }
-        else {
-            initFirstFragment();
-        }
+
+        initFirstFragment();
     }
 
-    private void initFirstFragment() {
-        BaseFragment baseFragment = FragmentAuthPhone.newInstance(
-                getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode());
+    public void initFirstFragment() {
+        BaseFragment baseFragment = FragmentAuthPhone.newInstance();
         getSupportFragmentManager().beginTransaction()
-                .add(mBinding.fragmentContainer.getId(), baseFragment)
+                .add(mBinding.fragmentContainer.getId(), baseFragment, fragPhoneTag)
+                .commit();
+    }
+
+    @Override
+    public void setInitPage() {
+        changeCurrentPage(FragmentAuthPhone.newInstance());
+    }
+
+    @Override
+    public void changeCurrentPage(Fragment frag) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(mBinding.fragmentContainer.getId(), frag)
                 .commit();
     }
 
@@ -85,15 +93,6 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
-    public void setTitle(String title) {
-    }
-
-    @Override
-    public void finishApp() {
-
-    }
-
-    @Override
     public void onSuccessAuthProcess() {
         startActivity(new Intent(this, ActivityMain.class));
         finish();
@@ -104,17 +103,13 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         CustomDialog customDialog = new CustomDialog(this);
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(mBinding.fragmentContainer.getId(),
-                            FragmentAuthPhone.newInstance(
-                                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()))
-                    .commit();
+            changeCurrentPage(FragmentAuthPhone.newInstance());
         };
         customDialog.isEditable(false)
                 .setTitleText(R.string.auth_certi_title)
                 .setMessageText(message)
-                .setPositiveButton(getString(R.string.common_retry), onClickListener)
-                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(false)
+                .setNegativeButton(getString(R.string.common_ok), onClickListener)
                 .show();
 
     }
@@ -130,22 +125,13 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     }
 
     @Override
-    public void refresh() {
-
-    }
-
-    @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getMessage(), e);
 
         CustomDialog customDialog = new CustomDialog(this);
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(mBinding.fragmentContainer.getId(),
-                            FragmentAuthPhone.newInstance(
-                                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()))
-                    .commit();
+
         };
         customDialog.isEditable(false)
                 .setTitleText(R.string.auth_certi_title)
@@ -153,11 +139,6 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
                 .setPositiveButton(getString(R.string.common_retry), onClickListener)
                 .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                 .show();
-    }
-
-    @Override
-    public void addItem(Object item) {
-
     }
 
     @Override
@@ -172,18 +153,7 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
 
     @Override
     public void onSuccessPhoneNumberAuth(String phoneNumber, String auth) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(mBinding.fragmentContainer.getId(), FragmentAuthCertification.newInstance(phoneNumber, auth))
-                .commit();
-    }
-
-    @Override
-    public void requestStartAppAuth() {
-    }
-
-    @Override
-    public void onEndAuthProcess() {
-
+        changeCurrentPage(FragmentAuthCertification.newInstance(phoneNumber, auth));
     }
 
     @Override
@@ -191,7 +161,9 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         if(requestCode == PHONE_NUMBER_PERMISSION_REQ) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 LogUtil.d(TAG, "onRequestPermissionsResult");
-                initFirstFragment();
+                FragmentAuthPhone frag = (FragmentAuthPhone)getSupportFragmentManager().findFragmentByTag(fragPhoneTag);
+                frag.setCountryCode(getPresenter().getPhoneNumberCountryCode());
+                frag.setPhoneNumber(getPresenter().getPhoneNumber());
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -207,5 +179,38 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
     @Override
     public PreferenceHelper getPreferenceHelper() {
         return null;
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return 0;
+    }
+
+    @Override
+    public void requestStartAppAuth() {
+    }
+
+    @Override
+    public void onEndAuthProcess() {
+    }
+
+    @Override
+    public void addItem(Object item) {
+    }
+
+    @Override
+    public void refresh() {
+    }
+
+    @Override
+    public void setTitle(String title) {
+    }
+
+    @Override
+    public void finishApp() {
+    }
+
+    @Override
+    public void onBtnClick(View view) {
     }
 }
