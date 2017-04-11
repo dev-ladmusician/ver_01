@@ -11,5 +11,6 @@ public interface UserPresenter {
 
     interface View<T> extends BasePresenterView<T>{
         void handleChangeAdmin(int position);
+        void onErrorChangeAdmin();
     }
 }

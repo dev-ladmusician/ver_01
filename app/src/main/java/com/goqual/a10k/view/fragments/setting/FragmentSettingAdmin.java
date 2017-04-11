@@ -16,6 +16,7 @@ import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.presenter.UserPresenter;
 import com.goqual.a10k.presenter.impl.UserPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
+import com.goqual.a10k.util.ToastUtil;
 import com.goqual.a10k.view.activities.ActivityInviteUser;
 import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -118,6 +119,7 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             getUserAdapter().addItem(admin);
             getUserAdapter().refresh();
             mBinding.setAdminUser(getUserAdapter().getAdmin());
+            mBinding.adminChangeAdmin.setVisibility(View.GONE);
             mSwitch.setIsadmin(false);
         } catch (Exception e) {
 
@@ -190,6 +192,12 @@ implements UserPresenter.View<User>, IToolbarClickListener {
             .setPositiveButton(getString(R.string.common_delete), onClickListener)
             .setNegativeButton(getString(R.string.common_cancel), onClickListener)
             .show();
+    }
+
+    @Override
+    public void onErrorChangeAdmin() {
+        getUserAdapter().setNonChecked();
+        ToastUtil.show(getActivity(), getString(R.string.switch_setting_chang_admin_error));
     }
 
     private void onClickChangeAdmin() {

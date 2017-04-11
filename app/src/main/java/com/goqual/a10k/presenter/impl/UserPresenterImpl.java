@@ -44,7 +44,7 @@ public class UserPresenterImpl implements UserPresenter {
                 .subscribe(resultDTO -> {
                             mView.handleChangeAdmin(position);
                         },
-                        mView::onError,
+                        (e)-> mView.onErrorChangeAdmin(),
                         mView::refresh);
     }
 
@@ -72,7 +72,7 @@ public class UserPresenterImpl implements UserPresenter {
                 .subscribe(resultDTO -> {
                             mAdapterDataModel.deleteItem(position);
                         },
-                        Throwable::printStackTrace,
+                        mView::onError,
                         () -> mView.refresh());
     }
 
