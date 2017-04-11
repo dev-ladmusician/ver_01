@@ -26,21 +26,6 @@
                 android:textSize="40dp"
                 android:textStyle="bold" />
 
-            <!--<EditText-->
-                <!--android:id="@+id/auth_phone_edit"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/auth_title"-->
-                <!--android:layout_marginTop="60dp"-->
-                <!--android:hint="@string/auth_phone_edit_hint"-->
-                <!--android:inputType="phone"-->
-                <!--android:textColorHighlight="@color/bg"-->
-                <!--android:maxLines="1"-->
-                <!--android:paddingBottom="15dp"-->
-                <!--android:textColor="@color/grey_07"-->
-                <!--android:maxLength="14"-->
-                <!--android:textSize="20dp" />-->
-
             <com.lamudi.phonefield.PhoneInputLayout
                 android:id="@+id/auth_phone_edit"
                 android:layout_width="match_parent"
@@ -51,14 +36,6 @@
                 android:textSize="20dp"
                 android:maxLength="14"
                 android:layout_marginTop="25dp" />
-
-            <!--<com.lamudi.phonefield.PhoneEditText-->
-                <!--android:id="@+id/edit_text"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_marginBottom="16dp"-->
-                <!--/>-->
 
             <RelativeLayout
                 android:id="@+id/auth_phone_btn_next"

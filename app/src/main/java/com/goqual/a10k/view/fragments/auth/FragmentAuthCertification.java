@@ -3,7 +3,6 @@ package com.goqual.a10k.view.fragments.auth;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import com.goqual.a10k.databinding.FragmentAuthCertificationBinding;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
 
 import java.util.Locale;
@@ -119,9 +119,20 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
         if(view.getId() == R.id.auth_certi_btn_next) {
             if(authKey.equals(mBinding.authCertiEdit.getText().toString())){
                 ((IAuthActivityInteraction)getActivity()).requestAppAuthToken(phoneNumber, authKey);
-            }
-            else {
-                Snackbar.make(mBinding.getRoot(), R.string.auth_certi_dialog_incorrect_certifinum, Snackbar.LENGTH_LONG).show();
+            } else {
+                CustomDialog dialog = new CustomDialog(getActivity());
+                dialog.isEditable(true)
+                        .isEditable(false)
+                        .setTitleText(R.string.auth_certi_dialog_incorrect_certifinum_title)
+                        .setMessageText(R.string.auth_certi_dialog_incorrect_certifinum)
+                        .setPositiveButton(getString(R.string.common_ok), (dia, which) -> {
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton(getString(R.string.common_retry), (dia, which) -> {
+                            ((ActivityPhoneAuth)getActivity()).setInitPage();
+                            dialog.dismiss();
+                        })
+                        .show();
             }
         }
     }

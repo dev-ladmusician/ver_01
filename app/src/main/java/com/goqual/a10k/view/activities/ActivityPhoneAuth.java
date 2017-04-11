@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -66,12 +67,18 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         }
     }
 
-    private void initFirstFragment() {
+    public void initFirstFragment() {
         BaseFragment baseFragment = FragmentAuthPhone.newInstance(
                 getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode());
         getSupportFragmentManager().beginTransaction()
                 .add(mBinding.fragmentContainer.getId(), baseFragment)
                 .commit();
+    }
+
+    @Override
+    public void setInitPage() {
+        changeCurrentPage(FragmentAuthPhone.newInstance(
+                getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()));
     }
 
     @Override
@@ -104,17 +111,14 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         CustomDialog customDialog = new CustomDialog(this);
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(mBinding.fragmentContainer.getId(),
-                            FragmentAuthPhone.newInstance(
-                                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()))
-                    .commit();
+            changeCurrentPage(FragmentAuthPhone.newInstance(
+                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()));
         };
         customDialog.isEditable(false)
                 .setTitleText(R.string.auth_certi_title)
                 .setMessageText(message)
-                .setPositiveButton(getString(R.string.common_retry), onClickListener)
-                .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                .setPositiveButton(false)
+                .setNegativeButton(getString(R.string.common_ok), onClickListener)
                 .show();
 
     }
@@ -141,11 +145,7 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         CustomDialog customDialog = new CustomDialog(this);
         DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
             dialog.dismiss();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(mBinding.fragmentContainer.getId(),
-                            FragmentAuthPhone.newInstance(
-                                    getPresenter().getPhoneNumber(), getPresenter().getPhoneNumberCountryCode()))
-                    .commit();
+
         };
         customDialog.isEditable(false)
                 .setTitleText(R.string.auth_certi_title)
@@ -153,6 +153,13 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
                 .setPositiveButton(getString(R.string.common_retry), onClickListener)
                 .setNegativeButton(getString(R.string.common_cancel), onClickListener)
                 .show();
+    }
+
+    @Override
+    public void changeCurrentPage(Fragment frag) {
+        getSupportFragmentManager().beginTransaction()
+            .replace(mBinding.fragmentContainer.getId(), frag)
+            .commit();
     }
 
     @Override
@@ -172,9 +179,7 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
 
     @Override
     public void onSuccessPhoneNumberAuth(String phoneNumber, String auth) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(mBinding.fragmentContainer.getId(), FragmentAuthCertification.newInstance(phoneNumber, auth))
-                .commit();
+        changeCurrentPage(FragmentAuthCertification.newInstance(phoneNumber, auth));
     }
 
     @Override

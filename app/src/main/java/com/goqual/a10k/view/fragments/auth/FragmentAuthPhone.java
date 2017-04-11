@@ -2,19 +2,16 @@ package com.goqual.a10k.view.fragments.auth;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentAuthPhoneBinding;
-import com.goqual.a10k.presenter.impl.PhoneAuthPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.base.BaseFragment;
+import com.goqual.a10k.view.dialog.CustomDialog;
 import com.goqual.a10k.view.interfaces.IAuthActivityInteraction;
-
-import java.util.regex.Pattern;
 
 /**
  * Created by hanwool on 2017. 2. 24..
@@ -38,7 +35,6 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
         args.putString(PHONE_NUMBER, phoneNumber);
         fragment.setArguments(args);
 
-        phoneNumber = phoneNumber;
         phoneCountryCode = countryCode;
 
         return fragment;
@@ -91,7 +87,16 @@ public class FragmentAuthPhone extends BaseFragment<FragmentAuthPhoneBinding> {
         if (mBinding.authPhoneEdit.isValid()) {
             mInteraction.requestSmsToken(mBinding.authPhoneEdit.getPhoneNumber().toString());
         } else {
-            Snackbar.make(mBinding.getRoot(), R.string.auth_phone_eror_invalid_number, Snackbar.LENGTH_LONG).show();
+            CustomDialog dialog = new CustomDialog(getActivity());
+            dialog.isEditable(true)
+                    .isEditable(false)
+                    .setTitleText(R.string.auth_phone_eror_invalid_number_title)
+                    .setMessageText(R.string.auth_phone_eror_invalid_number_content)
+                    .setPositiveButton(false)
+                    .setNegativeButton(getString(R.string.common_cancel), (dia, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         }
     }
 }
