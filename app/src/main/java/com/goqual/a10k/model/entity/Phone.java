@@ -24,9 +24,17 @@ public class Phone {
     private String photoUriString;
     private int _userid = -1;
     private int _connectionid = -1;
-    public boolean isInvited;
+    public boolean isInvited = false;
+    public boolean isConnected = false;
 
     public Phone() {
+    }
+
+    public Phone(String displayName, String number, String photoUriString, boolean isConnected) {
+        this.displayName = displayName;
+        this.number = number;
+        this.photoUriString = photoUriString;
+        this.isConnected = isConnected;
     }
 
     public Phone(String displayName, String number, String photoUriString) {

@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/txt_info"
+                    android:textSize="@dimen/txt_15"
                     android:textColor="@color/identitiy_02"
                     android:text="ON"
                     android:layout_marginRight="@dimen/padding_5"
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/txt_title"
+                    android:textSize="@dimen/txt_17"
                     android:text='@{!item.mIsSetStartTime ? @string/absence_default_time : item.getStartTimeString()}'
                     android:onClick="@{fragment::onBtnClick}"/>
 
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="-"
-                    android:textSize="@dimen/txt_title"
+                    android:textSize="@dimen/txt_17"
                     android:layout_marginLeft="@dimen/padding_15"
                     android:layout_marginRight="@dimen/padding_15"/>
 
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/txt_info"
+                    android:textSize="@dimen/txt_15"
                     android:textColor="@color/identitiy_02"
                     android:text="OFF"
                     android:layout_marginRight="@dimen/padding_5"
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/txt_title"
+                    android:textSize="@dimen/txt_17"
                     android:text='@{!item.mIsSetEndTime ? @string/absence_default_time : item.getEndTimeString()}'
                     android:onClick="@{fragment::onBtnClick}"/>
             </LinearLayout>

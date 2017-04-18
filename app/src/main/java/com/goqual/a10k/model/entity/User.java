@@ -2,11 +2,13 @@ package com.goqual.a10k.model.entity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.io.Serializable;
+
 /**
  * Created by ladmusician on 2016. 12. 26..
  */
 
-public class User implements Cloneable{
+public class User implements Cloneable, Serializable {
     private int _connectionid;
     private int _userid;
     private boolean isadmin;

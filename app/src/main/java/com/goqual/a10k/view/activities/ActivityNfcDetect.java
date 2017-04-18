@@ -78,6 +78,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>
         }
     }
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_nfc_detect;
@@ -103,6 +104,7 @@ public class ActivityNfcDetect extends BaseActivity<ActivityNfcDetectBinding>
     protected void onResume() {
         super.onResume();
         NfcUtil.enableForegroundDispatch(this);
+
         if(!isRegisterMode) {
             onNewIntent(getIntent());
         }

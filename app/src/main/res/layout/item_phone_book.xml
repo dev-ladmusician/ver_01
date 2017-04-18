@@ -50,6 +50,17 @@
             android:text="@{phone.number}"/>
 
         <TextView
+            android:id="@+id/item_user_connected"
+            android:layout_width="@dimen/item_invite_num"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:textColor="@color/identitiy_02"
+            android:visibility="@{phone.isConnected ? View.VISIBLE : View.GONE}"
+            android:text="@string/invite_user_connected"/>
+
+        <TextView
             android:id="@+id/item_user_invited"
             android:layout_width="@dimen/item_invite_num"
             android:layout_height="wrap_content"

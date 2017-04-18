@@ -145,7 +145,7 @@ implements IActivityInteraction, IToolbarInteraction {
 
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_admin));
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_nfc));
-        mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_absence));
+        if (mSwitch.isadmin) mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_absence));
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_history));
     }
 

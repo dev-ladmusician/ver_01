@@ -108,10 +108,10 @@
     <string name="rename_error_content">스위치 등록에 오류가 발생했습니다</string>
 
     <string name="check_connection_error_title">스위치 등록 오류</string>
-    <string name="check_connection_error_content">스위치가 AP에 연결되지 않았습니다 \nWi-Fi상태와 비밀번호를 다시 한번 체크해주세요</string>
+    <string name="check_connection_error_content">스위치가 AP에 연결되지 않았습니다 \nWi-Fi상태와 비밀번호를 \n다시 한번 체크해주세요</string>
 
     <string name="socket_error_title">스위치 등록 오류</string>
-    <string name="socket_error_content">스위치와 통신하는데 오류가 발생했습니다\n스위치 전원을 내렸다 올려 다시 시도해주세요</string>
+    <string name="socket_error_content">스위치와 통신하는데 오류가 발생했습니다\n스위치 전원을 내렸다 \n다시 올려 시도해주세요</string>
 
     <string name="add_connection_error_title">스위치 등록 오류</string>
     <string name="add_connection_error_content">스위치를 등록하는데 오류가 발생했습니다.</string>
@@ -195,6 +195,7 @@
     <string name="switch_setting_admin_delete_user_title">연결 해제</string>
     <string name="switch_setting_admin_delete_user_content"> 님을 \n삭제 하시겠습니까?</string>
     <string name="swtich_change_admin_title">관리자 변경</string>
+    <string name="swtich_change_admin_content">님으로 \n관리자를 변경하시겠습니까? \n변경하면 관리자 권한을 일게 됩니다</string>
     <string name="switch_setting_admin_change_admin_not_selected">관리자로 임명할 유저를 선택해주세요</string>
 
     <!-- invite -->
@@ -212,6 +213,7 @@
     <string name="invite_error_dialog_title">초대 실패</string>
     <string name="invite_error_dialog_content">님을 \n해당 스위치에 초대하는데 \n오류가 발생했습니다.</string>
     <string name="invite_user_invited">초대</string>
+    <string name="invite_user_connected">연결됨</string>
 
     <!-- history -->
     <string name="history_no_item">기록이 없습니다.</string>
@@ -315,6 +317,7 @@
     <!-- args -->
     <string name="arg_user_token">USER_TOKEN</string>
     <string name="arg_user_num">USER_NUM</string>
+    <string name="arg_user_connected">CONNECTED_USER</string>
     <string name="arg_user_fcm_token">USER_FCM_TOKEN</string>
     <string name="arg_switch_id">SWITCH_ID</string>
     <string name="arg_switch_state">SWITCH_STATE</string>

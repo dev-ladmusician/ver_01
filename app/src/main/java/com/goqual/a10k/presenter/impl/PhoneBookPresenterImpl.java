@@ -1,25 +1,26 @@
  package com.goqual.a10k.presenter.impl;
 
  import android.content.ContentResolver;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
-import android.telephony.PhoneNumberUtils;
+ import android.content.Context;
+ import android.database.Cursor;
+ import android.net.Uri;
+ import android.provider.ContactsContract;
+ import android.support.annotation.Nullable;
+ import android.telephony.PhoneNumberUtils;
 
-import com.goqual.a10k.model.entity.Phone;
-import com.goqual.a10k.model.remote.service.InviteService;
-import com.goqual.a10k.presenter.PhoneBookPresenter;
+ import com.goqual.a10k.model.entity.Phone;
+ import com.goqual.a10k.model.entity.User;
+ import com.goqual.a10k.model.remote.service.InviteService;
+ import com.goqual.a10k.presenter.PhoneBookPresenter;
  import com.goqual.a10k.util.LogUtil;
  import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Locale;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+ import rx.android.schedulers.AndroidSchedulers;
+ import rx.schedulers.Schedulers;
 
  /**
  * Created by ladmusician on 2017. 1. 17..
@@ -45,7 +46,7 @@ public class PhoneBookPresenterImpl implements PhoneBookPresenter {
     }
 
     @Override
-    public void loadItems(@Nullable String queryString) {
+    public void loadItems(List<User> connectedUser, @Nullable String queryString) {
         mView.loadingStart();
         mAdapter.clear();
         ContentResolver contentResolver = mContext.getContentResolver();
@@ -63,14 +64,21 @@ public class PhoneBookPresenterImpl implements PhoneBookPresenter {
                 int i = cursor.getColumnIndex("display_name");
                 int j = cursor.getColumnIndex("data1");
                 int k = cursor.getColumnIndex("photo_thumb_uri");
-                while (cursor.moveToNext())
-                {
+
+                while (cursor.moveToNext()) {
                     String name = cursor.getString(i);
                     String number = cursor.getString(j);
                     String photo = cursor.getString(k);
                     number = PhoneNumberUtils.formatNumber(number, countryCode);
-                    mAdapter.addItem(new Phone(name, number.replace("-", "."), photo));
-                    mUserList.add(new Phone(name, number.replace("-", ""), photo));
+
+                    boolean isConnected = false;
+
+                    for(User each : connectedUser) {
+                        if (each.getNum().equals(number.replace("-",""))) isConnected = true;
+                    }
+
+                    mAdapter.addItem(new Phone(name, number.replace("-", "."), photo, isConnected));
+                    mUserList.add(new Phone(name, number.replace("-", ""), photo, isConnected));
                 }
             } finally {
                 cursor.close();
