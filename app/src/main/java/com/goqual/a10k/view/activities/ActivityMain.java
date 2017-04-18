@@ -26,6 +26,7 @@ import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
+import com.goqual.a10k.view.interfaces.IMainInviteActivityInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
@@ -34,7 +35,7 @@ import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.EDIT;
 
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
-        implements IActivityInteraction, IToolbarInteraction, IMainActivityInteraction {
+        implements IActivityInteraction, IToolbarInteraction, IMainActivityInteraction, IMainInviteActivityInteraction {
     public static final String TAG = ActivityMain.class.getSimpleName();
 
     private EventToolbarClick mEventToolbarClick;
@@ -170,6 +171,16 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         LogUtil.e(TAG, "delete event pass");
         ((IMainActivityInteraction)fragmentPagerAdapter.getItem(
                 getResources().getInteger(R.integer.frag_main_alarm))).deleteSwitchEvent(switchId);
+    }
+
+    /**
+     * 스위치 초대에 응했을 때
+     */
+    @Override
+    public void addSwitchForInvite() {
+        mBinding.mainPager.setCurrentItem(0);
+        ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
+        ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).onResume();
     }
 
     /**

@@ -14,7 +14,8 @@
         android:layout_height="@dimen/item_timer_height"
         android:paddingLeft="@dimen/padding_16"
         android:paddingRight="@dimen/padding_16"
-        android:background="@drawable/style_border_bottom_grey">
+        android:background="@drawable/style_border_bottom_grey"
+        android:onClick="@{holder::onBtnClick}">
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/item_noti_ic"

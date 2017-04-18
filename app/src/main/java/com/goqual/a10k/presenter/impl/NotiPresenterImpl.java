@@ -3,6 +3,7 @@ package com.goqual.a10k.presenter.impl;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.NotiWrap;
+import com.goqual.a10k.model.remote.service.InviteService;
 import com.goqual.a10k.model.remote.service.NotiService;
 import com.goqual.a10k.presenter.NotiPresenter;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
@@ -22,6 +23,7 @@ public class NotiPresenterImpl implements NotiPresenter {
     private View<NotiWrap> mView;
     private AdapterDataModel<NotiWrap> mAlarmAdapterDataModel;
     private NotiService mNotiService;
+    private InviteService mInviteService;
     private Context mContext;
 
     public NotiPresenterImpl(Context ctx, View mView, AdapterDataModel<NotiWrap> dataModel) {
@@ -56,10 +58,31 @@ public class NotiPresenterImpl implements NotiPresenter {
                 );
     }
 
+    @Override
+    public void acceptInvite(int switchId) {
+        mView.loadingStart();
+        getInviteService().getInviteApi().acceptInvite(switchId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((x) -> {
+                            mView.loadingStop();
+                        },
+                        e -> mView.onError(e),
+                        mView::onSuccessInvite
+                );
+    }
+
     private NotiService getNotiService() {
         if (mNotiService == null) {
             mNotiService = new NotiService(mContext);
         }
         return mNotiService;
+    }
+
+    private InviteService getInviteService() {
+        if (mInviteService == null)
+            mInviteService = new InviteService(mContext);
+
+        return mInviteService;
     }
 }

@@ -240,6 +240,9 @@
     <string name="noti_content_day_ago_today">today</string>
     <string name="noti_no_item">아직 받은 알람이 없어요!</string>
 
+    <string name="noti_invite_title">스위치 초대</string>
+    <string name="noti_invite_content">스위치 초대를 수락하시겠습니까?</string>
+
     <!-- Timer -->
     <string name="timer_toolbar_cancel">Cancel</string>
     <string name="timer_toolbar_save">Save</string>
@@ -257,7 +260,7 @@
     <string name="alarm_repeat_sun">일</string>
     <string name="alarm_repeat_mon">월</string>
     <string name="alarm_repeat_tue">화</string>
-    <string name="alarm_repeat_wed">수</string>
+    <string name="alarm_repeat_wed">no</string>
     <string name="alarm_repeat_thur">목</string>
     <string name="alarm_repeat_fri">금</string>
     <string name="alarm_repeat_sat">토</string>

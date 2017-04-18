@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +44,8 @@ import retrofit2.adapter.rxjava.HttpException;
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-        implements SwitchPresenter.View<Switch>, ISwitchInteraction, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, ISwitchInteraction, IToolbarClickListener,
+        ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
     private String mTitle = null;
@@ -173,7 +173,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             connectionFailedDialog = null;
         }
         try {
-            Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+            //Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+            //ToastUtil.show(getActivity(), getString(R.string.SOCKET_SUCCESS_CONNECT));
         }
         catch (NullPointerException e) {
             LogUtil.e(TAG, e.getMessage(), e);
@@ -283,6 +284,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     public void setCurrentPage(int currentPage) {
         if(mPagerAdapter != null && mPagerAdapter.getCount()>0) {
+            mCurrentPage = currentPage;
             mBinding.viewPager.setCurrentItem(currentPage);
         }
     }
