@@ -9,6 +9,8 @@ public interface NotiPresenter extends BasePresenter{
 
     interface View<T> extends BasePresenterView<T>{
         void checkLoadMore();
+
         void onSuccessInvite();
+        void onErrorInvite();
     }
 }

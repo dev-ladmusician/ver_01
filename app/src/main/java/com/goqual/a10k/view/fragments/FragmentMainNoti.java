@@ -13,7 +13,6 @@ import com.goqual.a10k.databinding.FragmentMainNotiBinding;
 import com.goqual.a10k.model.entity.NotiWrap;
 import com.goqual.a10k.presenter.NotiPresenter;
 import com.goqual.a10k.presenter.impl.NotiPresenterImpl;
-import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.util.ResourceUtil;
 import com.goqual.a10k.view.adapters.AdapterNoti;
 import com.goqual.a10k.view.base.BaseFragment;
@@ -66,7 +65,28 @@ public class FragmentMainNoti extends BaseFragment<FragmentMainNotiBinding>
 
     @Override
     public void onError(Throwable e) {
-        LogUtil.e(TAG, e.getMessage(), e);
+        CustomDialog dialog = new CustomDialog(getActivity());
+        dialog.isEditable(false)
+                .setTitleText(R.string.noti_load_err_title)
+                .setMessageText(R.string.noti_load_err_content)
+                .setNegativeButton(false)
+                .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
+                    dialog.dismiss();
+                });
+        dialog.show();
+    }
+
+    @Override
+    public void onErrorInvite() {
+        CustomDialog dialog = new CustomDialog(getActivity());
+        dialog.isEditable(false)
+                .setTitleText(R.string.noti_invite_err_title)
+                .setMessageText(R.string.noti_invite_err_content)
+                .setNegativeButton(false)
+                .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
+                    dialog.dismiss();
+                });
+        dialog.show();
     }
 
     @Override

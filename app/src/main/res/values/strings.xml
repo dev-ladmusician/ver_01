@@ -238,10 +238,16 @@
     <string name="noti_content_hour_ago"> hours ago</string>
     <string name="noti_content_day_ago"> days ago</string>
     <string name="noti_content_day_ago_today">today</string>
-    <string name="noti_no_item">아직 받은 알람이 없어요!</string>
+    <string name="noti_no_item">아직 받은 알림이 없어요!</string>
+
+    <string name="noti_load_err_title">알림 가져오기 실패</string>
+    <string name="noti_load_err_content">알림을 가져오는데 오류가 발생했습니다</string>
 
     <string name="noti_invite_title">스위치 초대</string>
     <string name="noti_invite_content">스위치 초대를 수락하시겠습니까?</string>
+
+    <string name="noti_invite_err_title">초대 수락 실패</string>
+    <string name="noti_invite_err_content">스위치 초대를 수락하는데 \n오류가 발생했습니다</string>
 
     <!-- Timer -->
     <string name="timer_toolbar_cancel">Cancel</string>
