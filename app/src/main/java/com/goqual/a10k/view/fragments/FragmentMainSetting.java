@@ -10,14 +10,10 @@ import android.view.ViewGroup;
 
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.FragmentMainSettingBinding;
-import com.goqual.a10k.databinding.FragmentMainSwitchListBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
-import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.presenter.UserPresenter;
-import com.goqual.a10k.presenter.impl.UserPresenterImpl;
 import com.goqual.a10k.util.Constraint;
 import com.goqual.a10k.view.activities.ActivityMain;
-import com.goqual.a10k.view.adapters.AdapterUser;
 import com.goqual.a10k.view.base.BaseFragment;
 
 /**
@@ -68,7 +64,7 @@ public class FragmentMainSetting extends BaseFragment<FragmentMainSettingBinding
         switch (view.getId()) {
             case R.id.setting_logout:
                 PreferenceHelper.getInstance(getActivity()).deleteAllValues();
-                ((ActivityMain)getActivity()).handleLogin();
+                ((ActivityMain)getActivity()).handleLogout();
                 break;
             case R.id.setting_faq:
                 baseUrl += "faq";

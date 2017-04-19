@@ -228,6 +228,27 @@
                     android:layout_alignParentRight="true"
                     android:src="@drawable/ic_arrow_r_grey"/>
             </RelativeLayout>
+
+            <!-- delete -->
+            <RelativeLayout
+                android:id="@+id/alarm_delete_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/timer_menu_height_s"
+                android:layout_marginLeft="@dimen/padding_16"
+                android:layout_marginRight="@dimen/padding_16"
+                android:layout_marginTop="@dimen/padding_20"
+                android:background="@drawable/selector_btn_auth"
+                android:onClick="@{activity::onBtnClick}">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:textColor="@color/identitiy_02"
+                    android:textSize="@dimen/txt_17"
+                    android:text="@string/alarm_delete_btn_txt"/>
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout

@@ -10,11 +10,15 @@ import com.goqual.a10k.model.entity.Alarm;
 public interface AlarmAddEditPresenter extends BasePresenter{
     void add(Alarm item);
     void update(Alarm item);
+    void delete(Alarm item);
 
     interface View{
         void loadingStart();
         void loadingStop();
         void onSuccess();
         void onError(Throwable e);
+
+        void onSuccessDelete();
+        void onErrorDelete();
     }
 }

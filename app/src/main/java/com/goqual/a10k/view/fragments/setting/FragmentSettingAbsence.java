@@ -116,6 +116,9 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     public void onClickEdit(STATE state) {
         mCurrentToolbarState = state;
         if(mCurrentToolbarState == STATE.DONE) {
+            mAbsenceItem.setmIsEditable(false);
+            mBinding.setItem(mAbsenceItem);
+
             if (mIsChange) {
                 // 시작 시간 체크
                 if (!mAbsenceItem.ismIsSetStartTime())
@@ -141,6 +144,9 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             }
             ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
         } else {
+            mAbsenceItem.setmIsEditable(true);
+            mBinding.setItem(mAbsenceItem);
+
             mBinding.switchBtn1.setEnabled(true);
             mBinding.switchBtn2.setEnabled(true);
             mBinding.switchBtn3.setEnabled(true);

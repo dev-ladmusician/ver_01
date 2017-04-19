@@ -61,6 +61,7 @@
                 android:layout_marginTop="@dimen/margin_40"
                 android:background="@drawable/selector_btn_auth_disable"
                 android:layout_below="@+id/auth_certi_txt"
+                android:clickable="false"
                 android:onClick="@{fragment::onBtnClick}">
 
                 <ImageView

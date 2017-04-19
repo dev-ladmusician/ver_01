@@ -7,6 +7,7 @@
         <variable
             name="fragment"
             type="com.goqual.a10k.view.fragments.setting.FragmentSettingAbsence"/>
+
         <import type="android.view.View"
             alias="View"/>
     </data>
@@ -140,6 +141,14 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+            <!-- transparent bg -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparant_white"
+                android:visibility="@{item.mIsEditable ? View.GONE : View.VISIBLE}">
+            </RelativeLayout>
+
             <!-- absence info -->
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -151,14 +160,27 @@
                 android:gravity="center">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/absence_info_done"
+                    android:textSize="@dimen/txt_info_s"
+                    android:textColor="@color/identitiy_02"
+                    android:gravity="center"
+                    android:visibility="@{item.mIsEditable ? View.VISIBLE : View.GONE}"
+                    android:layout_marginLeft="@dimen/padding_15"
+                    android:layout_marginRight="@dimen/padding_15"/>
+
+                <TextView
                     android:id="@+id/absence_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Admin 권한이 있어야\n수정할 수 있습니다."
+                    android:text="@string/absence_info_edit"
                     android:textSize="@dimen/txt_info_s"
                     android:textColor="@color/grey_05"
                     android:gravity="center"
+                    android:visibility="@{item.mIsEditable ? View.GONE : View.VISIBLE}"
                     android:layout_marginLeft="@dimen/padding_15"
                     android:layout_marginRight="@dimen/padding_15"/>
             </LinearLayout>

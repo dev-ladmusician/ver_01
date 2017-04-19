@@ -148,7 +148,7 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
 
     @Override
     public void requestAppAuthToken(String phoneNumber, String smsToken) {
-        getPresenter().requestAppToken(phoneNumber, smsToken);
+        getPresenter().join(phoneNumber, smsToken);
     }
 
     @Override

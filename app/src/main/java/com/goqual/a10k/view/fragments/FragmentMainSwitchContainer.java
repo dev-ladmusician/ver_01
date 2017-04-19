@@ -48,7 +48,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
-    private String mTitle = null;
+    private String mTitle;
     private AdapterSwitchContainer mPagerAdapter;
     private SwitchPresenterImpl mPresenter;
     private SocketManagerImpl mSocketManager;
@@ -201,7 +201,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public boolean hasToolbarMenus() {
-        return true;
+        return getPagerAdapter().getCount() > 1;
     }
 
     @Override
@@ -272,11 +272,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     private void initView() {
+        mTitle = getString(R.string.title_switch_list);
         mBinding.viewPager.setAdapter(getPagerAdapter());
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
     }
-
-
 
     private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
@@ -303,6 +302,15 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             ((IFragmentInteraction)mPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
             ((IFragmentInteraction)mPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
             currentPage = position;
+
+            /**
+             * Edit 모드일 때 page를 each로 변경 했을 때
+             */
+            if (currentPage != 0 && mCurrentToolbarState == STATE.EDIT) {
+                mCurrentToolbarState = STATE.DONE;
+                ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+                ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(mCurrentToolbarState);
+            }
         }
 
         @Override
@@ -369,11 +377,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     private void handleToolbarEdit() {
+        mCurrentToolbarState = SwitchManager.getInstance().getCount() == 0 ?
+                IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE;
+
         if (((IActivityInteraction)getActivity()).getCurrentPage() ==
                 getResources().getInteger(R.integer.frag_main_switch))
-            ((IToolbarInteraction)getActivity()).setToolbarEdit(
-                    SwitchManager.getInstance().getCount() == 0 ?
-                            IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
     }
 
     /**

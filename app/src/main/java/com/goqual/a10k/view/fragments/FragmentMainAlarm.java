@@ -200,12 +200,14 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage, I
         getAdapter().setOnRecyclerItemClickListener((viewId, position) -> {
             switch (viewId) {
                 case R.id.item_alarm_container:
-                    LogUtil.e(TAG, "item alarm container click");
-                    Intent intent = new Intent(getActivity(), ActivityAlarmAddEdit.class);
-                    intent.putExtra(
-                            getString(R.string.arg_alarm),
-                            Parcels.wrap(getAdapter().getItem(position)));
-                    startActivity(intent);
+                    if (mCurrentToolbarState == STATE.EDIT) {
+                        LogUtil.e(TAG, "item alarm container click");
+                        Intent intent = new Intent(getActivity(), ActivityAlarmAddEdit.class);
+                        intent.putExtra(
+                                getString(R.string.arg_alarm),
+                                Parcels.wrap(getAdapter().getItem(position)));
+                        startActivity(intent);
+                    }
                     break;
                 case R.id.item_alarm_delete:
                     new CustomDialog(getActivity())
@@ -287,6 +289,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage, I
             ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.HIDE);
         } else {
             ((IToolbarInteraction)getActivity()).setToolbarEdit(STATE.DONE);
+            mCurrentToolbarState = STATE.DONE;
         }
     }
 

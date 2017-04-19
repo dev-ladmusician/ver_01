@@ -11,7 +11,7 @@ import org.parceler.Parcel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by ladmusician on 2016. 12. 8..
@@ -253,10 +253,11 @@ public class Alarm {
 
     public CharSequence makeTimeString() {
         StringBuilder stringBuilder = new StringBuilder();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm a", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, min);
+        calendar.setTimeZone(TimeZone.getDefault());
         stringBuilder.append(simpleDateFormat.format(calendar.getTime()));
         return stringBuilder;
     }

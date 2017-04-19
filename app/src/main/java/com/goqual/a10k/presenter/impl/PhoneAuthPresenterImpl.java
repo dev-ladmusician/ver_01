@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
 public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     private static final String TAG = PhoneAuthPresenter.class.getSimpleName();
 
-
+    private String mPhoneNumber;
     private View mView;
     private Context mContext = null;
 
@@ -70,16 +70,12 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     }
 
     @Override
-    public void requestAppToken(String phoneNumber, String smsToken) {
-        mView.loadingStart();
-
-        String fcmToken = getFcmToken();
-        LogUtil.e(TAG, "push token :: " + fcmToken);
-
+    public void join(String phoneNumber, String smsToken) {
         getUserService().getUserApi().join(
-                    phoneNumber,
-                    fcmToken,
-                    mContext.getString(R.string.push_type))
+                phoneNumber,
+                PreferenceHelper.getInstance(mContext)
+                        .getStringValue(mContext.getString(R.string.arg_user_fcm_token), ""),
+                mContext.getString(R.string.push_type))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((x) -> {
@@ -114,12 +110,6 @@ public class PhoneAuthPresenterImpl implements PhoneAuthPresenter {
     public String getPhoneNumberCountryCode() {
         TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getSimCountryIso();
-    }
-
-    @Override
-    public String getFcmToken() {
-        return PreferenceHelper.getInstance(mContext)
-                .getStringValue(mContext.getString(R.string.arg_user_fcm_token), "");
     }
 
     public AuthService getAuthService() {

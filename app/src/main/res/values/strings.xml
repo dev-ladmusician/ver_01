@@ -199,6 +199,7 @@
     <string name="switch_setting_admin_change_admin_not_selected">관리자로 임명할 유저를 선택해주세요</string>
 
     <!-- invite -->
+    <string name="invite_title">친구초대</string>
     <string name="invite_edit_hit">Name, Phone number</string>
     <string name="invite_people">PEOPLE</string>
     <string name="invite_message">10K로 손쉽게 집 조명을 제어해보세요!</string>
@@ -277,7 +278,10 @@
 
     <string name="alarm_delete_title">삭제</string>
     <string name="alarm_delete_content">알람을 삭제 하시겠습니까?</string>
+    <string name="alarm_delete_btn_txt">알림삭제</string>
     <string name="alarm_delete_error">알람을 삭제하는데 오류가 발생했습니다.</string>
+    <string name="alarm_delete_err_title">삭제 오류</string>
+    <string name="alarm_delete_err_content">알람을 삭제하는데 오류가 발생했습니다</string>
 
     <string name="alarm_confirm_update_title">알람 수정</string>
     <string name="alarm_confirm_add_title">알람 저장</string>
@@ -311,6 +315,9 @@
     <string name="switch_absence_mode">부재모드가 설정된 스위치입니다.</string>
     <string name="absence_info_client">Admin 권한이 있어야\n수정할 수 있습니다</string>
     <string name="absence_info_admin">부재모드 활성 시 회원들도\n 제어할 수 없습니다</string>
+
+    <string name="absence_info_edit">Edit을 눌러 부재모드시 \n작동할 버튼을 선택해 주세요</string>
+    <string name="absence_info_done">상단의 ON/OFF 버튼을 눌러 \n부재 시간을 설정해 주세요</string>
 
     <string name="absence_register_error_title">부재모드 등록 오류</string>
     <string name="absence_register_error_content">부재모드를 등록하는데 오류가 발생했습니다.</string>

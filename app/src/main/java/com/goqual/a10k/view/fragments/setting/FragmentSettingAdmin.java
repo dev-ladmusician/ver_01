@@ -206,7 +206,6 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         DialogInterface.OnClickListener onClickListener = (dialog1, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    LogUtil.e(TAG, "SELECTED POSITION :: " + getListDialog().getSelectedPosition());
                     if (getListDialog().getSelectedPosition() != -1) {
 
                         CustomDialog dialog = new CustomDialog(getContext());
@@ -221,7 +220,6 @@ implements UserPresenter.View<User>, IToolbarClickListener {
                                     dialog.dismiss();
                                 })
                                 .show();
-                        //getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
                     } else {
                         Toast.makeText(getContext(),
                                 R.string.switch_setting_admin_change_admin_not_selected, Toast.LENGTH_SHORT).show();

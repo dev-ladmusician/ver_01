@@ -15,8 +15,6 @@
         <import
             alias="View"
             type="android.view.View" />
-
-
     </data>
 
     <RelativeLayout

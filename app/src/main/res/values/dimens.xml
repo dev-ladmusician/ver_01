@@ -78,6 +78,7 @@
     <dimen name="item_height_xs">50dp</dimen>
 
     <dimen name="timer_menu_height">70dp</dimen>
+    <dimen name="timer_menu_height_s">50dp</dimen>
     <dimen name="item_delete_ic_size">30dp</dimen>
     <dimen name="item_delete_ic_container_size">46dp</dimen>
     <dimen name="item_setting_admin">60dp</dimen>
@@ -114,7 +115,7 @@
     <dimen name="item_absence_time_margin_top">3dp</dimen>
 
     <!-- alarm -->
-    <dimen name="alarm_clock_wrapper_height">230dp</dimen>
+    <dimen name="alarm_clock_wrapper_height">200dp</dimen>
     <dimen name="alarm_divider_height">20dp</dimen>
 
     <!-- noti -->
