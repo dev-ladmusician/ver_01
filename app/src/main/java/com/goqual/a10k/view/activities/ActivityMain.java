@@ -110,6 +110,9 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         mBinding.toolbarTitle.setText(title);
     }
 
+    /**
+     * 로그아웃하면 fcm token refresh
+     */
     public void handleLogout() {
         new AsyncTask() {
             @Override

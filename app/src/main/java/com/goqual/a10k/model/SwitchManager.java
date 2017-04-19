@@ -31,6 +31,11 @@ public class SwitchManager {
         return mSwitchList;
     }
 
+    public void update(List<Switch> items) {
+        this.mSwitchList.clear();
+        this.mSwitchList = new ArrayList<>(items);
+    }
+
     public void addItem(Switch item) {
         if (mSwitchList != null) {
             mSwitchList.add(item);
@@ -83,5 +88,7 @@ public class SwitchManager {
         return null;
     }
 
-
+    public boolean checkSwitchSequenceChange(List<Switch>items) {
+        return !mSwitchList.equals(items);
+    }
 }

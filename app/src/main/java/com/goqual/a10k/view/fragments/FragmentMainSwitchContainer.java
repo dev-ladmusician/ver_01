@@ -37,6 +37,8 @@ import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
+import java.util.List;
+
 import retrofit2.adapter.rxjava.HttpException;
 
 /**
@@ -66,12 +68,26 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void loadingStart() {
-
+        mBinding.loading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void loadingStop() {
+        mBinding.loading.setVisibility(View.INVISIBLE);
+    }
 
+    /**
+     * switch 순서 변경 후 호출
+     */
+    @Override
+    public void onChangeSwitchPosition(List<Switch> switchList) {
+        List<Switch> origin = SwitchManager.getInstance().getList();
+
+        // check switchManager list and switchList same
+        if(SwitchManager.getInstance().checkSwitchSequenceChange(switchList)) {
+            LogUtil.e(TAG, "change switch seq");
+            getPresenter().changeSeq(switchList);
+        }
     }
 
     /**
@@ -94,6 +110,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void refresh() {
+        loadingStop();
         /**
          * TODO Switch가 많아지면 memory 문제가 발생함
          */
@@ -351,6 +368,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         getPresenter().rename(position, title);
     }
 
+
+
     @Override
     public void onSuccessRenameSwitch(int position, String title) {
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).changeSwitchTitle(position, title);
@@ -363,6 +382,28 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
         mPagerAdapter.deleteItem(position);
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
+    }
+
+
+
+
+    @Override
+    public void onSuccessChangeSeq() {
+        loadingStop();
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
+    }
+
+    @Override
+    public void onErrorChangeSeq(Throwable e) {
+        CustomDialog dialog = new CustomDialog(getActivity())
+                .isEditable(false)
+                .setNegativeButton(false)
+                .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
+                    dia.dismiss();
+                })
+                .setTitleText(R.string.switch_change_seq_err_title)
+                .setMessageText(R.string.switch_change_seq_err_content);
+        dialog.show();
     }
 
     @Override

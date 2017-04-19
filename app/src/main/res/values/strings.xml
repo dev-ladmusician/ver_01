@@ -48,6 +48,9 @@
     <string name="add_switch">새로운 10k 등록하기</string>
     <string name="error_delete_switch">스위치를 삭제하는데 오류가 발생했습니다.</string>
 
+    <string name="switch_change_seq_err_title">순수 수정 실패</string>
+    <string name="switch_change_seq_err_content">스위치 순서를 변경하는데 오류가 발생했습니다</string>
+
     <!-- Error -->
     <string name="error_dialog_title">에러!</string>
     <string name="error_string_server">서버에 에러가 발생하였습니다.</string>

@@ -57,11 +57,15 @@ public class FragmentMainSwitchList extends BaseFragment<FragmentMainSwitchListB
         getAdapter().setItemState(state == STATE.EDIT);
 
         if (mCurrentToolbarState == STATE.EDIT) {
+            // edit mode
             mBinding.refresh.setEnabled(false);
             setEditSequence(true);
         } else {
+            // done mode
             mBinding.refresh.setEnabled(true);
             setEditSequence(false);
+
+            ((ISwitchOperationListener) getParentFragment()).onChangeSwitchPosition(getAdapter().getItems());
         }
     }
 
