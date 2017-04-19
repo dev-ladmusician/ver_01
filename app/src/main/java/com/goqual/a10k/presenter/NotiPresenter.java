@@ -5,8 +5,12 @@ package com.goqual.a10k.presenter;
  */
 
 public interface NotiPresenter extends BasePresenter{
+    void acceptInvite(int switchId);
 
     interface View<T> extends BasePresenterView<T>{
         void checkLoadMore();
+
+        void onSuccessInvite();
+        void onErrorInvite();
     }
 }

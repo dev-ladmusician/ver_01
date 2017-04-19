@@ -26,7 +26,7 @@ public class Absence {
     public String title;
     public boolean state;
     public int btncount; // count of btn in switch
-    public boolean mIsDeletable;
+    public boolean mIsEditable;
     public boolean mIsSetStartTime;
     public boolean mIsSetEndTime;
 
@@ -138,12 +138,12 @@ public class Absence {
         this.btncount = btncount;
     }
 
-    public boolean ismIsDeletable() {
-        return mIsDeletable;
+    public boolean ismIsEditable() {
+        return mIsEditable;
     }
 
-    public void setmIsDeletable(boolean mIsDeletable) {
-        this.mIsDeletable = mIsDeletable;
+    public void setmIsEditable(boolean mIsEditable) {
+        this.mIsEditable = mIsEditable;
     }
 
     public boolean ismIsSetStartTime() {

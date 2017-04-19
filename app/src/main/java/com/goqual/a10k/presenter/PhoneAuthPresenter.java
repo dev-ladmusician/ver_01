@@ -8,10 +8,10 @@ import com.goqual.a10k.view.activities.ActivityPhoneAuth;
 
 public interface PhoneAuthPresenter {
     void requestSmsToken(String phoneNumber);
-    void requestAppToken(String phoneNumber, String smsToken);
+    void join(String phoneNumber, String smsToken);
     String getPhoneNumber();
     String getPhoneNumberCountryCode();
-    String getFcmToken();
+
 
 
     interface View<T> extends BasePresenterView<T> {

@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +37,8 @@ import com.goqual.a10k.view.interfaces.ISwitchRefreshListener;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
+import java.util.List;
+
 import retrofit2.adapter.rxjava.HttpException;
 
 /**
@@ -45,10 +46,11 @@ import retrofit2.adapter.rxjava.HttpException;
  */
 
 public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitchContainerBinding>
-        implements SwitchPresenter.View<Switch>, ISwitchInteraction, IToolbarClickListener, ISwitchOperationListener, SocketManager.View {
+        implements SwitchPresenter.View<Switch>, ISwitchInteraction, IToolbarClickListener,
+        ISwitchOperationListener, SocketManager.View {
     private static final String TAG = FragmentMainSwitchContainer.class.getSimpleName();
 
-    private String mTitle = null;
+    private String mTitle;
     private AdapterSwitchContainer mPagerAdapter;
     private SwitchPresenterImpl mPresenter;
     private SocketManagerImpl mSocketManager;
@@ -66,12 +68,26 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void loadingStart() {
-
+        mBinding.loading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void loadingStop() {
+        mBinding.loading.setVisibility(View.INVISIBLE);
+    }
 
+    /**
+     * switch 순서 변경 후 호출
+     */
+    @Override
+    public void onChangeSwitchPosition(List<Switch> switchList) {
+        List<Switch> origin = SwitchManager.getInstance().getList();
+
+        // check switchManager list and switchList same
+        if(SwitchManager.getInstance().checkSwitchSequenceChange(switchList)) {
+            LogUtil.e(TAG, "change switch seq");
+            getPresenter().changeSeq(switchList);
+        }
     }
 
     /**
@@ -94,6 +110,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public void refresh() {
+        loadingStop();
         /**
          * TODO Switch가 많아지면 memory 문제가 발생함
          */
@@ -102,8 +119,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
         // update switch list
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
-
-        LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
 
         if (((IActivityInteraction)getActivity()).getCurrentPage() ==
                 getResources().getInteger(R.integer.frag_main_switch))
@@ -173,7 +188,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             connectionFailedDialog = null;
         }
         try {
-            Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+            //Snackbar.make(mBinding.getRoot(), R.string.SOCKET_SUCCESS_CONNECT, Snackbar.LENGTH_SHORT).show();
+            //ToastUtil.show(getActivity(), getString(R.string.SOCKET_SUCCESS_CONNECT));
         }
         catch (NullPointerException e) {
             LogUtil.e(TAG, e.getMessage(), e);
@@ -200,7 +216,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     @Override
     public boolean hasToolbarMenus() {
-        return true;
+        return getPagerAdapter().getCount() > 1;
     }
 
     @Override
@@ -243,12 +259,9 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         getSocketManager();
 
         mPagerAdapter.clear();
-        mPagerAdapter.refresh();
-
         SwitchManager.getInstance().clear();
-        // TODO: page
-        getPresenter()
-                .loadItems(1);
+
+        getPresenter().loadItems(1);
     }
 
     @Override
@@ -271,11 +284,10 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     private void initView() {
+        mTitle = getString(R.string.title_switch_list);
         mBinding.viewPager.setAdapter(getPagerAdapter());
         mBinding.viewPager.addOnPageChangeListener(onPageChangeListener);
     }
-
-
 
     private void passToolbarClickEvent(IToolbarClickListener.STATE state) {
         ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(state);
@@ -283,6 +295,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
 
     public void setCurrentPage(int currentPage) {
         if(mPagerAdapter != null && mPagerAdapter.getCount()>0) {
+            mCurrentPage = currentPage;
             mBinding.viewPager.setCurrentItem(currentPage);
         }
     }
@@ -301,6 +314,15 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
             ((IFragmentInteraction)mPagerAdapter.getItem(position)).setFragmentVisible(IFragmentInteraction.VISIBLE);
             ((IFragmentInteraction)mPagerAdapter.getItem(currentPage)).setFragmentVisible(IFragmentInteraction.INVISIBLE);
             currentPage = position;
+
+            /**
+             * Edit 모드일 때 page를 each로 변경 했을 때
+             */
+            if (currentPage != 0 && mCurrentToolbarState == STATE.EDIT) {
+                mCurrentToolbarState = STATE.DONE;
+                ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+                ((IToolbarClickListener)mPagerAdapter.getItem(0)).onClickEdit(mCurrentToolbarState);
+            }
         }
 
         @Override
@@ -346,6 +368,8 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         getPresenter().rename(position, title);
     }
 
+
+
     @Override
     public void onSuccessRenameSwitch(int position, String title) {
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).changeSwitchTitle(position, title);
@@ -360,6 +384,28 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).deleteSwitch(position);
     }
 
+
+
+
+    @Override
+    public void onSuccessChangeSeq() {
+        loadingStop();
+        ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
+    }
+
+    @Override
+    public void onErrorChangeSeq(Throwable e) {
+        CustomDialog dialog = new CustomDialog(getActivity())
+                .isEditable(false)
+                .setNegativeButton(false)
+                .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
+                    dia.dismiss();
+                })
+                .setTitleText(R.string.switch_change_seq_err_title)
+                .setMessageText(R.string.switch_change_seq_err_content);
+        dialog.show();
+    }
+
     @Override
     public void passDeleteEvent(int switchId) {
         // delete switch event를 alarm쪽으로 넘기기
@@ -367,11 +413,12 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
     }
 
     private void handleToolbarEdit() {
+        mCurrentToolbarState = SwitchManager.getInstance().getCount() == 0 ?
+                IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE;
+
         if (((IActivityInteraction)getActivity()).getCurrentPage() ==
                 getResources().getInteger(R.integer.frag_main_switch))
-            ((IToolbarInteraction)getActivity()).setToolbarEdit(
-                    SwitchManager.getInstance().getCount() == 0 ?
-                            IToolbarClickListener.STATE.HIDE : IToolbarClickListener.STATE.DONE);
+            ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
     }
 
     /**

@@ -70,7 +70,7 @@ public class ActivitySwitchConnection extends BaseActivity<ActivitySwitchConnect
         customDialog.isEditable(false)
                 .isEditable(false)
                 .setTitleText(R.string.socket_error_title)
-                .setMessageText(R.string.socket_error_content)
+                .setMessageText(R.string.check_connection_error_content)
                 .setPositiveButton(getString(R.string.common_ok), onClickListener)
                 .setNegativeButton(false)
                 .show();

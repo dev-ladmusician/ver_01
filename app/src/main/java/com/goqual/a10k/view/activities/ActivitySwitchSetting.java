@@ -83,7 +83,7 @@ implements IActivityInteraction, IToolbarInteraction {
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitchPosition));
         mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitchPosition));
-        mAdapterPage.addItem(FragmentSettingAbsence.newInstance(mSwitchPosition));
+        if (mSwitch.isadmin) mAdapterPage.addItem(FragmentSettingAbsence.newInstance(mSwitchPosition));
         mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitchPosition));
         mBinding.settingContainer.setAdapter(mAdapterPage);
         mBinding.settingContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -145,7 +145,7 @@ implements IActivityInteraction, IToolbarInteraction {
 
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_admin));
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_nfc));
-        mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_absence));
+        if (mSwitch.isadmin) mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_absence));
         mBinding.settingTabs.addTab(mBinding.settingTabs.newTab().setText(R.string.tab_title_history));
     }
 

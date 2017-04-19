@@ -18,12 +18,15 @@ import android.widget.Toast;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityInviteUserBinding;
 import com.goqual.a10k.model.entity.Phone;
+import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.presenter.PhoneBookPresenter;
 import com.goqual.a10k.presenter.impl.PhoneBookPresenterImpl;
 import com.goqual.a10k.util.LogUtil;
 import com.goqual.a10k.view.adapters.AdapterPhoneBook;
 import com.goqual.a10k.view.base.BaseActivity;
 import com.goqual.a10k.view.dialog.CustomDialog;
+
+import java.util.List;
 
 /**
  * Created by hanwool on 2017. 3. 21..
@@ -45,6 +48,7 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
 
     private CustomDialog mDialog = null;
     private CustomDialog mErrorDialog = null;
+    private List<User> mConnectedUser;
 
     @Override
     protected int getLayoutId() {
@@ -96,7 +100,10 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding.setActivity(this);
+
         mSwitchId = getIntent().getIntExtra(EXTRA_BSID, -1);
+        mConnectedUser = (List<User>)getIntent().getSerializableExtra(
+                getString(R.string.arg_user_connected));
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -113,7 +120,7 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
         mBinding.inviteContainer.setAdapter(getAdapter());
         mBinding.inviteContainer.setLayoutManager(new LinearLayoutManager(this));
 
-        getPresenter().loadItems(null);
+        getPresenter().loadItems(mConnectedUser, null);
 
         mBinding.searchTxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -129,7 +136,7 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
             @Override
             public void afterTextChanged(Editable s) {
                 LogUtil.d(TAG, "afterTextChanged::" + s);
-                getPresenter().loadItems(s.toString());
+                getPresenter().loadItems(mConnectedUser, s.toString());
             }
         });
     }
@@ -161,7 +168,7 @@ public class ActivityInviteUser extends BaseActivity<ActivityInviteUserBinding>
         if(mAdapter == null) {
             mAdapter = new AdapterPhoneBook(this);
             mAdapter.setOnRecyclerItemClickListener(((viewId, position) -> {
-                if (!getAdapter().getItem(position).isInvited) {
+                if (!getAdapter().getItem(position).isInvited && !getAdapter().getItem(position).isConnected) {
                     Phone user = getAdapter().getItem(position);
                     getDialog()
                             .setTitleText(R.string.invite_user_dialog_title)

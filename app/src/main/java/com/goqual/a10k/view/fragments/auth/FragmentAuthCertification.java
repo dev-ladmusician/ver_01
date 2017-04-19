@@ -3,6 +3,8 @@ package com.goqual.a10k.view.fragments.auth;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +105,35 @@ public class FragmentAuthCertification extends BaseFragment<FragmentAuthCertific
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBinding.setFragment(this);
+
+        mBinding.authCertiEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mBinding.authCertiBtnNext.setClickable(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mBinding.authCertiBtnNext.setClickable(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() == 4) {
+                    mBinding.authCertiBtnNext.setEnabled(true);
+                    mBinding.authCertiBtnNext.setClickable(true);
+                    mBinding.authCertiBtnNext.setBackgroundResource(R.drawable.selector_btn_auth);
+                    mBinding.authCertiBtnNextIcon.setImageResource(R.drawable.icon_arrow_right_blue);
+                } else {
+                    mBinding.authCertiBtnNext.setClickable(false);
+                    mBinding.authCertiBtnNext.setBackgroundResource(R.drawable.selector_btn_auth_disable);
+                    mBinding.authCertiBtnNextIcon.setImageResource(R.drawable.icon_arrow_right_grey);
+                }
+            }
+        });
+
+        mBinding.authCertiBtnNext.setClickable(false);
+        mBinding.authCertiBtnNext.setEnabled(false);
     }
 
     @Override

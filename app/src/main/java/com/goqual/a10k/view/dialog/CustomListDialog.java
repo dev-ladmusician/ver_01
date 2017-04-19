@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import com.goqual.a10k.model.entity.DialogModel;
 import com.goqual.a10k.model.entity.User;
 import com.goqual.a10k.view.adapters.AdapterUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,22 +34,10 @@ public class CustomListDialog extends Dialog {
     private List<User> mUsers = null;
     private int mSelectedPosition = -1;
 
-    public CustomListDialog(@NonNull Context context) {
-        super(context);
-        mContext = context;
-        mModel = new DialogModel();
-    }
-
-    public CustomListDialog(@NonNull Context context, @StyleRes int themeResId) {
-        super(context, themeResId);
-        mContext = context;
-        mModel = new DialogModel();
-    }
-
     public CustomListDialog(@NonNull Context context, List<User> items) {
         super(context);
         mContext = context;
-        this.mUsers = items;
+        this.mUsers = new ArrayList<>(items);
         mModel = new DialogModel();
     }
 
@@ -92,8 +80,16 @@ public class CustomListDialog extends Dialog {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        getAdapter().setDeletable(false);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        getAdapter().setNonChecked();
+        getAdapter().refresh();
     }
 
     public CustomListDialog setTitleText(String title) {

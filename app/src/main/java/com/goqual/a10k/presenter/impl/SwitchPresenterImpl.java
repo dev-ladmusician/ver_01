@@ -10,6 +10,8 @@ import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.service.SwitchService;
 import com.goqual.a10k.presenter.SwitchPresenter;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -28,6 +30,33 @@ public class SwitchPresenterImpl implements SwitchPresenter {
         mContext = ctx;
         mView = view;
         mAdapter = adapter;
+    }
+
+    @Override
+    public void changeSeq(List<Switch> items) {
+        String connectionIds = "";
+        String connectionSeqs = "";
+
+        for(int i = 1; i <= items.size(); i ++) {
+            if (i != items.size()) {
+                connectionIds += items.get(i-1).get_connectionid() + ",";
+                connectionSeqs += i + ",";
+            } else {
+                connectionIds += items.get(i-1).get_connectionid();
+                connectionSeqs += i;
+            }
+        }
+
+        mView.loadingStart();
+        getSwitchService().getSwitchApi().changeSeq(connectionIds, connectionSeqs)
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            SwitchManager.getInstance().update(items);
+                        },
+                        mView::onErrorChangeSeq,
+                        mView::onSuccessChangeSeq);
     }
 
     @Override
@@ -50,6 +79,7 @@ public class SwitchPresenterImpl implements SwitchPresenter {
 
     @Override
     public void loadItems(int page) {
+        mView.loadingStart();
         getSwitchService().getSwitchApi().gets(page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)

@@ -15,8 +15,6 @@
         <import
             alias="View"
             type="android.view.View" />
-
-
     </data>
 
     <RelativeLayout
@@ -87,6 +85,18 @@
                 <include
                     layout="@layout/item_switch_btn_state_s"
                     app:itemSwitch="@{itemSwitch}" />
+
+                <RelativeLayout
+                    android:id="@+id/item_switch_arrange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="6dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_switch_arrange"/>
+                </RelativeLayout>
             </LinearLayout>
 
             <!-- btn container -->
@@ -186,11 +196,11 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginBottom="1dp"
-            android:visibility="@{itemSwitch._absenceid != null ? View.VISIBLE : View.GONE}">
+            android:visibility="@{itemSwitch.mIsStateView ? View.GONE : itemSwitch._absenceid != null ? View.VISIBLE : View.GONE}">
 
             <ImageView
-                android:layout_width="@dimen/txt_title"
-                android:layout_height="@dimen/txt_title"
+                android:layout_width="@dimen/txt_17"
+                android:layout_height="@dimen/txt_17"
                 android:layout_marginRight="@dimen/padding_15"
                 android:src="@drawable/ic_lock_small"/>
 

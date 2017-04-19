@@ -2,6 +2,10 @@ package com.goqual.a10k.model.entity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 /**
  * Created by ladmusician on 2017. 2. 20..
  */
@@ -12,6 +16,10 @@ public class Switch implements Cloneable{
     public int btncount;
     public int seq;
     public Integer _absenceid;
+    public Integer start_hour;
+    public Integer start_min;
+    public Integer end_hour;
+    public Integer end_min;
     public boolean btn1;
     public boolean btn2;
     public boolean btn3;
@@ -37,6 +45,30 @@ public class Switch implements Cloneable{
         this.btn1 = btn1;
         this.btn2 = btn2;
         this.btn3 = btn3;
+    }
+
+    public CharSequence getStartTimeString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, start_hour);
+        calendar.set(Calendar.MINUTE, start_min);
+        calendar.setTimeZone(TimeZone.getDefault());
+        stringBuilder.append("ON ");
+        stringBuilder.append(simpleDateFormat.format(calendar.getTime()));
+        return stringBuilder;
+    }
+
+    public CharSequence getEndTimeString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, end_hour);
+        calendar.set(Calendar.MINUTE, end_min);
+        calendar.setTimeZone(TimeZone.getDefault());
+        stringBuilder.append("OFF ");
+        stringBuilder.append(simpleDateFormat.format(calendar.getTime()));
+        return stringBuilder;
     }
 
     // BS

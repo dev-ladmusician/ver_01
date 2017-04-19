@@ -68,6 +68,25 @@ public class ActivityAlarmAddEdit extends BaseActivity<ActivityAlarmEditBinding>
     }
 
     @Override
+    public void onSuccessDelete() {
+        finishApp();
+    }
+
+    @Override
+    public void onErrorDelete() {
+        CustomDialog customDialog = new CustomDialog(this);
+        DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
+            dialog.dismiss();
+        };
+        customDialog.isEditable(false)
+                .setTitleText(R.string.alarm_delete_err_title)
+                .setMessageText(R.string.alarm_delete_err_content)
+                .setPositiveButton(getString(R.string.common_select_switch), onClickListener)
+                .setNegativeButton(false)
+                .show();
+    }
+
+    @Override
     public void onError(Throwable e) {
         LogUtil.e(TAG, e.getStackTrace().toString());
         CustomDialog customDialog = new CustomDialog(this);
@@ -106,6 +125,25 @@ public class ActivityAlarmAddEdit extends BaseActivity<ActivityAlarmEditBinding>
                 break;
             case R.id.alarm_menu_sound:
                 startActivityForResult(getRingtoneIntent(), REQ_GET_SOUND);
+                break;
+            case R.id.alarm_delete_container:
+                CustomDialog customDialog = new CustomDialog(this);
+                DialogInterface.OnClickListener onClickListener = (dialog, which) ->  {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            getPresenter().delete(mAlarm);
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            break;
+                    }
+                    dialog.dismiss();
+                };
+                customDialog.isEditable(false)
+                        .setTitleText(R.string.alarm_delete_title)
+                        .setMessageText(R.string.alarm_delete_content)
+                        .setPositiveButton(getString(R.string.common_ok), onClickListener)
+                        .setNegativeButton(getString(R.string.common_cancel), onClickListener)
+                        .show();
                 break;
         }
     }

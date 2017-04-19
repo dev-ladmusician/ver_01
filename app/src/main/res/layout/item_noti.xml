@@ -7,6 +7,9 @@
         <variable
             name="item"
             type="com.goqual.a10k.model.entity.NotiWrap"/>
+        <import
+            alias="View"
+            type="android.view.View" />
     </data>
     <RelativeLayout
         android:id="@+id/item_noti_container"
@@ -14,14 +17,70 @@
         android:layout_height="@dimen/item_timer_height"
         android:paddingLeft="@dimen/padding_16"
         android:paddingRight="@dimen/padding_16"
-        android:background="@drawable/style_border_bottom_grey">
+        android:background="@drawable/style_border_bottom_grey"
+        android:onClick="@{holder::onBtnClick}">
 
-        <android.support.v7.widget.AppCompatImageView
+        <RelativeLayout
             android:id="@+id/item_noti_ic"
             android:layout_centerVertical="true"
-            android:layout_width="@dimen/item_noti_ic_size"
-            android:layout_height="@dimen/item_noti_ic_size"
-            android:src="@drawable/ic_noti" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 1 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_app_update" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 2 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_absence" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 3 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_absence" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 4 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_absence" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 5 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_delete_user" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 6 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_change_admin" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 7 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_invite" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/item_noti_ic_size"
+                android:layout_height="@dimen/item_noti_ic_size"
+                android:visibility="@{item._typeid == 8 ? View.VISIBLE : View.GONE}"
+                android:src="@drawable/ic_noti_new_user" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"

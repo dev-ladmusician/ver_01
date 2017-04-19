@@ -27,6 +27,23 @@ public class AlarmAddEditPresenterImpl implements AlarmAddEditPresenter {
     }
 
     @Override
+    public void delete(Alarm item) {
+        mView.loadingStart();
+        getAlarmService().getAlarmApi().delete(item.get_alarmid())
+                .subscribeOn(Schedulers.newThread())
+                .filter(result -> result.getResult() != null)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resultDTO -> {
+                            mView.onSuccessDelete();
+                        },
+                        (e) -> {
+                            mView.onErrorDelete();
+                        },
+                        mView::loadingStop
+                );
+    }
+
+    @Override
     public void add(Alarm item) {
         mView.loadingStart();
         getAlarmService().getAlarmApi().add(

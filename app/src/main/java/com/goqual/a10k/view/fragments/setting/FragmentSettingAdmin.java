@@ -25,6 +25,8 @@ import com.goqual.a10k.view.dialog.CustomListDialog;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
+import java.io.Serializable;
+
 /**
  * Created by hanwool on 2017. 2. 28..
  */
@@ -204,12 +206,11 @@ implements UserPresenter.View<User>, IToolbarClickListener {
         DialogInterface.OnClickListener onClickListener = (dialog1, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    LogUtil.e(TAG, "SELECTED POSITION :: " + getListDialog().getSelectedPosition());
                     if (getListDialog().getSelectedPosition() != -1) {
 
                         CustomDialog dialog = new CustomDialog(getContext());
                         dialog.setTitleText(R.string.swtich_change_admin_title)
-                                .setMessageText("[" + getUserAdapter().getItem(getListDialog().getSelectedPosition()).getNum() + "] 님으로 \n관리자를 변경하시겠습니까?")
+                                .setMessageText("[" + getUserAdapter().getItem(getListDialog().getSelectedPosition()).getNum() + "] " + getString(R.string.swtich_change_admin_content))
                                 .isEditable(false)
                                 .setPositiveButton(getString(R.string.common_ok), (dia, id) -> {
                                     getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
@@ -219,7 +220,6 @@ implements UserPresenter.View<User>, IToolbarClickListener {
                                     dialog.dismiss();
                                 })
                                 .show();
-                        //getUserPresenter().changeAdmin(getListDialog().getSelectedPosition());
                     } else {
                         Toast.makeText(getContext(),
                                 R.string.switch_setting_admin_change_admin_not_selected, Toast.LENGTH_SHORT).show();
@@ -256,7 +256,10 @@ implements UserPresenter.View<User>, IToolbarClickListener {
 
     public void onBtnClick(View view) {
         if(view.getId() == R.id.admin_add_user_in_exist_items) {
-            startActivity(new Intent(getActivity(), ActivityInviteUser.class));
+            Intent intent = new Intent(getActivity(), ActivityInviteUser.class);
+            intent.putExtra(getString(R.string.arg_user_connected),
+                    (Serializable) getUserAdapter().getItems());
+            startActivity(intent);
         } else if (view.getId() == R.id.admin_change_admin) {
             onClickChangeAdmin();
         }

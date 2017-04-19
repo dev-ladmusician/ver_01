@@ -1,6 +1,7 @@
 package com.goqual.a10k.view.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.goqual.a10k.R;
 import com.goqual.a10k.databinding.ActivityMainBinding;
 import com.goqual.a10k.helper.PreferenceHelper;
@@ -26,6 +28,7 @@ import com.goqual.a10k.view.fragments.FragmentMainSetting;
 import com.goqual.a10k.view.fragments.FragmentMainSwitchContainer;
 import com.goqual.a10k.view.interfaces.IActivityInteraction;
 import com.goqual.a10k.view.interfaces.IMainActivityInteraction;
+import com.goqual.a10k.view.interfaces.IMainInviteActivityInteraction;
 import com.goqual.a10k.view.interfaces.IToolbarClickListener;
 import com.goqual.a10k.view.interfaces.IToolbarInteraction;
 
@@ -34,7 +37,7 @@ import static com.goqual.a10k.view.interfaces.IToolbarClickListener.STATE.EDIT;
 
 
 public class ActivityMain extends BaseActivity<ActivityMainBinding>
-        implements IActivityInteraction, IToolbarInteraction, IMainActivityInteraction {
+        implements IActivityInteraction, IToolbarInteraction, IMainActivityInteraction, IMainInviteActivityInteraction {
     public static final String TAG = ActivityMain.class.getSimpleName();
 
     private EventToolbarClick mEventToolbarClick;
@@ -51,10 +54,10 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtil.e(TAG, "ON_CREATE!!!");
         mBinding.setActivity(this);
-        initView();
         backPressUtil = new BackPressUtil(this);
+
+        initView();
     }
 
     private void initView() {
@@ -91,18 +94,6 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         mBinding.mainTaps.addTab(mBinding.mainTaps.newTab().setIcon(R.drawable.selector_footer_setting));
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public AppBarLayout getAppbar() {
         return mBinding.appbar;
@@ -119,9 +110,38 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         mBinding.toolbarTitle.setText(title);
     }
 
-    public void handleLogin() {
-        startActivity(new Intent(this, ActivityPhoneAuth.class));
-        finish();
+    /**
+     * 로그아웃하면 fcm token refresh
+     */
+    public void handleLogout() {
+        new AsyncTask() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                LogUtil.e(TAG, "token :: " + PreferenceHelper.getInstance(getApplicationContext())
+                        .getStringValue(getString(R.string.arg_user_fcm_token), ""));
+            }
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                String token = "";
+                try {
+                    FirebaseInstanceId.getInstance().deleteInstanceId();
+                    token = FirebaseInstanceId.getInstance().getToken();
+
+                    LogUtil.e(TAG, "new token :: " + token);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return token;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                startActivity(new Intent(getApplicationContext(), ActivityPhoneAuth.class));
+                finish();
+            }
+        }.execute(null, null, null);
     }
 
     @Override
@@ -173,6 +193,16 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
     }
 
     /**
+     * 스위치 초대에 응했을 때
+     */
+    @Override
+    public void addSwitchForInvite() {
+        mBinding.mainPager.setCurrentItem(0);
+        ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).setCurrentPage(0);
+        ((FragmentMainSwitchContainer)fragmentPagerAdapter.getItem(0)).onResume();
+    }
+
+    /**
      * set visible toolbar add
      */
     private void setToolbarAddVisibility() {
@@ -191,6 +221,7 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
      */
     @Override
     public void setToolbarEdit(IToolbarClickListener.STATE state) {
+        mEventToolbarClick.setState(state);
         mBinding.setEventSwitEditEnum(state);
     }
 
@@ -285,5 +316,16 @@ public class ActivityMain extends BaseActivity<ActivityMainBinding>
         } else {
             backPressUtil.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

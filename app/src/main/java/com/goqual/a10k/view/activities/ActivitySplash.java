@@ -54,6 +54,12 @@ public class ActivitySplash extends AppCompatActivity {
                 LogUtil.e(TAG, "FCM TOKEN :: " + FirebaseInstanceId.getInstance().getToken());
                 startActivity(new Intent(this, ActivityPhoneAuth.class));
             } else {
+
+                String originFcmToken = PreferenceHelper.getInstance(getApplicationContext())
+                        .getStringValue(getString(R.string.arg_user_fcm_token), "");
+
+                LogUtil.e(TAG, "FCM TOKEN :: " + originFcmToken);
+
                 startActivity(new Intent(this, ActivityMain.class));
             }
             finish();

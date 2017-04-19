@@ -3,14 +3,12 @@ package com.goqual.a10k.model.remote.service;
 import android.content.Context;
 
 import com.goqual.a10k.model.entity.PagenationWrapper;
-import com.goqual.a10k.model.entity.SimplifySwitch;
 import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.model.remote.ResultDTO;
 import com.goqual.a10k.model.remote.RetrofitManager;
 
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -68,6 +66,13 @@ public class SwitchService {
         Observable<ResultDTO<Switch>> rename(
                 @Field("connectionId") int connectionId,
                 @Field("title") String title
+        );
+
+        @FormUrlEncoded
+        @PUT("connection")
+        Observable<ResultDTO<Switch>> changeSeq(
+                @Field("connectionIds") String connectionIds,
+                @Field("connectionSeqs") String connectionSeqs
         );
 
         @FormUrlEncoded
