@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by ladmusician on 2016. 12. 28..
@@ -44,12 +45,15 @@ public class History {
         this.btn = btn;
     }
 
-    public String getCreated() {
+    public CharSequence getCreated() {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            Date date = simpleDateFormat.parse(created.replace("Z", "").replace("T", " "));
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm a");
-            return simpleDateFormat1.format(date);
+            StringBuilder stringBuilder = new StringBuilder();
+            SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            tranSimpleFormat.setTimeZone(TimeZone.getTimeZone("Greenwich"));
+            Date data = tranSimpleFormat.parse(created.replace("Z", "").replace("T", " "));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+            stringBuilder.append(simpleDateFormat.format(data.getTime()));
+            return stringBuilder;
         }
         catch (ParseException e) {
             LogUtil.e("History", e.getMessage(), e);

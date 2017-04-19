@@ -83,7 +83,7 @@ implements IActivityInteraction, IToolbarInteraction {
         mAdapterPage = new AdapterPager(getSupportFragmentManager());
         mAdapterPage.addItem(FragmentSettingAdmin.newInstance(mSwitchPosition));
         mAdapterPage.addItem(FragmentSettingNfc.newInstance(mSwitchPosition));
-        mAdapterPage.addItem(FragmentSettingAbsence.newInstance(mSwitchPosition));
+        if (mSwitch.isadmin) mAdapterPage.addItem(FragmentSettingAbsence.newInstance(mSwitchPosition));
         mAdapterPage.addItem(FragmentSettingHistory.newInstance(mSwitchPosition));
         mBinding.settingContainer.setAdapter(mAdapterPage);
         mBinding.settingContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
