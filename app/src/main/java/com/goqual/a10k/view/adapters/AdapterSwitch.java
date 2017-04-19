@@ -11,9 +11,11 @@ import com.goqual.a10k.model.entity.Switch;
 import com.goqual.a10k.view.adapters.interfaces.OnRecyclerItemClickListener;
 import com.goqual.a10k.view.adapters.model.AdapterDataModel;
 import com.goqual.a10k.view.adapters.view.AdapterDataView;
+import com.goqual.a10k.view.fragments.helper.ItemTouchHelperAdapter;
 import com.goqual.a10k.view.viewholders.SwitchViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ import java.util.List;
  */
 
 public class AdapterSwitch extends RecyclerView.Adapter<SwitchViewHolder>
-implements AdapterDataModel<Switch>, AdapterDataView{
+implements AdapterDataModel<Switch>, AdapterDataView, ItemTouchHelperAdapter {
 
     private List<Switch> mSwitchList = null;
     private Context mContext = null;
@@ -104,5 +106,16 @@ implements AdapterDataModel<Switch>, AdapterDataView{
         }
 
         refresh();
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mSwitchList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
     }
 }

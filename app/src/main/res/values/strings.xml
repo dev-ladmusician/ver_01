@@ -235,6 +235,7 @@
     <string name="setting_item_logout">Logout</string>
 
     <!-- noti -->
+    <string name="noti_content_now"> now</string>
     <string name="noti_content_min_ago"> minutes ago</string>
     <string name="noti_content_hour_ago"> hours ago</string>
     <string name="noti_content_day_ago"> days ago</string>

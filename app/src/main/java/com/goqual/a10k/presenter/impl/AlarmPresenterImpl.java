@@ -68,7 +68,7 @@ public class AlarmPresenterImpl implements AlarmPresenter {
 
     @Override
     public void loadItems(int page) {
-        mView.refresh();
+        mAlarmAdapterDataModel.clear();
         getAlarmService().getAlarmApi().gets(page)
                 .subscribeOn(Schedulers.newThread())
                 .filter(result -> result.getResult() != null)

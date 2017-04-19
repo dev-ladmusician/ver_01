@@ -103,8 +103,6 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         // update switch list
         ((ISwitchRefreshListener)mPagerAdapter.getItem(0)).updateSwitches();
 
-        LogUtil.e(TAG, "CURRENT PAGE :: " + mCurrentPage);
-
         if (((IActivityInteraction)getActivity()).getCurrentPage() ==
                 getResources().getInteger(R.integer.frag_main_switch))
             mBinding.viewPager.setCurrentItem(mCurrentPage);
@@ -244,12 +242,9 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         getSocketManager();
 
         mPagerAdapter.clear();
-        mPagerAdapter.refresh();
-
         SwitchManager.getInstance().clear();
-        // TODO: page
-        getPresenter()
-                .loadItems(1);
+
+        getPresenter().loadItems(1);
     }
 
     @Override

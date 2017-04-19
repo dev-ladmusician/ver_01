@@ -69,20 +69,23 @@ public class NotiWrap implements BaseRealmWraper<Noti>{
     public CharSequence getDateString(Context ctx) {
         float hour = date / 60;
         StringBuilder stringBuilder = new StringBuilder();
-        if(hour < 1) {
+        if(hour < 1 && hour != 0) {
             // 분
             stringBuilder.append(date);
-            stringBuilder.append(ctx.getString(R.string.noti_content_min_ago));
+            stringBuilder.append(" " + ctx.getString(R.string.noti_content_min_ago));
         }
         else if(hour / 24 < 1) {
 //            시간
             stringBuilder.append((int)hour);
-            stringBuilder.append(ctx.getString(R.string.noti_content_min_ago));
+            stringBuilder.append(" " + ctx.getString(R.string.noti_content_hour_ago));
+        }
+        else if (hour == 0) {
+            stringBuilder.append(" " + ctx.getString(R.string.noti_content_now));
         }
         else {
             // 일
             stringBuilder.append((int)(hour / 24));
-            stringBuilder.append(ctx.getString(R.string.noti_content_min_ago));
+            stringBuilder.append(" " + ctx.getString(R.string.noti_content_day_ago));
         }
         return stringBuilder;
     }

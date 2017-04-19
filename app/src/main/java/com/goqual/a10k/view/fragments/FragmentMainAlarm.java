@@ -191,7 +191,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage, I
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAdapter().clear();
+                //getAdapter().clear();
                 setPage(1);
                 loadItems();
             }
