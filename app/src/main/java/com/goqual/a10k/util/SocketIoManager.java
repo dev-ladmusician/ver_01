@@ -58,7 +58,7 @@ public class SocketIoManager{
         LogUtil.d(TAG, "createSocket");
         try {
             if(mSocket == null) {
-                mSocket = IO.socket(Constraint.SOCKET_SERVER_IP);
+                mSocket = IO.socket(com.goqual.a10k.util.Constraint.SOCKET_SERVER_IP);
             }
             if(!isConnected) {
                 registerSocketCallback();

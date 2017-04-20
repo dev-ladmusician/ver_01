@@ -7,10 +7,10 @@
     <color name="tabSelected">#FFFFFF</color>
     <color name="tabUnSelected">#CCCCCC</color>
 
-    <color name="identitiy_01">#0EABF1</color>
-    <color name="identitiy_02">#0288D1</color>
-    <color name="identitiy_03">#186A99</color>
-    <color name="identitiy_04">#92CFEE</color>
+    <color name="identity_01">#0EABF1</color>
+    <color name="identity_02">#0288D1</color>
+    <color name="identity_03">#186A99</color>
+    <color name="identity_04">#92CFEE</color>
 
     <color name="grey_01">#F0EFF5</color>
     <color name="grey_02">#dedee2</color>

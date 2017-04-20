@@ -182,7 +182,7 @@ public class SetSwitchPresenterImpl
     private SimpleSocketClient getSocketClient() {
         if(mSocketClient == null) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mSocketClient = SimpleSocketClient.getInstance(Constraint.BS_SERVER_IP, Constraint.SERVER_PORT, this);
+                mSocketClient = SimpleSocketClient.getInstance(com.goqual.a10k.util.Constraint.BS_SERVER_IP, com.goqual.a10k.util.Constraint.SERVER_PORT, this);
 
                 ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkRequest.Builder networkRequestBuilder = new NetworkRequest.Builder();
@@ -206,7 +206,7 @@ public class SetSwitchPresenterImpl
                 });
             }
             else {
-                mSocketClient = SimpleSocketClient.getInstance(Constraint.BS_SERVER_IP, Constraint.SERVER_PORT, this);
+                mSocketClient = SimpleSocketClient.getInstance(com.goqual.a10k.util.Constraint.BS_SERVER_IP, com.goqual.a10k.util.Constraint.SERVER_PORT, this);
             }
         }
         return mSocketClient;
@@ -243,7 +243,7 @@ public class SetSwitchPresenterImpl
     }
 
     private void sendReqSetMqttServerIp() {
-        LogUtil.d(TAG, "sendReqSetMqttServerIp::" + Constraint.MQTT_BROKER_IP);
+        LogUtil.d(TAG, "sendReqSetMqttServerIp::" + com.goqual.a10k.util.Constraint.MQTT_BROKER_IP);
         ConnectSocketData data = new ConnectSocketData(SocketProtocols.REQ_MQTT_BROKER_IP, Constraint.MQTT_BROKER_IP);
         getSocketClient().sendPacket(data.makePacket());
     }
@@ -326,7 +326,7 @@ public class SetSwitchPresenterImpl
     private void onResGetBtnCount(ConnectSocketData data) {
         LogUtil.d(TAG, "onResGetBtnCount::" + data.toString());
         mSwitchBtnCount = Integer.parseInt(data.getData());
-        if(m10KResult.SSID.equals(Constraint.AP_NAME1)){
+        if(m10KResult.SSID.equals(com.goqual.a10k.util.Constraint.AP_NAME1)){
             mSwitchBtnCount = 1;
         }
         if(mSwitchBtnCount <= 3 || mSwitchBtnCount > 0) {

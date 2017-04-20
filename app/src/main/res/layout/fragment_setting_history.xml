@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@color/identitiy_01"
+                android:background="@color/identity_01"
                 android:paddingTop="@dimen/padding_16"
                 android:paddingBottom="@dimen/padding_16"
                 android:layout_marginTop="@dimen/padding_16"

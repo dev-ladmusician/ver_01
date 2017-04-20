@@ -83,8 +83,10 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mAbsenceItem = item;
             mAbsenceItem.setmIsSetStartTime(true);
             mAbsenceItem.setmIsSetEndTime(true);
+            mAbsenceItem.setmIsRegistered(true);
             mBinding.setItem(mAbsenceItem);
         } else {
+            mAbsenceItem.setmIsRegistered(false);
             setStateSwitchAvailable(false);
         }
     }
@@ -96,6 +98,8 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
     @Override
     public void onSuccessUpdate(Absence item) {
         mAbsenceItem.set_absenceid(item.get_absenceid());
+        mAbsenceItem.setmIsRegistered(true);
+        mBinding.setItem(mAbsenceItem);
         setStateSwitchAvailable(true);
     }
 
@@ -117,26 +121,27 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
         mCurrentToolbarState = state;
         if(mCurrentToolbarState == STATE.DONE) {
             mAbsenceItem.setmIsEditable(false);
+            if (mAbsenceItem.get_absenceid() <= 0) mAbsenceItem.setmIsRegistered(false);
+
             mBinding.setItem(mAbsenceItem);
 
             if (mIsChange) {
                 // 시작 시간 체크
-                if (!mAbsenceItem.ismIsSetStartTime())
+                if (!mAbsenceItem.ismIsSetStartTime()) {
                     ToastUtil.show(getActivity(), getString(R.string.absence_save_error_not_select_start_time));
+                    if (mAbsenceItem.get_absenceid() <= 0) setBtnUncheck();
+                }
 
                 // 종료 시간 체크
-                if (!mAbsenceItem.ismIsSetEndTime())
+                if (!mAbsenceItem.ismIsSetEndTime()) {
                     ToastUtil.show(getActivity(), getString(R.string.absence_save_error_not_select_end_time));
+                    if (mAbsenceItem.get_absenceid() <= 0) setBtnUncheck();
+                }
 
                 if (mAbsenceItem.ismIsSetStartTime() && mAbsenceItem.ismIsSetEndTime()) {
                     getPresenter().update(mAbsenceItem);
-                    mBinding.switchBtn1.setEnabled(false);
-                    mBinding.switchBtn2.setEnabled(false);
-                    mBinding.switchBtn3.setEnabled(false);
-                    //((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
-                }
-
-                if (mAbsenceItem.get_absenceid() == 0) {
+                    setBtnAvailable(false);
+                } else {
                     mAbsenceItem.setmIsSetStartTime(false);
                     mAbsenceItem.setmIsSetEndTime(false);
                     mBinding.setItem(mAbsenceItem);
@@ -147,11 +152,22 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mAbsenceItem.setmIsEditable(true);
             mBinding.setItem(mAbsenceItem);
 
-            mBinding.switchBtn1.setEnabled(true);
-            mBinding.switchBtn2.setEnabled(true);
-            mBinding.switchBtn3.setEnabled(true);
+            setBtnAvailable(true);
             ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
         }
+    }
+
+    private void setBtnAvailable(boolean isAvailable) {
+        mBinding.switchBtn1.setEnabled(isAvailable);
+        mBinding.switchBtn2.setEnabled(isAvailable);
+        mBinding.switchBtn3.setEnabled(isAvailable);
+    }
+
+    private void setBtnUncheck() {
+        mAbsenceItem.setBtn1(false);
+        mAbsenceItem.setBtn2(false);
+        mAbsenceItem.setBtn3(false);
+        mBinding.setItem(mAbsenceItem);
     }
 
     @Override
@@ -201,6 +217,17 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
                     getPresenter().update(mAbsenceItem);
                 }
                 break;
+            case R.id.absence_add:
+                mAbsenceItem.setmIsRegistered(true);
+                mAbsenceItem.setmIsEditable(true);
+                mBinding.switchBtn1.setEnabled(true);
+                mBinding.switchBtn2.setEnabled(true);
+                mBinding.switchBtn3.setEnabled(true);
+                mBinding.setItem(mAbsenceItem);
+
+                mCurrentToolbarState = STATE.EDIT;
+                ((IToolbarInteraction)getActivity()).setToolbarEdit(mCurrentToolbarState);
+                break;
         }
     }
 
@@ -239,9 +266,7 @@ public class FragmentSettingAbsence extends BaseFragment<FragmentSettingAbsenceB
             mBinding.setItem(mAbsenceItem);
         });
 
-        mBinding.switchBtn1.setEnabled(false);
-        mBinding.switchBtn2.setEnabled(false);
-        mBinding.switchBtn3.setEnabled(false);
+        setBtnAvailable(false);
     }
 
     @Override

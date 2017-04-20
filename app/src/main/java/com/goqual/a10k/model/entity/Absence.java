@@ -29,6 +29,7 @@ public class Absence {
     public boolean mIsEditable;
     public boolean mIsSetStartTime;
     public boolean mIsSetEndTime;
+    public boolean mIsRegistered;
 
     public Absence() {
 
@@ -152,6 +153,14 @@ public class Absence {
 
     public void setmIsSetStartTime(boolean mIsSetStartTime) {
         this.mIsSetStartTime = mIsSetStartTime;
+    }
+
+    public boolean ismIsRegistered() {
+        return mIsRegistered;
+    }
+
+    public void setmIsRegistered(boolean mIsRegistered) {
+        this.mIsRegistered = mIsRegistered;
     }
 
     public boolean ismIsSetEndTime() {

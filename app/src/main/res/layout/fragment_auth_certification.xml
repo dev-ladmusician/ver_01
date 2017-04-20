@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_40"
                 android:text="@string/auth_certi_title"
-                android:textColor="@color/identitiy_01"
+                android:textColor="@color/identity_01"
                 android:textSize="@dimen/auth_title_txt_size"
                 android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/auth_certi_edit"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/identitiy_01"
+                android:textColor="@color/identity_01"
                 android:textStyle="bold"
                 android:textSize="@dimen/txt_15"
                 android:text="@string/auth_certi_count" />
@@ -94,7 +94,7 @@
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@+id/auth_certi_txt_left"
                     android:layout_marginTop="@dimen/auth_txt_margin_top"
-                    android:textColor="@color/identitiy_01"
+                    android:textColor="@color/identity_01"
                     android:textStyle="bold"
                     android:text="@string/auth_certi_txt_mid" />
 

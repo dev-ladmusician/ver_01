@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/identitiy_01"
+                android:textColor="@color/identity_01"
                 android:layout_marginRight="@dimen/padding_16"
                 android:visibility="gone"
                 android:onClick="@{fragment::onBtnClick}"
@@ -91,7 +91,7 @@
                     android:id="@+id/admin_add_user_in_exist_items"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_delete_ic_container_size"
-                    android:background="@color/identitiy_04"
+                    android:background="@color/identity_04"
                     android:onClick="@{fragment::onBtnClick}">
 
                     <RelativeLayout
@@ -126,7 +126,7 @@
                 android:paddingRight="@dimen/padding_16"
                 android:layout_marginTop="@dimen/padding_16"
                 android:visibility="gone"
-                android:background="@color/identitiy_04">
+                android:background="@color/identity_04">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:textColor="@color/identitiy_01"
+            android:textColor="@color/identity_01"
             android:text="@string/item_wifi_connect"/>
     </RelativeLayout>
 

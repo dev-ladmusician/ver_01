@@ -31,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitManager {
     public static RetrofitManager instance;
     private final String BASE_URL = Constraint.BASE_URL;
-    private final String AUTH_BASE_URL = Constraint.AUTH_BASE_URL;
+    private final String AUTH_BASE_URL = com.goqual.a10k.util.Constraint.AUTH_BASE_URL;
     private Retrofit mRetrofit = null;
     private Retrofit mAuthRetrofit = null;
     private Context mContext = null;
@@ -58,7 +58,7 @@ public class RetrofitManager {
                 ));
                 // Request customization: add request headers
                 Request.Builder requestBuilder = original.newBuilder()
-                        .header(Constraint.CUSTOM_HEADER, getToken()); // <-- this is the important line
+                        .header(com.goqual.a10k.util.Constraint.CUSTOM_HEADER, getToken()); // <-- this is the important line
 
                 Request request = requestBuilder.build();
                 return chain.proceed(request);

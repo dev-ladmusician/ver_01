@@ -17,9 +17,9 @@
 
         <gradient
             android:centerY="0.50"
-            android:centerColor="@color/identitiy_04"
-            android:endColor="@color/identitiy_01"
-            android:startColor="@color/identitiy_04"
+            android:centerColor="@color/identity_04"
+            android:endColor="@color/identity_01"
+            android:startColor="@color/identity_04"
             android:type="sweep"
             android:useLevel="false" />
     </shape>

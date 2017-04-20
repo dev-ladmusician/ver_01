@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{itemSwitch.title}"
-                android:textColor="@color/identitiy_02"
+                android:textColor="@color/identity_02"
                 android:textStyle="bold"/>
 
             <!-- btn -->

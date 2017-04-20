@@ -13,7 +13,7 @@
             android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_height"
-            android:background="@color/identitiy_02"
+            android:background="@color/identity_02"
             android:elevation="3dp"
 
             android:paddingRight="@dimen/padding_16">

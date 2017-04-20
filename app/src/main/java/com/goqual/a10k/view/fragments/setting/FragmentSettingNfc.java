@@ -212,7 +212,7 @@ public class FragmentSettingNfc extends BaseFragment<FragmentSettingNfcBinding>
             }
         });
 
-        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identity_02));
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

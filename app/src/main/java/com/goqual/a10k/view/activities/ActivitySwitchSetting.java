@@ -174,16 +174,16 @@ implements IActivityInteraction, IToolbarInteraction {
 
     /**
      * toolbar 상태 변경
-     * @param STATE
+     * @param state
      */
     @Override
-    public void setToolbarEdit(IToolbarClickListener.STATE STATE) {
-        if (STATE == IToolbarClickListener.STATE.DONE)
+    public void setToolbarEdit(IToolbarClickListener.STATE state) {
+        if (state == IToolbarClickListener.STATE.DONE)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_edit));
-        else if (STATE == EDIT)
+        else if (state == EDIT)
             mBinding.toolbarEdit.setText(getString(R.string.toolbar_done));
-
-        mBinding.setEditSwitchState(STATE);
+        mEventToolbarClick.setState(state);
+        mBinding.setEditSwitchState(state);
     }
 
     @Override

@@ -187,7 +187,7 @@ implements AlarmPresenter.View<Alarm>, IToolbarClickListener, IPaginationPage, I
     private void initRecyclerView() {
         mBinding.setFragment(this);
 
-        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identity_02));
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

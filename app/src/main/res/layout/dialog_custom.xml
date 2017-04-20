@@ -82,7 +82,7 @@
                     android:layout_height="60dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textColor="@color/identitiy_01"
+                    android:textColor="@color/identity_01"
                     android:text="@{item.negativeButtonText}"
                     android:onClick="@{dialog::onBtnClick}"
                     android:visibility="@{item.isSetNegativeButton ? View.VISIBLE : View.GONE}" />
@@ -93,7 +93,7 @@
                     android:layout_height="60dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textColor="@color/identitiy_01"
+                    android:textColor="@color/identity_01"
                     android:text="@{item.positiveButtonText}"
                     android:onClick="@{dialog::onBtnClick}"
                     android:visibility="@{item.isSetPositiveButton ? View.VISIBLE : View.GONE}" />

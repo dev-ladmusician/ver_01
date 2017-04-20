@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="@string/auth_phone_title"
-                android:textColor="@color/identitiy_02"
+                android:textColor="@color/identity_02"
                 android:textSize="40dp"
                 android:textStyle="bold" />
 
