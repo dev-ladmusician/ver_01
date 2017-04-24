@@ -130,7 +130,7 @@ public class WifiPresenterImpl implements WifiPresenter {
             Collections.sort(scanResultList, new WifiLevelDescCompare());
             for(ScanResult result : scanResultList) {
                 if(result.frequency < WIFI_FREQUENCY_MAX_VALUE) {
-                    if(!(result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(Constraint.AP_NAME2))) {
+                    if(!(result.SSID.equals(Constraint.AP_NAME1) || result.SSID.equals(com.goqual.a10k.util.Constraint.AP_NAME2))) {
                         if(!result.SSID.isEmpty()) {
                             mScanResultList.add(result);
                             mView.addAP(result);
@@ -166,7 +166,7 @@ public class WifiPresenterImpl implements WifiPresenter {
             WifiInfo info = getWifiManager().getConnectionInfo();
             if(info != null) {
                 String ssid = info.getSSID().replaceAll("\"", "");
-                if(ssid.equals(Constraint.AP_NAME1) || ssid.equals(Constraint.AP_NAME2)) {
+                if(ssid.equals(com.goqual.a10k.util.Constraint.AP_NAME1) || ssid.equals(com.goqual.a10k.util.Constraint.AP_NAME2)) {
                     NetworkInfo networkInfo = (NetworkInfo)intent.getExtras().get("networkInfo");
                     if(networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                         mView.changeFragSetSwitch();

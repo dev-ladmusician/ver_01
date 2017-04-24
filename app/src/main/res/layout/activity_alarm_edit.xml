@@ -27,7 +27,7 @@
                 android:id="@+id/toolbar_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
-                android:background="@color/identitiy_02"
+                android:background="@color/identity_02"
                 android:elevation="3dp">
 
                 <TextView
@@ -245,7 +245,7 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:textColor="@color/identitiy_02"
+                    android:textColor="@color/identity_02"
                     android:textSize="@dimen/txt_17"
                     android:text="@string/alarm_delete_btn_txt"/>
             </RelativeLayout>

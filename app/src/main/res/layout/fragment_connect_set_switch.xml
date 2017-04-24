@@ -22,7 +22,7 @@
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/identitiy_02"
+            android:textColor="@color/identity_02"
             android:textStyle="bold"
             android:textSize="15dp"
             android:text="@string/set_switch_info"/>

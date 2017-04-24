@@ -56,7 +56,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:gravity="right"
-            android:textColor="@color/identitiy_02"
+            android:textColor="@color/identity_02"
             android:visibility="@{phone.isConnected ? View.VISIBLE : View.GONE}"
             android:text="@string/invite_user_connected"/>
 
@@ -67,7 +67,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:gravity="right"
-            android:textColor="@color/identitiy_02"
+            android:textColor="@color/identity_02"
             android:visibility="@{phone.isInvited ? View.VISIBLE : View.GONE}"
             android:text="@string/invite_user_invited"/>
     </RelativeLayout>

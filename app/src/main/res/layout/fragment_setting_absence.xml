@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textSize="@dimen/txt_15"
-                    android:textColor="@color/identitiy_02"
+                    android:textColor="@color/identity_02"
                     android:text="ON"
                     android:layout_marginRight="@dimen/padding_5"
                     android:visibility="@{!item.mIsSetStartTime ? View.VISIBLE : View.GONE}"
@@ -52,6 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textSize="@dimen/txt_17"
+                    android:paddingBottom="@dimen/padding_5"
+                    android:background="@{item.mIsEditable ? @drawable/style_border_bottom_grey : @drawable/style_border_none}"
                     android:text='@{!item.mIsSetStartTime ? @string/absence_default_time : item.getStartTimeString()}'
                     android:onClick="@{fragment::onBtnClick}"/>
 
@@ -70,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textSize="@dimen/txt_15"
-                    android:textColor="@color/identitiy_02"
+                    android:textColor="@color/identity_02"
                     android:text="OFF"
                     android:layout_marginRight="@dimen/padding_5"
                     android:visibility="@{!item.mIsSetEndTime ? View.VISIBLE : View.GONE}"
@@ -82,6 +84,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textSize="@dimen/txt_17"
+                    android:paddingBottom="@dimen/padding_5"
+                    android:background="@{item.mIsEditable ? @drawable/style_border_bottom_grey : @drawable/style_border_none}"
                     android:text='@{!item.mIsSetEndTime ? @string/absence_default_time : item.getEndTimeString()}'
                     android:onClick="@{fragment::onBtnClick}"/>
             </LinearLayout>
@@ -90,7 +94,8 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true"
+                android:visibility="@{item.mIsRegistered ? View.VISIBLE : View.GONE}">
 
                 <RelativeLayout
                     android:id="@+id/switch_btn_1"
@@ -149,6 +154,33 @@
                 android:visibility="@{item.mIsEditable ? View.GONE : View.VISIBLE}">
             </RelativeLayout>
 
+            <!-- + 버튼 -->
+            <RelativeLayout
+                android:id="@+id/absence_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragment::onBtnClick}"
+                android:visibility="@{item.mIsRegistered ? View.GONE : View.VISIBLE}">
+
+                <ImageView
+                    android:id="@+id/img_add_absence"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_plus_b"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/identity_02"
+                    android:textStyle="bold"
+                    android:text="@string/absence_add"
+                    android:layout_marginTop="@dimen/padding_16"
+                    android:layout_below="@+id/img_add_absence"/>
+            </RelativeLayout>
+
             <!-- absence info -->
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -160,27 +192,14 @@
                 android:gravity="center">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/absence_info_done"
-                    android:textSize="@dimen/txt_info_s"
-                    android:textColor="@color/identitiy_02"
-                    android:gravity="center"
-                    android:visibility="@{item.mIsEditable ? View.VISIBLE : View.GONE}"
-                    android:layout_marginLeft="@dimen/padding_15"
-                    android:layout_marginRight="@dimen/padding_15"/>
-
-                <TextView
                     android:id="@+id/absence_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/absence_info_edit"
+                    android:text="@{item.mIsEditable ? @string/absence_info_done : @string/absence_info_edit}"
                     android:textSize="@dimen/txt_info_s"
-                    android:textColor="@color/grey_05"
+                    android:textColor="@{item.mIsEditable ? @color/identity_02 : @color/grey_05}"
                     android:gravity="center"
-                    android:visibility="@{item.mIsEditable ? View.GONE : View.VISIBLE}"
                     android:layout_marginLeft="@dimen/padding_15"
                     android:layout_marginRight="@dimen/padding_15"/>
             </LinearLayout>

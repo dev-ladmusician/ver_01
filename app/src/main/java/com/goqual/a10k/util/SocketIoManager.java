@@ -58,7 +58,7 @@ public class SocketIoManager{
         LogUtil.d(TAG, "createSocket");
         try {
             if(mSocket == null) {
-                mSocket = IO.socket(Constraint.SOCKET_SERVER_IP);
+                mSocket = IO.socket(com.goqual.a10k.util.Constraint.SOCKET_SERVER_IP);
             }
             if(!isConnected) {
                 registerSocketCallback();
@@ -92,6 +92,9 @@ public class SocketIoManager{
         LogUtil.d(TAG, "destroy::REF:"+mRefCount + " SOCKET: " + mSocket);
     }
 
+    /**
+     * socket callback 등록
+     */
     private void registerSocketCallback() {
         mSocket.on(Socket.EVENT_CONNECT, onConnectedListener);
         mSocket.on(Socket.EVENT_RECONNECT, onReconnectingListener);
@@ -109,6 +112,9 @@ public class SocketIoManager{
         mSocket.on(SocketProtocols.SOCKET_PT_RES_OPERATION, operationResListener);
     }
 
+    /**
+     * socket callback 등록 해제
+     */
     private void unregisterSocketCallback() {
         if(mSocket != null) {
             mSocket.off(Socket.EVENT_CONNECT, onConnectedListener);

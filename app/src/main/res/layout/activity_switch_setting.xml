@@ -27,7 +27,7 @@
                 android:id="@+id/toolbar_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
-                android:background="@color/identitiy_02"
+                android:background="@color/identity_02"
                 android:elevation="3dp"
                 android:paddingLeft="@dimen/padding_16"
                 android:paddingRight="@dimen/padding_16">
@@ -82,7 +82,7 @@
                 android:id="@+id/setting_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/identitiy_02"
+                android:background="@color/identity_02"
                 android:elevation="3dp"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/white"

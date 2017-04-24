@@ -261,7 +261,7 @@ public class FragmentMainSwitchContainer extends BaseFragment<FragmentMainSwitch
         mPagerAdapter.clear();
         SwitchManager.getInstance().clear();
 
-        getPresenter().loadItems(1);
+        getPresenter().loadItems();
     }
 
     @Override

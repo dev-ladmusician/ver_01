@@ -326,6 +326,7 @@
     <string name="absence_register_error_title">부재모드 등록 오류</string>
     <string name="absence_register_error_content">부재모드를 등록하는데 오류가 발생했습니다.</string>
 
+    <string name="absence_add">부재모드를 등록해 보세요</string>
     <string name="absence_save_error_not_select_start_time">부재모드 시작 시간을 입력해주세요</string>
     <string name="absence_save_error_not_select_end_time">부재모드 종료 시간을 입력해주세요</string>
 

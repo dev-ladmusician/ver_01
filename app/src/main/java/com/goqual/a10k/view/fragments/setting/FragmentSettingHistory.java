@@ -129,7 +129,7 @@ implements HistoryPresenter.View<History>, IPaginationPage, com.wdullaer.materia
         mBinding.historyContainer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.historyContainer.setAdapter(mHistoryAdapter);
 
-        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identitiy_02));
+        mBinding.refresh.setColorSchemeColors(ResourceUtil.getColor(getActivity(), R.color.identity_02));
         mBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

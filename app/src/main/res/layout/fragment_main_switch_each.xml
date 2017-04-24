@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{itemSwitch.title}"
-                android:textColor="@color/identitiy_02"
+                android:textColor="@color/identity_02"
                 android:textStyle="bold"/>
 
             <!-- btn -->
@@ -129,7 +129,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/txt_16"
-                        android:textColor="@color/identitiy_02"
+                        android:textColor="@color/identity_02"
                         android:layout_marginBottom="@dimen/padding_5"
                         android:text="@{itemSwitch._absenceid != null ? itemSwitch.getStartTimeString() : @string/app_name}" />
                     <TextView

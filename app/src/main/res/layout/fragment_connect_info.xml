@@ -55,7 +55,7 @@
             android:layout_marginTop="@dimen/padding_32"
             android:gravity="center"
             android:text="@string/info_btn_start"
-            android:textColor="@color/identitiy_01"
+            android:textColor="@color/identity_01"
             android:textStyle="bold"
             android:textSize="@dimen/txt_15"
             android:background="@drawable/style_border_b"
