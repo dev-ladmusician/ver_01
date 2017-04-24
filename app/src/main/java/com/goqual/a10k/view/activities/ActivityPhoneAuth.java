@@ -151,11 +151,22 @@ public class ActivityPhoneAuth extends BaseActivity<ActivityPhoneAuthBinding>
         getPresenter().join(phoneNumber, smsToken);
     }
 
+    /**
+     * 인증번호 요청 후 성공하면 인증번호 입력하는 화면으로 이동
+     * @param phoneNumber
+     * @param auth
+     */
     @Override
     public void onSuccessPhoneNumberAuth(String phoneNumber, String auth) {
         changeCurrentPage(FragmentAuthCertification.newInstance(phoneNumber, auth));
     }
 
+    /**
+     * 핸드폰 번호 가져오는 권한을 요청 후 피드백
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == PHONE_NUMBER_PERMISSION_REQ) {

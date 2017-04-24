@@ -78,13 +78,17 @@ public class FragmentMainSwitchEach extends BaseFragment<FragmentMainSwitchEachB
         LogUtil.d(TAG, ""+view.getId());
         switch (view.getId()) {
             case R.id.switch_btn_1:
-                operationListener.onSwitchClicked(mSwitchItemPosition, 1);
+
+                if (mSwitch.get_absenceid() == null)
+                    operationListener.onSwitchClicked(mSwitchItemPosition, 1);
                 break;
             case R.id.switch_btn_2:
-                operationListener.onSwitchClicked(mSwitchItemPosition, 2);
+                if (mSwitch.get_absenceid() == null)
+                    operationListener.onSwitchClicked(mSwitchItemPosition, 2);
                 break;
             case R.id.switch_btn_3:
-                operationListener.onSwitchClicked(mSwitchItemPosition, 3);
+                if (mSwitch.get_absenceid() == null)
+                    operationListener.onSwitchClicked(mSwitchItemPosition, 3);
                 break;
             case R.id.switch_setting:
                 Intent intent = new Intent(getActivity(), ActivitySwitchSetting.class);
